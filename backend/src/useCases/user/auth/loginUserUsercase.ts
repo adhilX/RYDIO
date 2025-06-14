@@ -1,0 +1,24 @@
+import { User } from "../../../domain/entities/userEntities";
+import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
+import { IhashPassword } from "../../../domain/interface/serviceInterface/IhashPassword";
+import { IloginUserUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IloginUserUsecase";
+
+export class LoginUserUsecase implements IloginUserUsecase{
+
+    private userRepository : IuserRepository
+    private hashPassword: IhashPassword
+
+    constructor(userRepository:IuserRepository, hashPassword:IhashPassword){
+        this.hashPassword = hashPassword
+        this.userRepository = userRepository
+    }
+
+   async loginUser(email: string, password: string):Promise<User>{
+        const user = await this.userRepository.findByEmail(email)
+        if(!user)throw new Error('user not exist with this Email')
+            if(user.is_blocked)throw new Error('user is blocked by admin')
+                const matchPass = await this.hashPassword.comparePassword(password,user.password)
+            if(!matchPass)throw new Error('passaword not match')
+                return user
+    }
+}

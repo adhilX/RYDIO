@@ -1,0 +1,36 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.1",
+    "node-cache": "^5.1.2",
+    "nodemailer": "^7.0.3",
+    "redis": "^5.5.6"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^24.0.1",
+    "@types/nodemailer": "^6.4.17",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
