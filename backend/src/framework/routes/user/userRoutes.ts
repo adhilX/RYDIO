@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { sendendOtpController, userRegisterController } from "../../DI/userInject";
+import { sendendOtpController, userLoginController, userRegisterController } from "../../DI/userInject";
 
 export class UserRoutes {
 
@@ -18,6 +18,6 @@ export class UserRoutes {
        userRegisterController.register(req,res)
     })
     this.UserRoutes.post('/login',(req:Request, res:Response)=>{
-        
+        userLoginController.handleLogin(req,res)
     })
 }}

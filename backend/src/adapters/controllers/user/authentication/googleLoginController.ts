@@ -3,32 +3,29 @@ import { IjwtService } from "../../../../domain/interface/serviceInterface/IjwtS
 import { IloginUserUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IloginUserUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { setCookie } from "../../../../framework/services/tokenCookieSet";
+import { IgoogleloginUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IgoogleLoginUsecase";
 
-export class UserLoginController {
+export class GoogleLoginController {
     private jwtService: IjwtService
-    private loginUserUsecase : IloginUserUsecase
+    private GoogleLoginUsecase : IgoogleloginUsecase
 
-    constructor(jwtService:IjwtService,loginUserUsecase:IloginUserUsecase){
+    constructor(jwtService:IjwtService,GoogleLoginUsecase:IgoogleloginUsecase){
         this.jwtService = jwtService
-        this.loginUserUsecase =loginUserUsecase
+        this.GoogleLoginUsecase = GoogleLoginUsecase
     }
 
     async handleLogin(req:Request,res:Response){
         try {
-            const { email, password } = req.body
-            const user = await this .loginUserUsecase.loginUser(email,password)
-            if(!user){
-               res.status(HttpStatus.BAD_REQUEST).json({message:'user not found'})
-               return 
-            }
+            const { user } = req.body
+            const createUser = await this .GoogleLoginUsecase.googleLogin(user)
+          
            const ACCESSTOKEN_SECRET_KEY = process.env.ACCESSTOKEN_SECRET_KEY as string
           const REFRESHTOKEN_SECRET_KEY = process.env.REFRESHTOKEN_SECRET_KEY as string
 //    console.log(ACCESSTOKEN_SECRET_KEY,REFRESHTOKEN_SECRET_KEY,'dfasdfdfsdf')
        const accessToken = this.jwtService.createAccessToken(ACCESSTOKEN_SECRET_KEY,user._id?.toString() || "",user.role)
        const refreshToken = this.jwtService.createRefreshToken(REFRESHTOKEN_SECRET_KEY,user._id?.toString() || "")
-
        setCookie(res,refreshToken)
-       res.status(HttpStatus.OK).json({message:'login success',user,accessToken})
+       res.status(HttpStatus.OK).json({message:'login success',createUser,accessToken})
             
         } catch (error) {
              console.log('error while login client', error)

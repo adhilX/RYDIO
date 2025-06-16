@@ -10,9 +10,9 @@ export class SendOtpController{
 
     async sendOtp(req: Request, res:Response):Promise<void>{
         try {
-            const {email} = req.body
-            console.log(email,'ggg')
-            await this.userSendOtpUsecase.execute(email)
+            const {user} = req.body
+            console.log(user,'ggg')
+            await this.userSendOtpUsecase.execute(user?.email)
             res.status(HttpStatus.OK).json({message:'OTP sended successfully'})
             return
         } catch (error) {

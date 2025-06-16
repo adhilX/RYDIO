@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "forceConsistentCasingInFileNames":true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",
-    "lib": ["ES2023"],
+    "lib": ["ES6"],
     "module": "ESNext",
     "skipLibCheck": true,
 

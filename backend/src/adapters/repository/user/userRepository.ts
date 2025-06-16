@@ -10,4 +10,9 @@ export class UserRepostory implements IuserRepository{
     async findByEmail(email:string){
     return await userModel.findOne({email})
     }
+    
+    async googleLogin(user: User): Promise<User | null> {
+        return await userModel.create(user)
+    }
+    
 }

@@ -11,6 +11,7 @@ export class UserRegisterController {
         this.createuserUsecase = createuserUsecase
     }
      async register(req: Request, res: Response): Promise<void> {
+        console.log(req.body,'ggg')
         const { user, otp } = req.body as { user: any; otp: string };
         try {
             const verify = await this.verifyOtpUsecase.verifyOtp(user?.email, otp);
@@ -21,7 +22,7 @@ export class UserRegisterController {
             } else {
                 res.status(400).json({ message: 'OTP verification failed' });
             }
-        } catch (error) {
+        } catch (error) { 
             res.status(400).json({
                 message: "Error while creating client",
                 error: error instanceof Error ? error.message : "Unknown error",
