@@ -12,6 +12,10 @@ import { JwtService } from "../services/jwtService"
 import { UserLoginController } from "../../adapters/controllers/user/authentication/userLoginController"
 import { GoogleLoginUsecase } from "../../useCases/user/auth/GoogleLoginUsecase"
 import { GoogleLoginController } from "../../adapters/controllers/user/authentication/googleLoginController"
+import { ResendOtpController } from "../../adapters/controllers/user/authentication/resendOtpController"
+import { ResendOtpUsecase } from "../../useCases/user/auth/otpUsecase/resendOtpUsecase"
+import { ForgotPasswordController } from "../../adapters/controllers/user/authentication/forgotPasswordController"
+import { ForgotPasswordUsecase } from "../../useCases/user/auth/forgotPasswordUsecase"
 
 // regester user 
 const otpService = new OtpService()
@@ -31,8 +35,15 @@ const jwtService = new JwtService()
 const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword)
 export const userLoginController = new UserLoginController(jwtService,loginUserUsecase)
 
+//------forgotpassword-------
+const forgotPasswordUsecase = new ForgotPasswordUsecase(otpService,emailService,userRepostory)
+export const forgotPasswordController = new ForgotPasswordController(forgotPasswordUsecase)
 
 //-------Google Login ---------
 
 const googleLoginUsecase = new GoogleLoginUsecase(userRepostory)
 export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase)
+
+//-----resendOtp ------------
+const resendOtpUsecase = new ResendOtpUsecase(otpService,emailService)
+export const resendOtpController = new ResendOtpController(resendOtpUsecase)

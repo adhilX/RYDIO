@@ -4,11 +4,13 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 import userReducer from "./slice/user/UserSlice";
 import tokenReducer from "./slice/user/UserTokenSlice";
+import AdminToken from "./slice/admin/AdminTokenSlice";
 
 
 const rootReducer = combineReducers({
   auth: userReducer,
-  userToken: tokenReducer
+  userToken: tokenReducer,
+  adminToken :AdminToken
 });
 
 const persistConfig = {

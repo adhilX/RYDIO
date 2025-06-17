@@ -2,7 +2,7 @@ import { IemailServise } from "../../../../domain/interface/serviceInterface/Iem
 import { IotpService } from "../../../../domain/interface/serviceInterface/IotpService"
 import { IresendOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IresendOtpUsecase"
 
-export class VarifyOtpUsecase implements IresendOtpUsecase{
+export class ResendOtpUsecase implements IresendOtpUsecase{
 
     private otpService: IotpService
     private emailService :IemailServise

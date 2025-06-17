@@ -30,7 +30,6 @@ export default function Login() {
 const onSubmit = async(data: TloginForm) => {
   try {
     const response = await loginUser(data);
-    console.log(response)
     dispatch(addToken(response.accessToken))
     dispatch(addUser(response.user))
     toast.success("Login successful!");

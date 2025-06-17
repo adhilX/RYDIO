@@ -4,6 +4,7 @@ import express, { Application, urlencoded } from 'express';
 import { UserRoutes } from './framework/routes/user/userRoutes';
 import { ConnectMongoDB } from './framework/database/databaseConnection/dbConnection';
 import cors from 'cors';
+import { AdminRoutes } from './framework/routes/admin/adminRoutes';
 
 export class App {
     private app : Application                
@@ -15,12 +16,13 @@ export class App {
             origin: process.env.ORIGIN,
             credentials: true
         }))
-        this.app.use(express.json());
-        this.app.use(urlencoded({extended:true}));
         this.port = process.env.PORT || 3000;
-        this.setUserRoutes();
         this.database = new ConnectMongoDB()
         this.database.connectDB()
+        this.app.use(express.json());
+        this.app.use(urlencoded({extended:true}));
+        this.setUserRoutes();
+        this.setAdminRoutes()
     }
 
     public listen(): void {
@@ -30,6 +32,10 @@ export class App {
     }   
     private setUserRoutes(){
         this.app.use('/',new UserRoutes().UserRoutes);
+    }
+    private setAdminRoutes(){
+        console.log(new AdminRoutes().AdminRoute)
+        this.app.use('/admin',new AdminRoutes().AdminRoute)
     }
 }
 
