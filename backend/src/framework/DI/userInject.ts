@@ -14,8 +14,11 @@ import { GoogleLoginUsecase } from "../../useCases/user/auth/GoogleLoginUsecase"
 import { GoogleLoginController } from "../../adapters/controllers/user/authentication/googleLoginController"
 import { ResendOtpController } from "../../adapters/controllers/user/authentication/resendOtpController"
 import { ResendOtpUsecase } from "../../useCases/user/auth/otpUsecase/resendOtpUsecase"
-import { ForgotPasswordController } from "../../adapters/controllers/user/authentication/forgotPasswordController"
-import { ForgotPasswordUsecase } from "../../useCases/user/auth/forgotPasswordUsecase"
+import { SendOtpForgotPasswordController } from "../../adapters/controllers/user/authentication/sendOtpforgotPasswordController"
+import { ForgotPasswordUsecase } from "../../useCases/user/auth/SendforgotPasswordOtpUsecase"
+import { VerifyForgotPassowordOtpController } from "../../adapters/controllers/user/authentication/verifyForgotPasswordOtpController"
+import { ChangePasswordController } from "../../adapters/controllers/user/authentication/ChangePasswordController"
+import { ChangePasswordUseCase } from "../../useCases/user/auth/ChangePasswordUsecase"
 
 // regester user 
 const otpService = new OtpService()
@@ -35,10 +38,6 @@ const jwtService = new JwtService()
 const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword)
 export const userLoginController = new UserLoginController(jwtService,loginUserUsecase)
 
-//------forgotpassword-------
-const forgotPasswordUsecase = new ForgotPasswordUsecase(otpService,emailService,userRepostory)
-export const forgotPasswordController = new ForgotPasswordController(forgotPasswordUsecase)
-
 //-------Google Login ---------
 
 const googleLoginUsecase = new GoogleLoginUsecase(userRepostory)
@@ -47,3 +46,14 @@ export const googleLoginController = new GoogleLoginController(jwtService,google
 //-----resendOtp ------------
 const resendOtpUsecase = new ResendOtpUsecase(otpService,emailService)
 export const resendOtpController = new ResendOtpController(resendOtpUsecase)
+
+//------forgotpassword-------
+const forgotPasswordUsecase = new ForgotPasswordUsecase(otpService,emailService,userRepostory)
+export const sendOtpForgotPasswordController = new SendOtpForgotPasswordController(forgotPasswordUsecase)
+
+//------verifyforgotPassword---------
+export const verifyForgotPassowordOtpController = new VerifyForgotPassowordOtpController(verifyOtpUsecase)
+
+//--------change-Passoword--------
+const changePasswordUsecase = new ChangePasswordUseCase(userRepostory,hashPassword)
+export const changePasswordController = new ChangePasswordController(changePasswordUsecase)

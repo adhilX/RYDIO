@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IForgotPasswordUsecase } from "../../../../domain/interface/usecaseInterface/IForgotPasswordUsecase";
+import { IForgotPasswordUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IForgotPasswordUsecase";
 
-export class ForgotPasswordController {
+export class SendOtpForgotPasswordController {
     private forgotPasswordUsecase: IForgotPasswordUsecase;
 
     constructor(forgotPasswordUsecase: IForgotPasswordUsecase) {

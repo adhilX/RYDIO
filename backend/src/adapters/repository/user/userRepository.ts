@@ -14,5 +14,7 @@ export class UserRepostory implements IuserRepository{
     async googleLogin(user: User): Promise<User | null> {
         return await userModel.create(user)
     }
-    
+      async forgotPassword(email: string, password: string): Promise<User | null> {
+     return await userModel.findByIdAndUpdate(email, { password }, { new: true })
+      }
 }

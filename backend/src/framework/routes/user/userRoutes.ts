@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { forgotPasswordController, sendendOtpController, userLoginController, userRegisterController } from "../../DI/userInject";
+import { resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
 
 export class UserRoutes {
 
@@ -21,6 +21,12 @@ export class UserRoutes {
         userLoginController.handleLogin(req,res)
     })
     this.UserRoutes.post('/resendotp',(req:Request, res:Response)=>{
-       forgotPasswordController.handleForgotPassword(req,res)
+        resendOtpController.resendOpt(req,res)
+    })
+    this.UserRoutes.post('/forgotpassword',(req:Request, res:Response)=>{
+       sendOtpForgotPasswordController.handleForgotPassword(req,res)
+    })
+    this.UserRoutes.post('/verifyforgotpasswordotp',(req:Request, res:Response)=>{
+       verifyForgotPassowordOtpController.verify(req,res)
     })
 }}
