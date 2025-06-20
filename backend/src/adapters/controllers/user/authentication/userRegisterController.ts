@@ -14,13 +14,14 @@ export class UserRegisterController {
         console.log(req.body,'ggg')
         const { user, otp } = req.body as { user: any; otp: string };
         try {
+            console.log(user,otp)
             const verify = await this.verifyOtpUsecase.verifyOtp(user?.email, otp);
             console.log(verify)
             if (verify) {
                 const newUser = await this.createuserUsecase.createUser(user);
                 res.status(201).json({ message: 'user created', newUser });
             } else {
-                res.status(400).json({ message: 'OTP verification failed' });
+                res.status(400).json({ error: 'OTP verification failed' });
             }
         } catch (error) { 
             res.status(400).json({

@@ -5,14 +5,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { removeUser } from '@/store/slice/user/UserSlice';
 import { removeToken } from '@/store/slice/user/UserTokenSlice';
+// import { userLogout } from '@/services/user/authService';
+import toast from 'react-hot-toast';
 
 function Navbar({setIsMenuOpen,isMenuOpen,}: { setIsMenuOpen: (isOpen: boolean) => void; isMenuOpen: boolean}) {
   const token = useSelector((state: RootState) => state.userToken.token);
 const dispatch =useDispatch()
 
-  function logout(){
-    dispatch(removeUser())
-    dispatch(removeToken())
+   const logout = async()=>{
+    try {
+      // await userLogout()
+      dispatch(removeUser())
+      dispatch(removeToken())
+      toast.success('logout success')
+    } catch (error) {
+      const errorMessage = (error instanceof Error) ? error.message : "An unknown error occurred"
+        toast.error(`logout failed: ${errorMessage}`)
+        console.error("logout Error:", error)
+        throw error;
+    }
   }
   return (
     <nav className="relative z-50 bg-gray-900/80 backdrop-blur-xl border-b border-gray-700/50">
@@ -35,11 +46,20 @@ const dispatch =useDispatch()
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             {token ? (
+              <div>
+
               <Link to="#">
                 <Button onClick={logout} className="bg-gradient-to-r from-red-800 to-red-700 hover:from-red-700 hover:to-red-600 text-white">
                   Logout
                 </Button>
+
               </Link>
+              <Link to={'/userprofile'}>
+              <Button className='bg-cyan-900'>
+                  profile
+                </Button>
+              </Link>
+              </div>
             ) : (
               <>
                 <Link to="/login">

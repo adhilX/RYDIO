@@ -34,7 +34,6 @@ export class App {
         this.app.use('/',new UserRoutes().UserRoutes);
     }
     private setAdminRoutes(){
-        console.log(new AdminRoutes().AdminRoute)
         this.app.use('/admin',new AdminRoutes().AdminRoute)
     }
 }

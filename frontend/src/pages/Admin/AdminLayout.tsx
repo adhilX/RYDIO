@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserManagement } from '@/components/admin/UserManagment';
-import { Dashboard } from '@/components/admin/Dashboard';
 import { Sidebar } from '@/components/admin/SideBar';
+import { Outlet, useLocation } from 'react-router';
 
-const Index = () => {
-    const [currentPage, setCurrentPage] = useState('dashboard');
+const AdminLayout = () => {
+    const location = useLocation()
+    const [currentPage, setCurrentPage] = useState(location.pathname.split('/')[2]|| 'dashboard');
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
     const pageVariants = {
@@ -20,31 +20,8 @@ const Index = () => {
         duration: 0.3
     };
 
-    const renderCurrentPage = () => {
-        switch (currentPage) {
-            case 'users':
-                return <UserManagement />;
-            case 'analytics':
-                return (
-                    <div className="p-6 bg-gray-900">
-                        <h1 className="text-3xl font-bold dark:text-white">Analytics</h1>
-                        <p className="dark:text-gray-400 mt-1">Analytics page coming soon...</p>
-                    </div>
-                );
-            case 'settings':
-                return (
-                    <div className="p-6 dark:bg-gray-900">
-                        <h1 className="text-3xl font-bold dark:text-white">Settings</h1>
-                        <p className="dark:text-gray-400 mt-1">Settings page coming soon...</p>
-                    </div>
-                );
-            default:
-                return <Dashboard />;
-        }
-    };
-
     return (
-        <div className="min-h-screen bg-gray-900 flex w-full">
+        <div className="min-h-screen bg-black flex w-full">
             <Sidebar
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
@@ -62,12 +39,12 @@ const Index = () => {
                         transition={pageTransition}
                         className="h-full overflow-y-auto"
                     >
-                        {renderCurrentPage()}
+                        <Outlet />
                     </motion.div>
                 </AnimatePresence>
             </main>
         </div>
-    );
+    )
 };
 
-export default Index;
+export default AdminLayout

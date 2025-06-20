@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, getAllUserController } from "../../DI/adminInject";
+import { adminLoginController, blockUserController, getAllUserController, searchUserController, unblockUserController } from "../../DI/adminInject";
 
 export class AdminRoutes {
      public AdminRoute : Router
@@ -14,13 +14,19 @@ export class AdminRoutes {
             adminLoginController.handleAdminLogin(req,res)
         })
     
-        this.AdminRoute.get('/getUsers',(req:Request,res:Response)=>{
-            console.log('asdk')
+        this.AdminRoute.get('/getusers',(req:Request,res:Response)=>{
             getAllUserController.getAllUsers(req,res)
         })
-
-        this.AdminRoute.get('/test',(req:Request,res:Response)=>{
-            res.send('hyyy iam here')
+        this.AdminRoute.patch('/userblock/:userId',(req:Request,res:Response)=>{
+         blockUserController.handleClientBlock(req,res)
         })
+        this.AdminRoute.patch('/unuserblock/:userId',(req:Request,res:Response)=>{
+         unblockUserController.handleClientBlock(req,res)
+        })
+        this.AdminRoute.get('/searchuser',(req:Request,res:Response)=>{
+        searchUserController.searchUser(req,res)
+        })
+
+
     }
 }

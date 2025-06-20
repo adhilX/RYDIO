@@ -12,11 +12,12 @@ export class ChangePasswordUseCase implements IchangePasswordUsecase {
    
     }
     async ChangePassword(email: string, newPassword: string): Promise<User> {
+        // console.log(email,newPassword)
         const user = await this.userRepository.findByEmail(email)
         if (!user) throw new Error('No client exist in this email')
         const hashedPassword = await this.hashPassword.hashPassword(newPassword)
         if (!hashedPassword) throw new Error('Error while hashing password')
-        const updatedUser = await this.userRepository.forgotPassword(email, hashedPassword)
+        const updatedUser = await this.userRepository.changePassword(user._id?.toString(), hashedPassword)
         if (!updatedUser) throw new Error('error while updating new password in client')
         return updatedUser
     }

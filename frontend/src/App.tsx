@@ -5,17 +5,20 @@ import { AdminRoutes } from "./Routes/AdminRoutes";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import {GoogleOAuthProvider} from '@react-oauth/google'
 function App() {
   const router = createBrowserRouter([
     { path: "/*", element: <UserRoutes /> },
     { path: "/admin/*", element: <AdminRoutes /> },
   ]);
-
+const client_id = import.meta.env.VITE_CLIENT_ID
   return (
     <>
     <Provider store={store}>
+      <GoogleOAuthProvider clientId={client_id}>
       <Toaster position="top-right" reverseOrder={false} />
       <RouterProvider router={router} />
+      </GoogleOAuthProvider>
     </Provider>
     </>
   );

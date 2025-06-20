@@ -16,7 +16,7 @@ const initialState: { user: User | null } = {
 }
 
 export const userSlice = createSlice({
-    name: "clientSlice",
+    name: "userSlice",
     initialState,
     reducers: {
         addUser: (state, action) => {

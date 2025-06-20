@@ -1,220 +1,243 @@
-import  { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, MoreHorizontal, Edit, Trash2, UserCheck, UserX } from 'lucide-react';
+import { Search } from 'lucide-react';
+import { getUsers } from '@/services/admin/authService';
+import { UnbserBlock, UserBlock } from '@/services/admin/UserBlockService';
+import toast from 'react-hot-toast';
+import { PuffLoader } from 'react-spinners';
 
 interface User {
-  id: string;
-  name: string;
+  _id: string;
   email: string;
-  role: string;
-  status: 'active' | 'inactive';
-  lastLogin: string;
-  avatar: string;
+  phone: string;
+  profile_image: string;
+  is_blocked: boolean;
+  vendor_access: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const mockUsers: User[] = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    role: 'Admin',
-    status: 'active',
-    lastLogin: '2024-01-15',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face'
-  }
-];
-
 export function UserManagement() {
-  const [users, setUsers] = useState<User[]>(mockUsers);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedRole, setSelectedRole] = useState('all');
+  const [users, setUsers] = useState<User[]>([]);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit] = useState(6);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesRole = selectedRole === 'all' || user.role.toLowerCase() === selectedRole.toLowerCase();
-    return matchesSearch && matchesRole;
-  });
+  // Debounce effect
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+      setCurrentPage(1); // reset page on new search
+    }, 1500);
+    return () => clearTimeout(timeout);
+  }, [search]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
+  // Fetch users
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setIsLoading(true);
+      try {
+        const { users, total } = await getUsers(debouncedSearch, currentPage, limit);
+        if (Array.isArray(users)) {
+          setUsers(users);
+          setTotalUsers(total);
+          setTotalPages(Math.ceil(total / limit));
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Failed to fetch users');
+      } finally {
+        setIsLoading(false);
       }
+    };
+    fetchUsers();
+  }, [debouncedSearch, currentPage, limit]);
+
+  const handleBlock = async (userId: string, blocked: boolean) => {
+    try {
+      if (!blocked) {
+        await UserBlock(userId);
+        toast.success('User blocked');
+      } else {
+        await UnbserBlock(userId);
+        toast.success('User unblocked');
+      }
+      toggleBlock(userId);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`User block failed: ${errorMessage}`);
     }
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+  const toggleBlock = (userId: string) => {
+    setUsers(prev =>
+      prev.map(user =>
+        user._id === userId ? { ...user, is_blocked: !user.is_blocked } : user
+      )
+    );
+  };
+
+  const toggleVendorAccess = (userId: string) => {
+    setUsers(prev =>
+      prev.map(user =>
+        user._id === userId ? { ...user, vendor_access: !user.vendor_access } : user
+      )
+    );
+  };
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
   return (
-    <motion.div
-      className="p-6 space-y-6 bg-gray-900 min-h-screen"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {/* Header */}
-      <motion.div variants={itemVariants} className="flex items-center justify-between">
+    <motion.div className="p-6 space-y-6 bg-black min-h-screen">
+      <motion.div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">User Management</h1>
-          <p className="text-gray-400 mt-1">Manage and monitor user accounts</p>
+          <p className="text-gray-400 mt-1">Manage and monitor user accounts ({totalUsers} total)</p>
         </div>
-      
       </motion.div>
 
-      {/* Stats Cards */}
-      {/* <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {[
-          { label: 'Total Users', value: users.length, color: 'blue' },
-          { label: 'Active Users', value: users.filter(u => u.status === 'active').length, color: 'green' },
-          { label: 'Inactive Users', value: users.filter(u => u.status === 'inactive').length, color: 'orange' },
-          { label: 'Admins', value: users.filter(u => u.role === 'Admin').length, color: 'purple' }
-        ].map((stat, index) => (
-          <motion.div
-            key={stat.label}
-            className="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-sm"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">{stat.label}</p>
-                <p className="text-2xl font-bold text-white mt-1">{stat.value}</p>
-              </div>
-              <div className={`w-12 h-12 rounded-xl bg-${stat.color}-900/20 flex items-center justify-center`}>
-                <Users className={`w-6 h-6 text-${stat.color}-400`} />
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div> */}
-
-      {/* Filters and Search */}
-      <motion.div
-        variants={itemVariants}
-        className="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-sm"
-      >
+      {/* Search */}
+      <motion.div className="bg-black p-3 rounded-xl border border-gray-700 shadow-sm">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Search users..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
+              placeholder="Search by email or name..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          {/* <select
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-            className="px-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-700 text-white"
-            aria-label="Filter users by role"
-          >
-            <option value="all">All Roles</option>
-            <option value="admin">Admin</option>
-            <option value="editor">Editor</option>
-            <option value="user">User</option>
-          </select> */}
         </div>
       </motion.div>
 
-      {/* Users Table */}
-      <motion.div
-        variants={itemVariants}
-        className="bg-gray-800 rounded-xl border border-gray-700 shadow-sm overflow-hidden"
-      >
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-700">
-              <tr>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-400 uppercase tracking-wider">User</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-400 uppercase tracking-wider">Role</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-400 uppercase tracking-wider">Last Login</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-400 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700">
-              {filteredUsers.map((user, index) => (
-                <motion.tr
-                  key={user.id}
-                  className="hover:bg-gray-700/50 transition-colors"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <img className="h-10 w-10 rounded-full object-cover" src={user.avatar} alt={user.name} />
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-white">{user.name}</div>
-                        <div className="text-sm text-gray-400">{user.email}</div>
+      {/* Table */}
+      <motion.div className="bg-black rounded-xl border border-gray-700 shadow-sm overflow-hidden">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-max">
+            <PuffLoader color="#ffffff" size={60} />
+          </div>
+        ) : users.length === 0 ? (
+          <div className="p-6  h-100 flex text-center justify-center text-gray-400">No users found</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto">
+              <thead className="bg-black ">
+                <tr>
+                  <th className="px-6 py-2 text-left text-sm font-medium text-gray-400 uppercase">User</th>
+                  <th className="px-6 py-2 text-left text-sm font-medium text-gray-400 uppercase">Created</th>
+                  <th className="px-6 py-2 text-left text-sm font-medium text-gray-400 uppercase">Status</th>
+                  <th className="px-6 py-2 text-left text-sm font-medium text-gray-400 uppercase">Vendor Access</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-700">
+                {users.map((user, index) => (
+                  <motion.tr
+                    key={user._id}
+                    className="hover:bg-gray-700/50"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.03 }}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <img
+                          className="h-10 w-10 rounded-full object-cover"
+                          src={user.profile_image?.trim() || 'https://cdn.vectorstock.com/i/preview-1x/17/61/male-avatar-profile-picture-vector-10211761.jpg'}
+                          alt={user.email}
+                        />
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-white">{user.email}</div>
+                          <div className="text-sm text-gray-400">{user.phone}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      user.role === 'Admin' ? 'bg-purple-900/20 text-purple-400' :
-                      user.role === 'Editor' ? 'bg-blue-900/20 text-blue-400' :
-                      'bg-gray-700 text-gray-300'
-                    }`}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      {user.status === 'active' ? (
-                        <UserCheck className="w-4 h-4 text-green-500 mr-2" />
-                      ) : (
-                        <UserX className="w-4 h-4 text-red-500 mr-2" />
-                      )}
-                      <span className={`text-sm font-medium ${
-                        user.status === 'active' ? 'text-green-400' : 'text-red-400'
-                      }`}>
-                        {user.status}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                    {user.lastLogin}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end gap-2">
-                      <motion.button
-                        className="text-blue-400 hover:text-blue-300 p-1 rounded"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-400 whitespace-nowrap">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => handleBlock(user._id, user.is_blocked)}
+                        className={`text-sm font-medium px-3 py-1 rounded-lg ${
+                          user.is_blocked
+                            ? 'bg-red-900/30 text-red-400 hover:bg-red-900/50'
+                            : 'bg-green-900/30 text-green-400 hover:bg-green-900/50'
+                        }`}
                       >
-                        <Edit size={16} />
-                      </motion.button>
-                      <motion.button
-                        className="text-red-400 hover:text-red-300 p-1 rounded"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
+                        {user.is_blocked ? 'Unblock' : 'Block'}
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => toggleVendorAccess(user._id)}
+                        className={`text-sm font-medium px-3 py-1 rounded-lg ${
+                          user.vendor_access
+                            ? 'bg-blue-900/30 text-blue-400 hover:bg-blue-900/50'
+                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        }`}
                       >
-                        <Trash2 size={16} />
-                      </motion.button>
-                      <motion.button
-                        className="text-gray-400 hover:text-gray-300 p-1 rounded"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <MoreHorizontal size={16} />
-                      </motion.button>
-                    </div>
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                        {user.vendor_access ? 'True' : 'False'}
+                      </button>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </motion.div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <motion.div
+          className="flex items-center justify-center bg-dark p-4 rounded-xl border border-gray-700"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 bg-gray-700 text-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2))
+                .map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-1 rounded-lg ${
+                      currentPage === page
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+            </div>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 bg-gray-700 text-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

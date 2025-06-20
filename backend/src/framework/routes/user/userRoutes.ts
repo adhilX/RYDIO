@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
-import { resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { changePasswordController, googleLoginController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { blockUserController } from "../../DI/adminInject";
 
 export class UserRoutes {
 
@@ -20,6 +21,11 @@ export class UserRoutes {
     this.UserRoutes.post('/login',(req:Request, res:Response)=>{
         userLoginController.handleLogin(req,res)
     })
+    
+    this.UserRoutes.post('/googlelogin',(req:Request, res:Response)=>{
+        googleLoginController.handleLogin(req,res)
+    })
+
     this.UserRoutes.post('/resendotp',(req:Request, res:Response)=>{
         resendOtpController.resendOpt(req,res)
     })
@@ -28,5 +34,11 @@ export class UserRoutes {
     })
     this.UserRoutes.post('/verifyforgotpasswordotp',(req:Request, res:Response)=>{
        verifyForgotPassowordOtpController.verify(req,res)
+    })
+    this.UserRoutes.patch('/changepassword',(req:Request, res:Response)=>{
+       changePasswordController.handleForgetPassword(req,res)
+    })
+    this.UserRoutes.patch('/logout',(req:Request, res:Response)=>{
+       blockUserController.handleClientBlock(req,res)
     })
 }}

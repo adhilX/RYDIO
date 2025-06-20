@@ -13,7 +13,11 @@ export class VerifyForgotPassowordOtpController {
         const { email, otp } = req.body as { email: string; otp: string };
         try {
             const verify = await this.verifyOtpUsecase.verifyOtp(email, otp);
-              res.status(201).json({ message: 'otp veified', verify });
+            if (verify) {
+                res.status(200).json({ message: 'OTP verified successfully', data: verify });
+            } else {
+                res.status(400).json({ error: 'Invalid or expired OTP' });
+            }
         } catch (error) { 
             res.status(400).json({
                 message: "Error while creating client",

@@ -1,13 +1,16 @@
+import { removeToken } from '@/store/slice/admin/AdminTokenSlice';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Users, 
+import {
+  Users,
   // BarChart3, 
   // Settings, 
-  Menu, 
-  X, 
+  Menu,
+  X,
   Home,
   LogOut
 } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 interface SidebarProps {
   currentPage: string;
@@ -17,9 +20,10 @@ interface SidebarProps {
   onLogout?: () => void; // Optional logout handler
 }
 
+
 const menuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: Home ,path: "/dashboard" },
-  { id: 'users', label: 'User Management', icon: Users },
+  { id: 'dashboard', label: 'Dashboard', icon: Home, path: "/admin" },
+  { id: 'users', label: 'User Management', icon: Users, path: "/admin/users" },
   // { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   // { id: 'settings', label: 'Settings', icon: Settings },
 ];
@@ -29,15 +33,19 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
     expanded: { width: 280 },
     collapsed: { width: 80 }
   };
-
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const itemVariants = {
     expanded: { opacity: 1, x: 0 },
     collapsed: { opacity: 0, x: -20 }
   };
+  const handleLogout = ()=>{
+    dispatch(removeToken())
+  }
 
   return (
     <motion.div
-      className="bg-gray-900 border-r border-gray-800 flex flex-col h-screen relative z-50"
+      className="bg-black border-r border-gray-800 flex flex-col h-screen relative z-50"
       variants={sidebarVariants}
       animate={isCollapsed ? 'collapsed' : 'expanded'}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -78,16 +86,18 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentPage === item.id;
-          
+
           return (
             <motion.button
               key={item.id}
-              onClick={() => onPageChange(item.id)}
-              className={`w-full flex items-center p-3 rounded-lg transition-all duration-200 ${
-                isActive
+              onClick={() => {
+                onPageChange(item.id);
+                navigate(item.path);
+              }}
+              className={`w-full flex items-center p-3 rounded-lg transition-all duration-200 ${isActive
                   ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
                   : 'text-gray-400 hover:bg-gray-800'
-              }`}
+                }`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -129,6 +139,7 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
                 animate="expanded"
                 exit="collapsed"
                 transition={{ duration: 0.2 }}
+                onClick={handleLogout}
               >
                 Logout
               </motion.span>
