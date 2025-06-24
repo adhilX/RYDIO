@@ -7,7 +7,9 @@ import {
   Menu,
   X,
   Home,
-  LogOut
+  LogOut,
+  Car,
+  MessageCircleWarning
 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -24,8 +26,8 @@ interface SidebarProps {
 const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: Home, path: "/admin" },
   { id: 'users', label: 'User Management', icon: Users, path: "/admin/users" },
-  // { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-  // { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'vehicle', label: 'vehicle Management', icon: Car, path:'/admin/vehicle' },
+  { id: 'requests', label: 'requests', icon:MessageCircleWarning, path:'/admin/requests'},
 ];
 
 export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollapse, onLogout }: SidebarProps) {

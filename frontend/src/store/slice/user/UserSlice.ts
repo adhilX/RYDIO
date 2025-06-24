@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 interface User {
     email: string,
     name: string,
-    phone: number,
+    phone: string,
     profileImage?: string,
     _id?: string
     role: 'user',
