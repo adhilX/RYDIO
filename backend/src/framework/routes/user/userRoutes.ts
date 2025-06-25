@@ -44,7 +44,7 @@ export class UserRoutes {
     this.UserRoutes.patch('/editProfile',(req:Request,res:Response)=>{
         editProfileController.handleEditProfle(req,res)
     })
-    this.UserRoutes.patch('/add-vehicle',(req:Request,res:Response)=>{
+    this.UserRoutes.post('/add-vehicle',(req:Request,res:Response)=>{
         addVehicleController.addVehicle(req,res)
     })
 
