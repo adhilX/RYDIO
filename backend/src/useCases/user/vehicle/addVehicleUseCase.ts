@@ -8,6 +8,6 @@ export class AddVehicleUsecase implements IaddvehicleUsecase{
         this.vehicleRepository = vehicleRepository
     }
    async addVehicle(vehicle: IVehicle): Promise<IVehicle> {
-        return await this.vehicleRepository.addVehicle(vehicle)
+        return await this.vehicleRepository.addVehicle({...vehicle,admin_approve:'pending'})
     }
 }

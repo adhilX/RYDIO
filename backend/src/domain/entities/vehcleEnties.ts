@@ -14,6 +14,7 @@ export interface IVehicle {
     price_per_day: number;
     description: string;
     image_urls: string[];
+    admin_approve : 'pending'| 'accepted'| 'rejected'
     is_available?: boolean;
     created_at?: Date;
 }

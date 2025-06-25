@@ -15,6 +15,7 @@ export const VehicleSchema = new Schema<IVehicle>({
     automatic: { type: Boolean, required: true },
     price_per_day: { type: Number, required: true },
     description: { type: String, required: true },
+    admin_approve: {type: String, enum :['pending','accepted','rejected']},
     image_urls: { type: [String], required: true },
     is_available: { type: Boolean, default: true },
 }, { timestamps: true });
