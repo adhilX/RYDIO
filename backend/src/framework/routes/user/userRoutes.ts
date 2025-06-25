@@ -1,6 +1,5 @@
 import { Request, Response, Router } from "express";
-import { changePasswordController, googleLoginController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
-import { blockUserController } from "../../DI/adminInject";
+import { addVehicleController, changePasswordController, editProfileController, googleLoginController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
 
 export class UserRoutes {
 
@@ -38,7 +37,15 @@ export class UserRoutes {
     this.UserRoutes.patch('/changepassword',(req:Request, res:Response)=>{
        changePasswordController.handleForgetPassword(req,res)
     })
-    this.UserRoutes.patch('/logout',(req:Request, res:Response)=>{
-       blockUserController.handleClientBlock(req,res)
+    // this.UserRoutes.patch('/logout',(req:Request, res:Response)=>{
+      //  blockUserController.handleClientBlock(req,res)
+    // })
+    
+    this.UserRoutes.patch('/editProfile',(req:Request,res:Response)=>{
+        editProfileController.handleEditProfle(req,res)
     })
+    this.UserRoutes.patch('/add-vehicle',(req:Request,res:Response)=>{
+        addVehicleController.addVehicle(req,res)
+    })
+
 }}

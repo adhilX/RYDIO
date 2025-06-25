@@ -3,14 +3,15 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ImageCropper } from "@/components/modal/ImageCroper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { uploadToCloudinary } from "@/lib/utils/cloudinaryUpload";
 import { updateProfile } from "@/services/user/UpdateProfileService";
 import toast from "react-hot-toast";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userProfileSchema, type UserProfileFormData } from "@/Types/User/validation/UpdateProfileSchema";
+import { addUser } from "@/store/slice/user/UserSlice";
 
 export default function UserProfile() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -19,12 +20,11 @@ export default function UserProfile() {
   const [croppedImage, setCroppedImage] = useState<File | null>(null);
   const [showCropper, setShowCropper] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const dispatch = useDispatch()
   const {
     register,
     reset,
     handleSubmit,
-    control,
     formState: { errors, isSubmitting },
   } = useForm<UserProfileFormData>({
     resolver: zodResolver(userProfileSchema),
@@ -34,14 +34,10 @@ export default function UserProfile() {
     },
   });
 
-  const formValues = useWatch({ control });
-  useEffect(() => {
-    console.log("Form values:", formValues);
-  }, [formValues]);
+  console.log(user)
 
   useEffect(() => {
     if (user) {
-      console.log("Resetting form with:", user.name, user.phone);
       reset({
         name: user.name || "",
         phone: user.phone || "",
@@ -71,14 +67,14 @@ export default function UserProfile() {
         toast.error("User data not available");
         return;
       }
-      let imageUrl: string = user.profileImage || "";
+      let imageUrl: string = user.profile_image || "";
       if (croppedImage) {
         imageUrl = await uploadToCloudinary(croppedImage);
-        console.log(imageUrl)
       }
       const updatedData = { ...userData, email: user.email };
-      await updateProfile(imageUrl, updatedData);
+      const {newUser} = await updateProfile(imageUrl, updatedData);
       toast.success("Profile updated successfully!");
+      dispatch(addUser(newUser))
       setIsEditing(false);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -105,7 +101,7 @@ export default function UserProfile() {
           onClick={isEditing ? triggerFileInput : undefined}
         >
           <Avatar className="w-32 h-32 border-4 border-white shadow-lg group-hover:opacity-90 transition-opacity">
-            <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) : user.profileImage || ""} />
+            <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) : user.profile_image || ""} />
             <AvatarFallback className="bg-gray-100 text-gray-600 text-6xl font-medium">
               {user.name?.[0]?.toUpperCase() || "?"}
             </AvatarFallback>

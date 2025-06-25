@@ -1,5 +1,5 @@
-import { ClientEnties } from "../../../../entities/clientEnties";
+import { User } from "../../../../entities/userEntities";
 
 export interface IcreateUserUsecase{
-    createUser(user:ClientEnties):Promise<ClientEnties | null>
+    createUser(user:User):Promise<User | null>
 }

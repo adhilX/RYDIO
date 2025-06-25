@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
-import { ClientEnties } from "../../../domain/entities/clientEnties";
+import { User } from "../../../domain/entities/userEntities";
 
-export const userSchema = new Schema<ClientEnties>({
+export const userSchema = new Schema<User>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false },
@@ -10,5 +10,7 @@ export const userSchema = new Schema<ClientEnties>({
   profile_image: { type: String, default: "" },
   is_blocked: { type: Boolean, default: false },
   vendor_access: { type: Boolean, default: true },
+  is_verified_user: { type: Boolean, default: false },
+  last_login: { type: Date, default: new Date() },
   googleVerification: { type: Boolean, default: false }
-},{timestamps:true});
+}, { timestamps: true });

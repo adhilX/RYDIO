@@ -4,7 +4,7 @@ interface User {
     email: string,
     name: string,
     phone: string,
-    profileImage?: string,
+    profile_image?: string,
     _id?: string
     role: 'user',
     is_blocked: boolean,

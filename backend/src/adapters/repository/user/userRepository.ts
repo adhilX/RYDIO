@@ -17,4 +17,7 @@ export class UserRepostory implements IuserRepository{
       async changePassword(id: string, password: string): Promise<User | null> {
      return await userModel.findByIdAndUpdate(id, { password }, { new: true })
       }
+      async updateProfile(email: string, phone: string, name:string,profile_image:string): Promise<User | null> {
+     return await userModel.findOneAndUpdate({email}, { phone,name,profile_image }, { new: true })
+      }
 }

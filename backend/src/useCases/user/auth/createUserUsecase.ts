@@ -1,4 +1,3 @@
-import { ClientEnties } from "../../../domain/entities/clientEnties";
 import { User } from "../../../domain/entities/userEntities";
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IhashPassword } from "../../../domain/interface/serviceInterface/IhashPassword";
@@ -12,7 +11,7 @@ export class CreateUserUsecase implements IcreateUserUsecase{
         this.userRepository = userRepository
     }
 
-    async createUser(user: ClientEnties): Promise<ClientEnties | null> {
+    async createUser(user: User): Promise<User | null> {
         
         const existUser = await this.userRepository.findByEmail(user.email)
         if(existUser)throw new Error('user already exist')
@@ -27,6 +26,8 @@ export class CreateUserUsecase implements IcreateUserUsecase{
             email,
             password:hashPassword ?? '',
             role: 'user',
+            is_verified_user: false,
+            last_login: new Date()
         })
      if (!newUser) throw new Error('Error while creating user')
         return newUser

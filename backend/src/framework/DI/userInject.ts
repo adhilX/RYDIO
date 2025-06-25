@@ -19,6 +19,11 @@ import { ForgotPasswordUsecase } from "../../useCases/user/auth/SendforgotPasswo
 import { VerifyForgotPassowordOtpController } from "../../adapters/controllers/user/authentication/verifyForgotPasswordOtpController"
 import { ChangePasswordController } from "../../adapters/controllers/user/authentication/ChangePasswordController"
 import { ChangePasswordUseCase } from "../../useCases/user/auth/ChangePasswordUsecase"
+import { EditProfileController } from "../../adapters/controllers/user/editProfileController"
+import { EditProfileUsecase } from "../../useCases/user/editProfileUsecase"
+import { AddVehicleController } from "../../adapters/controllers/user/addVehicleController"
+import { AddVehicleUsecase } from "../../useCases/user/vehicle/addVehicleUseCase"
+import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository"
 
 // regester user 
 const otpService = new OtpService()
@@ -57,3 +62,14 @@ export const verifyForgotPassowordOtpController = new VerifyForgotPassowordOtpCo
 //--------change-Passoword--------
 const changePasswordUsecase = new ChangePasswordUseCase(userRepostory,hashPassword)
 export const changePasswordController = new ChangePasswordController(changePasswordUsecase)
+
+
+//-------update profile------------
+const editProfileUseCase = new EditProfileUsecase(userRepostory)
+export const editProfileController = new EditProfileController(editProfileUseCase)
+
+//------ add vehicle--------------
+
+const vehicleRepository = new VehicleRepository()
+const addVehicleUsecase = new AddVehicleUsecase(vehicleRepository)
+export const addVehicleController = new AddVehicleController(addVehicleUsecase)

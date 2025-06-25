@@ -4,7 +4,7 @@ import { isAxiosError } from "axios";
 
 export const updateProfile = async (ImageUrl:string, userData:userData) => {
   try {
-    const response = await axiosInstance.patch("/updateProfile", { ImageUrl, ...userData });
+    const response = await axiosInstance.patch("/editProfile", { ImageUrl, ...userData });
     return response?.data;
   } catch (error) {
     console.error('Error while updating profile:', error);
