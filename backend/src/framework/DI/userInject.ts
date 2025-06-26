@@ -24,6 +24,7 @@ import { EditProfileUsecase } from "../../useCases/user/editProfileUsecase"
 import { AddVehicleController } from "../../adapters/controllers/user/addVehicleController"
 import { AddVehicleUsecase } from "../../useCases/user/vehicle/addVehicleUseCase"
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository"
+import { LocationRepository } from "../../adapters/repository/user/LocationRepository"
 
 // regester user 
 const otpService = new OtpService()
@@ -71,5 +72,6 @@ export const editProfileController = new EditProfileController(editProfileUseCas
 //------ add vehicle--------------
 
 const vehicleRepository = new VehicleRepository()
-const addVehicleUsecase = new AddVehicleUsecase(vehicleRepository)
+const locationRepository = new LocationRepository()
+const addVehicleUsecase = new AddVehicleUsecase(vehicleRepository,locationRepository)
 export const addVehicleController = new AddVehicleController(addVehicleUsecase)

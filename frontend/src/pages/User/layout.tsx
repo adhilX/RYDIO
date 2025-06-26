@@ -1,6 +1,6 @@
 // Layout.jsx
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "./DashBoardSidebar";
+import { Sidebar } from "../../components/user/Dashboard/DashBoardSidebar";
 import Navbar from "@/components/user/Navbar";
 export default function Layout() {
   

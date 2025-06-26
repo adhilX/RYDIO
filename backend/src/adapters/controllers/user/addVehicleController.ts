@@ -10,8 +10,8 @@ export class AddVehicleController {
 
     async addVehicle(req:Request,res:Response):Promise<void>{
         try {
-            const {vehicle} = req.body
-           const response= await this.addVehicleUsecase.addVehicle(vehicle)
+            const {vehicle,location} = req.body
+           const response= await this.addVehicleUsecase.addVehicle({vehicle,location})
             res.status(HttpStatus.CREATED).json({message:'vehicle added'})
         } catch (error) {
               console.log('error while adding vehicle', error)

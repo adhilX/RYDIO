@@ -47,5 +47,7 @@ export class UserRoutes {
     this.UserRoutes.post('/add-vehicle',(req:Request,res:Response)=>{
         addVehicleController.addVehicle(req,res)
     })
-
+    this.UserRoutes.post('/add-location',(req:Request,res:Response)=>{
+    })
+    
 }}

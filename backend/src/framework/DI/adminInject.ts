@@ -3,12 +3,15 @@ import { BlockUserController } from "../../adapters/controllers/admin/BlockUsers
 import { GetAllUserController } from "../../adapters/controllers/admin/GetAllUserController";
 import { SearchUserController } from "../../adapters/controllers/admin/SearchUserController";
 import { UnblockUserController } from "../../adapters/controllers/admin/UnblockUserController";
+import { VehicleUpproveController } from "../../adapters/controllers/admin/vehicleManagment/VehicleUpproveController";
 import { AdminRepository } from "../../adapters/repository/admin/adminRepository";
+import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository";
 import { LoginAdminUsecase } from "../../useCases/admin/AdminLoginUsecase";
 import { BlockUserUseCase } from "../../useCases/admin/BlockUserUsecase";
 import { GetAllUserUsecase } from "../../useCases/admin/getAllUserUsecase";
 import { SearchUserusercase } from "../../useCases/admin/searchUserUsecase";
 import { UnblockUserUseCase } from "../../useCases/admin/UnblockUserUsecase";
+import { VehicleUpproveUsecase } from "../../useCases/admin/vehicleManagment/vehicleApproveUsecase";
 
 import { HashPassword } from "../services/hashPassword";
 import { JwtService } from "../services/jwtService";
@@ -39,3 +42,8 @@ export const unblockUserController = new UnblockUserController(unblockUserUseCas
 
 const searchUserusercase = new SearchUserusercase(adminRepository)
 export const searchUserController = new SearchUserController(searchUserusercase)
+
+//------approve vehicle--------
+const vehicleRepository = new VehicleRepository()
+const vehicleUpproveUsecase = new VehicleUpproveUsecase(vehicleRepository)
+export const vehicleUpproveController = new VehicleUpproveController(vehicleUpproveUsecase)

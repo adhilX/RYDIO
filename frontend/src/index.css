@@ -1,8 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+.leaflet-control-geosearch form input {
+  color: black !important;
+}
 
-
+.leaflet-control-geosearch .results > * {
+  color: black !important;
+}
 
 :root {
 

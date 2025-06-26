@@ -1,6 +1,10 @@
+import { Location } from "../../../../entities/LocationEnties";
 import { IVehicle } from "../../../../entities/vehcleEnties";
-
+interface AddVehicleProps {
+  vehicle: Omit<IVehicle, 'location_id'>;
+  location: Location
+}
 export interface IaddvehicleUsecase {
 
-    addVehicle(vehicle:IVehicle):Promise<IVehicle>
+    addVehicle({ vehicle, location }: AddVehicleProps): Promise<IVehicle>
 }
