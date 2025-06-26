@@ -4,7 +4,7 @@ import { LogOut, User, Car, Wallet, Calendar, LockKeyhole, X, Menu } from "lucid
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 
 export function Sidebar() {
   const dispatch = useDispatch();

@@ -21,7 +21,7 @@ const AdminLayout = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black flex w-full">
+        <div className="min-h-screen bg-black flex text-white w-full">
             <Sidebar
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}

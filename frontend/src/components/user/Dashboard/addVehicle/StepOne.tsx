@@ -43,7 +43,7 @@ const StepOne = ({ onSubmit, defaultValues }: StepOneProps) => {
       onSubmit={onSubmit}
     >
       {() => (
-        <Form className="space-y-4">
+        <Form className="space-y-4 ">
           <div>
             <label>Vehicle Name</label>
             <Field name="name" as={Input} placeholder="Enter vehicle name" />

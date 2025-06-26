@@ -27,7 +27,7 @@ const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: Home, path: "/admin" },
   { id: 'users', label: 'User Management', icon: Users, path: "/admin/users" },
   { id: 'vehicle', label: 'vehicle Management', icon: Car, path:'/admin/vehicle' },
-  { id: 'requests', label: 'requests', icon:MessageCircleWarning, path:'/admin/requests'},
+  { id: 'vehicle_requests', label: 'vehicle Requests', icon:MessageCircleWarning, path:'/admin/vehicle_requests'},
 ];
 
 export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollapse, onLogout }: SidebarProps) {

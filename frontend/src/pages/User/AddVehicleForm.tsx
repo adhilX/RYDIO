@@ -94,7 +94,7 @@ export default function AddVehicleForm() {
       </div>
 
       {/* Step Content */}
-      <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
+      <div className=" bg-stone-900 text-whitp-6 rounded-lg shadow-lg">
         {step === 1 && (
           <StepOne
             onSubmit={handleStepOneSubmit}

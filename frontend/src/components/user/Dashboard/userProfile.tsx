@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,6 +12,7 @@ import { useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userProfileSchema, type UserProfileFormData } from "@/Types/User/validation/UpdateProfileSchema";
 import { addUser } from "@/store/slice/user/UserSlice";
+import { UploadIdProofModal } from "./modal/IdProof";
 
 export default function UserProfile() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -21,6 +22,8 @@ export default function UserProfile() {
   const [showCropper, setShowCropper] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch()
+
+  const [open,SetOpen] = useState(false)
   const {
     register,
     reset,
@@ -204,6 +207,7 @@ export default function UserProfile() {
           </div>
         </div>
       </form>
+      <UploadIdProofModal open={open} onClose={SetOpen} />
     </div>
   );
 }

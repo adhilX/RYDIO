@@ -5,6 +5,8 @@ import AdminProtectedRoute from "./ProtectedRoutes/AdminProtectedRoute";
 import AdminLayout from "@/pages/Admin/AdminLayout";
 import { Dashboard } from "@/components/admin/Dashboard";
 import { UserManagement } from "@/components/admin/UserManagment";
+import VehicleList from "@/components/admin/vehicleList";
+import RequestedVehiclesPage from "@/components/admin/RequestedVehicle";
 
 
 export const AdminRoutes = () => {
@@ -18,6 +20,8 @@ export const AdminRoutes = () => {
         <Route path="/" element={<AdminLayout/>}>
           <Route index element={<Dashboard/>} />
           <Route path="users" element={<UserManagement/>} />
+          <Route path="vehicle" element={<><VehicleList/></>} />
+          <Route path="vehicle_requests" element={<><RequestedVehiclesPage/></>} />
         </Route>
       </Route>
     </Routes>
