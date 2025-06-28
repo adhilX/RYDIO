@@ -21,7 +21,11 @@ const AdminLayout = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black flex text-white w-full">
+        <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] via-[#2d0b12] to-[#181818] flex text-white w-full relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center opacity-10"></div>
+            <div className="absolute inset-0 bg-black/70"></div>
+            <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-[#e63946]/10 to-[#1a1a1a]/0 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-tr from-[#e63946]/20 to-[#181818]/0 rounded-full blur-3xl animate-pulse delay-1000"></div>
             <Sidebar
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}

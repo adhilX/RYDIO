@@ -1,4 +1,4 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -36,8 +36,6 @@ export default function UserProfile() {
       phone: "",
     },
   });
-
-  console.log(user)
 
   useEffect(() => {
     if (user) {
@@ -92,18 +90,11 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-8 bg-white rounded-xl shadow-sm border border-gray-200">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">User Profile</h2>
-        <p className="text-sm text-gray-500">Manage your account details</p>
-      </div>
-
-      <div className="flex justify-center mb-8">
-        <div
-          className="relative group cursor-pointer"
-          onClick={isEditing ? triggerFileInput : undefined}
-        >
-          <Avatar className="w-32 h-32 border-4 border-white shadow-lg group-hover:opacity-90 transition-opacity">
+    <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12 py-8 md:py-12 font-sans">
+      {/* Left: User Details Card */}
+      <div className="w-full md:w-[340px] bg-white dark:bg-black rounded-xl shadow-lg border border-gray-200 dark:border-white/10 p-6 md:p-8 flex flex-col items-center mb-8 md:mb-0">
+        <div className="relative group cursor-pointer mb-6" onClick={isEditing ? triggerFileInput : undefined}>
+          <Avatar className="w-32 h-32 border-4 border-white dark:border-black shadow-lg group-hover:opacity-90 transition-opacity">
             <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) : user.profile_image || ""} />
             <AvatarFallback className="bg-gray-100 text-gray-600 text-6xl font-medium">
               {user.name?.[0]?.toUpperCase() || "?"}
@@ -123,91 +114,96 @@ export default function UserProfile() {
           ref={fileInputRef}
           title="Upload profile image"
         />
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">{user.name || "Not set"}</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{user.email || "Not set"}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{user.phone || "Add your phone number"}</p>
+        <Button
+          className="w-full bg-[#6DA5C0] hover:bg-[#5b8ca3] text-white font-semibold py-2 rounded-md transition-all duration-200 shadow-sm mb-2"
+          onClick={()=>SetOpen(true)}
+        >
+          Submit ID Proof
+        </Button>
+        <Button
+          className="w-full bg-black dark:bg-white text-white dark:text-black border border-black dark:border-white hover:bg-[#6DA5C0] hover:text-white dark:hover:bg-[#6DA5C0] dark:hover:text-white font-semibold py-2 rounded-md transition-all duration-200 shadow-sm"
+          type="button"
+          onClick={() => setIsEditing(true)}
+          disabled={isEditing}
+        >
+          Edit Profile
+        </Button>
+        <ImageCropper
+          imageSrc={imageSrc}
+          onCropComplete={setCroppedImage}
+          open={showCropper}
+          onOpenChange={setShowCropper}
+        />
+        <UploadIdProofModal open={open} onClose={() => SetOpen(false)} onUploadComplete={() => {}}/>
       </div>
 
-      <ImageCropper
-        imageSrc={imageSrc}
-        onCropComplete={setCroppedImage}
-        open={showCropper}
-        onOpenChange={setShowCropper}
-      />
-
-      <form onSubmit={handleSubmit(handleUpdateUser)}>
-        <div className="space-y-6">
+      {/* Right: Editable Form or Info Blocks */}
+      <div className="flex-1 bg-white dark:bg-black rounded-xl shadow-lg border border-gray-200 dark:border-white/10 p-6 md:p-8">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Profile Details</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Manage your account details</p>
+        </div>
+        <form onSubmit={handleSubmit(handleUpdateUser)} className="space-y-8">
           {/* Name Field */}
           <div>
-            <Label htmlFor="name" className="text-sm font-medium text-gray-700 mb-1 block">
-              Name
-            </Label>
+            <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">Name</Label>
             {isEditing ? (
               <div>
                 <input
                   {...register("name")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 focus:ring-gray-900 focus:border-gray-900"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-md text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
                 />
                 {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
               </div>
             ) : (
-              <p className="text-gray-900 font-medium">{user.name || "Not set"}</p>
+              <p className="text-gray-900 dark:text-white font-medium">{user.name || "Not set"}</p>
             )}
           </div>
-
           {/* Email Field (read-only) */}
           <div>
-            <Label className="text-sm font-medium text-gray-700 mb-1 block">Email</Label>
-            <p className="text-gray-900 font-medium">{user.email || "Not set"}</p>
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">Email</Label>
+            <p className="text-gray-900 dark:text-white font-medium">{user.email || "Not set"}</p>
             <span className="text-xs text-yellow-600 mt-1 block">Email cannot be changed</span>
           </div>
-
           {/* Phone Field */}
           <div>
-            <Label htmlFor="phone" className="text-sm font-medium text-gray-700 mb-1 block">
-              Phone
-            </Label>
+            <Label htmlFor="phone" className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">Phone</Label>
             {isEditing ? (
               <div>
                 <input
                   {...register("phone")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 focus:ring-gray-900 focus:border-gray-900"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-md text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
                 />
                 {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>}
               </div>
             ) : (
-              <p className="text-gray-900 font-medium">{user.phone || "Add your phone number"}</p>
+              <p className="text-gray-900 dark:text-white font-medium">{user.phone || "Add your phone number"}</p>
             )}
           </div>
-
-          <div className="pt-4 flex justify-center">
-            {isEditing ? (
-              <>
-                <Button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="w-28 bg-gray-300 hover:bg-red-400 text-black py-2 mx-3 rounded-md transition-colors shadow-sm"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-28 bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-md transition-colors shadow-sm"
-                >
-                  {isSubmitting ? "Please Wait..." : "Save Profile"}
-                </Button>
-              </>
-            ) : (
+          {/* Save/Cancel Buttons */}
+          {isEditing && (
+            <div className="flex gap-4 pt-2">
               <Button
                 type="button"
-                onClick={() => setIsEditing(true)}
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-md transition-colors shadow-sm"
+                onClick={() => setIsEditing(false)}
+                className="w-28 bg-gray-300 hover:bg-red-400 text-black py-2 rounded-md transition-all duration-200 shadow-sm"
               >
-                Edit Profile
+                Cancel
               </Button>
-            )}
-          </div>
-        </div>
-      </form>
-      <UploadIdProofModal open={open} onClose={SetOpen} />
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-28 bg-[#6DA5C0] hover:bg-[#5b8ca3] text-white py-2 rounded-md transition-all duration-200 shadow-sm"
+              >
+                {isSubmitting ? "Please Wait..." : "Save Profile"}
+              </Button>
+            </div>
+          )}
+        </form>
+      </div>
     </div>
   );
 }

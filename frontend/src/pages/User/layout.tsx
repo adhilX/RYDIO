@@ -5,11 +5,11 @@ import Navbar from "@/components/user/Navbar";
 export default function Layout() {
   
   return (
-    <div className="min-h-screen  bg-stone-900 text-white relative">
+    <div className="min-h-screen bg-black text-white relative">
       <Navbar />
       <div className="flex flex-col md:flex-row"> 
         <Sidebar />
-        <main className="flex-1 p-4 md:p-6"> 
+        <main className="flex-1 p-5 md:p-6"> 
           <Outlet />
         </main>
       </div>

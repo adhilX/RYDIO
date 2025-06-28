@@ -5,6 +5,7 @@ import { UserRoutes } from './framework/routes/user/userRoutes';
 import { ConnectMongoDB } from './framework/database/databaseConnection/dbConnection';
 import cors from 'cors';
 import { AdminRoutes } from './framework/routes/admin/adminRoutes';
+import redisService from './framework/services/redisService';
 
 export class App {
     private app : Application                
@@ -18,6 +19,7 @@ export class App {
         }))
         this.port = process.env.PORT || 3000;
         this.database = new ConnectMongoDB()
+        this.connectRedis()
         this.database.connectDB()
         this.app.use(express.json());
         this.app.use(urlencoded({extended:true}));
@@ -35,6 +37,9 @@ export class App {
     }
     private setAdminRoutes(){
         this.app.use('/admin',new AdminRoutes().AdminRoute)
+    }
+       private async connectRedis() {
+        await redisService.connect()
     }
 }
 

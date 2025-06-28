@@ -5,7 +5,6 @@ import {
   // BarChart3, 
   // Settings, 
   Menu,
-  X,
   Home,
   LogOut,
   Car,
@@ -47,18 +46,18 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
 
   return (
     <motion.div
-      className="bg-black border-r border-gray-800 flex flex-col h-screen relative z-50"
+      className="bg-black/90 backdrop-blur-xl border-r border-[#e63946]/30 shadow-2xl flex flex-col h-screen relative z-50 rounded-r-2xl"
       variants={sidebarVariants}
       animate={isCollapsed ? 'collapsed' : 'expanded'}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       {/* Header */}
-      <div className="p-4 border-b border-gray-800">
+      <div className="p-4 border-b border-black/60">
         <div className="flex items-center justify-between">
           <AnimatePresence>
             {!isCollapsed && (
               <motion.h1
-                className="text-xl font-bold text-white"
+                className="text-xl font-bold text-[#e63946] tracking-wider drop-shadow"
                 variants={itemVariants}
                 initial="collapsed"
                 animate="expanded"
@@ -71,13 +70,13 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
           </AnimatePresence>
           <button
             onClick={onToggleCollapse}
-            className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-lg hover:bg-black/60 transition-colors"
           >
             <motion.div
               animate={{ rotate: isCollapsed ? 0 : 180 }}
               transition={{ duration: 0.3 }}
             >
-              {isCollapsed ? <Menu size={20} color="#fff" /> : <X size={20} color="#fff" />}
+              <Menu size={20} color="#fff" />
             </motion.div>
           </button>
         </div>
@@ -96,18 +95,19 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
                 onPageChange(item.id);
                 navigate(item.path);
               }}
-              className={`w-full flex items-center p-3 rounded-lg transition-all duration-200 ${isActive
-                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
-                  : 'text-gray-400 hover:bg-gray-800'
-                }`}
-              whileHover={{ scale: 1.02 }}
+              className={`w-full flex items-center p-3 rounded-xl transition-all duration-200 font-semibold text-base group relative
+                ${isActive
+                  ? 'bg-[#e63946]/30 text-[#e63946] shadow-lg ring-2 ring-[#e63946] scale-105 border-l-4 border-[#e63946]'
+                  : 'text-gray-400 hover:bg-black/60 hover:text-[#e63946]'}
+              `}
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Icon size={20} color={isActive ? "#fff" : "#9ca3af"} />
+              <Icon size={22} color={isActive ? "#e63946" : "#9ca3af"} className="transition-all duration-200" />
               <AnimatePresence>
                 {!isCollapsed && (
                   <motion.span
-                    className="ml-3 font-medium"
+                    className="ml-3 font-medium tracking-wide"
                     variants={itemVariants}
                     initial="collapsed"
                     animate="expanded"
@@ -118,24 +118,27 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
                   </motion.span>
                 )}
               </AnimatePresence>
+              {isActive && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#e63946] rounded-full shadow-lg animate-pulse" />
+              )}
             </motion.button>
           );
         })}
       </nav>
 
       {/* Logout Button */}
-      <div className="p-4 border-t border-gray-800 mt-auto">
+      <div className="p-4 border-t border-black/60 mt-auto">
         <motion.button
           onClick={onLogout}
-          className="w-full flex items-center p-3 rounded-lg text-gray-400 hover:bg-gray-800 transition-all duration-200"
-          whileHover={{ scale: 1.02 }}
+          className="w-full flex items-center p-3 rounded-xl text-[#e63946] hover:bg-black/60 hover:text-white transition-all duration-200 font-semibold border-t border-[#e63946]/20"
+          whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
         >
-          <LogOut size={20} color="#9ca3af" />
+          <LogOut size={22} color="#e63946" />
           <AnimatePresence>
             {!isCollapsed && (
               <motion.span
-                className="ml-3 font-medium"
+                className="ml-3 font-medium tracking-wide"
                 variants={itemVariants}
                 initial="collapsed"
                 animate="expanded"

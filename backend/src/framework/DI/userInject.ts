@@ -25,6 +25,10 @@ import { AddVehicleController } from "../../adapters/controllers/user/addVehicle
 import { AddVehicleUsecase } from "../../useCases/user/vehicle/addVehicleUseCase"
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository"
 import { LocationRepository } from "../../adapters/repository/user/LocationRepository"
+import { ChangePasswordUserController } from "../../adapters/controllers/user/changePasswordController"
+import { ChangePassword } from "../../useCases/user/ChangePasswordUsecase"
+import { MyVehicleController } from "../../adapters/controllers/user/MyVehicleController"
+import { MyVehicleUsecase } from "../../useCases/user/vehicle/MyvehicleUsecase"
 
 // regester user 
 const otpService = new OtpService()
@@ -75,3 +79,14 @@ const vehicleRepository = new VehicleRepository()
 const locationRepository = new LocationRepository()
 const addVehicleUsecase = new AddVehicleUsecase(vehicleRepository,locationRepository)
 export const addVehicleController = new AddVehicleController(addVehicleUsecase)
+
+
+//-----change password---------
+
+const changePasswordUserUsecase = new ChangePassword(userRepostory,hashPassword)
+export const changePasswordUserController = new ChangePasswordUserController(changePasswordUserUsecase)
+
+//---get my vehicle---
+
+const myvehicleUsecase = new MyVehicleUsecase(vehicleRepository)
+export const myVehicleController = new MyVehicleController(myvehicleUsecase)

@@ -47,9 +47,9 @@ export default function SignupPage() {
         <CardHeader className="space-y-2 pb-2">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white tracking-wider">
-              RY<span className="text-red-700">DIO</span>
+              RY<span className="text-[#e63946]">DIO</span>
             </h1>
-            <div className="w-16 h-1 bg-gradient-to-r from-red-700 to-red-500 mx-auto mt-2 rounded-full"></div>
+            <div className="w-16 h-1 bg-gradient-to-r from-[#e63946] to-red-500 mx-auto mt-2 rounded-full"></div>
           </div>
           <div className="text-center space-y-1">
             <h2 className="text-2xl font-semibold text-white">Create Account</h2>
@@ -104,8 +104,8 @@ export default function SignupPage() {
                         as="input"
                         className={`w-full pl-11 bg-gray-800/50 border-gray-600 text-white h-10 rounded-md 
                           ${touched.name && errors.name
-                            ? "border border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
-                            : "border border-gray-600 focus:border-red-700 focus:ring-2 focus:ring-red-700/20"
+                            ? "border border-[#e63946] focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/50"
+                            : "border border-gray-600 focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/20"
                           }`}
                         disabled={isSubmitting}
                       />
@@ -130,8 +130,8 @@ export default function SignupPage() {
                         as="input"
                         className={`w-full pl-11 bg-gray-800/50 border-gray-600 text-white h-10 rounded-md 
                           ${touched.email && errors.email
-                            ? "border border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
-                            : "border border-gray-600 focus:border-red-700 focus:ring-2 focus:ring-red-700/20"
+                            ? "border border-[#e63946] focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/50"
+                            : "border border-gray-600 focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/20"
                           }`}
                         disabled={isSubmitting}
                       />
@@ -156,8 +156,8 @@ export default function SignupPage() {
                         as="input"
                         className={`w-full pl-11 bg-gray-800/50 border-gray-600 text-white h-10 rounded-md 
                           ${touched.phone && errors.phone
-                            ? "border border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
-                            : "border border-gray-600 focus:border-red-700 focus:ring-2 focus:ring-red-700/20"
+                            ? "border border-[#e63946] focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/50"
+                            : "border border-gray-600 focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/20"
                           }`}
                         disabled={isSubmitting}
                       />
@@ -182,8 +182,8 @@ export default function SignupPage() {
                         as="input"
                         className={`w-full pl-11 pr-12 bg-gray-800/50 border-gray-600 text-white h-10 rounded-md 
                           ${touched.password && errors.password
-                            ? "border border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
-                            : "border border-gray-600 focus:border-red-700 focus:ring-2 focus:ring-red-700/20"
+                            ? "border border-[#e63946] focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/50"
+                            : "border border-gray-600 focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/20"
                           }`}
                         disabled={isSubmitting}
                       />
@@ -218,8 +218,8 @@ export default function SignupPage() {
                         as="input"
                         className={`w-full pl-11 pr-12 bg-gray-800/50 border-gray-600 text-white h-10 rounded-md 
                           ${touched.confirmPassword && errors.confirmPassword
-                            ? "border border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
-                            : "border border-gray-600 focus:border-red-700 focus:ring-2 focus:ring-red-700/20"
+                            ? "border border-[#e63946] focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/50"
+                            : "border border-gray-600 focus:border-[#e63946] focus:ring-2 focus:ring-[#e63946]/20"
                           }`}
                         disabled={isSubmitting}
                       />
@@ -242,7 +242,7 @@ export default function SignupPage() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-red-700 hover:bg-red-600 text-white font-semibold h-12"
+                    className="w-full bg-[#e63946] hover:bg-red-600 text-white font-semibold h-12"
                   >
                     {isSubmitting ? "Please Wait..." : "Create Account"}
                   </Button>

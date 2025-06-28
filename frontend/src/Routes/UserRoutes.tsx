@@ -8,6 +8,9 @@ import Layout from "@/pages/User/layout"
 import { Route, Routes } from "react-router"
 import UserProtectedRoute from "./ProtectedRoutes/userProtectedRoute"
 import ProtectedRoute from "./ProtectedRoutes/ProtectedRoutes"
+import ChangePassword from "@/components/user/Dashboard/ChagePassword"
+import Wallet from "@/components/user/Dashboard/Wallet"
+import ListVehilce from "@/components/user/Dashboard/ListVehilce"
 
 
 export const UserRoutes = () => {
@@ -38,7 +41,31 @@ export const UserRoutes = () => {
                     path="vehicles"
                     element={
                         <UserProtectedRoute>
+                            <ListVehilce />
+                        </UserProtectedRoute>
+                    }
+                />
+                <Route
+                    path="add-vehicle"
+                    element={
+                        <UserProtectedRoute>
                             <AddVehicleForm />
+                        </UserProtectedRoute>
+                    }
+                />
+                <Route
+                    path="change-password"
+                    element={
+                        <UserProtectedRoute>
+                            <ChangePassword />
+                        </UserProtectedRoute>
+                    }
+                />
+                <Route
+                    path="wallet"
+                    element={
+                        <UserProtectedRoute>
+                            <Wallet />
                         </UserProtectedRoute>
                     }
                 />

@@ -1,33 +1,41 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { handleVehicle } from '@/services/admin/vehicleSevice';
 import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
+import type { Iuser } from '@/Types/User/Iuser';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
-interface Owner {
-  name: string;
-  email: string;
-  phone: string;
-}
 
 interface AdminVehicleModalProps {
   open: boolean;
   onClose: () => void;
-  vehicle: Vehicle & { owner: Owner };
+  vehicle: Vehicle & { owner_id: Iuser };
 }
 
 export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onClose, vehicle }) => {
   if (!vehicle) return null;
-
+  
+  const handleAccept = async()=>{
+   const response = await handleVehicle(vehicle._id!,'accepted')
+  toast.success(response.message)
+  onClose()
+  }
+  const handleReject = async()=>{
+   const response = await handleVehicle(vehicle._id!,'rejected')
+  toast.success(response.message)
+  onClose()
+  }
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl p-0 overflow-hidden bg-white dark:bg-gray-900">
+      <DialogContent className="max-w-3xl p-0 overflow-hidden bg-neutral-900">
         <motion.div
           className="w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="flex justify-between items-center px-6 py-4 border-b dark:border-gray-700">
+          <div className="flex justify-between items-center px-6 py-4 text-white border-b dark:border-gray-700">
             <DialogTitle className="text-lg font-bold">Vehicle Details</DialogTitle>
             <button onClick={onClose}>
               <X className="w-5 h-5" />
@@ -53,16 +61,16 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
             {/* Owner Info */}
             <div>
               <h3 className="font-semibold mb-2">Owner Info</h3>
-              <p><span className="font-medium">Name:</span> {vehicle.owner.name}</p>
-              <p><span className="font-medium">Email:</span> {vehicle.owner.email}</p>
-              <p><span className="font-medium">Phone:</span> {vehicle.owner.phone}</p>
+              <p><span className="font-medium">Name:</span> {vehicle.owner_id.name}</p>
+              <p><span className="font-medium">Email:</span> {vehicle.owner_id.email}</p>
+              <p><span className="font-medium">Phone:</span> {vehicle.owner_id.phone}</p>
 
               <div className="mt-4">
                 <h3 className="font-semibold mb-2">Location</h3>
-                <p><span className="font-medium">City:</span> {vehicle.city}</p>
-                <p><span className="font-medium">State:</span> {vehicle.state}</p>
-                <p><span className="font-medium">Country:</span> {vehicle.country}</p>
-                <p><span className="font-medium">Pincode:</span> {vehicle.pincode}</p>
+                <p><span className="font-medium">City:</span> {vehicle.location_id.city}</p>
+                <p><span className="font-medium">State:</span> {vehicle.location_id.state}</p>
+                <p><span className="font-medium">Country:</span> {vehicle.location_id.country}</p>
+                <p><span className="font-medium">Pincode:</span> {vehicle.location_id.pincode}</p>
               </div>
             </div>
           </div>
@@ -70,7 +78,7 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
           {/* Images */}
           {vehicle.image_urls?.length > 0 && (
             <div className="px-6 pb-6">
-              <h3 className="font-semibold mb-2">Images</h3>
+              <h3 className="font-semibold mb-2 text-white">Images</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {vehicle.image_urls.map((url, idx) => (
                   <img
@@ -84,6 +92,20 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
             </div>
           )}
         </motion.div>
+        <div className="flex justify-end gap-4 px-6 pb-6">
+          <button
+          onClick={handleAccept}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded cursor-pointer transition-colors"
+          >
+            Accept
+          </button>
+          <button
+          onClick={handleReject}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded cursor-pointer transition-colors"
+          >
+            Reject
+          </button>
+        </div>
       </DialogContent>
     </Dialog>
   );

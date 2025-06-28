@@ -1,117 +1,107 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
 import { AdminVehicleModal } from './modal/AdminVehicleModal';
 import VehicleCard from './vehicleCard';
+import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
+import { getPendingVehicle } from '@/services/admin/vehicleSevice';
+import { Input } from '../ui/input';
+import Pagination from '../Pagination';
+import type { Iuser } from '@/Types/User/Iuser';
 
-interface Vehicle {
-  id: string;
-  name: string;
-  brand: string;
-  registration_number: string;
-  image_url: string;
-  status: 'requested' | 'rejected';
-  owner: {
-    name: string;
-    email: string;
-  };
-}
 
-const dummyVehicles: Vehicle[] = Array.from({ length: 25 }).map((_, i) => ({
-  id: `veh-${i + 1}`,
-  name: `Car ${i + 1}`,
-  brand: ['Toyota', 'Honda', 'Ford'][i % 3],
-  registration_number: `KL-${i + 10}-XYZ`,
-  image_url: 'https://via.placeholder.com/200x120',
-  status: i % 2 === 0 ? 'requested' : 'rejected',
-  owner: {
-    name: `Owner ${i + 1}`,
-    email: `owner${i + 1}@mail.com`,
-  },
-}));
 
-const ITEMS_PER_PAGE = 6;
 
 export default function AdminRequestedVehicles() {
   const [showRejected, setShowRejected] = useState(false);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
-
-  const filteredVehicles = dummyVehicles.filter(
-    (v) =>
-      v.status === (showRejected ? 'rejected' : 'requested') &&
-      v.name.toLowerCase().includes(search.toLowerCase())
+  const [vehicle, setVehicles] = useState<Vehicle[]>([])
+  const [totalPage,setTotalPage]= useState(1)
+  const filteredVehicles = vehicle.filter((v) =>
+    v.admin_approve === (showRejected ? 'rejected' : 'pending')
   );
 
-  const totalPages = Math.ceil(filteredVehicles.length / ITEMS_PER_PAGE);
-  const currentData = filteredVehicles.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+
+const [debouncedSearch, setDebouncedSearch] = useState(search);
+
+useEffect(() => {
+  const delayDebounce = setTimeout(() => {
+    setDebouncedSearch(search);
+  }, 500); 
+
+  return () => clearTimeout(delayDebounce);
+}, [search]);
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [search, showRejected]);
+    const fetchData = async () => {
+      const response = await getPendingVehicle(debouncedSearch, currentPage, 6);
+      setVehicles(response?.vehicles || []);
+      setTotalPage(response?.total)
+    };
+    fetchData();
+  }, [debouncedSearch, currentPage, showRejected, selectedVehicle]);
+
 
   return (
     <motion.div
-      className="p-6 space-y-6"
+      className={
+        `p-6 space-y-6 0 shadow-2xl rounded-xl transition-all duration-300` +
+        (selectedVehicle ? ' blur-sm ' : '')
+      }
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex flex-col md:flex-row text-white justify-between items-center gap-4">
+      <div className="flex flex-col md:flex-row text-white justify-end p-4 items-center gap-4">
         <Input
           placeholder="Search vehicle..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
+          className="max-w-sm bg-black/60 border border-black/60 text-white focus:outline-none focus:ring-2 focus:ring-[#e63946] rounded-lg"
         />
         <Button
           variant="outline"
-          onClick={() => setShowRejected((prev) => !prev)}
+          onClick={() => {
+            setShowRejected((prev) => !prev);
+            setCurrentPage(1);
+          }}
+          className="bg-[#e63946] hover:bg-red-600 text-white rounded-lg font-semibold transition"
         >
           {showRejected ? 'Show Requested' : 'Show Rejected'}
         </Button>
+
       </div>
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[200px]"></div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {currentData.map((vehicle) => (
-                  <VehicleCard setSelectedVehicle={setSelectedVehicle} vehicle={vehicle}/>
-
-        ))}
+        {filteredVehicles.length? filteredVehicles.map((vehicle, idx) => (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05 }}
+          >
+            <VehicleCard vehicle={vehicle} setSelectedVehicle={setSelectedVehicle} />
+          </motion.div>
+        )) : (
+          <div className="col-span-full flex justify-center items-center py-12">
+        <p className="text-gray-100 text-lg">No vehicles found.</p>
+          </div>
+        )}
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center items-center gap-2 pt-4">
-        <Button
-          variant="secondary"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
-        >
-          Prev
-        </Button>
-        <span className="text-sm text-gray-300">
-          Page {currentPage} of {totalPages}
-        </span>
-        <Button
-          variant="secondary"
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-        >
-          Next
-        </Button>
-      </div>
 
-      {selectedVehicle && (
-        <AdminVehicleModal
-          vehicle={selectedVehicle}
-          open={!!selectedVehicle}
-          onClose={() => setSelectedVehicle(null)}
-        />
-      )}
+{totalPage>1?<Pagination currentPage={currentPage} onPageChange={setCurrentPage} totalPages={totalPage}/>:<></>}
+   {selectedVehicle && typeof selectedVehicle.owner_id !== 'string' && (
+  <AdminVehicleModal
+    vehicle={selectedVehicle as Vehicle & { owner_id: Iuser }}
+    open={!!selectedVehicle}
+    onClose={() => setSelectedVehicle(null)}
+  />
+)}
+
     </motion.div>
   );
 }

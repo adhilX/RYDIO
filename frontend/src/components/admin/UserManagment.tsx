@@ -4,7 +4,7 @@ import { Search } from 'lucide-react';
 import { getUsers } from '@/services/admin/authService';
 import { UnbserBlock, UserBlock } from '@/services/admin/UserBlockService';
 import toast from 'react-hot-toast';
-import { PuffLoader } from 'react-spinners';
+import Pagination from '../Pagination';
 
 interface User {
   _id: string;
@@ -89,14 +89,10 @@ export function UserManagement() {
     );
   };
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+
 
   return (
-    <motion.div className="p-6 space-y-6 bg-black min-h-screen">
+    <motion.div className="p-6 space-y-6 min-h-screen bg-black/90">
       <motion.div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">User Management</h1>
@@ -105,7 +101,7 @@ export function UserManagement() {
       </motion.div>
 
       {/* Search */}
-      <motion.div className="bg-black p-3 rounded-xl border border-gray-700 shadow-sm">
+      <motion.div className="bg-black/80 backdrop-blur-xl border border-black/60 shadow-2xl p-3 rounded-xl">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -114,17 +110,18 @@ export function UserManagement() {
               placeholder="Search by email or name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-black/60 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#e63946]"
             />
           </div>
         </div>
       </motion.div>
 
       {/* Table */}
-      <motion.div className="bg-black rounded-xl border border-gray-700 shadow-sm overflow-hidden">
+      <motion.div className="bg-transparent backdrop-blur-xl border border-black/60 shadow-2xl rounded-xl overflow-hidden">
         {isLoading ? (
-          <div className="flex justify-center items-center h-max">
-            <PuffLoader color="#ffffff" size={60} />
+          <div className="flex flex-col justify-center items-center h-64">
+            <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+            <span className="mt-4 text-white/80 text-lg font-semibold animate-pulse">Loading users...</span>
           </div>
         ) : users.length === 0 ? (
           <div className="p-6  h-100 flex text-center justify-center text-gray-400">No users found</div>
@@ -143,7 +140,7 @@ export function UserManagement() {
                 {users.map((user, index) => (
                   <motion.tr
                     key={user._id}
-                    className="hover:bg-gray-700/50"
+                    className="hover:bg-black/60 transition-all duration-200"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.03 }}
@@ -167,10 +164,10 @@ export function UserManagement() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => handleBlock(user._id, user.is_blocked)}
-                        className={`text-sm font-medium px-3 py-1 rounded-lg ${
+                        className={`text-sm font-medium px-3 py-1 rounded-lg transition-all duration-200 shadow-sm ${
                           user.is_blocked
-                            ? 'bg-red-900/30 text-red-400 hover:bg-red-900/50'
-                            : 'bg-green-900/30 text-green-400 hover:bg-green-900/50'
+                            ? 'bg-[#e63946]/20 text-[#e63946] hover:bg-[#e63946]/30'
+                            : 'bg-green-900/30 text-green-400 hover:bg-black/60'
                         }`}
                       >
                         {user.is_blocked ? 'Unblock' : 'Block'}
@@ -179,10 +176,10 @@ export function UserManagement() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => toggleVendorAccess(user._id)}
-                        className={`text-sm font-medium px-3 py-1 rounded-lg ${
+                        className={`text-sm font-medium px-3 py-1 rounded-lg transition-all duration-200 shadow-sm ${
                           user.vendor_access
-                            ? 'bg-blue-900/30 text-blue-400 hover:bg-blue-900/50'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            ? 'bg-[#e63946]/20 text-[#e63946] hover:bg-[#e63946]/30'
+                            : 'bg-black/60 text-gray-300 hover:bg-black/80'
                         }`}
                       >
                         {user.vendor_access ? 'True' : 'False'}
@@ -198,45 +195,11 @@ export function UserManagement() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <motion.div
-          className="flex items-center justify-center bg-dark p-4 rounded-xl border border-gray-700"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 bg-gray-700 text-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Previous
-            </button>
-            <div className="flex items-center gap-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2))
-                .map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => handlePageChange(page)}
-                    className={`px-3 py-1 rounded-lg ${
-                      currentPage === page
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-            </div>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 bg-gray-700 text-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-            </button>
-          </div>
-        </motion.div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       )}
     </motion.div>
   );

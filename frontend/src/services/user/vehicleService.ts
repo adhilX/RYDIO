@@ -5,14 +5,27 @@ import { isAxiosError } from "axios";
 
 export const postVehicle = async (vehicle:Vehicle,location:StepThreeFormData) => {
   try {
-    const response = await axiosInstance.post("/add-vehicle",{vehicle,location});
+    const response = await axiosInstance.post("/add-vehicle", { vehicle, location });
     return response?.data;
   } catch (error) {
-    console.error('Error while updating profile:', error);
+    console.error('Error while adding vehicle:', error);
     if (isAxiosError(error)) {
-      const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while updating profile';
+      const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while adding vehicle';
       throw new Error(errorMsg);
     }
-    throw new Error('An unexpected error occurred while updating profile');
+    throw new Error('An unexpected error occurred while adding vehicle');
+  }
+};
+export const getMyVehicle = async (owner_id: string, search = '', page = 1, limit = 10) => {
+  try {
+    const response = await axiosInstance.post("/my-vehicle", { owner_id, search, page, limit });
+    return response?.data;
+  } catch (error) {
+    console.error('Error while fetching vehicles:', error);
+    if (isAxiosError(error)) {
+      const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while fetching vehicles';
+      throw new Error(errorMsg);
+    }
+    throw new Error('An unexpected error occurred while fetching vehicles');
   }
 };

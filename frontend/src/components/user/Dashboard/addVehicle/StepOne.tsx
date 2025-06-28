@@ -43,69 +43,70 @@ const StepOne = ({ onSubmit, defaultValues }: StepOneProps) => {
       onSubmit={onSubmit}
     >
       {() => (
-        <Form className="space-y-4 ">
-          <div>
-            <label>Vehicle Name</label>
-            <Field name="name" as={Input} placeholder="Enter vehicle name" />
-            <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
+        <Form className="space-y-6 font-sans">
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Vehicle Name</label>
+            <Field name="name" as={Input} placeholder="Enter vehicle name" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+            <ErrorMessage name="name" component="div" className="mt-1 text-sm text-red-500" />
           </div>
 
-          <div>
-            <label>Brand</label>
-            <Field name="brand" as={Input} placeholder="Enter brand" />
-            <ErrorMessage name="brand" component="div" className="text-red-500 text-sm" />
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Brand</label>
+            <Field name="brand" as={Input} placeholder="Enter brand" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+            <ErrorMessage name="brand" component="div" className="mt-1 text-sm text-red-500" />
           </div>
 
-          <div>
-            <label>Registration Number</label>
-            <Field name="registration_number" as={Input} placeholder="Enter registration number" />
-            <ErrorMessage name="registration_number" component="div" className="text-red-500 text-sm" />
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Registration Number</label>
+            <Field name="registration_number" as={Input} placeholder="Enter registration number" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+            <ErrorMessage name="registration_number" component="div" className="mt-1 text-sm text-red-500" />
           </div>
 
-          <div>
-            <label>Fuel Type</label>
-            <Field name="fuel_type" as="select" className="w-full border rounded px-2 py-1">
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Fuel Type</label>
+            <Field name="fuel_type" as="select" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200">
               <option value="petrol">Petrol</option>
               <option value="diesel">Diesel</option>
               <option value="electric">Electric</option>
             </Field>
-            <ErrorMessage name="fuel_type" component="div" className="text-red-500 text-sm" />
+            <ErrorMessage name="fuel_type" component="div" className="mt-1 text-sm text-red-500" />
           </div>
 
-          <div>
-            <label>Seats</label>
-            <Field name="seats" as="select" className="w-full border rounded px-2 py-1">
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Seats</label>
+            <Field name="seats" as="select" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200">
               {[2, 4, 5, 7].map((seat) => (
                 <option key={seat} value={seat}>{seat}</option>
               ))}
             </Field>
-            <ErrorMessage name="seats" component="div" className="text-red-500 text-sm" />
+            <ErrorMessage name="seats" component="div" className="mt-1 text-sm text-red-500" />
           </div>
 
-          <div>
-            <label>Car Type</label>
-            <Field name="car_type" as="select" className="w-full border rounded px-2 py-1">
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Car Type</label>
+            <Field name="car_type" as="select" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200">
               {['sedan', 'hateback', 'xuv', 'suv', 'sports'].map((type) => (
                 <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
               ))}
             </Field>
-            <ErrorMessage name="car_type" component="div" className="text-red-500 text-sm" />
+            <ErrorMessage name="car_type" component="div" className="mt-1 text-sm text-red-500" />
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Field type="checkbox" name="automatic" />
-            <label>Automatic Transmission</label>
+          <div className="flex items-center space-x-2 mb-6">
+            <Field type="checkbox" name="automatic" className="accent-[#6DA5C0] w-5 h-5 rounded focus:ring-[#6DA5C0]" />
+            <label className="text-gray-700 dark:text-gray-200">Automatic Transmission</label>
           </div>
 
-          <div>
-            <label>Price Per Day</label>
-            <Field name="price_per_day" type="number" as={Input} placeholder="Enter price per day" />
-            <ErrorMessage name="price_per_day" component="div" className="text-red-500 text-sm" />
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Price Per Day</label>
+            <Field name="price_per_day" type="number" as={Input} placeholder="Enter price per day" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+            <ErrorMessage name="price_per_day" component="div" className="mt-1 text-sm text-red-500" />
           </div>
-          <div>
-            <label>description</label>
-            <Field name="description" type="text" as={Input} placeholder="Enter description for this vehicle" />
-            <ErrorMessage name="description" component="div" className="text-red-500 text-sm" />
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Description</label>
+            <Field name="description" type="text" as={Input} placeholder="Enter description for this vehicle" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+            <ErrorMessage name="description" component="div" className="mt-1 text-sm text-red-500" />
           </div>
 
           <button type="submit" className="hidden" aria-label="Submit Step One"></button>

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, blockUserController, getAllUserController, searchUserController, unblockUserController, vehicleUpproveController } from "../../DI/adminInject";
+import { adminLoginController, blockUserController, getAllUserController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController } from "../../DI/adminInject";
 
 export class AdminRoutes {
      public AdminRoute : Router
@@ -25,6 +25,9 @@ export class AdminRoutes {
         })
         this.AdminRoute.get('/searchuser',(req:Request,res:Response)=>{
         searchUserController.searchUser(req,res)
+        })
+        this.AdminRoute.get('/pending-vehicle',(req:Request,res:Response)=>{
+           pendingVehicleController.approveVehicle(req,res)
         })
         this.AdminRoute.post('/vehicle-upprove/:id',(req:Request,res:Response)=>{
         vehicleUpproveController.approveVehicle(req,res)

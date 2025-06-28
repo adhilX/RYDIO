@@ -94,73 +94,9 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
       onSubmit={(values) => conform(values)  }
     >
       {({ setFieldValue }) => (
-        <Form className="space-y-4 text-white">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1">Location Name</label>
-              <Field
-                name="name"
-                as={Input}
-                placeholder="e.g. Cochin Airport"
-              />
-              <ErrorMessage
-                name="name"
-                component="div"
-                className="text-red-400 text-sm mt-1"
-              />
-            </div>
-            <div>
-              <label className="block mb-1">Address</label>
-              <Field
-                name="address"
-                as={Input}
-                readOnly
-              />
-              <ErrorMessage
-                name="address"
-                component="div"
-                className="text-red-400 text-sm mt-1"
-              />
-            </div>
-            <div>
-              <label className="block mb-1">City</label>
-              <Field name="city" as={Input} readOnly />
-              <ErrorMessage
-                name="city"
-                component="div"
-                className="text-red-400 text-sm mt-1"
-              />
-            </div>
-            <div>
-              <label className="block mb-1">State</label>
-              <Field name="state" as={Input} readOnly />
-              <ErrorMessage
-                name="state"
-                component="div"
-                className="text-red-400 text-sm mt-1"
-              />
-            </div>
-            <div>
-              <label className="block mb-1">Country</label>
-              <Field name="country" as={Input} readOnly />
-              <ErrorMessage
-                name="country"
-                component="div"
-                className="text-red-400 text-sm mt-1"
-              />
-            </div>
-            <div>
-              <label className="block mb-1">Pincode</label>
-              <Field name="pincode" as={Input} readOnly />
-              <ErrorMessage
-                name="pincode"
-                component="div"
-                className="text-red-400 text-sm mt-1"
-              />
-            </div>
-          </div>
-
-          <div className="h-96 rounded overflow-hidden">
+        <Form className="space-y-8 font-sans">
+            
+          <div className="h-96 rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-black">
             <MapContainer
               center={marker}
               zoom={13}
@@ -175,11 +111,80 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
               <Marker position={marker} />
             </MapContainer>
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Location Name</label>
+              <Field
+                name="name"
+                as={Input}
+                placeholder="e.g. Cochin Airport"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
+              />
+              <ErrorMessage
+                name="name"
+                component="div"
+                className="mt-1 text-sm text-red-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Address</label>
+              <Field
+                name="address"
+                as={Input}
+                readOnly
+                className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
+              />
+              <ErrorMessage
+                name="address"
+                component="div"
+                className="mt-1 text-sm text-red-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">City</label>
+              <Field name="city" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <ErrorMessage
+                name="city"
+                component="div"
+                className="mt-1 text-sm text-red-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">State</label>
+              <Field name="state" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <ErrorMessage
+                name="state"
+                component="div"
+                className="mt-1 text-sm text-red-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Country</label>
+              <Field name="country" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <ErrorMessage
+                name="country"
+                component="div"
+                className="mt-1 text-sm text-red-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Pincode</label>
+              <Field name="pincode" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <ErrorMessage
+                name="pincode"
+                component="div"
+                className="mt-1 text-sm text-red-500"
+              />
+            </div>
+          </div>
 
-          <div className="pt-4 text-right">
-           {btnOn?<></>:(<Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
-              Confirm Location
-            </Button>)}
+
+          <div className="pt-6 text-right">
+           {btnOn ? null : (
+             <Button type="submit" className="bg-[#6DA5C0] hover:bg-[#5b8ca3] text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-sm">
+               Confirm Location
+             </Button>
+           )}
           </div>
         </Form>
       )}

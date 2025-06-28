@@ -1,6 +1,8 @@
+import type { Iuser } from "../Iuser";
 
 export interface Vehicle {
-    owner_id: string;
+    _id?:string 
+    owner_id: string | Iuser
     location_id?: string;
     name: string;
     brand: string;

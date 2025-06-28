@@ -22,7 +22,7 @@ export class AddVehicleUsecase implements IaddvehicleUsecase{
     const savedLocation = await this.locationRepository.findOrCreate(location);
     return this.vehicleRepository.addVehicle({
       ...vehicle,
-      location_id: savedLocation._id!.toString(),
+      location_id: savedLocation._id!,
     });
   }
 }

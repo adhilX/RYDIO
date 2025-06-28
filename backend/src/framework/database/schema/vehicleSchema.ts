@@ -1,11 +1,9 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 import { IVehicle } from '../../../domain/entities/vehcleEnties';
 
-
-
 export const VehicleSchema = new Schema<IVehicle>({
-    owner_id: { type: String, required: true },
-    location_id: { type: String, required: true },
+    owner_id: { type: Types.ObjectId, ref: 'user',required: true },
+    location_id: { type: Types.ObjectId,ref :'location', required: true },
     name: { type: String, required: true },
     brand: { type: String, required: true },
     registration_number: { type: String, required: true },

@@ -75,10 +75,14 @@ const handleChangePass = async(pass:string ,email:string)=>{
 
   return (
        <>
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
-      <div className="bg-zinc-900 p-6 rounded-xl shadow-lg w-full max-w-md text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center opacity-10"></div>
+      <div className="absolute inset-0 bg-black/60"></div>
+      <div className="absolute top-20 left-20 w-72 h-72 bg-red-900/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-red-800/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="bg-gray-900/80 backdrop-blur-xl border-gray-700/50 shadow-2xl w-full max-w-md text-white p-6 rounded-xl relative z-10">
         <h2 className="text-2xl font-semibold mb-4 text-center">Forgot Password</h2>
-        <p className="text-sm text-zinc-400 mb-6 text-center">
+        <p className="text-sm text-gray-400 mb-6 text-center">
           Enter your email to receive OTP.
         </p>
 
@@ -87,7 +91,7 @@ const handleChangePass = async(pass:string ,email:string)=>{
             type="string"
             placeholder="Enter your email"
             {...register('email')}
-            className="w-full px-4 py-2 rounded-md bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-4 py-2 rounded-md bg-gray-800/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-[#e63946]"
           />
      {errors.email && (
               <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
@@ -95,7 +99,7 @@ const handleChangePass = async(pass:string ,email:string)=>{
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md transition disabled:opacity-50"
+            className="w-full bg-[#e63946] hover:bg-red-600 text-white py-2 rounded-md transition disabled:opacity-50"
           >
             {isSubmitting ? "Sending..." : "Send OTP"}
           </button>

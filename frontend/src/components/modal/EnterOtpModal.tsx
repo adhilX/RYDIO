@@ -102,7 +102,7 @@ export default function OtpModal<T extends string | SignupSchema>({ isOpen, onCl
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="bg-zinc-900 text-white rounded-2xl p-6 w-[90%] max-w-md shadow-xl relative"
+            className="bg-gray-900/80 backdrop-blur-xl border-gray-700/50 shadow-2xl text-white rounded-2xl p-6 w-[90%] max-w-md relative"
           >
             <button
               onClick={onClose}
@@ -131,7 +131,7 @@ export default function OtpModal<T extends string | SignupSchema>({ isOpen, onCl
                   onKeyDown={(e) => {
                     if (e.key === "Backspace") handleBackspace(index)
                   }}
-                  className="w-10 h-12 text-center text-lg rounded-md bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="w-10 h-12 text-center text-lg rounded-md bg-gray-800/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-[#e63946]"
                   placeholder="0"
                   disabled={isLoading}
                 />
@@ -140,7 +140,7 @@ export default function OtpModal<T extends string | SignupSchema>({ isOpen, onCl
 
             <button
               onClick={handleSubmit}
-              className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#e63946] hover:bg-red-600 text-white py-2 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isLoading || otp.join("").length !== 6}
             >
               {isLoading ? "Verifying..." : "Verify"}

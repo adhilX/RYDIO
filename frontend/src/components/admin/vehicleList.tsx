@@ -1,25 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
 import { AdminVehicleModal } from './modal/AdminVehicleModal';
 import VehicleCard from './vehicleCard';
+import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
 
-interface Vehicle {
-  id: string;
-  name: string;
-  brand: string;
-  fuelType: string;
-  pricePerDay: number;
-  carType: string;
-  seats: number;
-  automatic: boolean;
-  image: string;
-  registrationNumber: string;
-  owner: string;
-  location: string;
-  status: 'pending' | 'accepted' | 'rejected';
-}
 
 const dummyVehicles: Vehicle[] = Array.from({ length: 15 }, (_, i) => ({
   id: `${i + 1}`,
@@ -37,6 +23,11 @@ const dummyVehicles: Vehicle[] = Array.from({ length: 15 }, (_, i) => ({
   status: 'pending',
 }));
 
+useEffect(()=>{
+  const fetchData = ()=>{
+    
+  }
+})
 export default function AdminVehicleList() {
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [search, setSearch] = useState('');
@@ -52,25 +43,32 @@ export default function AdminVehicleList() {
 
   return (
     <motion.div
-      className="p-4 space-y-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      className="p-4 space-y-6 bg-black/80 backdrop-blur-xl border border-black/60 shadow-2xl rounded-xl"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 30 }}
+      transition={{ duration: 0.3 }}
     >
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Vehicle Management</h2>
+        <h2 className="text-xl font-semibold text-white tracking-wider">Vehicle Management</h2>
         <Input
           placeholder="Search vehicles..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-64"
+          className="w-64 bg-black/60 border border-black/60 text-white focus:outline-none focus:ring-2 focus:ring-[#e63946] rounded-lg"
         />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {paginated.map((vehicle) => (
-            
-        <VehicleCard setSelectedVehicle={setSelectedVehicle} vehicle={vehicle}/>
+        {paginated.map((vehicle, idx) => (
+          <motion.div
+            key={vehicle.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05 }}
+          >
+            <VehicleCard setSelectedVehicle={setSelectedVehicle} vehicle={vehicle}/>
+          </motion.div>
         ))}
       </div>
 
@@ -78,13 +76,15 @@ export default function AdminVehicleList() {
         <Button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((p) => p - 1)}
+          className="bg-[#e63946] hover:bg-red-600 text-white rounded-lg px-4 py-2 font-semibold transition disabled:opacity-50"
         >
           Previous
         </Button>
-        <span className="text-sm">Page {currentPage} of {totalPages}</span>
+        <span className="text-sm text-white">Page {currentPage} of {totalPages}</span>
         <Button
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage((p) => p + 1)}
+          className="bg-[#e63946] hover:bg-red-600 text-white rounded-lg px-4 py-2 font-semibold transition disabled:opacity-50"
         >
           Next
         </Button>
@@ -92,6 +92,7 @@ export default function AdminVehicleList() {
 
       {selectedVehicle && (
         <AdminVehicleModal
+          open={selectedVehicle}
           vehicle={selectedVehicle}
           onClose={() => setSelectedVehicle(null)}
         />

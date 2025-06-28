@@ -1,16 +1,17 @@
 import { removeUser } from "@/store/slice/user/UserSlice";
 import { removeToken } from "@/store/slice/user/UserTokenSlice";
-import { LogOut, User, Car, Wallet, Calendar, LockKeyhole, X, Menu } from "lucide-react";
+import { LogOut, User, Car, Wallet, LockKeyhole, X, Menu } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 
 export function Sidebar() {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  
-  const logout = async() => {
+
+  const logout = async () => {
     try {
       dispatch(removeUser());
       dispatch(removeToken());
@@ -19,8 +20,19 @@ export function Sidebar() {
       const errorMessage = (error instanceof Error) ? error.message : "An unknown error occurred";
       toast.error(`Logout failed: ${errorMessage}`);
       console.error("Logout Error:", error);
-      throw error;
     }
+  };
+
+  const links = [
+    { to: 'userProfile', label: 'User Profile', icon: User },
+    { to: 'userProfile/vehicles', label: 'My Vehicles', icon: Car },
+    { to: 'userProfile/wallet', label: 'Wallet', icon: Wallet },
+    // { to: 'userProfile/bookings', label: 'My Bookings', icon: Calendar },
+    { to: 'userProfile/change-password', label: 'Change Password', icon: LockKeyhole },
+  ];
+
+  const isActive = (path: string) => {
+    return location.pathname === `/${path}` || (path === '' && location.pathname === '/');
   };
 
   return (
@@ -36,60 +48,43 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside className={`
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        fixed md:sticky md:top-16 left-0 z-30
-        w-64 bg-white/10 backdrop-blur-md border-r border-white/20
-        h-[calc(100vh-4rem)] p-4 pt-20 flex flex-col justify-between
-        transition-transform duration-300 ease-in-out
+           md:sticky md:top-[88px] left-6 z-1
+        w-[300px] bg-gradient-to-b from-[#232b3a] via-[#181f23] to-[#232b3a] text-white border border-white/10
+        h-[calc(100vh-96px)] p-0 flex flex-col items-stretch justify
+        rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out
+        ring-1 ring-[#6DA5C0]/10 
       `}>
-        <nav className="space-y-2">
-          <NavLink 
-            to="" 
-            className={({isActive}) => `flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-gray-300'}`}
-            onClick={() => setIsMobileOpen(false)}
-          >
-            <User className="w-5 h-5" />
-            <span>User Profile</span>
-          </NavLink>
-          <NavLink 
-            to="vehicles" 
-            className={({isActive}) => `flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-gray-300'}`}
-            onClick={() => setIsMobileOpen(false)}
-          >
-            <Car className="w-5 h-5" />
-            <span>My Vehicles</span>
-          </NavLink>
-          <NavLink 
-            to="wallet" 
-            className={({isActive}) => `flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-gray-300'}`}
-            onClick={() => setIsMobileOpen(false)}
-          >
-            <Wallet className="w-5 h-5" />
-            <span>Wallet</span>
-          </NavLink>
-          <NavLink 
-            to="bookings" 
-            className={({isActive}) => `flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-gray-300'}`}
-            onClick={() => setIsMobileOpen(false)}
-          >
-            <Calendar className="w-5 h-5" />
-            <span>My Bookings</span>
-          </NavLink>
-          <NavLink 
-            to="changepassword" 
-            className={({isActive}) => `flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-gray-300'}`}
-            onClick={() => setIsMobileOpen(false)}
-          >
-            <LockKeyhole className="w-5 h-5" />
-            <span>Change Password</span>
-          </NavLink>
+       
+        <nav className="flex-1 flex flex-col  gap-4 px-4 py-6">
+          {links.map(({ to, label, icon: Icon }) => {
+            const active = isActive(to);
+            return (
+              <NavLink
+                to={`/${to}`}
+                key={to}
+                onClick={() => setIsMobileOpen(false)}
+                className={`flex items-center gap-4 px-4 py-3 rounded-full font-semibold text-base transition-all duration-200 group relative
+                  ${active
+                    ? 'bg-[#eaf6fa] dark:bg-[#1a232a] text-[#6DA5C0] shadow-lg scale-105 ring-2 ring-[#6DA5C0]'
+                    : 'hover:bg-[#232b3a] hover:text-[#6DA5C0] text-gray-200'}`}
+                style={{ fontFamily: 'DM Sans, Inter, sans-serif' }}
+              >
+                <Icon className={`w-6 h-6 flex-shrink-0 transition-all duration-200 ${active ? 'text-[#6DA5C0] scale-110' : 'group-hover:text-[#6DA5C0]'}`} />
+                <span className="flex-1 text-left tracking-wide">{label}</span>
+                {active && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#6DA5C0] rounded-full shadow-lg animate-pulse" />
+                )}
+              </NavLink>
+            );
+          })}
         </nav>
-      
+        <div className="mx-4 my-2 border-t border-white/10" />
         <button 
-          onClick={logout} 
-          className="flex items-center space-x-3 p-3 rounded-lg text-red-400 hover:bg-white/10 hover:text-red-300 transition-all duration-300"
+          onClick={logout}
+          className="flex items-center gap-4 px-4 py-3 rounded-full text-red-400 hover:bg-[#232b3a] hover:text-red-300 transition-all duration-200 font-semibold mb-6 mx-4 dashboard-sidebar-btn"
         >
-          <LogOut className="w-5 h-5" />
-          <span>Logout</span>
+          <LogOut className="w-6 h-6 flex-shrink-0" />
+          <span className="flex-1 text-left tracking-wide">Logout</span>
         </button>
       </aside>
     </>

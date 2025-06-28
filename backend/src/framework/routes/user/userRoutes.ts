@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, editProfileController, googleLoginController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
 
 export class UserRoutes {
 
@@ -47,7 +47,11 @@ export class UserRoutes {
     this.UserRoutes.post('/add-vehicle',(req:Request,res:Response)=>{
         addVehicleController.addVehicle(req,res)
     })
-    this.UserRoutes.post('/add-location',(req:Request,res:Response)=>{
+    this.UserRoutes.patch('/change-password',(req:Request,res:Response)=>{
+      changePasswordUserController.handleEditProfle(req,res)
+    })
+    this.UserRoutes.post('/my-vehicle',(req:Request,res:Response)=>{
+    myVehicleController.getMyVehicle(req,res)
     })
     
 }}
