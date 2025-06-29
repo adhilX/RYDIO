@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
 
 export class UserRoutes {
 
@@ -18,6 +18,7 @@ export class UserRoutes {
        userRegisterController.register(req,res)
     })
     this.UserRoutes.post('/login',(req:Request, res:Response)=>{
+        console.log('gggggggggggggg')
         userLoginController.handleLogin(req,res)
     })
     
@@ -37,9 +38,9 @@ export class UserRoutes {
     this.UserRoutes.patch('/changepassword',(req:Request, res:Response)=>{
        changePasswordController.handleForgetPassword(req,res)
     })
-    // this.UserRoutes.patch('/logout',(req:Request, res:Response)=>{
-      //  blockUserController.handleClientBlock(req,res)
-    // })
+    this.UserRoutes.get('/logout',(req:Request, res:Response)=>{
+       userlogoutController.handleClientLogout(req,res)
+    })
     
     this.UserRoutes.patch('/editProfile',(req:Request,res:Response)=>{
         editProfileController.handleEditProfle(req,res)

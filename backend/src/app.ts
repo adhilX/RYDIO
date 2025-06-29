@@ -4,6 +4,7 @@ import express, { Application, urlencoded } from 'express';
 import { UserRoutes } from './framework/routes/user/userRoutes';
 import { ConnectMongoDB } from './framework/database/databaseConnection/dbConnection';
 import cors from 'cors';
+import morgan from 'morgan'
 import { AdminRoutes } from './framework/routes/admin/adminRoutes';
 import redisService from './framework/services/redisService';
 
@@ -23,6 +24,7 @@ export class App {
         this.database.connectDB()
         this.app.use(express.json());
         this.app.use(urlencoded({extended:true}));
+        this.app.use(morgan('dev'))
         this.setUserRoutes();
         this.setAdminRoutes()
     }

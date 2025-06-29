@@ -23,11 +23,11 @@ const dummyVehicles: Vehicle[] = Array.from({ length: 15 }, (_, i) => ({
   status: 'pending',
 }));
 
-useEffect(()=>{
-  const fetchData = ()=>{
-    
-  }
-})
+// useEffect(()=>{
+//   const fetchData = ()=>{
+
+//   }
+// })
 export default function AdminVehicleList() {
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [search, setSearch] = useState('');

@@ -1,3 +1,4 @@
+import { userLogout } from "@/services/user/authService";
 import { removeUser } from "@/store/slice/user/UserSlice";
 import { removeToken } from "@/store/slice/user/UserTokenSlice";
 import { LogOut, User, Car, Wallet, LockKeyhole, X, Menu } from "lucide-react";
@@ -13,9 +14,10 @@ export function Sidebar() {
 
   const logout = async () => {
     try {
+      await userLogout()
       dispatch(removeUser());
       dispatch(removeToken());
-      toast.success('Logout successful');
+      toast.success('Logout successful!');
     } catch (error) {
       const errorMessage = (error instanceof Error) ? error.message : "An unknown error occurred";
       toast.error(`Logout failed: ${errorMessage}`);

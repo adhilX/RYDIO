@@ -29,6 +29,9 @@ import { ChangePasswordUserController } from "../../adapters/controllers/user/ch
 import { ChangePassword } from "../../useCases/user/ChangePasswordUsecase"
 import { MyVehicleController } from "../../adapters/controllers/user/MyVehicleController"
 import { MyVehicleUsecase } from "../../useCases/user/vehicle/MyvehicleUsecase"
+import { RedisService } from "../services/redisService"
+import { UserLogoutController } from "../../adapters/controllers/user/authentication/userLogoutController"
+import { UserLogoutUseCase } from "../../useCases/user/auth/LogoutUserUsecase"
 
 // regester user 
 const otpService = new OtpService()
@@ -37,6 +40,7 @@ const userRepostory = new UserRepostory()
 const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRepostory)
 const verifyOtpUsecase = new VerifyOtpUsecase(otpService)
 const hashPassword = new HashPassword()
+const redisService = new RedisService()
 const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword)
 export const sendendOtpController = new SendOtpController(sendOtpUserUsecase)
 export const  userRegisterController = new UserRegisterController(verifyOtpUsecase,createUserUsecase)
@@ -46,12 +50,12 @@ export const  userRegisterController = new UserRegisterController(verifyOtpUseca
 
 const jwtService = new JwtService()
 const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword)
-export const userLoginController = new UserLoginController(jwtService,loginUserUsecase)
+export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService)
 
 //-------Google Login ---------
 
 const googleLoginUsecase = new GoogleLoginUsecase(userRepostory)
-export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase)
+export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase,redisService)
 
 //-----resendOtp ------------
 const resendOtpUsecase = new ResendOtpUsecase(otpService,emailService)
@@ -68,6 +72,9 @@ export const verifyForgotPassowordOtpController = new VerifyForgotPassowordOtpCo
 const changePasswordUsecase = new ChangePasswordUseCase(userRepostory,hashPassword)
 export const changePasswordController = new ChangePasswordController(changePasswordUsecase)
 
+//-------logout ----------------
+const userLogoutUseCase = new UserLogoutUseCase(redisService,jwtService)
+export const userlogoutController = new UserLogoutController(userLogoutUseCase)
 
 //-------update profile------------
 const editProfileUseCase = new EditProfileUsecase(userRepostory)

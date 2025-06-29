@@ -61,10 +61,7 @@ export default function Login() {
               }
             }}
           >
-            {({ errors, touched, values }) => {
-              // Debug form values
-              console.log("Form values:", values);
-
+            {({ errors, touched }) => {
               return (
                 <Form className="space-y-5" noValidate>
                   <div className="space-y-2">

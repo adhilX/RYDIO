@@ -4,14 +4,16 @@ import { IloginUserUsecase } from "../../../../domain/interface/usecaseInterface
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { setCookie } from "../../../../framework/services/tokenCookieSet";
 import { IgoogleloginUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IgoogleLoginUsecase";
+import { IredisService } from "../../../../domain/interface/serviceInterface/IredisService";
 
 export class GoogleLoginController {
     private jwtService: IjwtService
     private GoogleLoginUsecase : IgoogleloginUsecase
-
-    constructor(jwtService:IjwtService,GoogleLoginUsecase:IgoogleloginUsecase){
+    private redisService:IredisService
+    constructor(jwtService:IjwtService,GoogleLoginUsecase:IgoogleloginUsecase,redisService:IredisService){
         this.jwtService = jwtService
         this.GoogleLoginUsecase = GoogleLoginUsecase
+        this.redisService=redisService
     }
 
     async handleLogin(req:Request,res:Response){
@@ -24,8 +26,24 @@ export class GoogleLoginController {
 //    console.log(ACCESSTOKEN_SECRET_KEY,REFRESHTOKEN_SECRET_KEY,'dfasdfdfsdf')
        const accessToken = this.jwtService.createAccessToken(ACCESSTOKEN_SECRET_KEY,user._id?.toString() || "",user.role)
        const refreshToken = this.jwtService.createRefreshToken(REFRESHTOKEN_SECRET_KEY,user._id?.toString() || "")
+       await this.redisService.set(`user:${user.role}:${user._id}`, 15 * 60, JSON.stringify(user.is_blocked))
+
        setCookie(res,refreshToken)
-       res.status(HttpStatus.OK).json({message:'login success',createUser,accessToken})
+
+             const selectedFields = {
+                email: user.email,
+                name: user.name,
+                phone: user.phone,
+                profile_image: user.profile_image,
+                _id: user._id,
+                role: user.role,
+                status: user.is_blocked,
+                is_verified_user :user.is_verified_user,
+                last_login:user.last_login,
+                vendor_access:user.vendor_access,
+                googleVerification:user.googleVerification
+            }
+       res.status(HttpStatus.OK).json({message:'login success',createUser:selectedFields,accessToken})
             
         } catch (error) {
              console.log('error while login client', error)

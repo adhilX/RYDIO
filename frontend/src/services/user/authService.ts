@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/Instance";
+import axiosInstance from "@/axios/UserInterceptors";
 import type { Client } from "@/Types/User/auth/TGoogle";
 import type { TloginForm } from "@/Types/User/auth/Tloginform";
 import type { SignupSchema } from "@/Types/User/auth/Tsignupform";
@@ -45,7 +45,9 @@ export const verifyOtp = async (otp: string, user: SignupSchema) => {
 
 export const userLogout = async () => {
     try {
+      console.log('hiiiiiiiiiiii')
         const response = await axiosInstance.get('/logout')
+        console.log(response)
         return response.data
     } catch (error) {
         console.log('error while client logout', error)

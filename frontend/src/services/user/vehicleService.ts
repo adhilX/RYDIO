@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/Instance";
+import axiosInstance from "@/axios/UserInterceptors";
 import type { StepThreeFormData } from "@/components/user/Dashboard/addVehicle/StepThree";
 import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle";
 import { isAxiosError } from "axios";
