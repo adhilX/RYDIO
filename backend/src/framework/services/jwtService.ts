@@ -25,9 +25,8 @@ export class JwtService implements IjwtService {
             return null
         }
     }
-
     tokenDecode(accessToken: string): DecodedTokenEntity | null {
         return jwt.decode(accessToken) as DecodedTokenEntity
     }
-    
+
 }

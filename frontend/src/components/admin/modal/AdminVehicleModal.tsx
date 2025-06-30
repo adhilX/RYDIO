@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { handleVehicle } from '@/services/admin/vehicleSevice';
 import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
 import type { Iuser } from '@/Types/User/Iuser';
+import type { Ilocation } from '@/Types/User/location';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -10,7 +11,7 @@ import toast from 'react-hot-toast';
 interface AdminVehicleModalProps {
   open: boolean;
   onClose: () => void;
-  vehicle: Vehicle & { owner_id: Iuser };
+  vehicle: Vehicle & { owner_id: Iuser , location_id:Ilocation};
 }
 
 export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onClose, vehicle }) => {
@@ -37,8 +38,8 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
         >
           <div className="flex justify-between items-center px-6 py-4 text-white border-b dark:border-gray-700">
             <DialogTitle className="text-lg font-bold">Vehicle Details</DialogTitle>
-            <button onClick={onClose}>
-              <X className="w-5 h-5" />
+            <button onClick={onClose} title="Close">
+              <X className="w-5 h-5" aria-label="Close" />
             </button>
           </div>
 

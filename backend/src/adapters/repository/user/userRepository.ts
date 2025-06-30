@@ -23,4 +23,11 @@ export class UserRepostory implements IuserRepository{
       async updateProfile(email: string, phone: string, name:string,profile_image:string): Promise<User | null> {
      return await userModel.findOneAndUpdate({email}, { phone,name,profile_image }, { new: true })
       }
+
+      async findStatusForMidddlewere(userId: string): Promise<string> {
+        console.log('dffdfdfd')
+          const user = await userModel.findById(userId)
+          if(!user)throw new Error('no user found this id')
+            return String(user.is_blocked)
+      }
 }

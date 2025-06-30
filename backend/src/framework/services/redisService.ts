@@ -6,7 +6,7 @@ export class RedisService implements IredisService {
 
     constructor() {
         this.client = createClient({
-            url: process.env.REDIS_URL || 'redis://localhost:6379',
+            url: process.env.REDIS_URL ,
             socket: {
                 reconnectStrategy: (retries: number) => {
                     if (retries > 10) return new Error('Too many retries');

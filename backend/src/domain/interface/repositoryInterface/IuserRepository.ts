@@ -8,4 +8,5 @@ export interface IuserRepository{
     googleLogin(user:User):Promise<User|null>
     changePassword(id:string|undefined ,password:string):Promise<User|null>
     updateProfile(email: string, phone: string, name:string,profile_image:string): Promise<User | null> 
+    findStatusForMidddlewere(userId:string):Promise<string>
 }

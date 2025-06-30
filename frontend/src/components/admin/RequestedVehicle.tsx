@@ -8,9 +8,7 @@ import { getPendingVehicle } from '@/services/admin/vehicleSevice';
 import { Input } from '../ui/input';
 import Pagination from '../Pagination';
 import type { Iuser } from '@/Types/User/Iuser';
-
-
-
+import type { Ilocation } from '@/Types/User/location';
 
 export default function AdminRequestedVehicles() {
   const [showRejected, setShowRejected] = useState(false);
@@ -18,21 +16,18 @@ export default function AdminRequestedVehicles() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [vehicle, setVehicles] = useState<Vehicle[]>([])
-  const [totalPage,setTotalPage]= useState(1)
+  const [totalPage, setTotalPage] = useState(1)
   const filteredVehicles = vehicle.filter((v) =>
     v.admin_approve === (showRejected ? 'rejected' : 'pending')
   );
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
 
-
-const [debouncedSearch, setDebouncedSearch] = useState(search);
-
-useEffect(() => {
-  const delayDebounce = setTimeout(() => {
-    setDebouncedSearch(search);
-  }, 500); 
-
-  return () => clearTimeout(delayDebounce);
-}, [search]);
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,7 +37,6 @@ useEffect(() => {
     };
     fetchData();
   }, [debouncedSearch, currentPage, showRejected, selectedVehicle]);
-
 
   return (
     <motion.div
@@ -71,11 +65,10 @@ useEffect(() => {
         >
           {showRejected ? 'Show Requested' : 'Show Rejected'}
         </Button>
-
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[200px]"></div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredVehicles.length? filteredVehicles.map((vehicle, idx) => (
+        {filteredVehicles.length ? filteredVehicles.map((vehicle, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
@@ -86,22 +79,22 @@ useEffect(() => {
           </motion.div>
         )) : (
           <div className="col-span-full flex justify-center items-center py-12">
-        <p className="text-gray-100 text-lg">No vehicles found.</p>
+            <p className="text-gray-100 text-lg">No vehicles found.</p>
           </div>
         )}
       </div>
 
       {/* Pagination */}
 
-{totalPage>1?<Pagination currentPage={currentPage} onPageChange={setCurrentPage} totalPages={totalPage}/>:<></>}
-   {selectedVehicle && typeof selectedVehicle.owner_id !== 'string' && (
-  <AdminVehicleModal
-    vehicle={selectedVehicle as Vehicle & { owner_id: Iuser }}
-    open={!!selectedVehicle}
-    onClose={() => setSelectedVehicle(null)}
-  />
-)}
+      {totalPage > 1 ? <Pagination currentPage={currentPage} onPageChange={setCurrentPage} totalPages={totalPage} /> : <></>}
 
+      {selectedVehicle && typeof selectedVehicle.owner_id !== 'string' && (
+        <AdminVehicleModal
+          vehicle={selectedVehicle as Vehicle & { owner_id: Iuser, location_id: Ilocation }}
+          open={!!selectedVehicle}
+          onClose={() => setSelectedVehicle(null)}
+        />
+      )}
     </motion.div>
   );
 }
