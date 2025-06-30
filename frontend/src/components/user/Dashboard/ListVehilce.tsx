@@ -1,46 +1,67 @@
 import { useEffect, useState } from 'react';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getMyVehicle } from '@/services/user/vehicleService';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
+import { motion } from 'framer-motion';
+import Pagination from '@/components/Pagination';
 
-const dummyVehicles = [
-  { id: 1, name: 'Hyundai i20', model: 'Asta', year: 2022, status: 'Active', image: 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&w=400' },
-  { id: 2, name: 'Maruti Swift', model: 'VXi', year: 2021, status: 'Inactive', image: 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&w=400' },
-  { id: 3, name: 'Honda City', model: 'ZX', year: 2023, status: 'Active', image: 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&w=400' },
-  { id: 4, name: 'Tata Nexon', model: 'XZ+', year: 2020, status: 'Active', image: 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&w=400' },
-  { id: 5, name: 'Kia Seltos', model: 'GTX', year: 2022, status: 'Inactive', image: 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&w=400' },
-  { id: 6, name: 'Toyota Innova', model: 'Crysta', year: 2021, status: 'Active', image: 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&w=400' },
-];
 
- const  ListVehilce=()=> {
-  const user = useSelector((state:RootState)=>state.auth.user)
+const ListVehilce = () => {
+  const user = useSelector((state: RootState) => state.auth.user)
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
-  const [page, setPage] = useState(1);
-  const perPage = 3;
-  const totalPages = Math.ceil(dummyVehicles.length / perPage);
+  const [totalPages, setTotalPages] = useState(1)
+  const [search, setSearch] = useState('')
+  const [limit] = useState(6)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false)
+  const [debouncedSearch, setDebouncedSearch] = useState('')
   const navigate = useNavigate();
-  
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+      setCurrentPage(1);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [search]);
+
   useEffect(() => {
     const fetchData = async () => {
       if (user && user._id) {
-          const response = await getMyVehicle(user._id as string);
-          if (response && response.vehicle) {
-            setVehicles(response.vehicle);
-          }
+        setIsLoading(true)
+        const response = await getMyVehicle(user._id, debouncedSearch, currentPage, limit);
+        if (response && response.vehicle) {
+          setVehicles(response.vehicle);
+          setTotalPages(Math.ceil(response.total / limit));
+        }
+        setIsLoading(false)
       }
     };
     fetchData();
-  }, [user]);
+  }, [debouncedSearch, currentPage, user, limit]);
 
   if (!user) return null;
-  console.log(vehicles);
   return (
     <div className="w-full p-4 md:p-8 font-sans">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-[#232b3a] tracking-tight">My Vehicles</h1>
+        <motion.div className="bg-black/80 backdrop-blur-xl border border-black/60 shadow-2xl p-3 rounded-xl">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Search by email or name..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-white/40 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#e63946]"
+              />
+            </div>
+          </div>
+        </motion.div>
         <button
           onClick={() => navigate('/userProfile/add-vehicle')}
           className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#6DA5C0] text-white font-semibold shadow hover:bg-[#232b3a] transition"
@@ -50,9 +71,17 @@ const dummyVehicles = [
         </button>
       </div>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-xl shadow divide-y divide-gray-100">
+
+        {isLoading ? (
+          <div className="flex flex-col justify-center items-center h-64">
+            <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+            <span className="mt-4 text-white/80 text-lg font-semibold animate-pulse">Loading vehicle...</span>
+          </div>
+        ) : vehicles.length === 0 ? (
+          <div className="p-6  h-100 flex text-center justify-center text-gray-400">No vehicle found</div>
+        ) : (<table className="min-w-full bg-stone-950 rounded-xl shadow divide-y divide-gray-100">
           <thead>
-            <tr className="bg-[#eaf6fa] text-[#232b3a]">
+            <tr className="bg-[#6DA5C0] text-[#232b3a]">
               <th className="px-4 py-3 text-left font-semibold">Image</th>
               <th className="px-4 py-3 text-left font-semibold">Name</th>
               <th className="px-4 py-3 text-left font-semibold">Model</th>
@@ -61,40 +90,31 @@ const dummyVehicles = [
             </tr>
           </thead>
           <tbody>
-            {vehicles.map((vehicle ,index)=> (
-              <tr key={index} className="hover:bg-[#f6fbfd] transition">
+            {vehicles.map((vehicle, index) => (
+              <tr key={index} className="hover:bg-stone-700 transition">
                 <td className="px-4 py-3">
                   <img src={vehicle.image_urls[0]} alt={vehicle.name} className="w-16 h-10 object-cover rounded-lg shadow" />
                 </td>
-                <td className="px-4 py-3 font-medium text-[#232b3a]">{vehicle.name}</td>
-                <td className="px-4 py-3 text-[#232b3a]">{vehicle.brand}</td>
-                <td className="px-4 py-3 text-[#232b3a]">{vehicle.fuel_type}</td>
+                <td className="px-4 py-3 font-medium ">{vehicle.name}</td>
+                <td className="px-4 py-3 ">{vehicle.brand}</td>
+                <td className="px-4 py-3 ">{vehicle.fuel_type}</td>
                 <td className="px-4 py-3">
                   <span className={`px-3 py-1 rounded-full text-xs font-bold ${vehicle.is_available ? 'bg-[#eaf6fa] text-[#6DA5C0]' : 'bg-gray-200 text-gray-500'}`}>{vehicle.admin_approve}</span>
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>)}
       </div>
       {/* Pagination Controls */}
-      <div className="flex justify-end gap-2 mt-6">
-        <button
-          className="px-4 py-2 rounded-lg bg-[#232b3a] text-white/80 hover:bg-[#6DA5C0] hover:text-white font-semibold transition disabled:opacity-40"
-          onClick={() => setPage(page - 1)}
-          disabled={page === 1}
-        >
-          Previous
-        </button>
-        <span className="px-2 text-[#232b3a]/60 self-center">Page {page} of {totalPages}</span>
-        <button
-          className="px-4 py-2 rounded-lg bg-[#232b3a] text-white/80 hover:bg-[#6DA5C0] hover:text-white font-semibold transition disabled:opacity-40"
-          onClick={() => setPage(page + 1)}
-          disabled={page === totalPages}
-        >
-          Next
-        </button>
-      </div>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 }

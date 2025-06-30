@@ -10,7 +10,8 @@ export class MyVehicleUsecase implements ImyVehicleUsecase {
     }
 
 
-  async getMyvehicle(owner_id:string): Promise<{vehicle:IVehicle[],total:number}|null> {
-    return this.vehicleRepository.myVehicle(owner_id)
+  async getMyvehicle(owner_id: string, search: string, page: string, limit: string ): Promise<{ vehicle: IVehicle[]; total: number; } | null> {
+        return this.vehicleRepository.myVehicle(owner_id,search,page,limit)
+
   }
 }
