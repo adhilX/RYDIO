@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 
 export class JwtService implements IjwtService {
     createAccessToken(accessSecretKey: string, userId: string, role: string): string {
-        return jwt.sign({ userId, role }, accessSecretKey, { expiresIn: '15m' })
+        return jwt.sign({ userId, role }, accessSecretKey, { expiresIn: '1m' })
     }
 
     createRefreshToken(refreshSecretKey: string, userId: string): string {

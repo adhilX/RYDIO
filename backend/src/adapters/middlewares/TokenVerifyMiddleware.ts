@@ -17,6 +17,7 @@ export const verifyTokenAndCheckBlackList = (TokenService: ItokenService) => {
                 return
             }
             const decoded = await TokenService.verifyToken(token);
+            console.log(decoded);
             (req as any).user = decoded
             next()
         } catch (error) {

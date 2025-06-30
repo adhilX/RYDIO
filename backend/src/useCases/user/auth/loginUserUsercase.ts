@@ -16,6 +16,8 @@ export class LoginUserUsecase implements IloginUserUsecase{
    async loginUser(email: string, password: string):Promise<User>{
         const user = await this.userRepository.findByEmail(email)
         if(!user)throw new Error('user not exist with this Email')
+            console.log(user.is_blocked)
+            if(user.is_blocked)throw new Error('user is blocked')
                 const matchPass = await this.hashPassword.comparePassword(password,user.password)
             if(!matchPass)throw new Error('passaword not match')
                 return user

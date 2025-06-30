@@ -48,6 +48,9 @@ export class AdminRepository implements IadminRepository {
   ]);
   return { vehicles, total };
 }
+    async findById(_id:string):Promise<User|null>{
+    return await userModel.findById(_id)
+    }
 }
 
 
