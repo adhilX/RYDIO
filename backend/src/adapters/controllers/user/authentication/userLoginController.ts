@@ -35,6 +35,7 @@ export class UserLoginController {
                 email: user.email,
                 name: user.name,
                 phone: user.phone,
+                idproof_id:user.idproof_id,
                 profile_image: user.profile_image,
                 _id: user._id,
                 role: user.role,

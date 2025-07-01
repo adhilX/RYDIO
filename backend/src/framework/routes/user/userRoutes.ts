@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -53,7 +53,10 @@ export class UserRoutes {
       changePasswordUserController.handleEditProfle(req,res)
     })
     this.UserRoutes.post('/my-vehicle',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
-    myVehicleController.getMyVehicle(req,res)
+      myVehicleController.getMyVehicle(req,res)
+    })
+    this.UserRoutes.post('/upload-idproof',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+        uploadIdProofController.uploadIdProof(req,res)
     })
     
 }}

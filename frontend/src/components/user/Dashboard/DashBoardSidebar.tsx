@@ -52,9 +52,9 @@ export function Sidebar() {
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
            md:sticky md:top-[88px] left-6 z-1
         w-[300px] bg-gradient-to-b from-[#232b3a] via-[#181f23] to-[#232b3a] text-white border border-white/10
-        h-[calc(100vh-96px)] p-0 flex flex-col items-stretch justify
-        rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out
-        ring-1 ring-[#6DA5C0]/10 
+        h-[calc(100vh-40px)] my-[20px] flex flex-col items-stretch justify
+        rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out pt-14
+        ring-1 ring-[#6DA5C0]/10
       `}>
        
         <nav className="flex-1 flex flex-col  gap-4 px-4 py-6">

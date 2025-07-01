@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { AdminVehicleModal } from './modal/AdminVehicleModal';
-import VehicleCard from './vehicleCard';
+import VehicleCard from './VehicleCard';
 import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
 import { getPendingVehicle } from '@/services/admin/vehicleSevice';
 import { Input } from '../ui/input';
@@ -15,7 +15,7 @@ export default function AdminRequestedVehicles() {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
-  const [vehicle, setVehicles] = useState<Vehicle[]>([])
+  const [vehicle, setVehicles] = useState<(Vehicle & { owner_id: Iuser, location_id: Ilocation })[]>([])
   const [totalPage, setTotalPage] = useState(1)
   const filteredVehicles = vehicle.filter((v) =>
     v.admin_approve === (showRejected ? 'rejected' : 'pending')
@@ -41,7 +41,7 @@ export default function AdminRequestedVehicles() {
   return (
     <motion.div
       className={
-        `p-6 space-y-6 0 shadow-2xl rounded-xl transition-all duration-300` +
+        `p-6 space-y-6 0 rounded-xl transition-all duration-300` +
         (selectedVehicle ? ' blur-sm ' : '')
       }
       initial={{ opacity: 0, y: 30 }}

@@ -1,7 +1,9 @@
+import type { IidProof_id } from "@/Types/User/IidProof";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface User {
     _id?: string
+    idproof_id?:IidProof_id,
     email: string,
     name: string,
     phone: string,

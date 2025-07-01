@@ -11,6 +11,7 @@ import ProtectedRoute from "./ProtectedRoutes/ProtectedRoutes"
 import ChangePassword from "@/components/user/Dashboard/ChagePassword"
 import Wallet from "@/components/user/Dashboard/Wallet"
 import ListVehilce from "@/components/user/Dashboard/ListVehilce"
+import UserVehicleList from "@/pages/User/UserVehicleList"
 
 
 export const UserRoutes = () => {
@@ -24,6 +25,7 @@ export const UserRoutes = () => {
             <Route path='/forgetpassword' element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
 
             <Route path='/' element={<LandingPage />} />
+            <Route path='/vehicle-list' element={<UserVehicleList />} />
             <Route
                 path="/userprofile"
                 element={

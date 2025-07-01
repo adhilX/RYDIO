@@ -5,7 +5,7 @@ export const getPendingVehicle = async (search= '',page = 1, limit = 6) => {
     const response = await axiosInstance.get("/admin/pending-vehicle", {
        params: {search,page, limit }
     });
-    // console.log(response.data)
+    console.log(response.data)
     return response?.data;
   } catch (error) {
     console.log('Error while fetching pending vehicles:', error);

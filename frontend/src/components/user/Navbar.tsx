@@ -11,9 +11,9 @@ function Navbar() {
 
 
   return (
-      <header className="relative z-50 p-6 ">
+      <header className="absolute top-0 w-screen z-50 p-6 ">
         <nav className="flex items-center justify-between max-w-7xl mx-auto">
-          <div className="flex items-center  space-x-2">
+          <div className="flex items-center mr-15 space-x-2">
             <Car className="text-white animate-bounce" size={32} />
             <span className="text-2xl font-bold text-white">RYDIO</span>
           </div>

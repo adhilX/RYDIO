@@ -114,15 +114,33 @@ export default function UserProfile() {
           ref={fileInputRef}
           title="Upload profile image"
         />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">{user.name || "Not set"}</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+          {user.name || "Not set"}
+          {user.idproof_id?.status === 'approved' && (
+            <span title="Verified" className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+            </span>
+          )}
+        </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{user.email || "Not set"}</p>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{user.phone || "Add your phone number"}</p>
-        <Button
-          className="w-full bg-[#6DA5C0] hover:bg-[#5b8ca3] text-white font-semibold py-2 rounded-md transition-all duration-200 shadow-sm mb-2"
-          onClick={()=>SetOpen(true)}
-        >
-          Submit ID Proof
-        </Button>
+        {user.idproof_id ? (
+          user.idproof_id.status !== 'approved' ? (
+            <div className="mb-2 p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 flex items-center">
+              <span className="font-semibold">ID Proof Status:</span>
+              <span className="capitalize">{user.idproof_id.status}</span>
+            </div>
+          ) : null
+        ) : (
+          <Button
+            className="w-full bg-[#6DA5C0] hover:bg-[#5b8ca3] text-white font-semibold py-2 rounded-md transition-all duration-200 shadow-sm mb-2"
+            onClick={() => SetOpen(true)}
+          >
+            Submit ID Proof
+          </Button>
+        )}
         <Button
           className="w-full bg-black dark:bg-white text-white dark:text-black border border-black dark:border-white hover:bg-[#6DA5C0] hover:text-white dark:hover:bg-[#6DA5C0] dark:hover:text-white font-semibold py-2 rounded-md transition-all duration-200 shadow-sm"
           type="button"
@@ -137,7 +155,7 @@ export default function UserProfile() {
           open={showCropper}
           onOpenChange={setShowCropper}
         />
-        <UploadIdProofModal open={open} onClose={() => SetOpen(false)} onUploadComplete={() => {}}/>
+        <UploadIdProofModal open={open} onClose={() => SetOpen(false)}/>
       </div>
 
       {/* Right: Editable Form or Info Blocks */}

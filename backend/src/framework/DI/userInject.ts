@@ -32,6 +32,9 @@ import { MyVehicleUsecase } from "../../useCases/user/vehicle/MyvehicleUsecase"
 import { RedisService } from "../services/redisService"
 import { UserLogoutController } from "../../adapters/controllers/user/authentication/userLogoutController"
 import { UserLogoutUseCase } from "../../useCases/user/auth/LogoutUserUsecase"
+import { UploadIdProofController } from "../../adapters/controllers/user/uploadIDProofController"
+import { UploadIdProofUsecase } from "../../useCases/user/UploadIdProofUsecase"
+import { UploadIdProofRepository } from "../../adapters/repository/user/UploadIdProofRepository"
 
 // regester user 
 const otpService = new OtpService()
@@ -97,3 +100,10 @@ export const changePasswordUserController = new ChangePasswordUserController(cha
 
 const myvehicleUsecase = new MyVehicleUsecase(vehicleRepository)
 export const myVehicleController = new MyVehicleController(myvehicleUsecase)
+
+
+//-------upload Id prooof-------------
+
+const uploadIdProofRepository = new UploadIdProofRepository()
+const uploadIdProofUsecase = new UploadIdProofUsecase(uploadIdProofRepository)
+export const uploadIdProofController = new UploadIdProofController(uploadIdProofUsecase)

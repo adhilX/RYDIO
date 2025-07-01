@@ -4,48 +4,48 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { uploadToCloudinary } from "@/lib/utils/cloudinaryUpload";
 import { AnimatePresence, motion } from "framer-motion";
+import toast from "react-hot-toast";
+import { ImageCropper } from "@/components/modal/ImageCroper";
+import { uploadIdProof } from "@/services/user/UpdateProfileService";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import { addUser } from "@/store/slice/user/UserSlice";
 
 interface UploadIdProofModalProps {
   open: boolean;
   onClose: () => void;
-  onUploadComplete: (url: string) => void;
 }
-
-const docTypes = [
-  "Aadhar Card",
-  "Passport",
-  "Driving License",
-  "Voter ID",
-  "Other",
-];
 
 export const UploadIdProofModal = ({
   open,
   onClose,
-  onUploadComplete,
 }: UploadIdProofModalProps) => {
   const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [docType, setDocType] = useState(docTypes[0]);
-
+  const [showCropper, setShowCropper] = useState(false);
+  const [croppedFile, setCroppedFile] = useState<File | null>(null);
+  const user = useSelector((state: RootState) => state.auth.user)
+  const dispatch = useDispatch()
   useEffect(() => {
     if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
+      setShowCropper(true);
     }
   }, [file]);
 
   const handleUpload = async () => {
-    if (!file) return;
+    if (!user) return 
+    const uploadTarget = croppedFile
+    if (!uploadTarget) return;
     setUploading(true);
     try {
-      const url = await uploadToCloudinary(file);
-      onUploadComplete(url);
-      onClose();
+      onClose()
+      const url = await uploadToCloudinary(uploadTarget);
+     const updatedUser = await uploadIdProof(url, user._id!)
+      dispatch(addUser(updatedUser.newUser))
+      setCroppedFile(null)
+      toast.success(updatedUser.message)
     } catch (err) {
-      alert("❌ Failed to upload. Try again.");
+      toast.error((err as Error).message);
     } finally {
       setUploading(false);
     }
@@ -68,18 +68,6 @@ export const UploadIdProofModal = ({
               </DialogHeader>
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Document Type</label>
-                  <select
-                    value={docType}
-                    onChange={e => setDocType(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
-                  >
-                    {docTypes.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Upload Document Image</label>
                   <Input
                     type="file"
@@ -91,12 +79,20 @@ export const UploadIdProofModal = ({
                     className="w-full text-gray-700 dark:text-gray-200"
                   />
                 </div>
-                {preview && (
+                {showCropper && file && (
+                  <ImageCropper
+                    imageSrc={URL.createObjectURL(file)}
+                    onCropComplete={setCroppedFile}
+                    onOpenChange={setShowCropper}
+                    open={showCropper}
+                  />
+                )}
+                {croppedFile && !showCropper && (
                   <motion.img
-                    src={preview}
+                    src={URL.createObjectURL(croppedFile)}
                     alt="Preview"
-                    className="w-full h-40 object-cover rounded-lg border border-gray-200 dark:border-white/10 shadow-sm"
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    className="w-full object-cover rounded-lg border border-gray-200 dark:border-white/10 shadow-sm"
+                    initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
@@ -112,7 +108,7 @@ export const UploadIdProofModal = ({
                 </Button>
                 <Button
                   onClick={handleUpload}
-                  disabled={!file || uploading}
+                  disabled={(!file && !croppedFile) || uploading || showCropper}
                   className="rounded-lg px-6 py-2 font-semibold bg-[#6DA5C0] text-white hover:bg-[#5b8ca3] transition-all duration-200 shadow-sm"
                 >
                   {uploading ? "Uploading..." : "Submit"}
