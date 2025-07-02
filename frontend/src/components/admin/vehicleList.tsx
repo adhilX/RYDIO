@@ -6,8 +6,8 @@ import VehicleCard from './VehicleCard';
 import type { Iuser } from '@/Types/User/Iuser';
 import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
 import type { Ilocation } from '@/Types/User/location';
-import { getPendingVehicle } from '@/services/admin/vehicleSevice';
 import Pagination from '../Pagination';
+import { getAprovedVehicle } from '@/services/admin/vehicleSevice';
 
 export default function AdminVehicleList() {
   const [vehicles, setVehicles] = useState<(Vehicle & { owner_id: Iuser; location_id: Ilocation })[]>([]);
@@ -20,7 +20,7 @@ export default function AdminVehicleList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getPendingVehicle(search, currentPage, perPage);
+        const response = await getAprovedVehicle(search, currentPage, perPage);
         setVehicles(response.vehicle);
         setTotalPage(response?.total)
 

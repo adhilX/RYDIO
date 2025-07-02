@@ -3,6 +3,7 @@ import { BlockUserController } from "../../adapters/controllers/admin/BlockUsers
 import { GetAllUserController } from "../../adapters/controllers/admin/GetAllUserController";
 import { SearchUserController } from "../../adapters/controllers/admin/SearchUserController";
 import { UnblockUserController } from "../../adapters/controllers/admin/UnblockUserController";
+import { GetApprovedVehicleController } from "../../adapters/controllers/admin/vehicleManagment/getApproveVehicleContorller";
 import { PendingVehicleController } from "../../adapters/controllers/admin/vehicleManagment/PendingVehilcleContorller";
 import { VehicleUpproveController } from "../../adapters/controllers/admin/vehicleManagment/VehicleUpproveController";
 import { AdminRepository } from "../../adapters/repository/admin/adminRepository";
@@ -12,6 +13,7 @@ import { BlockUserUseCase } from "../../useCases/admin/BlockUserUsecase";
 import { GetAllUserUsecase } from "../../useCases/admin/getAllUserUsecase";
 import { SearchUserusercase } from "../../useCases/admin/searchUserUsecase";
 import { UnblockUserUseCase } from "../../useCases/admin/UnblockUserUsecase";
+import { ApprovedVehicleusercase } from "../../useCases/admin/vehicleManagment/ApprovedVehiceUsecase";
 import { PendingVehicleusercase } from "../../useCases/admin/vehicleManagment/PendingVehicleUsecase";
 import { VehicleUpproveUsecase } from "../../useCases/admin/vehicleManagment/vehicleApproveUsecase";
 
@@ -54,3 +56,7 @@ export const vehicleUpproveController = new VehicleUpproveController(vehicleUppr
 //-------fetch pending vehicle------
 const pendingVehicleUsecase = new PendingVehicleusercase(adminRepository)
 export const pendingVehicleController = new PendingVehicleController(pendingVehicleUsecase)
+//-------fetch pending vehicle------
+
+const approvedVehicleUsecase = new ApprovedVehicleusercase(adminRepository)
+export const ApprovedVehiceController = new GetApprovedVehicleController(approvedVehicleUsecase)

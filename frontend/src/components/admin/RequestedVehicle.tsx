@@ -32,7 +32,7 @@ export default function AdminRequestedVehicles() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getPendingVehicle(debouncedSearch, currentPage, 6);
-      setVehicles(response?.vehicles || []);
+      setVehicles(response?.vehicle || []);
       setTotalPage(response?.total)
     };
     fetchData();

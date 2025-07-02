@@ -48,6 +48,16 @@ export class AdminRepository implements IadminRepository {
   ]);
   return { vehicles, total };
 }
+  async getApprovedVehicle(page = 1, limit = 10): Promise<{ vehicles: IVehicle[]; total: number } | null> {
+  const skip = (page - 1) * limit;
+  const filter = { admin_approve: 'accepted'};
+
+  const [vehicles, total] = await Promise.all([
+    VehicleModel.find(filter).populate('owner_id').populate('location_id').skip(skip).limit(limit),
+    VehicleModel.countDocuments(filter)
+  ]);
+  return { vehicles, total };
+}
     async findById(_id:string):Promise<User|null>{
     return await userModel.findById(_id)
     }

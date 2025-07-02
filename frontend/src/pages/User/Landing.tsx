@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Navbar from '@/components/user/Navbar';
+import { useNavigate } from 'react-router';
 
 const LandingPage = () => {
   const [location, setLocation] = useState('');
@@ -31,7 +32,7 @@ const LandingPage = () => {
     Autoplay({ delay: 5000, stopOnInteraction: false })
   );
 
-
+const navigate = useNavigate()
 
   useEffect(() => {
     const complete = location && pickupDate && returnDate;
@@ -159,9 +160,9 @@ const LandingPage = () => {
 
               <div className="flex items-end">
                 <Button 
-                  className="w-full h-14 bg-white hover:bg-gray-200 text-black rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 active:rotate-3 transform shadow-lg hover:shadow-xl"
+                  className="w-full h-14 bg-white hover:bg-gray-200 text-black rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 active:rotate-3 transform cursor-pointer  shadow-lg hover:shadow-xl"
                   onClick={() => {
-                    console.log('Search clicked!');
+                     navigate('/vehicle-list')
                   }}
                 >
                   <Search className="mr-2" size={20} />

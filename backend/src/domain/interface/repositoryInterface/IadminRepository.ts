@@ -10,4 +10,5 @@ export interface IadminRepository {
     unblockUser(userId:string):Promise<boolean|null>
     SearchUser(  search: string,page: number,limit: number): Promise<{ users: User[]; total: number } | null>;
     getPendingVehicle(page:number, limit:number):Promise<{vehicles: IVehicle[]; total: number } | null >
+    getApprovedVehicle(page:number, limit:number):Promise<{vehicles: IVehicle[]; total: number } | null >
 }
