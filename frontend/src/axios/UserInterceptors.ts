@@ -42,12 +42,11 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshRes = await axios.get(
-          `${import.meta.env.VITE_API_AUTH_BASEURL}/refresh-token`,
+        console.log(import.meta.env.VITE_API_BASEURL);
+        const refreshRes = await axios.get(`${import.meta.env.VITE_API_BASEURL}refresh-token`,
           { withCredentials: true }
         );
-
-        const newAccessToken = refreshRes.data?.accessToken;
+        const newAccessToken = refreshRes.data?.newAccessToken;
         if (newAccessToken) {
           store.dispatch(addToken(newAccessToken));
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -55,6 +54,7 @@ axiosInstance.interceptors.response.use(
         }
       } catch (refreshErr) {
         store.dispatch(removeUser());
+        store.dispatch(removeToken());
         window.location.href = '/login';
         return Promise.reject(refreshErr);
       }

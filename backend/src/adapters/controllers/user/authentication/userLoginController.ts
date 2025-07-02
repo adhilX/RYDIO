@@ -20,7 +20,6 @@ export class UserLoginController {
         try {
             const { email, password } = req.body
             const user = await this .loginUserUsecase.loginUser(email,password)
-            console.log('hjhjjjjjjjgh ')
             if(!user){
                res.status(HttpStatus.BAD_REQUEST).json({message:'user not found'})
                return 
@@ -36,6 +35,7 @@ export class UserLoginController {
                 email: user.email,
                 name: user.name,
                 phone: user.phone,
+                idproof_id:user.idproof_id,
                 profile_image: user.profile_image,
                 _id: user._id,
                 role: user.role,

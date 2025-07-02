@@ -1,5 +1,7 @@
 import { Request, Response, Router } from "express";
 import { adminLoginController, blockUserController, getAllUserController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController } from "../../DI/adminInject";
+import { injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
+import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
 export class AdminRoutes {
      public AdminRoute : Router
@@ -13,8 +15,7 @@ export class AdminRoutes {
         this.AdminRoute.post('/login',(req:Request,res:Response)=>{
             adminLoginController.handleAdminLogin(req,res)
         })
-    
-        this.AdminRoute.get('/getusers',(req:Request,res:Response)=>{
+        this.AdminRoute.get('/getusers',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
             getAllUserController.getAllUsers(req,res)
         })
         this.AdminRoute.patch('/userblock/:userId',(req:Request,res:Response)=>{
@@ -32,7 +33,6 @@ export class AdminRoutes {
         this.AdminRoute.post('/vehicle-upprove/:id',(req:Request,res:Response)=>{
         vehicleUpproveController.approveVehicle(req,res)
         })
-
 
     }
 }

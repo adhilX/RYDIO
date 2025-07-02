@@ -1,6 +1,8 @@
+import type { IidProof_id } from "./IidProof";
 
 export interface Iuser {
   _id?: string; 
+  idproof?:IidProof_id;
   name: string;
   email: string;
   password: string;

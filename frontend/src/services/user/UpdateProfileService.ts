@@ -2,7 +2,7 @@ import axiosInstance from "@/axios/UserInterceptors";
 import type { userData } from "@/Types/User/UpdateProfile/TpdateUserData";
 import { isAxiosError } from "axios";
 
-export const updateProfile = async (ImageUrl:string, userData:userData) => {
+export const updateProfile = async (ImageUrl: string, userData: userData) => {
   try {
     const response = await axiosInstance.patch("/editProfile", { ImageUrl, ...userData });
     return response?.data;
@@ -15,7 +15,7 @@ export const updateProfile = async (ImageUrl:string, userData:userData) => {
     throw new Error('An unexpected error occurred while updating profile');
   }
 };
-type Value = { current: string; newPass: string; confirm: string ;_id:string };
+type Value = { current: string; newPass: string; confirm: string; _id: string };
 export const changePassword = async (value: Value) => {
   try {
     const response = await axiosInstance.patch("/change-password", { value });
@@ -29,3 +29,17 @@ export const changePassword = async (value: Value) => {
     throw new Error('An unexpected error occurred while changing password');
   }
 };
+
+export const uploadIdProof = async (idProofUrl: string,userId:string) => {
+  try {
+    const response = await axiosInstance.post("/upload-idproof", { idProofUrl,userId });
+    return response?.data;
+  } catch (error) {
+    console.error('Error while uploading ID proof:', error);
+    if (isAxiosError(error)) {
+      const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while uploading ID proof';
+      throw new Error(errorMsg);
+    }
+    throw new Error('An unexpected error occurred while uploading ID proof');
+  }
+}

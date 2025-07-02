@@ -4,11 +4,6 @@ import { IVerificationRequestModel } from "../models/verificationRequestModel";
 
 export const verificationRequestSchema = new Schema<IVerificationRequestModel>(
   {
-    userId: {
-      type: Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     idProofUrl: {
       type: String,
       required: true,
@@ -17,7 +12,7 @@ export const verificationRequestSchema = new Schema<IVerificationRequestModel>(
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending",
-    },
+  },
     reason: {
       type: String,
       default: "", 

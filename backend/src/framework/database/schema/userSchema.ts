@@ -1,7 +1,8 @@
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import { User } from "../../../domain/entities/userEntities";
 
 export const userSchema = new Schema<User>({
+  idproof_id: { type: Types.ObjectId, ref: 'VerificationRequest',default: null },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false },

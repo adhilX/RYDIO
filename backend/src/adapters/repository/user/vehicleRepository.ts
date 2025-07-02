@@ -20,19 +20,25 @@ if (typeof vehicle.owner_id === 'string') {
          const result = await VehicleModel.findByIdAndUpdate(id, { admin_approve:action });
         return result !== null;
     }
-    async myVehicle(owner_id:string,search='',page=1,limit=10): Promise<{vehicle:IVehicle[],total:number }| null> {
- const query = search
-      ? {
-        $or: [
-          { name: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } }
-        ]
-      } : {}
-    const skip = (page - 1) * limit;
-    const [vehicle, total] = await Promise.all([
-      VehicleModel.find(query).skip(skip).limit(limit),
-      VehicleModel.countDocuments(query)
-    ]);
-    return { vehicle, total }
-}
+    async myVehicle(owner_id: string, search: string, page: string, limit: string): Promise<{ vehicle: IVehicle[], total: number } | null> {
+      const baseQuery: any = { owner_id };
+      console.log(search)
+      const query = search
+        ? {
+            ...baseQuery,
+            $or: [
+              { name: { $regex: search, $options: "i" } },
+              { brand: { $regex: search, $options: "i" } },
+            ]
+          }
+        : baseQuery;
+      const pageNum = parseInt(page, 10) || 1;
+      const limitNum = parseInt(limit, 10) || 10;
+      const skip = (pageNum - 1) * limitNum;
+      const [vehicle, total] = await Promise.all([
+        VehicleModel.find(query).skip(skip).limit(limitNum),
+        VehicleModel.countDocuments(query)
+      ]);
+      return { vehicle, total };
+    }
 }

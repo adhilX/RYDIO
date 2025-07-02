@@ -1,10 +1,13 @@
 import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle"
+import type { Iuser } from '@/Types/User/Iuser';
+import type { Ilocation } from '@/Types/User/location';
 import { Button } from "../ui/button"
 import { motion } from "framer-motion"
 
+
 type VehicleCardProps = {
-  vehicle: Vehicle;
-  setSelectedVehicle: (vehicle: Vehicle) => void;
+  vehicle: Vehicle & { owner_id: Iuser; location_id: Ilocation };
+  setSelectedVehicle: (vehicle: Vehicle & { owner_id: Iuser; location_id: Ilocation }) => void;
 };
 
 function VehicleCard({ vehicle, setSelectedVehicle }: VehicleCardProps) {

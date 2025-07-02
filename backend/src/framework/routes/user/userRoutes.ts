@@ -1,5 +1,7 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
+import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
 export class UserRoutes {
 
@@ -18,7 +20,6 @@ export class UserRoutes {
        userRegisterController.register(req,res)
     })
     this.UserRoutes.post('/login',(req:Request, res:Response)=>{
-        console.log('gggggggggggggg')
         userLoginController.handleLogin(req,res)
     })
     
@@ -35,24 +36,27 @@ export class UserRoutes {
     this.UserRoutes.post('/verifyforgotpasswordotp',(req:Request, res:Response)=>{
        verifyForgotPassowordOtpController.verify(req,res)
     })
-    this.UserRoutes.patch('/changepassword',(req:Request, res:Response)=>{
-       changePasswordController.handleForgetPassword(req,res)
-    })
     this.UserRoutes.get('/logout',(req:Request, res:Response)=>{
        userlogoutController.handleClientLogout(req,res)
     })
+    this.UserRoutes.patch('/changepassword',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request, res:Response)=>{
+       changePasswordController.handleForgetPassword(req,res)
+    })
     
-    this.UserRoutes.patch('/editProfile',(req:Request,res:Response)=>{
+    this.UserRoutes.patch('/editProfile',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         editProfileController.handleEditProfle(req,res)
     })
-    this.UserRoutes.post('/add-vehicle',(req:Request,res:Response)=>{
+    this.UserRoutes.post('/add-vehicle',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         addVehicleController.addVehicle(req,res)
     })
-    this.UserRoutes.patch('/change-password',(req:Request,res:Response)=>{
+    this.UserRoutes.patch('/change-password',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
       changePasswordUserController.handleEditProfle(req,res)
     })
-    this.UserRoutes.post('/my-vehicle',(req:Request,res:Response)=>{
-    myVehicleController.getMyVehicle(req,res)
+    this.UserRoutes.post('/my-vehicle',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+      myVehicleController.getMyVehicle(req,res)
+    })
+    this.UserRoutes.post('/upload-idproof',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+        uploadIdProofController.uploadIdProof(req,res)
     })
     
 }}

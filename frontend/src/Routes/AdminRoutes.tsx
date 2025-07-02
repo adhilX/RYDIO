@@ -22,6 +22,7 @@ export const AdminRoutes = () => {
           <Route path="users" element={<UserManagement/>} />
           <Route path="vehicle" element={<><VehicleList/></>} />
           <Route path="vehicle_requests" element={<><RequestedVehiclesPage/></>} />
+          <Route path="verifyid_requests" element={<></>} />
         </Route>
       </Route>
     </Routes>

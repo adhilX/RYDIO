@@ -7,6 +7,8 @@ import cors from 'cors';
 import morgan from 'morgan'
 import { AdminRoutes } from './framework/routes/admin/adminRoutes';
 import redisService from './framework/services/redisService';
+import { AuthRoute } from './framework/routes/auth/RefreshRoutes';
+import cookieParser from 'cookie-parser'
 
 export class App {
     private app : Application                
@@ -23,10 +25,13 @@ export class App {
         this.connectRedis()
         this.database.connectDB()
         this.app.use(express.json());
+        this.app.use(cookieParser())
         this.app.use(urlencoded({extended:true}));
         this.app.use(morgan('dev'))
+        this.setAuthRoutes()
         this.setUserRoutes();
-        this.setAdminRoutes()
+        this.setAdminRoutes();
+        
     }
 
     public listen(): void {
@@ -39,6 +44,9 @@ export class App {
     }
     private setAdminRoutes(){
         this.app.use('/admin',new AdminRoutes().AdminRoute)
+    }
+    private setAuthRoutes(){
+        this.app.use('/refresh-token',new AuthRoute().AuthRouter)
     }
        private async connectRedis() {
         await redisService.connect()
