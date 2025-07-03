@@ -27,11 +27,10 @@ export class AdminLoginController {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: "invalid credentials" })
                 return
             }
-
-            const ACCESSTOKEN_SECRET_KEY = process.env.ACCESSTOKEN_SECRET_KEY as string
-            const REFRESHTOKEN_SECRET_KEY = process.env.REFRESHTOKEN_SECRET_KEY as string
-            const accessToken = this.jwtService.createAccessToken(ACCESSTOKEN_SECRET_KEY, admin._id?.toString() || "", admin.role)
-            const refreshToken = this.jwtService.createRefreshToken(REFRESHTOKEN_SECRET_KEY, admin._id?.toString() || "")
+            const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string
+            const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string
+            const accessToken = this.jwtService.createAccessToken(ACCESS_TOKEN_KEY, admin._id?.toString() || "", admin.role)
+            const refreshToken = this.jwtService.createRefreshToken(REFRESH_TOKEN_KEY, admin._id?.toString() || "")
             setCookie(res, refreshToken)
             res.status(HttpStatus.OK).json({ message: 'login success', admin, accessToken })
         } catch (error) {

@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { User } from "../../../domain/entities/userEntities";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 import { IsearchUserUsecase } from "../../../domain/interface/usecaseInterface/admin/IsearchUserUsecase";
 

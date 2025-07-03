@@ -6,7 +6,7 @@ export function useCurrentLocation() {
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
+      setError("geolocation is not supported by your browser");
       return;
     }
 
@@ -16,7 +16,7 @@ export function useCurrentLocation() {
         setLocation({ latitude, longitude });
       },
       (err) => {
-        setError("Failed to get location: " + err.message);
+        setError("failed to get location: " + err.message);
       }
     );
   }, []);

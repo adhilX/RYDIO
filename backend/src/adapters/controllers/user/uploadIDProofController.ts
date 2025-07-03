@@ -25,7 +25,7 @@ export class UploadIdProofController {
            console.error('Error while uploading ID proof:', error);
            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                message: "An error occurred while uploading ID proof",
-               error: error instanceof Error ? error.message : String(error),
+                error: error instanceof Error ? error.message : 'Unknown error from uploadIDproof controller',
            });
        }
    }

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
 import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
+import { locationModel } from "../../../framework/database/models/locationModel";
 
 export class VehicleRepository implements IvehicleRepository{
    async addVehicle(vehicle: IVehicle): Promise<IVehicle> {
@@ -41,4 +42,24 @@ if (typeof vehicle.owner_id === 'string') {
       ]);
       return { vehicle, total };
     }
+    async findVehicle(lat: number, lon: number): Promise<IVehicle[] | null> {
+      const locations = await locationModel.find({
+        location: {
+          $near: {
+            $geometry: { type: 'Point', coordinates: [lat, lon] },
+            $minDistance: 0,
+            $maxDistance: 99999999
+          }
+        }
+      });
+      if (!locations.length) return null
+
+      const locationId = locations.map(loc => loc._id);
+      const vehicles = await VehicleModel.find({
+        location_id: { $in: locationId },
+        admin_approve: 'accepted'
+      });
+      return vehicles 
+    }
+
 }

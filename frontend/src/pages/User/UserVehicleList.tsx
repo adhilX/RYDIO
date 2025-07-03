@@ -1,132 +1,210 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, X } from 'lucide-react';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import Pagination from '@/components/Pagination';
-import VehicleCard from '@/components/user/VehicleCard';
-import FilterSidebar from '@/components/user/FilterSidebar';
-import Navbar from '@/components/user/Navbar';
+import { useState, useMemo } from "react"
+import type { Car, FilterState } from "@/Types/User/carType"
+import { FilterSidebar } from "@/components/user/FilterSidebar"
+import { VehicleCard } from "@/components/user/VehicleCard"
+import Pagination from "@/components/Pagination"
+import Navbar from "@/components/user/Navbar"
 
-// Dummy data for vehicles
-const dummyVehicles = [
+// Mock data
+const mockCars: Car[] = [
   {
-    _id: '1',
-    owner_id: '',
-    name: 'Tesla Model S',
-    brand: 'Tesla',
-    registration_number: 'TSLA1234',
-    fuel_type: 'electric',
+    id: "1",
+    name: "Model S",
+    brand: "Tesla",
+    price_per_day: 120,
+    fuel_type: "electric",
     seats: 5,
-    car_type: 'sedan',
+    car_type: "sedan",
     automatic: true,
-    price_per_day: 3500,
-    description: 'A luxury electric sedan with autopilot.',
-    image_urls: [
-      'https://images.unsplash.com/photo-1511918984145-48de785d4c4e?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=800&q=80',
-    ],
-    admin_approve: 'accepted',
     is_available: true,
+    image_urls: ["/placeholder.svg?height=200&width=300"],
+    rating: 4.8,
+    reviews: 124,
   },
   {
-    _id: '2',
-    owner_id: '',
-    name: 'BMW X5',
-    brand: 'BMW',
-    registration_number: 'BMW5678',
-    fuel_type: 'diesel',
-    seats: 7,
-    car_type: 'suv',
+    id: "2",
+    name: "Mustang GT",
+    brand: "Ford",
+    price_per_day: 95,
+    fuel_type: "petrol",
+    seats: 4,
+    car_type: "sports",
     automatic: true,
-    price_per_day: 4200,
-    description: 'Spacious SUV for family trips.',
-    image_urls: [
-      'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1461632830798-3adb3034e4c8?auto=format&fit=crop&w=800&q=80',
-    ],
-    admin_approve: 'accepted',
     is_available: true,
+    image_urls: ["/placeholder.svg?height=200&width=300"],
+    rating: 4.6,
+    reviews: 89,
   },
-  // ...more dummy vehicles
-];
+  {
+    id: "3",
+    name: "X5",
+    brand: "BMW",
+    price_per_day: 110,
+    fuel_type: "diesel",
+    seats: 7,
+    car_type: "suv",
+    automatic: true,
+    is_available: true,
+    image_urls: ["/placeholder.svg?height=200&width=300"],
+    rating: 4.7,
+    reviews: 156,
+  },
+  {
+    id: "4",
+    name: "Civic",
+    brand: "Honda",
+    price_per_day: 45,
+    fuel_type: "petrol",
+    seats: 5,
+    car_type: "sedan",
+    automatic: false,
+    is_available: true,
+    image_urls: ["/placeholder.svg?height=200&width=300"],
+    rating: 4.3,
+    reviews: 67,
+  },
+  {
+    id: "5",
+    name: "Corolla",
+    brand: "Toyota",
+    price_per_day: 40,
+    fuel_type: "petrol",
+    seats: 5,
+    car_type: "sedan",
+    automatic: true,
+    is_available: true,
+    image_urls: ["/placeholder.svg?height=200&width=300"],
+    rating: 4.4,
+    reviews: 92,
+  },
+  {
+    id: "6",
+    name: "Wrangler",
+    brand: "Jeep",
+    price_per_day: 85,
+    fuel_type: "petrol",
+    seats: 5,
+    car_type: "suv",
+    automatic: true,
+    is_available: true,
+    image_urls: ["/placeholder.svg?height=200&width=300"],
+    rating: 4.5,
+    reviews: 78,
+  },
+]
 
-export default function UserVehicleList() {
-  const [showFilters, setShowFilters] = useState(false);
-  const [search, setSearch] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 3;
+const CARS_PER_PAGE = 6
 
-  // Filtered and paginated dummy data (replace with API call later)
-  const filteredVehicles = dummyVehicles.filter(v =>
-    v.name.toLowerCase().includes(search.toLowerCase()) ||
-    v.brand.toLowerCase().includes(search.toLowerCase())
-  );
+export default function UserVehileList() {
+  const [filters, setFilters] = useState<FilterState>({
+    fuel_types: [],
+    seats: [],
+    car_types: [],
+    transmission: [],
+    price_range: [0, 500],
+    available_only: false,
+  })
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const filteredCars = useMemo(() => {
+    return mockCars.filter((car) => {
+      // Fuel type filter
+      if (filters.fuel_types.length > 0 && !filters.fuel_types.includes(car.fuel_type)) {
+        return false
+      }
+
+      // Seats filter
+      if (filters.seats.length > 0 && !filters.seats.includes(car.seats)) {
+        return false
+      }
+
+      // Car type filter
+      if (filters.car_types.length > 0 && !filters.car_types.includes(car.car_type)) {
+        return false
+      }
+
+      // Transmission filter
+      if (filters.transmission.length > 0) {
+        const isAutomatic = car.automatic
+        const hasAutomatic = filters.transmission.includes("automatic")
+        const hasManual = filters.transmission.includes("manual")
+
+        if (hasAutomatic && hasManual) {
+          // Both selected, show all
+        } else if (hasAutomatic && !isAutomatic) {
+          return false
+        } else if (hasManual && isAutomatic) {
+          return false
+        }
+      }
+
+      // Price range filter
+      if (car.price_per_day < filters.price_range[0] || car.price_per_day > filters.price_range[1]) {
+        return false
+      }
+
+      // Available only filter
+      if (filters.available_only && !car.is_available) {
+        return false
+      }
+
+      return true
+    })
+  }, [filters])
+
+  const totalPages = Math.ceil(filteredCars.length / CARS_PER_PAGE)
+  const startIndex = (currentPage - 1) * CARS_PER_PAGE
+  const paginatedCars = filteredCars.slice(startIndex, startIndex + CARS_PER_PAGE)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   return (
     <>
-    
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900  relative">
       <Navbar/>
-    <div className="min-h-screen bg-black text-white font-sans  flex  flex-col md:flex-row">
-      {/* Sidebar (collapsible on mobile) */}
-      <AnimatePresence>
-        {(showFilters || window.innerWidth >= 768) && (
-          <motion.aside
-            initial={{ x: -320, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -320, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="z-20 w-full md:w-72 md:sticky top-0 h-full bg-gradient-to-b from-[#232b3a] via-[#181f23] to-[#232b3a] border-r border-white/10 p-0 flex flex-col shadow-2xl md:translate-x-0 fixed md:relative left-0"
-          >
-            <div className="flex items-center justify-between px-6 py-4 md:hidden">
-              <span className="text-lg font-bold text-[#6DA5C0]">Filters</span>
-              <button onClick={() => setShowFilters(false)} className="text-white hover:text-[#6DA5C0]">
-                <X size={24} />
-              </button>
+      <div className="relative top-15 z-10">
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex gap-8">
+            {/* Sidebar */}
+            <FilterSidebar filters={filters} onFiltersChange={setFilters} />
+
+            {/* Main Content */}
+            <div className="flex-1">
+              <div className="mb-6">
+                <h2 className="text-3xl font-bold text-white mb-2">Available Cars</h2>
+                <p className="text-gray-300">Choose from our premium collection of vehicles</p>
+              </div>
+
+              {/* Car Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {paginatedCars.map((car) => (
+                  <VehicleCard key={car.id} car={car} />
+                ))}
+              </div>
+
+              {/* No Results */}
+              {filteredCars.length === 0 && (
+                <div className="text-center py-12">
+                  <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-md mx-auto">
+                    <h3 className="text-xl font-semibold text-white mb-2">No cars found</h3>
+                    <p className="text-gray-300">Try adjusting your filters to see more results.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Pagination */}
+              {filteredCars.length > 0 && (
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+              )}
             </div>
-            <FilterSidebar />
-          </motion.aside>
-        )}
-      </AnimatePresence>
-      {/* Filter toggle button (mobile) */}
-      <button
-        className="md:hidden fixed top-5 left-5 z-30 bg-[#6DA5C0] text-white p-2 rounded-full shadow-lg"
-        onClick={() => setShowFilters(true)}
-        aria-label="Open filters"
-      >
-        <Filter size={20} />
-      </button>
-      {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-10">
-        {/* Search Bar */}
-        <Card className="max-w-3xl mx-auto p-6 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-md border-white/20 mb-10">
-          <div className="flex items-center gap-4">
-            <Search className="text-gray-300" size={22} />
-            <Input
-              type="text"
-              placeholder="Search by car, brand, type..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="bg-white/10 text-white placeholder:text-gray-300 border-white/30 focus:border-[#6DA5C0] h-12 rounded-xl text-lg"
-            />
           </div>
-        </Card>
-        {/* Vehicle Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredVehicles.length === 0 ? (
-            <div className="col-span-full text-center text-gray-400 py-20">No vehicles found.</div>
-          ) : (
-            filteredVehicles.map(vehicle => (
-              <VehicleCard key={vehicle._id} vehicle={vehicle} />
-            ))
-          )}
         </div>
-        {/* Pagination */}
-        <div className="mt-12 flex justify-center">
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-        </div>
-      </main>
+      </div>
     </div>
     </>
-  );
+  )
 }

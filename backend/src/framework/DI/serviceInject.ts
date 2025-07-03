@@ -13,7 +13,7 @@ const redisService =new  RedisService()
 const userRepository =new UserRepostory()
 const jwtService = new JwtService()
 const adminRepository = new AdminRepository()
-const accessSecretKey = process.env.ACCESSTOKEN_SECRET_KEY as string 
+const accessSecretKey = process.env.ACCESS_TOKEN_KEY as string 
 const tokenService = new TokenService(redisService,jwtService,accessSecretKey)
 //-----------user-block-checker
 export const injectedUserBlockChecker = UserBlockCheckingMiddleware(redisService,userRepository)

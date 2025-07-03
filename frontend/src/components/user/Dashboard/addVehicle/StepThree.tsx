@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { LeafletMouseEvent } from "leaflet";
+import { findLocation } from "@/services/user/locationService";
 
 interface StepThreeProps {
   onSubmit: (data: StepThreeFormData) => void;
@@ -46,11 +47,8 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
 
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-      );
-      const data = await res.json();
+  
+      const data =  await findLocation(lat,lng)
       const address = data.address || {};
 
       setFieldValue("latitude", lat);
@@ -61,9 +59,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
       setFieldValue("country", address.country || "");
       setFieldValue("pincode", address.postcode || "");
       setMarker([lat, lng]);
-    } catch (error) {
-      console.error("Reverse geocoding failed:", error);
-    }
+   
   };
 
   const MapClickHandler = ({ setFieldValue }: { setFieldValue: FormikHelpers<StepThreeFormData>["setFieldValue"]; }) => {
