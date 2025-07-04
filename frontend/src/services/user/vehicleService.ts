@@ -43,3 +43,17 @@ export const SearchVehicle = async (latitude: number|null, longitude: number|nul
     throw new Error('An unexpected error occurred while searching for vehicles');
   }
 };
+
+export const getVehicleDetails= async (id:string)=>{
+ try {
+  const response = await axiosInstance.get(`/vehicle-details/${id}`)
+  return response.data
+ } catch (error) {
+    console.error('Error while fetching vehicle details:', error);
+    if (isAxiosError(error)) {
+      const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while fetching vehicle details';
+      throw new Error(errorMsg);
+    }
+    throw new Error('An unexpected error occurred while fetching vehicle details');
+  }
+}

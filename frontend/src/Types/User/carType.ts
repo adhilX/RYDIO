@@ -1,5 +1,5 @@
 export interface Car {
-  id: string
+  _id: string
   name: string
   brand: string
   price_per_day: number

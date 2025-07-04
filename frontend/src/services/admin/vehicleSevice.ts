@@ -36,3 +36,13 @@ export const handleVehicle = async (vehicle_id:string, action: 'accepted'|'rejec
     throw error;
   }
 };
+
+export const getVehilceDetails = async (id:string) =>{
+  try {
+    const response = await axiosInstance.get(`/vehicle-details/${id}`)
+    console.log(response.data)
+  } catch (error) {
+        console.log('Error while fetching vehicle details:', error);
+    throw error;
+  }
+}

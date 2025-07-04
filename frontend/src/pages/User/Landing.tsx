@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { findLocation } from '@/services/user/locationService';
-import { SearchVehicle } from '@/services/user/vehicleService';
 import VehicleSearchBar from '@/components/user/VehicleSearchBar';
 
 const LandingPage = () => {
@@ -67,8 +66,7 @@ useEffect(() => {
       console.log('data not filed')
       return 
     }
-    const data = await SearchVehicle(latitude,longitude)
-     console.log(data)
+    navigate('/vehicle-list',{state:{latitude,longitude}})
     
   }
   return (

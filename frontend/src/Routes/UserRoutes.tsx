@@ -12,6 +12,7 @@ import ChangePassword from "@/components/user/Dashboard/ChagePassword"
 import Wallet from "@/components/user/Dashboard/Wallet"
 import ListVehilce from "@/components/user/Dashboard/ListVehilce"
 import UserVehicleList from "@/pages/User/UserVehicleList"
+import VehicleDetailPage from "@/pages/User/VehicleDetailPage"
 
 
 export const UserRoutes = () => {
@@ -26,6 +27,7 @@ export const UserRoutes = () => {
 
             <Route path='/' element={<LandingPage />} />
             <Route path='/vehicle-list' element={<UserVehicleList />} />
+            <Route path='/vehicle-details/:id' element={ <VehicleDetailPage/>} />
             <Route
                 path="/userprofile"
                 element={

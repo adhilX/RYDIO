@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, searchVehicleController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, editProfileController, googleLoginController, myVehicleController, resendOtpController, searchVehicleController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, vehilceDetailsController, verifyForgotPassowordOtpController } from "../../DI/userInject";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -60,5 +60,9 @@ export class UserRoutes {
     })
     this.UserRoutes.post('/search-vehicle',(req:Request,res:Response)=>{
         searchVehicleController.searchVehicle(req,res)
+    })
+    this.UserRoutes.get('/vehicle-details/:id',(req:Request,res:Response)=>{ 
+        console.log('ddddddddddddddddddddd')
+         vehilceDetailsController.getVehicleDetails(req,res)
     })
 }}

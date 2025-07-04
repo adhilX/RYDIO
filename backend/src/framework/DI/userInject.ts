@@ -37,6 +37,8 @@ import { UploadIdProofUsecase } from "../../useCases/user/UploadIdProofUsecase"
 import { UploadIdProofRepository } from "../../adapters/repository/user/UploadIdProofRepository"
 import { SearchVehicleUsecase } from "../../useCases/user/vehicle/searchVehicleUsecase"
 import { SearchVehicleController } from "../../adapters/controllers/user/searchVehicleController"
+import { VehilceDetailsController } from "../../adapters/controllers/user/vehilceDetailsController"
+import { VehicleDetailsUsecase } from "../../useCases/user/vehicle/vehicleDetailsUsecase"
 
 // regester user 
 const otpService = new OtpService()
@@ -106,6 +108,11 @@ export const myVehicleController = new MyVehicleController(myvehicleUsecase)
 //-------search vehicle------------
 const searchVehicleUsecase = new SearchVehicleUsecase(vehicleRepository)
 export const searchVehicleController = new SearchVehicleController(searchVehicleUsecase)
+
+//----get vehicle details------
+
+const vehicleDetailsUsecase = new VehicleDetailsUsecase(vehicleRepository)
+export const vehilceDetailsController = new VehilceDetailsController(vehicleDetailsUsecase)
 
 //-------upload Id prooof-------------
 

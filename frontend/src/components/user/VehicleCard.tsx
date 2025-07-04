@@ -2,21 +2,22 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Fuel, Users, Settings, Star } from "lucide-react"
 import type { Car } from "@/Types/User/carType"
+import { useNavigate } from "react-router"
 
 interface CarCardProps {
   car: Car
 }
 
 export function VehicleCard({ car }: CarCardProps) {
+  const navigate = useNavigate()
   return (
     <div className="group relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
       <div className="relative h-48 overflow-hidden">
-        {/* <Image
+        <img
           src={car.image_urls[0] || "/placeholder.svg?height=200&width=300"}
           alt={car.name}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-110"
-        /> */}
+          className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110 rounded"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <Badge
           variant="secondary"
@@ -60,9 +61,9 @@ export function VehicleCard({ car }: CarCardProps) {
             <span className="text-2xl font-bold text-white">${car.price_per_day}</span>
             <span className="text-gray-300 text-sm">/day</span>
           </div>
-          <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-            Book Now
-          </Button>
+            <Button onClick={()=>navigate(`/vehicle-details/${car._id}`)} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+            View Details
+            </Button>
         </div>
       </div>
     </div>
