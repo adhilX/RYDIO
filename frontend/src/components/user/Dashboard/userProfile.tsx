@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,7 +8,7 @@ import type { RootState } from "@/store/store";
 import { uploadToCloudinary } from "@/lib/utils/cloudinaryUpload";
 import { updateProfile } from "@/services/user/UpdateProfileService";
 import toast from "react-hot-toast";
-import { useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userProfileSchema, type UserProfileFormData } from "@/Types/User/validation/UpdateProfileSchema";
 import { addUser } from "@/store/slice/user/UserSlice";
@@ -23,7 +23,7 @@ export default function UserProfile() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch()
 
-  const [open,SetOpen] = useState(false)
+  const [open, SetOpen] = useState(false)
   const {
     register,
     reset,
@@ -73,7 +73,7 @@ export default function UserProfile() {
         imageUrl = await uploadToCloudinary(croppedImage);
       }
       const updatedData = { ...userData, email: user.email };
-      const {newUser} = await updateProfile(imageUrl, updatedData);
+      const { newUser } = await updateProfile(imageUrl, updatedData);
       toast.success("Profile updated successfully!");
       dispatch(addUser(newUser))
       setIsEditing(false);
@@ -116,13 +116,39 @@ export default function UserProfile() {
         />
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
           {user.name || "Not set"}
-          {user.idproof_id?.status === 'approved' && (
-            <span title="Verified" className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-              </svg>
-            </span>
+          {user.is_verified_user && (
+            <svg
+              fill="#000000"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              className="icon flat-line"
+            >
+              <path
+                d="M21.37,12c0,1-.86,1.79-1.14,2.67s-.1,2.08-.65,2.83-1.73.94-2.5,1.49-1.28,1.62-2.18,1.92S13,20.65,12,20.65s-2,.55-2.9.27S7.67,19.55,6.92,19,5,18.28,4.42,17.51s-.35-1.92-.65-2.83S2.63,13,2.63,12s.86-1.8,1.14-2.68.1-2.08.65-2.83S6.15,5.56,6.92,5,8.2,3.39,9.1,3.09s1.93.27,2.9.27,2-.55,2.9-.27S16.33,4.46,17.08,5s1.94.72,2.5,1.49.35,1.92.65,2.83S21.37,11,21.37,12Z"
+                fill="#61d0ff"
+                strokeWidth={0.696}
+              />
+              <polyline
+                points="8 12 11 15 16 10"
+                fill="none"
+                stroke="#000000"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={0.696}
+              />
+              <path
+                d="M21.37,12c0,1-.86,1.79-1.14,2.67s-.1,2.08-.65,2.83-1.73.94-2.5,1.49-1.28,1.62-2.18,1.92S13,20.65,12,20.65s-2,.55-2.9.27S7.67,19.55,6.92,19,5,18.28,4.42,17.51s-.35-1.92-.65-2.83S2.63,13,2.63,12s.86-1.8,1.14-2.68.1-2.08.65-2.83S6.15,5.56,6.92,5,8.2,3.39,9.1,3.09s1.93.27,2.9.27,2-.55,2.9-.27S16.33,4.46,17.08,5s1.94.72,2.5,1.49.35,1.92.65,2.83S21.37,11,21.37,12Z"
+                fill="none"
+                stroke="#000000"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={0.696}
+              />
+            </svg>
           )}
+
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{user.email || "Not set"}</p>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{user.phone || "Add your phone number"}</p>
@@ -155,7 +181,7 @@ export default function UserProfile() {
           open={showCropper}
           onOpenChange={setShowCropper}
         />
-        <UploadIdProofModal open={open} onClose={() => SetOpen(false)}/>
+        <UploadIdProofModal open={open} onClose={() => SetOpen(false)} />
       </div>
 
       {/* Right: Editable Form or Info Blocks */}

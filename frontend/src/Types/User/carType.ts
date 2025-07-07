@@ -1,17 +1,4 @@
-export interface Car {
-  _id: string
-  name: string
-  brand: string
-  price_per_day: number
-  fuel_type: "petrol" | "diesel" | "electric"
-  seats: 2 | 4 | 5 | 7
-  car_type: "sedan" | "hatchback" | "xuv" | "suv" | "sports"
-  automatic: boolean
-  is_available?: boolean
-  image_urls: string[]
-  rating?: number
-  reviews?: number
-}
+
 
 export interface CarFilters {
   fuel_type: "petrol" | "diesel" | "electric"

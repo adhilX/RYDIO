@@ -1,8 +1,10 @@
+import { IVerificationRequest } from "../../../domain/entities/IVerificationRequest";
 import { User } from "../../../domain/entities/userEntities";
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
 import { IadminRepository } from "../../../domain/interface/repositoryInterface/IadminRepository";
 import { userModel } from "../../../framework/database/models/userModel";
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
+import { verificationRequestModel } from "../../../framework/database/models/verificationRequestModel";
 
 export class AdminRepository implements IadminRepository {
   async findByEmail(email: string): Promise<User | null> {
@@ -48,18 +50,57 @@ export class AdminRepository implements IadminRepository {
   ]);
   return { vehicles, total };
 }
-  async getApprovedVehicle(page = 1, limit = 10): Promise<{ vehicles: IVehicle[]; total: number } | null> {
+  async getApprovedVehicle(search='',page = 1, limit = 10): Promise<{ vehicles: IVehicle[]; total: number } | null> {
   const skip = (page - 1) * limit;
-  const filter = { admin_approve: 'accepted'};
-
+  console.log(search)
+  const searchFilter = search
+  ? {
+    $or: [
+      { name: { $regex: search, $options: 'i' } },
+      { brand: { $regex: search, $options: 'i' } }
+        ]
+      }
+      : {};
+      const filter = { admin_approve: 'accepted',...searchFilter};
   const [vehicles, total] = await Promise.all([
     VehicleModel.find(filter).populate('owner_id').populate('location_id').skip(skip).limit(limit),
     VehicleModel.countDocuments(filter)
   ]);
   return { vehicles, total };
 }
+
     async findById(_id:string):Promise<User|null>{
-    return await userModel.findById(_id)
+    return await userModel.findOne({_id,role:'admin'})
+    }
+ async getIdProof(status: "pending" | "approved" | "rejected", page: number, limit: number): Promise<{idProof:IVerificationRequest[]; total:number }| null> {
+
+    const skip = (page - 1) * limit;
+    const [idProof,total]= await Promise.all([
+
+        verificationRequestModel.find({status}).skip(skip).limit(limit),
+        verificationRequestModel.countDocuments({status})
+    ])
+    return {idProof,total}
+    }
+
+    async findByIdProof(idProof_id:string[]):Promise<User[]>{
+      return await userModel.find({idproof_id:{$in:idProof_id}}).populate('idproof_id').select('-password')
+    }
+    async idProofUprove(idProof_id:string,owner_id:string):Promise<boolean>{
+     const success =  await verificationRequestModel.findByIdAndUpdate(idProof_id,{status:'approved'})
+     if(success){
+      await userModel.findByIdAndUpdate(owner_id,{is_verified_user:true})
+     }
+     return !!success
+    }
+    async idProofReject(idProof_id:string):Promise<boolean>{
+     const success =  await verificationRequestModel.findByIdAndUpdate(idProof_id,{status:'rejected'})
+     return !!success
+    }
+
+    async setVeifedUser(userId: string): Promise<boolean> {
+      const success = await userModel.findByIdAndUpdate(userId,{is_verified_user:true})
+      return !!success
     }
 }
 

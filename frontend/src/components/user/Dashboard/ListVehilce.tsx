@@ -18,6 +18,7 @@ const ListVehilce = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false)
   const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [disableAddBtn,setDisableAddBtn] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,8 +41,16 @@ const ListVehilce = () => {
         setIsLoading(false)
       }
     };
-    fetchData();
-  }, [debouncedSearch, currentPage, user, limit]);
+    const changeAddBtn=()=>{
+      console.log(user?.idproof_id)
+      console.log(vehicles.length)
+      if(!user?.idproof_id &&vehicles.length >1 ){
+        setDisableAddBtn(true)
+      }
+    }
+  fetchData();
+  changeAddBtn()
+  }, [debouncedSearch, currentPage, user, limit, vehicles.length]);
 
   if (!user) return null;
   return (
@@ -62,9 +71,20 @@ const ListVehilce = () => {
             </div>
           </div>
         </motion.div>
-        <button
+  {disableAddBtn && (
+  <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg shadow-sm text-sm font-medium max-w-md">
+    Submit ID proof to add more vehicles.
+  </div>
+)}
+         <button
+          disabled={disableAddBtn}
           onClick={() => navigate('/userProfile/add-vehicle')}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#6DA5C0] text-white font-semibold shadow hover:bg-[#232b3a] transition"
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold shadow transition
+            ${disableAddBtn
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-[#6DA5C0] text-white hover:bg-[#232b3a]'
+            }`
+          }
         >
           <PlusCircle className="w-5 h-5" />
           Add Vehicle

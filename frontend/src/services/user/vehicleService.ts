@@ -30,10 +30,11 @@ export const getMyVehicle = async (owner_id: string, search = '', page = 1, limi
   }
 };
 
-export const SearchVehicle = async (latitude: number|null, longitude: number|null) => {
+export const SearchVehicle = async (latitude: number|null, longitude: number|null,currentPage:number,limit:number) => {
   try {
-    const response = await axiosInstance.post("/search-vehicle", { latitude, longitude });
-    return response?.data;
+    const response = await axiosInstance.post("/search-vehicle", { latitude, longitude,currentPage,limit });
+    console.log(response.data)
+    return response?.data
   } catch (error) {
     console.error('Error while searching for vehicles:', error);
     if (isAxiosError(error)) {

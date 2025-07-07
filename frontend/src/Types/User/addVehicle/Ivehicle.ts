@@ -1,9 +1,10 @@
 import type { Iuser } from "../Iuser";
+import type { Ilocation } from "../location";
 
 export interface Vehicle {
     _id?:string 
-    owner_id: string | Iuser
-    location_id?: string;
+    owner_id: Iuser
+    location_id?: Ilocation;
     name: string;
     brand: string;
     registration_number: string;

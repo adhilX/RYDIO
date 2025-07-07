@@ -1,14 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Fuel, Users, Settings, Star } from "lucide-react"
-import type { Car } from "@/Types/User/carType"
+import { Fuel, Users, Settings } from "lucide-react"
 import { useNavigate } from "react-router"
+import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle"
 
-interface CarCardProps {
-  car: Car
-}
 
-export function VehicleCard({ car }: CarCardProps) {
+
+export function VehicleCard({ car }:{car:Vehicle}) {
   const navigate = useNavigate()
   return (
     <div className="group relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
@@ -33,12 +31,12 @@ export function VehicleCard({ car }: CarCardProps) {
             <h3 className="text-xl font-bold text-white mb-1">{car.name}</h3>
             <p className="text-gray-300 text-sm">{car.brand}</p>
           </div>
-          {car.rating && (
+          {/* {car.rating && (
             <div className="flex items-center gap-1 text-yellow-400">
               <Star className="w-4 h-4 fill-current" />
               <span className="text-sm text-white">{car.rating}</span>
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="flex items-center gap-4 mb-4 text-gray-300">
@@ -61,7 +59,7 @@ export function VehicleCard({ car }: CarCardProps) {
             <span className="text-2xl font-bold text-white">${car.price_per_day}</span>
             <span className="text-gray-300 text-sm">/day</span>
           </div>
-            <Button onClick={()=>navigate(`/vehicle-details/${car._id}`)} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Button onClick={()=>navigate(`/vehicle-details/${car._id}`)} className=" bg-[#6DA5C0] text-white hover:bg-[#5b8ca3] border-0 shadow-lg hover:shadow-xl transition-all duration-300">
             View Details
             </Button>
         </div>

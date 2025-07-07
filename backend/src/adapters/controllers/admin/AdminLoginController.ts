@@ -27,6 +27,10 @@ export class AdminLoginController {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: "invalid credentials" })
                 return
             }
+            if (admin.role != 'admin') {
+                res.status(HttpStatus.BAD_REQUEST).json({ message: "this is not admin" })
+                return
+            }
             const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string
             const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string
             const accessToken = this.jwtService.createAccessToken(ACCESS_TOKEN_KEY, admin._id?.toString() || "", admin.role)

@@ -31,12 +31,11 @@ export function UserManagement() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedSearch(search);
-      setCurrentPage(1); // reset page on new search
+      setCurrentPage(1); 
     }, 1500);
     return () => clearTimeout(timeout);
   }, [search]);
 
-  // Fetch users
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);

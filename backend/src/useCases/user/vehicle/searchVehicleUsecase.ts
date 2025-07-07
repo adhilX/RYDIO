@@ -8,7 +8,8 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase{
         this.vehicleRepsitory = vehicleRepsitory
     }
 
-     async searchVehicle(lat: number, lon: number): Promise<IVehicle[] | null> {
-        return  this.vehicleRepsitory.findVehicle(lat,lon)
+     async searchVehicle(lat: number, lon: number, search: string, currentPage: number, limit: number): Promise<{ vehicles: IVehicle[], total: number } | null>{
+         return  this.vehicleRepsitory.findVehicle(lat,lon,search,currentPage,limit)
+         
      }
 } 

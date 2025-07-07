@@ -14,7 +14,7 @@ function VehicleCard({ vehicle, setSelectedVehicle }: VehicleCardProps) {
   return (
     <motion.div
       whileHover={{ scale: 1.03, boxShadow: '0 8px 32px 0 rgba(230,57,70,0.25)' }}
-      className="bg-black/80 backdrop-blur-xl border border-black/60 shadow-2xl rounded-xl p-4 flex flex-col transition-all duration-200"
+      className="bg-stone-600/35 backdrop-blur-xl border border-black/60 shadow-2xl rounded-xl p-4 flex flex-col transition-all duration-200"
     >
       <img
         src={vehicle.image_urls[0]}

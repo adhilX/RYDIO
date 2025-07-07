@@ -1,6 +1,8 @@
 import { AdminLoginController } from "../../adapters/controllers/admin/AdminLoginController";
 import { BlockUserController } from "../../adapters/controllers/admin/BlockUsersController";
 import { GetAllUserController } from "../../adapters/controllers/admin/GetAllUserController";
+import { GetIdProofController } from "../../adapters/controllers/admin/getIdproofController";
+import { IdProofActionController } from "../../adapters/controllers/admin/idProofActionController";
 import { SearchUserController } from "../../adapters/controllers/admin/SearchUserController";
 import { UnblockUserController } from "../../adapters/controllers/admin/UnblockUserController";
 import { GetApprovedVehicleController } from "../../adapters/controllers/admin/vehicleManagment/getApproveVehicleContorller";
@@ -11,6 +13,8 @@ import { VehicleRepository } from "../../adapters/repository/user/vehicleReposit
 import { LoginAdminUsecase } from "../../useCases/admin/AdminLoginUsecase";
 import { BlockUserUseCase } from "../../useCases/admin/BlockUserUsecase";
 import { GetAllUserUsecase } from "../../useCases/admin/getAllUserUsecase";
+import { GetIdProofUscase } from "../../useCases/admin/getIdProofUscase";
+import { IdProofActionUsecase } from "../../useCases/admin/idProofActionUsecase";
 import { SearchUserusercase } from "../../useCases/admin/searchUserUsecase";
 import { UnblockUserUseCase } from "../../useCases/admin/UnblockUserUsecase";
 import { ApprovedVehicleusercase } from "../../useCases/admin/vehicleManagment/ApprovedVehiceUsecase";
@@ -56,7 +60,17 @@ export const vehicleUpproveController = new VehicleUpproveController(vehicleUppr
 //-------fetch pending vehicle------
 const pendingVehicleUsecase = new PendingVehicleusercase(adminRepository)
 export const pendingVehicleController = new PendingVehicleController(pendingVehicleUsecase)
-//-------fetch pending vehicle------
+
+//-------fetch vehicle------
 
 const approvedVehicleUsecase = new ApprovedVehicleusercase(adminRepository)
 export const ApprovedVehiceController = new GetApprovedVehicleController(approvedVehicleUsecase)
+
+//-----fetch id Proof-------------
+const getIdProofUscase = new GetIdProofUscase(adminRepository)
+export const getIdProofController = new GetIdProofController(getIdProofUscase)
+
+//------ id proof action-----------
+
+const idProofActionUsecase = new IdProofActionUsecase(adminRepository)
+export const idProofActionController = new IdProofActionController(idProofActionUsecase)

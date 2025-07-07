@@ -62,7 +62,6 @@ export class UserRoutes {
         searchVehicleController.searchVehicle(req,res)
     })
     this.UserRoutes.get('/vehicle-details/:id',(req:Request,res:Response)=>{ 
-        console.log('ddddddddddddddddddddd')
          vehilceDetailsController.getVehicleDetails(req,res)
     })
 }}

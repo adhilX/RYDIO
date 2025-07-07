@@ -1,26 +1,30 @@
 import { useState, useEffect } from "react"
-import type { FilterState } from "@/Types/User/carType"
+import type {  FilterState } from "@/Types/User/carType"
 import { FilterSidebar } from "@/components/user/FilterSidebar"
 import { VehicleCard } from "@/components/user/VehicleCard"
 import Pagination from "@/components/Pagination"
 import Navbar from "@/components/user/Navbar"
 import { useLocation } from "react-router"
 import { SearchVehicle } from "@/services/user/vehicleService"
+import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle"
 
 const CARS_PER_PAGE = 6
 
 export default function UserVehileList() {
   const location = useLocation()
-  const [cars,setCars]= useState([])
+  const [cars,setCars]= useState<Vehicle[]|null>([])
+  const [totalPages,setTotalPages]=useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
   useEffect(()=>{
     const fetchvehilce = async()=>{
       const {latitude,longitude}= location.state
       console.log(latitude,longitude)
-      const data = await SearchVehicle(latitude,longitude)
+      const data = await SearchVehicle(latitude,longitude,currentPage,CARS_PER_PAGE)
       setCars(data.vehicles)
+      setTotalPages(data.total/CARS_PER_PAGE)
     }
     fetchvehilce()
-  },[location.state])
+  },[location.state,currentPage])
   const [filters, setFilters] = useState<FilterState>({
     fuel_types: [],
     seats: [],
@@ -29,16 +33,11 @@ export default function UserVehileList() {
     price_range: [0, 500],
     available_only: false,
   })
-  const [currentPage, setCurrentPage] = useState(1)
 
-
-  const totalPages = Math.ceil(cars.length / CARS_PER_PAGE)
-  const startIndex = (currentPage - 1) * CARS_PER_PAGE
-  const paginatedCars = cars.slice(startIndex, startIndex + CARS_PER_PAGE)
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    // window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
@@ -61,13 +60,13 @@ export default function UserVehileList() {
 
               {/* Car Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {paginatedCars.map((car) => (
+                {cars?.map((car) => (
                   <VehicleCard key={car._id} car={car} />
                 ))}
               </div>
 
               {/* No Results */}
-              {cars.length === 0 && (
+              {cars?.length === 0 && (
                 <div className="text-center py-12">
                   <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-md mx-auto">
                     <h3 className="text-xl font-semibold text-white mb-2">No cars found</h3>
@@ -77,7 +76,7 @@ export default function UserVehileList() {
               )}
 
               {/* Pagination */}
-              {cars.length > 0 && (
+              {totalPages >1 && (
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
               )}
             </div>

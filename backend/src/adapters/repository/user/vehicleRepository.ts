@@ -22,19 +22,19 @@ export class VehicleRepository implements IvehicleRepository {
     return result !== null;
   }
   async myVehicle(owner_id: string, search: string, page: string, limit: string): Promise<{ vehicle: IVehicle[], total: number } | null> {
-    const baseQuery: any = { owner_id };
+    const owner: any = { owner_id };
     console.log(search)
     const query = search
       ? {
-        ...baseQuery,
+        ...owner,
         $or: [
           { name: { $regex: search, $options: "i" } },
           { brand: { $regex: search, $options: "i" } },
         ]
       }
-      : baseQuery;
-    const pageNum = parseInt(page, 10) || 1;
-    const limitNum = parseInt(limit, 10) || 10;
+      : owner;
+    const pageNum = Number(page)
+    const limitNum = Number(limit)
     const skip = (pageNum - 1) * limitNum;
     const [vehicle, total] = await Promise.all([
       VehicleModel.find(query).skip(skip).limit(limitNum),
@@ -42,7 +42,8 @@ export class VehicleRepository implements IvehicleRepository {
     ]);
     return { vehicle, total };
   }
-  async findVehicle(lat: number, lon: number): Promise<IVehicle[] | null> {
+  async findVehicle(lat: number, lon: number, search: string, page: number, limit: number): Promise<{ vehicles: IVehicle[], total: number } | null> {
+
     const locations = await locationModel.find({
       location: {
         $near: {
@@ -54,13 +55,28 @@ export class VehicleRepository implements IvehicleRepository {
     });
     if (!locations.length) return null
 
-    const locationId = locations.map(loc => loc._id);
-    const vehicles = await VehicleModel.find({
-      location_id: { $in: locationId },
-      admin_approve: 'accepted'
-    });
-    return vehicles
+    const query = search
+      ? {
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { brand: { $regex: search, $options: "i" } },
+        ]
+      }
+      : {};
+    const skip = (page - 1) * limit;
+    const locationId = locations.map(loc => loc._id.toString());
+    console.log(locationId)
+    const [vehicles, total] = await Promise.all([
+      VehicleModel.find({
+        ...query,
+        location_id: { $in: locationId },
+        admin_approve: 'accepted'
+      }).skip(skip).limit(limit),
+      VehicleModel.countDocuments(query)
+    ]);
+    return { vehicles, total }
   }
+
   async getVehicleDetails(Id: string): Promise<IVehicle | null> {
     return await VehicleModel.findById(Id).populate('owner_id').populate('location_id')
   }

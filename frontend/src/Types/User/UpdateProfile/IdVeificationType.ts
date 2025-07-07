@@ -1,7 +1,5 @@
-import { ObjectId } from "mongoose";
-
-export interface IVerificationRequest {
-  _id?: string | ObjectId ; 
+export type IVerificationRequest={
+  _id?: string    ; 
   idProofUrl: string;
   status: 'pending' | 'approved' | 'rejected';
   reason?: string;

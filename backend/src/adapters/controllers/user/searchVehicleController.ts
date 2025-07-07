@@ -10,9 +10,9 @@ export class SearchVehicleController {
   
     async searchVehicle (req:Request,res:Response):Promise<void>{
         try {
-            const {latitude,longitude} = req.body
-        const vehicles = await this.searchVehicleUsecase.searchVehicle(latitude,longitude)
-        res.status(HttpStatus.OK).json({vehicles})
+            const {latitude,longitude,search,currentPage,limit} = req.body
+        const vehicles = await this.searchVehicleUsecase.searchVehicle(latitude,longitude,search,currentPage,limit)
+        res.status(HttpStatus.OK).json(vehicles)
             
         } catch (error) {
           console.error('Error while searching vehicles:', error);

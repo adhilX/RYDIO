@@ -17,23 +17,31 @@ export default function AdminVehicleList() {
   const [totalPage, setTotalPage] = useState(1)
   const perPage = 6;
 
+   const [debouncedSearch, setDebouncedSearch] = useState(search);
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 1000);
+   return () => clearTimeout(delayDebounce);
+  }, [search]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAprovedVehicle(search, currentPage, perPage);
+        const response = await getAprovedVehicle(debouncedSearch, currentPage, perPage);
         setVehicles(response.vehicle);
-        setTotalPage(response?.total)
+        setTotalPage(response?.total/perPage)
 
       } catch (error) {
         console.error('Failed to fetch vehicles:', error);
       }
     };
     fetchData();
-  }, [search, currentPage]);
+  }, [debouncedSearch, currentPage]);
 
   return (
     <motion.div
-      className="p-4 space-y-6 bg-transparent shadow-2xl  rounded-xl "
+      className="p-4 space-y-6 rounded-xl "
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       // exit={{ opacity: 0, y: 30 }}
@@ -64,9 +72,8 @@ export default function AdminVehicleList() {
           </div>)}
       </div>
 
-           {totalPage > 1 ? <Pagination currentPage={currentPage} onPageChange={setCurrentPage} totalPages={totalPage} /> : <></>}
-     
-
+       {totalPage > 1 ? <Pagination currentPage={currentPage} onPageChange={setCurrentPage} totalPages={totalPage} /> : <></>}
+  
       {selectedVehicle && (
         <AdminVehicleModal
           open={true}

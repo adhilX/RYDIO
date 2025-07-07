@@ -9,8 +9,8 @@ import { IapprovedVehicleUsecase } from "../../../domain/interface/usecaseInterf
             this.adminRepository = adminRepository
         }
 
-    async getApprovedVehicle( page:number, limit: number): Promise<{ vehicle: IVehicle[]; total: number; } | null> {
-        const result = await this.adminRepository.getApprovedVehicle(page, limit);
+    async getApprovedVehicle( search:string,page:number, limit: number): Promise<{ vehicle: IVehicle[]; total: number; } | null> {
+        const result = await this.adminRepository.getApprovedVehicle(search,page, limit);
         if (!result) return null;
         return { vehicle: result.vehicles, total: result.total };
     }

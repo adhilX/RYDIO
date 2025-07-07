@@ -10,6 +10,8 @@ import Pagination from '../Pagination';
 import type { Iuser } from '@/Types/User/Iuser';
 import type { Ilocation } from '@/Types/User/location';
 
+const CARS_PER_PAGE = 6
+
 export default function AdminRequestedVehicles() {
   const [showRejected, setShowRejected] = useState(false);
   const [search, setSearch] = useState('');
@@ -24,16 +26,15 @@ export default function AdminRequestedVehicles() {
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       setDebouncedSearch(search);
-    }, 500);
-
-    return () => clearTimeout(delayDebounce);
+    }, 1000);
+   return () => clearTimeout(delayDebounce);
   }, [search]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await getPendingVehicle(debouncedSearch, currentPage, 6);
       setVehicles(response?.vehicle || []);
-      setTotalPage(response?.total)
+      setTotalPage(response?.total/CARS_PER_PAGE)
     };
     fetchData();
   }, [debouncedSearch, currentPage, showRejected, selectedVehicle]);
@@ -83,7 +84,6 @@ export default function AdminRequestedVehicles() {
           </div>
         )}
       </div>
-
       {/* Pagination */}
 
       {totalPage > 1 ? <Pagination currentPage={currentPage} onPageChange={setCurrentPage} totalPages={totalPage} /> : <></>}

@@ -7,6 +7,7 @@ import { Dashboard } from "@/components/admin/Dashboard";
 import { UserManagement } from "@/components/admin/UserManagment";
 import VehicleList from "@/components/admin/vehicleList";
 import RequestedVehiclesPage from "@/components/admin/RequestedVehicle";
+import IdproofRequest from "@/components/admin/IdproofRequest";
 
 
 export const AdminRoutes = () => {
@@ -22,7 +23,7 @@ export const AdminRoutes = () => {
           <Route path="users" element={<UserManagement/>} />
           <Route path="vehicle" element={<><VehicleList/></>} />
           <Route path="vehicle_requests" element={<><RequestedVehiclesPage/></>} />
-          <Route path="verifyid_requests" element={<></>} />
+          <Route path="idproof-requests" element={<><IdproofRequest/></>} />
         </Route>
       </Route>
     </Routes>
