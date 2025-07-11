@@ -11,7 +11,7 @@ export class CreateUserUsecase implements IcreateUserUsecase{
         this.userRepository = userRepository
     }
 
-    async createUser(user: User): Promise<User | null> {
+    async createUser(user: User): Promise<Omit<User, 'password'> | null> {
         
         const existUser = await this.userRepository.findByEmail(user.email)
         if(existUser)throw new Error('user already exist')
@@ -30,6 +30,7 @@ export class CreateUserUsecase implements IcreateUserUsecase{
             last_login: new Date()
         })
      if (!newUser) throw new Error('Error while creating user')
-        return newUser
+  const { password: _, ...userWithoutPassword } = newUser as User;
+        return userWithoutPassword
     }
 }

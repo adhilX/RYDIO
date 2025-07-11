@@ -1,3 +1,4 @@
+import { User } from "../../domain/entities/userEntities";
 import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
 import { IgetAllUserUsecase } from "../../domain/interface/usecaseInterface/admin/getAllUserUsecase";
 
@@ -9,6 +10,11 @@ export class GetAllUserUsecase implements IgetAllUserUsecase{
     }
 
   async getAllUser(){
-    return this.adminRepository.getAllUsers()
+    const user = await this.adminRepository.getAllUsers()
+    user?.map((user:User) =>{
+      const{password,...rest} = user
+      return rest
+    })
+    return user
   }
 }

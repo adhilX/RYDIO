@@ -127,7 +127,6 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
               <Field
                 name="address"
                 as={Input}
-                readOnly
                 className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
               />
               <ErrorMessage
@@ -138,7 +137,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">City</label>
-              <Field name="city" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <Field name="city" as={Input}  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
               <ErrorMessage
                 name="city"
                 component="div"
@@ -147,7 +146,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">State</label>
-              <Field name="state" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <Field name="state" as={Input}  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
               <ErrorMessage
                 name="state"
                 component="div"
@@ -156,7 +155,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Country</label>
-              <Field name="country" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <Field name="country" as={Input}  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
               <ErrorMessage
                 name="country"
                 component="div"
@@ -165,7 +164,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Pincode</label>
-              <Field name="pincode" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <Field name="pincode" as={Input}  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
               <ErrorMessage
                 name="pincode"
                 component="div"

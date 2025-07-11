@@ -11,7 +11,7 @@ export class ChangePassword implements IChangePasswordUsecase{
         this.hashPassword = hashPassword
     }
         
-    async handleChangePassword(newPassword: { current: string, newPass: string, confirm: string,_id:string }): Promise<User| null> {
+    async handleChangePassword(newPassword: { current: string, newPass: string, confirm: string,_id:string }): Promise<Omit<User, 'password'> | null> {
         const { current, newPass , _id } = newPassword
         const user = await this.userRepository.findById(_id)
         if(!user?.password)throw new Error('user not found')
@@ -20,7 +20,7 @@ export class ChangePassword implements IChangePasswordUsecase{
         if(!verifyPass) throw new Error('current password not match')
         if (current === newPass) throw new Error('New password must be different from the current password');
         const updatedUser = await this.userRepository.changePassword(_id,newPass)
-        
-        return updatedUser;
+        const { password: _, ...userWithoutPassword } = updatedUser as User;
+        return userWithoutPassword;
     }
 }

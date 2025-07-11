@@ -1,5 +1,4 @@
 import { User } from "../../../../entities/userEntities";
 
 export interface IcreateUserUsecase{
-    createUser(user:User):Promise<User | null>
-}
+createUser(user: User): Promise<Omit<User, 'password'> | null>}

@@ -84,7 +84,7 @@ export class AdminRepository implements IadminRepository {
     }
 
     async findByIdProof(idProof_id:string[]):Promise<User[]>{
-      return await userModel.find({idproof_id:{$in:idProof_id}}).populate('idproof_id').select('-password')
+      return await userModel.find({idproof_id:{$in:idProof_id}}).populate('idproof_id')
     }
     async idProofUprove(idProof_id:string,owner_id:string):Promise<boolean>{
      const success =  await verificationRequestModel.findByIdAndUpdate(idProof_id,{status:'approved'})

@@ -8,7 +8,7 @@ export class EditProfileUsecase implements IeditProfileUsecase{
         this.userRepository =userRepository
     }
         
-    async handleEditProfile(userData: { name: string; email: string; phone?: string; ImageUrl?: string; }): Promise<User> {
+    async handleEditProfile(userData: { name: string; email: string; phone?: string; ImageUrl?: string; }): Promise<Omit<User, 'password'>> {
         const { name, email, phone, ImageUrl } = userData;
         console.log(ImageUrl)
         const updatedUser = await this.userRepository.updateProfile(
@@ -20,6 +20,7 @@ export class EditProfileUsecase implements IeditProfileUsecase{
         if (!updatedUser) {
             throw new Error("User not found or update failed");
         }
-        return updatedUser;
+        const { password, ...userWithoutPassword } = updatedUser as User;
+        return userWithoutPassword;
     }
 }

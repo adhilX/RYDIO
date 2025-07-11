@@ -12,8 +12,6 @@ export class UploadIdProofRepository implements IUploadIdProofRepository {
                 userId,
                 { idproof_id: result._id },
                 { new: true }
-            )
-            .select('-password')
-            .populate('idproof_id');
+            ).populate('idproof_id');
     }
 }

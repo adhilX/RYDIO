@@ -23,7 +23,6 @@ export class VehicleRepository implements IvehicleRepository {
   }
   async myVehicle(owner_id: string, search: string, page: string, limit: string): Promise<{ vehicle: IVehicle[], total: number } | null> {
     const owner: any = { owner_id };
-    console.log(search)
     const query = search
       ? {
         ...owner,
@@ -43,13 +42,12 @@ export class VehicleRepository implements IvehicleRepository {
     return { vehicle, total };
   }
   async findVehicle(lat: number, lon: number, search: string, page: number, limit: number): Promise<{ vehicles: IVehicle[], total: number } | null> {
-
     const locations = await locationModel.find({
       location: {
         $near: {
-          $geometry: { type: 'Point', coordinates: [lat, lon] },
-          $minDistance: 0,
-          $maxDistance: 99999999
+          $geometry: { type: 'Point', coordinates: [lon,lat] },
+          // $minDistance: 0,
+          $maxDistance: 10000 
         }
       }
     });
@@ -65,7 +63,6 @@ export class VehicleRepository implements IvehicleRepository {
       : {};
     const skip = (page - 1) * limit;
     const locationId = locations.map(loc => loc._id.toString());
-    console.log(locationId)
     const [vehicles, total] = await Promise.all([
       VehicleModel.find({
         ...query,

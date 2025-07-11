@@ -18,7 +18,7 @@ interface FilterSidebarProps {
 export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleFilterChange = (key: keyof FilterState, value: any) => {
+  const handleFilterChange = (key: keyof FilterState, value: string | number | (string | number)[]) => {
     onFiltersChange({ ...filters, [key]: value })
   }
 

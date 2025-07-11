@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Car, Fuel, Users, Settings, MapPin, Phone, Mail, CheckCircle, Badge } from "lucide-react"
+import { Car, Fuel, Users, Settings, MapPin, Phone, Mail, Badge } from "lucide-react"
 import { DatePicker } from "@/components/ui/date-picker"
 import { getVehicleDetails } from "@/services/user/vehicleService"
 import { useLocation, useNavigate } from "react-router"
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle"
 import toast from "react-hot-toast"
 import { LatLng } from 'leaflet';
+import Navbar from "@/components/user/Navbar"
 
 const VehicleDetailPage = () => {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null)
@@ -63,10 +64,10 @@ const VehicleDetailPage = () => {
     return vehicle.price_per_day * days
   }
 
- const getLocationCoordinates = (): [number, number] => {
-  const [lng, lat] = vehicle?.location_id?.location?.coordinates || []
-  return (typeof lat === 'number' && typeof lng === 'number') ? [lat, lng] : [20.5937, 78.9629]
-}
+  const getLocationCoordinates = (): [number, number] => {
+    const [lng, lat] = vehicle?.location_id?.location?.coordinates || []
+    return (typeof lat === 'number' && typeof lng === 'number') ? [lat, lng] : [20.5937, 78.9629]
+  }
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
@@ -90,13 +91,14 @@ const VehicleDetailPage = () => {
 
   const totalPrice = calculateTotalPrice()
 
-const locationCoordinates = new LatLng(...(getLocationCoordinates()));
+  const locationCoordinates = new LatLng(...(getLocationCoordinates()));
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { staggerChildren: 0.1 } }}
-      className="min-h-screen bg-gray-900 text-white"
+      className="min-h-screen bg-gray-900 pt-10 text-white"
     >
+      <Navbar/>
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -147,9 +149,9 @@ const locationCoordinates = new LatLng(...(getLocationCoordinates()));
                   key={selectedImageIndex}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="relative h-80 w-full"
+                  className="relative overflow-hidden"
                 >
-                  <img src={vehicle.image_urls?.[selectedImageIndex] || "/placeholder.svg"} alt={`${vehicle.name} - Image ${selectedImageIndex + 1}`} className="object-cover w-full h-full" />
+                  <img src={vehicle.image_urls?.[selectedImageIndex] || "/placeholder.svg"} alt={`${vehicle.name} - Image ${selectedImageIndex + 1}`} className=" object-cover h-200 w-full" />
                   <Badge className={`absolute top-4 right-4 ${vehicle.is_available ? "bg-green-500" : "bg-red-500"}`}>
                     {vehicle.is_available ? "Available" : "Not Available"}
                   </Badge>
@@ -225,12 +227,40 @@ const locationCoordinates = new LatLng(...(getLocationCoordinates()));
                 <div className="flex items-start gap-4">
                   <div className="relative">
                     <img src={vehicle.owner_id.profile_image || "/placeholder.svg?height=60&width=60"} alt={vehicle.owner_id.name} width={60} height={60} className="rounded-full object-cover" />
-                    {vehicle.owner_id.is_verified_user && <CheckCircle className="absolute -bottom-1 -right-1 w-5 h-5 text-green-500 bg-white rounded-full" />}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-semibold">{vehicle.owner_id.name}</h4>
-                      {vehicle.owner_id.is_verified_user && <Badge className="text-xs">Verified</Badge>}
+                      {vehicle.owner_id.is_verified_user && <svg
+                        fill="#000000"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="icon flat-line"
+                      >
+                        <path
+                          d="M21.37,12c0,1-.86,1.79-1.14,2.67s-.1,2.08-.65,2.83-1.73.94-2.5,1.49-1.28,1.62-2.18,1.92S13,20.65,12,20.65s-2,.55-2.9.27S7.67,19.55,6.92,19,5,18.28,4.42,17.51s-.35-1.92-.65-2.83S2.63,13,2.63,12s.86-1.8,1.14-2.68.1-2.08.65-2.83S6.15,5.56,6.92,5,8.2,3.39,9.1,3.09s1.93.27,2.9.27,2-.55,2.9-.27S16.33,4.46,17.08,5s1.94.72,2.5,1.49.35,1.92.65,2.83S21.37,11,21.37,12Z"
+                          fill="#61d0ff"
+                          strokeWidth={0.696}
+                        />
+                        <polyline
+                          points="8 12 11 15 16 10"
+                          fill="none"
+                          stroke="#000000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={0.696}
+                        />
+                        <path
+                          d="M21.37,12c0,1-.86,1.79-1.14,2.67s-.1,2.08-.65,2.83-1.73.94-2.5,1.49-1.28,1.62-2.18,1.92S13,20.65,12,20.65s-2,.55-2.9.27S7.67,19.55,6.92,19,5,18.28,4.42,17.51s-.35-1.92-.65-2.83S2.63,13,2.63,12s.86-1.8,1.14-2.68.1-2.08.65-2.83S6.15,5.56,6.92,5,8.2,3.39,9.1,3.09s1.93.27,2.9.27,2-.55,2.9-.27S16.33,4.46,17.08,5s1.94.72,2.5,1.49.35,1.92.65,2.83S21.37,11,21.37,12Z"
+                          fill="none"
+                          stroke="#000000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={0.696}
+                        />
+                      </svg>}
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm text-gray-400"><Mail className="w-4 h-4" /> {vehicle.owner_id.email}</div>
@@ -269,7 +299,7 @@ const locationCoordinates = new LatLng(...(getLocationCoordinates()));
           <Card className="mt-6 bg-gray-800 border-none">
             <CardContent className="p-6">
               <h3 className="text-lg font-semibold mb-4">Vehicle Location</h3>
-              <div className="h-80 rounded-lg overflow-hidden">
+              <div className="h-200 rounded-lg overflow-hidden">
                 <MapContainer center={locationCoordinates} zoom={15} scrollWheelZoom={false} style={{ height: "100%", width: "100%" }} className="rounded-lg">
                   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                   <Marker position={locationCoordinates}>

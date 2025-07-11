@@ -37,7 +37,7 @@ const LandingPage = () => {
 
 const navigate = useNavigate()
 const {latitude,longitude} = useSelector((state:RootState)=>state.location)
-
+   const [newLocation, setNewLocation] = useState({ latitude: 0, longitude: 0 });
 const fetchLocation = async (latitude: number, longitude: number) => {
   const data = await findLocation(latitude, longitude);
   return data.display_name;
@@ -66,7 +66,8 @@ useEffect(() => {
       console.log('data not filed')
       return 
     }
-    navigate('/vehicle-list',{state:{latitude,longitude}})
+    const final = {latitude:newLocation?.latitude || latitude,longitude:newLocation?.longitude || longitude}
+    navigate('/vehicle-list',{state:{...final}})
     
   }
   return (
@@ -116,7 +117,7 @@ useEffect(() => {
         </div>
 
         {/* Search Form */}
-        <VehicleSearchBar handleDateChange={handleDateChange} handleVehicleSearch={handleVehicleSearch} isFormComplete={isFormComplete} location={location} pickupDate={pickupDate} returnDate={returnDate} setLocation={setLocation} setPickupDate={setPickupDate} setReturnDate={setReturnDate} showSparkles={showSparkles}/>
+        <VehicleSearchBar handleDateChange={handleDateChange} setNewLocation={setNewLocation} handleVehicleSearch={handleVehicleSearch} isFormComplete={isFormComplete} location={location} pickupDate={pickupDate} returnDate={returnDate} setLocation={setLocation} setPickupDate={setPickupDate} setReturnDate={setReturnDate} showSparkles={showSparkles}/>
         {/* Feature Cards */}
         <div className="max-w-7xl mx-auto pb-24">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">

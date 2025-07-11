@@ -18,7 +18,6 @@ export default function UserVehileList() {
   useEffect(()=>{
     const fetchvehilce = async()=>{
       const {latitude,longitude}= location.state
-      console.log(latitude,longitude)
       const data = await SearchVehicle(latitude,longitude,currentPage,CARS_PER_PAGE)
       setCars(data.vehicles)
       setTotalPages(data.total/CARS_PER_PAGE)

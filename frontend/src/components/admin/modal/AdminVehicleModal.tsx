@@ -96,7 +96,7 @@ const showBtn = pathname == '/admin/vehicle_requests'
           )}
         </motion.div>
 
-        {showBtn?<div className="flex justify-end gap-4 px-6 pb-6">
+        {showBtn && vehicle.admin_approve == 'pending'?<div className="flex justify-end gap-4 px-6 pb-6">
           <button
           onClick={handleAccept}
             className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded cursor-pointer transition-colors"

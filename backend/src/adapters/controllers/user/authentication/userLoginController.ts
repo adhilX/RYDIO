@@ -15,7 +15,6 @@ export class UserLoginController {
         this.redisService = redisService
 
     }
-
     async handleLogin(req: Request, res: Response) {
         try {
             const { email, password } = req.body

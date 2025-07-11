@@ -49,12 +49,12 @@ export default function AdminRequestedVehicles() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex flex-col md:flex-row text-white justify-end p-4 items-center gap-4">
+      <div className="flex flex-col md:flex-row text-white justify-end p-4  items-center gap-4">
         <Input
           placeholder="Search vehicle..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm bg-black/60 border border-black/60 text-white focus:outline-none focus:ring-2 focus:ring-[#e63946] rounded-lg"
+          className="max-w-sm bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-[#e63946] rounded-lg"
         />
         <Button
           variant="outline"
@@ -67,7 +67,7 @@ export default function AdminRequestedVehicles() {
           {showRejected ? 'Show Requested' : 'Show Rejected'}
         </Button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[200px]"></div>
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[200px]"></div> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredVehicles.length ? filteredVehicles.map((vehicle, idx) => (
           <motion.div

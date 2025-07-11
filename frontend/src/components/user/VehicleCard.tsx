@@ -56,7 +56,7 @@ export function VehicleCard({ car }:{car:Vehicle}) {
 
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-2xl font-bold text-white">${car.price_per_day}</span>
+            <span className="text-2xl font-bold text-white">₹{car.price_per_day}</span>
             <span className="text-gray-300 text-sm">/day</span>
           </div>
             <Button onClick={()=>navigate(`/vehicle-details/${car._id}`)} className=" bg-[#6DA5C0] text-white hover:bg-[#5b8ca3] border-0 shadow-lg hover:shadow-xl transition-all duration-300">
