@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 import { getUsers } from '@/services/admin/authService';
-import { UnbserBlock, UserBlock } from '@/services/admin/UserBlockService';
+import { HandleVendorAccess, UnbserBlock, UserBlock } from '@/services/admin/UserManagmentService';
 import toast from 'react-hot-toast';
 import Pagination from '../Pagination';
 
@@ -69,6 +69,16 @@ export function UserManagement() {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       toast.error(`User block failed: ${errorMessage}`);
+    }
+  };
+  const handleVendorAccess = async (userId: string, vendorAccess: boolean) => {
+    try {
+ await HandleVendorAccess(userId,vendorAccess);
+        toast.success('vendor access changed');
+      toggleVendorAccess(userId);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`vendor access failed: ${errorMessage}`);
     }
   };
 
@@ -174,7 +184,7 @@ export function UserManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
-                        onClick={() => toggleVendorAccess(user._id)}
+                        onClick={() => handleVendorAccess(user._id, user.vendor_access)}
                         className={`text-sm font-medium px-3 py-1 rounded-lg transition-all duration-200 shadow-sm ${
                           user.vendor_access
                             ? 'bg-[#e63946]/20 text-[#e63946] hover:bg-[#e63946]/30'

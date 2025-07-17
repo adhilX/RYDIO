@@ -25,3 +25,16 @@ export const UnbserBlock = async (userId:string) => {
         throw new Error('error while client login')
       }
 };
+
+export const HandleVendorAccess = async (userId:string,vendorAccess:boolean) => {
+  try {
+    const response = await axiosInstance.patch(`/admin/vendor-access/${userId}`,{vendorAccess})
+    return response?.data;
+  } catch (error) {
+ console.log('error while client login', error)
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data?.error)
+        }
+        throw new Error('error while client login')
+      }
+};

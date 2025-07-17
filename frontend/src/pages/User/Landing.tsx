@@ -115,7 +115,7 @@ useEffect(() => {
             Premium vehicles, warm service, and unforgettable journeys await you
           </p>
         </div>
-
+        <div className="h-30"></div>
         {/* Search Form */}
         <VehicleSearchBar handleDateChange={handleDateChange} setNewLocation={setNewLocation} handleVehicleSearch={handleVehicleSearch} isFormComplete={isFormComplete} location={location} pickupDate={pickupDate} returnDate={returnDate} setLocation={setLocation} setPickupDate={setPickupDate} setReturnDate={setReturnDate} showSparkles={showSparkles}/>
         {/* Feature Cards */}

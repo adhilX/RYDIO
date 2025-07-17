@@ -42,9 +42,7 @@ const ListVehilce = () => {
       }
     };
     const changeAddBtn=()=>{
-      console.log(user?.idproof_id)
-      console.log(vehicles.length)
-      if(!user?.idproof_id &&vehicles.length >1 ){
+      if(!user?.idproof_id &&vehicles.length >=1){
         setDisableAddBtn(true)
       }
     }

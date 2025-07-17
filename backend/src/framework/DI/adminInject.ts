@@ -8,6 +8,7 @@ import { UnblockUserController } from "../../adapters/controllers/admin/UnblockU
 import { GetApprovedVehicleController } from "../../adapters/controllers/admin/vehicleManagment/getApproveVehicleContorller";
 import { PendingVehicleController } from "../../adapters/controllers/admin/vehicleManagment/PendingVehilcleContorller";
 import { VehicleUpproveController } from "../../adapters/controllers/admin/vehicleManagment/VehicleUpproveController";
+import { VendorAccessController } from "../../adapters/controllers/admin/vendorAccessController";
 import { AdminRepository } from "../../adapters/repository/admin/adminRepository";
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository";
 import { LoginAdminUsecase } from "../../useCases/admin/AdminLoginUsecase";
@@ -20,9 +21,9 @@ import { UnblockUserUseCase } from "../../useCases/admin/UnblockUserUsecase";
 import { ApprovedVehicleusercase } from "../../useCases/admin/vehicleManagment/ApprovedVehiceUsecase";
 import { PendingVehicleusercase } from "../../useCases/admin/vehicleManagment/PendingVehicleUsecase";
 import { VehicleUpproveUsecase } from "../../useCases/admin/vehicleManagment/vehicleApproveUsecase";
+import { VendorAccessUsecase } from "../../useCases/admin/vendorAccessUsecase";
 import { HashPassword } from "../services/hashPassword";
 import { JwtService } from "../services/jwtService";
-
 
 //-----------admin login------------
 const adminRepository = new AdminRepository()
@@ -30,7 +31,6 @@ const hashPassword = new HashPassword()
 const jwtService = new JwtService()
 const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword)
 export const adminLoginController = new AdminLoginController(loginAdminUsecase,jwtService)
-
 
 //------get All Usersss-------------
 const getAllUserUsecase = new GetAllUserUsecase(adminRepository)
@@ -73,3 +73,7 @@ export const getIdProofController = new GetIdProofController(getIdProofUscase)
 
 const idProofActionUsecase = new IdProofActionUsecase(adminRepository)
 export const idProofActionController = new IdProofActionController(idProofActionUsecase)
+
+//-------vendor access--------
+const vendorAccessUsecase = new VendorAccessUsecase(adminRepository)
+export const vendorAccessController = new VendorAccessController(vendorAccessUsecase)

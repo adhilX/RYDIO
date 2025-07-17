@@ -1,4 +1,3 @@
-// src/routes/ProtectedRoutes/AdminProtectedRoute.tsx
 
 import type { RootState } from "@/store/store";
 import { useSelector } from "react-redux";

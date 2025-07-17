@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getIdProofController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController } from "../../DI/adminInject";
+import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getIdProofController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController } from "../../DI/adminInject";
 import { injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -10,7 +10,6 @@ export class AdminRoutes {
         this.AdminRoute = Router()
         this.setRoutes()
     }
-
     private setRoutes() {
         this.AdminRoute.post('/login', (req: Request, res: Response) => {
             adminLoginController.handleAdminLogin(req, res)
@@ -42,6 +41,8 @@ export class AdminRoutes {
         this.AdminRoute.post('/idproof-action/:id',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
            idProofActionController.idProofAction(req,res)
         })
-
+        this.AdminRoute.patch('/vendor-access/:userId',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
+           vendorAccessController.handleVendorAccess(req,res)
+         })
     }
 }

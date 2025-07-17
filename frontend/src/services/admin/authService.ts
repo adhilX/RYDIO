@@ -21,7 +21,7 @@ export const getUsers = async (search = "", page = 1, limit = 6) => {
        params: { search, page, limit }
     });
     console.log(response.data)
-    return response?.data?.users;
+    return response?.data
   } catch (error) {
     console.log('Error while fetching users:', error);
     throw error;

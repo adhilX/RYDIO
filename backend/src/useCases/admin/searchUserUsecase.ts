@@ -14,7 +14,8 @@
          if(!result) return null
         const {users,total}= result
          const fileredUser = users.map((user:User) => {
-            const { password,idproof_id,vendor_access,is_verified_user,created_at,role,googleVerification,is_blocked,profile_image,last_login, ...rest } = user;
+              const plainUser = JSON.parse(JSON.stringify(user))
+            const { password, ...rest } = plainUser
             return rest;
           });
           return { users: fileredUser, total};

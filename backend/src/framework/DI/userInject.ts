@@ -39,6 +39,9 @@ import { SearchVehicleUsecase } from "../../useCases/user/vehicle/searchVehicleU
 import { SearchVehicleController } from "../../adapters/controllers/user/searchVehicleController"
 import { VehilceDetailsController } from "../../adapters/controllers/user/vehilceDetailsController"
 import { VehicleDetailsUsecase } from "../../useCases/user/vehicle/vehicleDetailsUsecase"
+import { BookingRepository } from "../../adapters/repository/booking/bookingRepository"
+import { CreateBookingUsecase } from "../../useCases/user/booking/createBooking"
+import { CreateBookingController } from "../../adapters/controllers/user/booking/createBookingController"
 
 // regester user 
 const otpService = new OtpService()
@@ -119,3 +122,9 @@ export const vehilceDetailsController = new VehilceDetailsController(vehicleDeta
 const uploadIdProofRepository = new UploadIdProofRepository()
 const uploadIdProofUsecase = new UploadIdProofUsecase(uploadIdProofRepository)
 export const uploadIdProofController = new UploadIdProofController(uploadIdProofUsecase)
+
+//----------create Booking------------
+
+const bookingRepository = new BookingRepository()
+const createBookingUsecase = new CreateBookingUsecase(bookingRepository)
+export const createBookingController = new CreateBookingController(createBookingUsecase)

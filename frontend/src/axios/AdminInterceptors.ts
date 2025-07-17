@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { store } from '../store/store';
-import { toast } from 'react-hot-toast';
-import { removeUser } from '@/store/slice/user/UserSlice';
 import { addToken, removeToken } from '@/store/slice/admin/AdminTokenSlice';
 
 const axiosInstance = axios.create({
@@ -24,24 +22,12 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    if (
-      error.response?.status === 400 
-    ) {
-      toast.error("Your account has cbeen bloked.");
-      store.dispatch(removeToken());
-      window.location.href = '/admin/login';
-      return;
-    }
-
     if (
       error.response?.status === 401 &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true;
-
       try {
-        console.log(import.meta.env.VITE_API_BASEURL);
         const refreshRes = await axios.get(`${import.meta.env.VITE_API_BASEURL}refresh-token`,
           { withCredentials: true }
         );
@@ -52,13 +38,11 @@ axiosInstance.interceptors.response.use(
           return axiosInstance(originalRequest);
         }
       } catch (refreshErr) {
-        store.dispatch(removeUser());
         store.dispatch(removeToken());
         window.location.href = '/admin/login';
         return Promise.reject(refreshErr);
       }
     }
-
     return Promise.reject(error);
   }
 );

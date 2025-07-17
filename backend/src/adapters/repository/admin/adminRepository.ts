@@ -101,6 +101,11 @@ export class AdminRepository implements IadminRepository {
     async setVeifedUser(userId: string): Promise<boolean> {
       const success = await userModel.findByIdAndUpdate(userId,{is_verified_user:true})
       return !!success
+ 
+    }
+    async vendorAccess(userId: string, vendorAccess: boolean): Promise<boolean> {
+      const success = await userModel.findByIdAndUpdate(userId, { vendor_access: vendorAccess }, { new: true })
+      return !!success
     }
 }
 
