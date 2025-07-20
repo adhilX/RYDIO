@@ -1,24 +1,23 @@
-"use client"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { Filter, X, RotateCcw } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Filter, X, RotateCcw, Search } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import type { FilterState } from "@/Types/User/carType"
 
 interface FilterSidebarProps {
-  filters: FilterState
-  onFiltersChange: (filters: FilterState) => void
+  filters: FilterState & { search?: string }
+  onFiltersChange: (filters: FilterState & { search?: string }) => void
 }
 
 export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleFilterChange = (key: keyof FilterState, value: string | number | (string | number)[]) => {
+  const handleFilterChange = (key: keyof (FilterState & { search?: string }), value: string | number | (string | number)[]) => {
     onFiltersChange({ ...filters, [key]: value })
   }
 
@@ -36,6 +35,7 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
 
   const clearFilters = () => {
     onFiltersChange({
+      search: "",
       fuel_types: [],
       seats: [],
       car_types: [],
@@ -47,6 +47,7 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
 
   const getActiveFiltersCount = () => {
     let count = 0
+    if (filters.search && filters.search.trim() !== "") count++
     if (filters.fuel_types.length > 0) count++
     if (filters.seats.length > 0) count++
     if (filters.car_types.length > 0) count++
@@ -60,29 +61,45 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-white">Filters</h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-lg font-semibold text-white">Filters</h2>
           {getActiveFiltersCount() > 0 && (
-            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">{getActiveFiltersCount()}</span>
+            <span className="bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+              {getActiveFiltersCount()}
+            </span>
           )}
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={clearFilters}
-          className="text-gray-300 hover:text-white hover:bg-white/10 flex items-center gap-1"
+          className="text-gray-300 hover:text-white hover:bg-white/10 h-8 px-2 text-sm"
           disabled={getActiveFiltersCount() === 0}
         >
-          <RotateCcw className="w-3 h-3" />
-          Reset
+          <RotateCcw className="w-3 h-3 mr-1" />
+          Clear
         </Button>
       </div>
 
       <Separator className="bg-white/20" />
 
+      {/* Search Bar */}
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-gray-300">Search Cars</Label>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="Search by make, model, or features..."
+            value={filters.search || ""}
+            onChange={(e) => handleFilterChange("search", e.target.value)}
+            className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-500"
+          />
+        </div>
+      </div>
+
       {/* Price Range */}
-      <div className="space-y-4">
-        <Label className="text-white font-medium text-base flex items-center gap-2">💰 Price Range (per day)</Label>
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-gray-300">Price Range (per day)</Label>
         <div className="bg-white/5 rounded-lg p-4 border border-white/10">
           <Slider
             value={filters.price_range}
@@ -93,34 +110,33 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
             className="w-full"
           />
           <div className="flex justify-between text-sm text-gray-300 mt-3">
-            <span className="bg-white/10 px-2 py-1 rounded">${filters.price_range[0]}</span>
-            <span className="bg-white/10 px-2 py-1 rounded">${filters.price_range[1]}</span>
+            <span className="font-medium bg-white/10 px-2 py-1 rounded">${filters.price_range[0]}</span>
+            <span className="font-medium bg-white/10 px-2 py-1 rounded">${filters.price_range[1]}</span>
           </div>
         </div>
       </div>
 
       {/* Fuel Type */}
-      <div className="space-y-4">
-        <Label className="text-white font-medium text-base flex items-center gap-2">⛽ Fuel Type</Label>
-        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-          <div className="grid grid-cols-1 gap-3">
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-gray-300">Fuel Type</Label>
+        <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+          <div className="space-y-2">
             {[
-              { value: "petrol", label: "Petrol", emoji: "⛽" },
-              { value: "diesel", label: "Diesel", emoji: "🚗" },
-              { value: "electric", label: "Electric", emoji: "🔋" },
+              { value: "petrol", label: "Petrol" },
+              { value: "diesel", label: "Diesel" },
+              { value: "electric", label: "Electric" },
             ].map((fuel) => (
-              <div
-                key={fuel.value}
-                className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors"
-              >
+              <div key={fuel.value} className="flex items-center space-x-3">
                 <Checkbox
                   id={fuel.value}
                   checked={filters.fuel_types.includes(fuel.value)}
                   onCheckedChange={(checked) => handleArrayFilterChange("fuel_types", fuel.value, checked as boolean)}
                   className="border-white/30 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                 />
-                <Label htmlFor={fuel.value} className="text-gray-300 cursor-pointer flex items-center gap-2 flex-1">
-                  <span>{fuel.emoji}</span>
+                <Label 
+                  htmlFor={fuel.value} 
+                  className="text-sm text-gray-300 cursor-pointer font-normal"
+                >
                   {fuel.label}
                 </Label>
               </div>
@@ -130,19 +146,22 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
       </div>
 
       {/* Seats */}
-      <div className="space-y-4">
-        <Label className="text-white font-medium text-base flex items-center gap-2">👥 Number of Seats</Label>
-        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-          <div className="grid grid-cols-2 gap-3">
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-gray-300">Number of Seats</Label>
+        <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+          <div className="grid grid-cols-2 gap-2">
             {[2, 4, 5, 7].map((seat) => (
-              <div key={seat} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
+              <div key={seat} className="flex items-center space-x-2">
                 <Checkbox
                   id={`seat-${seat}`}
                   checked={filters.seats.includes(seat)}
                   onCheckedChange={(checked) => handleArrayFilterChange("seats", seat, checked as boolean)}
                   className="border-white/30 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                 />
-                <Label htmlFor={`seat-${seat}`} className="text-gray-300 cursor-pointer flex-1">
+                <Label 
+                  htmlFor={`seat-${seat}`} 
+                  className="text-sm text-gray-300 cursor-pointer font-normal"
+                >
                   {seat} seats
                 </Label>
               </div>
@@ -152,29 +171,28 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
       </div>
 
       {/* Car Type */}
-      <div className="space-y-4">
-        <Label className="text-white font-medium text-base flex items-center gap-2">🚙 Vehicle Type</Label>
-        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-          <div className="grid grid-cols-1 gap-3">
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-gray-300">Vehicle Type</Label>
+        <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+          <div className="space-y-2">
             {[
-              { value: "sedan", label: "Sedan", emoji: "🚗" },
-              { value: "hatchback", label: "Hatchback", emoji: "🚙" },
-              { value: "xuv", label: "XUV", emoji: "🚐" },
-              { value: "suv", label: "SUV", emoji: "🚙" },
-              { value: "sports", label: "Sports", emoji: "🏎️" },
+              { value: "sedan", label: "Sedan" },
+              { value: "hatchback", label: "Hatchback" },
+              { value: "xuv", label: "XUV" },
+              { value: "suv", label: "SUV" },
+              { value: "sports", label: "Sports" },
             ].map((type) => (
-              <div
-                key={type.value}
-                className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors"
-              >
+              <div key={type.value} className="flex items-center space-x-3">
                 <Checkbox
                   id={type.value}
                   checked={filters.car_types.includes(type.value)}
                   onCheckedChange={(checked) => handleArrayFilterChange("car_types", type.value, checked as boolean)}
                   className="border-white/30 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                 />
-                <Label htmlFor={type.value} className="text-gray-300 cursor-pointer flex items-center gap-2 flex-1">
-                  <span>{type.emoji}</span>
+                <Label 
+                  htmlFor={type.value} 
+                  className="text-sm text-gray-300 cursor-pointer font-normal"
+                >
                   {type.label}
                 </Label>
               </div>
@@ -184,18 +202,15 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
       </div>
 
       {/* Transmission */}
-      <div className="space-y-4">
-        <Label className="text-white font-medium text-base flex items-center gap-2">⚙️ Transmission</Label>
-        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-          <div className="grid grid-cols-1 gap-3">
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-gray-300">Transmission</Label>
+        <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+          <div className="space-y-2">
             {[
-              { value: "automatic", label: "Automatic", emoji: "🔄" },
-              { value: "manual", label: "Manual", emoji: "🎛️" },
+              { value: "automatic", label: "Automatic" },
+              { value: "manual", label: "Manual" },
             ].map((trans) => (
-              <div
-                key={trans.value}
-                className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors"
-              >
+              <div key={trans.value} className="flex items-center space-x-3">
                 <Checkbox
                   id={trans.value}
                   checked={filters.transmission.includes(trans.value)}
@@ -204,8 +219,10 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
                   }
                   className="border-white/30 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                 />
-                <Label htmlFor={trans.value} className="text-gray-300 cursor-pointer flex items-center gap-2 flex-1">
-                  <span>{trans.emoji}</span>
+                <Label 
+                  htmlFor={trans.value} 
+                  className="text-sm text-gray-300 cursor-pointer font-normal"
+                >
                   {trans.label}
                 </Label>
               </div>
@@ -215,7 +232,7 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
       </div>
 
       {/* Available Only */}
-      <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+      <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
         <div className="flex items-center space-x-3">
           <Checkbox
             id="available"
@@ -223,8 +240,10 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
             onCheckedChange={(checked) => handleFilterChange("available_only", checked)}
             className="border-white/30 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
           />
-          <Label htmlFor="available" className="text-gray-300 cursor-pointer flex items-center gap-2">
-            <span>✅</span>
+          <Label 
+            htmlFor="available" 
+            className="text-sm text-green-300 cursor-pointer font-normal"
+          >
             Show available cars only
           </Label>
         </div>
@@ -236,7 +255,7 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
     <>
       {/* Desktop Sidebar */}
       <div className="hidden lg:block w-80 h-fit sticky top-6">
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-xl">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
           <FilterContent />
         </div>
       </div>
@@ -247,22 +266,31 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
           <SheetTrigger asChild>
             <Button
               size="lg"
-              className="rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 relative"
+              className="rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 relative"
             >
               <Filter className="w-5 h-5 mr-2" />
               Filters
               {getActiveFiltersCount() > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
                   {getActiveFiltersCount()}
                 </span>
               )}
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="bg-black/95 backdrop-blur-md border-white/20 w-80 overflow-y-auto">
+          <SheetContent 
+            side="left" 
+            className="bg-black/95 backdrop-blur-md border-white/20 w-80 overflow-y-auto"
+          >
             <SheetHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-              <SheetTitle className="text-white text-xl">Filter Cars</SheetTitle>
+              <SheetTitle className="text-white text-lg font-semibold">
+                Filter Cars
+              </SheetTitle>
               <SheetClose asChild>
-                <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white hover:bg-white/10 p-2">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-gray-300 hover:text-white hover:bg-white/10 h-8 w-8 p-0"
+                >
                   <X className="w-4 h-4" />
                 </Button>
               </SheetClose>

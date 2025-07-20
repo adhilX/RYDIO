@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { ArrowLeft, Car, Fuel, Users, Settings, MapPin, Phone, Mail, CheckCircle, Calendar, CreditCard, Wallet, Sparkles } from "lucide-react"
+import { ArrowLeft, Car, Fuel, Users, Settings, MapPin, Phone, Mail, CheckCircle, Calendar, CreditCard, Sparkles } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useNavigate, useLocation } from "react-router-dom"
 import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle"
+import toast from "react-hot-toast"
+import { getCheckoutSession } from "@/services/user/bookingService"
 
 interface BookingData {
   vehicle: Vehicle
@@ -19,8 +21,12 @@ interface BookingData {
 const BookingConfirmation = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe'>('wallet')
+  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe'>('stripe')
   const [isProcessing, setIsProcessing] = useState(false)
+// const [name, setName] = useState('');
+// const [phone, setPhone] = useState('');
+// const [address, setAddress] = useState('');
+// const [city, setCity] = useState('');
 
   const bookingData: BookingData = location.state?.bookingData
 
@@ -57,22 +63,26 @@ const BookingConfirmation = () => {
     }
   }
 
-  const handlePayment = async () => {
-    setIsProcessing(true)
+  const publishable_key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
 
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log("Processing payment with method:", paymentMethod)
-      console.log("Booking details:", bookingData)
-      alert("Payment successful! Your booking has been confirmed.")
-      navigate('/userProfile')
-    } catch (error) {
-      console.error("Payment failed:", error)
-      alert("Payment failed. Please try again.")
-    } finally {
-      setIsProcessing(false)
-    }
+const handlePayment = async ()=> {
+  setIsProcessing(true);
+  try {
+      const stripeLib = await import("@stripe/stripe-js");
+      const stripeInstance = await stripeLib.loadStripe(publishable_key);
+      const response = await getCheckoutSession(bookingData);
+       console.log(stripeInstance)
+      if (stripeInstance) {
+        stripeInstance.redirectToCheckout({ sessionId: response.sessionId });
+      }
+      
+  } catch (error) {
+    console.error("Payment failed:", error);
+    toast.error("Payment failed. Please try again.");
+  } finally {
+    setIsProcessing(false);
   }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#232b3a] via-[#1a1f2a] to-[#232b3a] text-white">
@@ -304,6 +314,55 @@ const BookingConfirmation = () => {
                 </div>
               </CardContent>
             </Card>
+{/* <Card className="bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
+  <CardHeader>
+    <CardTitle className="text-white">Your Contact Info</CardTitle>
+  </CardHeader>
+  <CardContent className="space-y-4">
+    <div className="space-y-3">
+      <div>
+        <label className="text-gray-300 block mb-1">Full Name</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter your full name"
+          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
+        />
+      </div>
+      <div>
+        <label className="text-gray-300 block mb-1">Phone Number</label>
+        <input
+          type="text"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Enter your phone number"
+          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
+        />
+      </div>
+      <div>
+        <label className="text-gray-300 block mb-1">Address</label>
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="Street address"
+          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
+        />
+      </div>
+      <div>
+        <label className="text-gray-300 block mb-1">City</label>
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="Enter city"
+          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
+        />
+      </div>
+    </div>
+  </CardContent>
+</Card> */}
 
             {/* Payment Method */}
             <Card className="bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
@@ -312,7 +371,7 @@ const BookingConfirmation = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  <motion.label
+                  {/* <motion.label
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="flex items-center gap-3 p-4 rounded-xl border border-white/20 cursor-pointer hover:bg-white/5 transition-all"
@@ -330,7 +389,7 @@ const BookingConfirmation = () => {
                       <p className="font-semibold text-white">Wallet Payment</p>
                       <p className="text-sm text-gray-400">Pay using your wallet balance</p>
                     </div>
-                  </motion.label>
+                  </motion.label> */}
 
                   <motion.label
                     whileHover={{ scale: 1.02 }}
@@ -352,7 +411,6 @@ const BookingConfirmation = () => {
                     </div>
                   </motion.label>
                 </div>
-
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

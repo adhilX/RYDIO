@@ -20,7 +20,9 @@ export class LoginUserUsecase implements IloginUserUsecase{
             if(user.is_blocked)throw new Error('user is blocked')
                 const matchPass = await this.hashPassword.comparePassword(password,user.password)
             if(!matchPass)throw new Error('passaword not match')
-                const {password:_,...userWithoutPassword} = user
+                const plainUser = JSON.parse(JSON.stringify(user))
+                const {password:_,...userWithoutPassword} = plainUser
+            console.log(userWithoutPassword)
                 return userWithoutPassword
     }
 }

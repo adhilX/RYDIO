@@ -10,7 +10,7 @@ import { loginUser } from "@/services/user/authService";
 import { useDispatch } from "react-redux";
 import { addToken } from "@/store/slice/user/UserTokenSlice";
 import { addUser } from "@/store/slice/user/UserSlice";
-import Google from "./Google";
+import Google from "../pages/User/auth/Google";
 import { loginFormSchema, type TLoginForm } from "@/Types/User/validation/LoginFrom";
 
 export default function Login() {

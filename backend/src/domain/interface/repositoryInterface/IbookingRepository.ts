@@ -1,5 +1,5 @@
-import { BookingEntities } from "../../entities/BookingEntities";
+import { Ibooking } from "../../entities/BookingEntities";
 
 export interface IbookingRepostory {
-    createBooking(booking: BookingEntities): Promise<BookingEntities>
+    createBooking(booking: Ibooking): Promise<Ibooking>
 }

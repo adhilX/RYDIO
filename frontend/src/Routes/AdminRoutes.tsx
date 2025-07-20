@@ -2,7 +2,7 @@
 import { Route, Routes } from "react-router-dom";
 import AdminLogin from "@/pages/Admin/Login";
 import AdminProtectedRoute from "./ProtectedRoutes/AdminProtectedRoute";
-import AdminLayout from "@/pages/Admin/AdminLayout";
+import AdminLayout from "@/layout/admin/AdminLayout";
 import { Dashboard } from "@/components/admin/Dashboard";
 import { UserManagement } from "@/components/admin/UserManagment";
 import VehicleList from "@/components/admin/vehicleList";

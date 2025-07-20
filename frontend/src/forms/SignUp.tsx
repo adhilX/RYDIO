@@ -9,8 +9,7 @@ import toast from "react-hot-toast";
 import { userSignup, verifyOtp } from "@/services/user/authService";
 import { signupSchema, type SignupSchema } from "@/Types/User/validation/SignupForm";
 import OtpModal from "@/components/modal/EnterOtpModal";
-import Google from "./Google";
-
+import Google from "@/pages/User/auth/Google";
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
