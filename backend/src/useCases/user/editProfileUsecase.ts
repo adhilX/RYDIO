@@ -20,7 +20,8 @@ export class EditProfileUsecase implements IeditProfileUsecase{
         if (!updatedUser) {
             throw new Error("User not found or update failed");
         }
-        const { password, ...userWithoutPassword } = updatedUser as User;
+        const plainUser = JSON.parse(JSON.stringify(updatedUser));
+        const { password, ...userWithoutPassword } = plainUser as User;
         return userWithoutPassword;
     }
 }

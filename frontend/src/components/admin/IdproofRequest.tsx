@@ -17,7 +17,7 @@ import type { Iuser } from '@/Types/User/Iuser';
 import type { IVerificationRequest } from '@/Types/User/UpdateProfile/IdVeificationType';
 import Pagination from '../Pagination';
 
-
+const IMG_URL = import.meta.env.VITE_IMAGE_URL
 const IdproofRequest: React.FC = () => {
   const [selectedRequest, setSelectedRequest] = useState<Iuser & { idproof_id: IVerificationRequest } | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -183,7 +183,7 @@ return (
                             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center overflow-hidden">
                                 {request.profile_image ? (
                                     <img 
-                                        src={request.profile_image} 
+                                        src={IMG_URL+request.profile_image} 
                                         alt="Profile" 
                                         className="w-full h-full object-cover"
                                     />

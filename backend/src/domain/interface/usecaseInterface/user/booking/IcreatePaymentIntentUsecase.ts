@@ -1,4 +1,6 @@
+import { BookingData } from "../../../../entities/BookingEntities";
+
 export interface IcreatePaymentIntentUsecase{
 
-    createPaymentIntent(amount: number): Promise<string>
+    createPaymentIntent(bookingData:BookingData): Promise<string>
 }

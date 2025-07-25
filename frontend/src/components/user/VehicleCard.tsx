@@ -4,15 +4,14 @@ import { Fuel, Users, Settings } from "lucide-react"
 import { useNavigate } from "react-router"
 import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle"
 
-
-
+const IMG_URL=import.meta.env.VITE_IMAGE_URL
 export function VehicleCard({ car }:{car:Vehicle}) {
   const navigate = useNavigate()
   return (
     <div className="group relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
       <div className="relative h-48 overflow-hidden">
         <img
-          src={car.image_urls[0] || "/placeholder.svg?height=200&width=300"}
+          src={IMG_URL+car.image_urls[0] || "/placeholder.svg?height=200&width=300"}
           alt={car.name}
           className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110 rounded"
         />

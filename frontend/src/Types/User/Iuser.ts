@@ -5,7 +5,6 @@ export interface Iuser {
   idproof?:IidProof_id;
   name: string;
   email: string;
-  password: string;
   phone: string;
   role: 'user'| 'admin';
   profile_image?: string;

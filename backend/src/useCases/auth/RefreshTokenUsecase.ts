@@ -29,10 +29,7 @@ export class RefreshTokenUseCase implements IrefreshTokenUseCase {
         const role = client ? 'user' : admin ? 'admin' : null;
         if (!user || !role) throw new Error('User Not Found')
 
-        const newAccessToken = this.jwtService.createAccessToken(process.env.ACCESS_TOKEN_KEY as string,
-            userId,
-            role)
-
+        const newAccessToken = this.jwtService.createAccessToken(process.env.ACCESS_TOKEN_KEY as string, userId, role)
         return newAccessToken
     }
 }

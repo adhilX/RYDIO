@@ -55,7 +55,6 @@ const vehicleRepository = new VehicleRepository()
 const vehicleUpproveUsecase = new VehicleUpproveUsecase(vehicleRepository)
 export const vehicleUpproveController = new VehicleUpproveController(vehicleUpproveUsecase)
 
-
 //-------fetch pending vehicle------
 const pendingVehicleUsecase = new PendingVehicleusercase(adminRepository)
 export const pendingVehicleController = new PendingVehicleController(pendingVehicleUsecase)
@@ -75,5 +74,6 @@ const idProofActionUsecase = new IdProofActionUsecase(adminRepository)
 export const idProofActionController = new IdProofActionController(idProofActionUsecase)
 
 //-------vendor access--------
+
 const vendorAccessUsecase = new VendorAccessUsecase(adminRepository)
 export const vendorAccessController = new VendorAccessController(vendorAccessUsecase)

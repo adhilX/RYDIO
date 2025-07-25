@@ -23,11 +23,11 @@ export class App {
         this.port = process.env.PORT || 3000;
         this.database = new ConnectMongoDB()
         this.connectRedis()
+        this.app.use(morgan('dev'))
         this.database.connectDB()
         this.app.use(express.json());
         this.app.use(cookieParser())
         this.app.use(urlencoded({extended:true}));
-        this.app.use(morgan('dev'))
         this.setAuthRoutes()
         this.setUserRoutes();
         this.setAdminRoutes();

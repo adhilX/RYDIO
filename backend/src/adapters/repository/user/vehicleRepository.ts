@@ -41,40 +41,78 @@ export class VehicleRepository implements IvehicleRepository {
     ]);
     return { vehicle, total };
   }
-  async findVehicle(lat: number, lon: number, search: string, page: number, limit: number): Promise<{ vehicles: IVehicle[], total: number } | null> {
-    const locations = await locationModel.find({
-      location: {
-        $near: {
-          $geometry: { type: 'Point', coordinates: [lon,lat] },
-          // $minDistance: 0,
-          $maxDistance: 10000 
-        }
-      }
-    });
-    if (!locations.length) return null
-
-    const query = search
-      ? {
-        $or: [
-          { name: { $regex: search, $options: "i" } },
-          { brand: { $regex: search, $options: "i" } },
-        ]
-      }
-      : {};
-    const skip = (page - 1) * limit;
-    const locationId = locations.map(loc => loc._id.toString());
-    const [vehicles, total] = await Promise.all([
-      VehicleModel.find({
-        ...query,
-        location_id: { $in: locationId },
-        admin_approve: 'accepted'
-      }).skip(skip).limit(limit),
-      VehicleModel.countDocuments(query)
-    ]);
-    return { vehicles, total }
+  async findVehicle(
+  lat: number,
+  lon: number,
+  search: string,
+  page: number,
+  limit: number,
+  filters: {
+    fuel_types?: string[],
+    seats?: number[],
+    car_types?: string[],
+    transmission?: string[]
   }
+): Promise<{ vehicles: IVehicle[], total: number } | null> {
+  const locations = await locationModel.find({
+    location: {
+      $near: {
+        $geometry: { type: 'Point', coordinates: [lon, lat] },
+        $maxDistance: 10000
+      }
+    }
+  });
+
+  if (!locations.length) return null;
+
+  const locationIds = locations.map(loc => loc._id.toString());
+
+  const query: any = {
+    location_id: { $in: locationIds },
+    admin_approve: 'accepted'
+  };
+
+  if (search) {
+    query.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { brand: { $regex: search, $options: "i" } }
+    ];
+  } 
+
+  if (filters) {
+    if (filters.fuel_types?.length) {
+      query.fuel_type = { $in: filters.fuel_types };
+    }
+
+    if (filters.seats?.length) {
+      query.seats = { $in: filters.seats };
+    }
+
+    if (filters.car_types?.length) {
+      query.car_type = { $in: filters.car_types };
+    }
+
+    if (filters.transmission?.length) {
+      query.transmission = { $in: filters.transmission };
+    }
+  }
+
+  const skip = (page - 1) * limit;
+
+  const [vehicles, total] = await Promise.all([
+    VehicleModel.find(query).skip(skip).limit(limit),
+    VehicleModel.countDocuments(query)
+  ]);
+
+  return { vehicles, total };
+}
 
   async getVehicleDetails(Id: string): Promise<IVehicle | null> {
     return await VehicleModel.findById(Id).populate('owner_id').populate('location_id')
   }
+ async isExistingVehicle(regiseration_number: string): Promise<boolean> {
+  const result = await VehicleModel.findOne({ registration_number : regiseration_number });
+  return result !== null;
+ }
+
 }

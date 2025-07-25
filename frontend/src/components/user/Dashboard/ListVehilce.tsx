@@ -7,7 +7,7 @@ import type { RootState } from '@/store/store';
 import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
 import { motion } from 'framer-motion';
 import Pagination from '@/components/Pagination';
-
+const IMG_URL=import.meta.env.VITE_IMAGE_URL
 
 const ListVehilce = () => {
   const user = useSelector((state: RootState) => state.auth.user)
@@ -111,7 +111,7 @@ const ListVehilce = () => {
             {vehicles.map((vehicle, index) => (
               <tr key={index} className="hover:bg-stone-700 transition">
                 <td className="px-4 py-3">
-                  <img src={vehicle.image_urls[0]} alt={vehicle.name} className="w-16 h-10 object-cover rounded-lg shadow" />
+                  <img src={IMG_URL+vehicle.image_urls[0]} alt={vehicle.name} className="w-16 h-10 object-cover rounded-lg shadow" />
                 </td>
                 <td className="px-4 py-3 font-medium ">{vehicle.name}</td>
                 <td className="px-4 py-3 ">{vehicle.brand}</td>

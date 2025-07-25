@@ -9,8 +9,9 @@ export class CreateBookingController {
 
     async createBooking(req: any, res: any) {
       try {
-        const {booking}  =req.body
-        const response = await this.createBookingUsecase.createBooking(booking)
+        const {stripeIntentId,user_id,bookingData}  =req.body
+
+        const response = await this.createBookingUsecase.createBooking({bookingData,stripeIntentId,user_id})
         res.status(HttpStatus.OK).json(response)
       } catch (error) {
           console.log('error while creating booking ', error)

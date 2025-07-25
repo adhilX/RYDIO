@@ -1,6 +1,7 @@
 import axiosInstance from "@/axios/UserInterceptors";
 import type { StepThreeFormData } from "@/components/user/Dashboard/addVehicle/StepThree";
 import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle";
+import type { FilterState } from "@/Types/User/carType";
 import { isAxiosError } from "axios";
 
 export const postVehicle = async (vehicle: Vehicle, location: StepThreeFormData) => {
@@ -30,10 +31,22 @@ export const getMyVehicle = async (owner_id: string, search = '', page = 1, limi
   }
 };
 
-export const SearchVehicle = async (latitude: number|null, longitude: number|null,currentPage:number,limit:number) => {
+export const SearchVehicle = async (
+  latitude: number|null,
+  longitude: number|null,
+  currentPage: number,
+  limit: number,
+  filters?: FilterState
+) => {
   try {
-    console.log(latitude,longitude,currentPage,limit)
-    const response = await axiosInstance.post("/search-vehicle", { latitude, longitude,currentPage,limit });
+    console.log(latitude, longitude, currentPage, limit, filters)
+    const response = await axiosInstance.post("/search-vehicle", {
+      latitude,
+      longitude,
+      currentPage,
+      limit,
+      filters, 
+    });
     return response?.data
   } catch (error) {
     console.error('Error while searching for vehicles:', error);

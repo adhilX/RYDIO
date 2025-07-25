@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import type {  FilterState } from "@/Types/User/carType"
-import { FilterSidebar } from "@/components/user/FilterSidebar"
+import  FilterSidebar  from "@/components/user/FilterSidebar"
 import { VehicleCard } from "@/components/user/VehicleCard"
 import Pagination from "@/components/Pagination"
 import Navbar from "@/components/user/Navbar"
@@ -15,29 +15,34 @@ export default function UserVehileList() {
   const [cars,setCars]= useState<Vehicle[]|null>([])
   const [totalPages,setTotalPages]=useState(1)
   const [currentPage, setCurrentPage] = useState(1)
-  useEffect(()=>{
-    const fetchvehilce = async()=>{
-      const {latitude,longitude}= location.state
-      const data = await SearchVehicle(latitude,longitude,currentPage,CARS_PER_PAGE)
-      setCars(data.vehicles)
-      setTotalPages(data.total/CARS_PER_PAGE)
-    }
-    fetchvehilce()
-  },[location.state,currentPage])
-  const [filters, setFilters] = useState<FilterState>({
-    fuel_types: [],
-    seats: [],
-    car_types: [],
-    transmission: [],
-    price_range: [0, 500],
-    available_only: false,
-  })
+ const [filters, setFilters] = useState<FilterState>({
+  search: "",
+  fuel_types: [],
+  seats: [],
+  car_types: [],
+  transmission: [],
+  price_range: [0, 10000],
+  available_only: false,
+});
 
+const handilfilter = useCallback((updatedFilters: FilterState) => {
+  setFilters(updatedFilters);
+}, []);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     // window.scrollTo({ top: 0, behavior: "smooth" })
   }
+
+  useEffect(() => {
+    const fetchvehilce = async () => {
+      const { latitude, longitude } = location.state
+      const data = await SearchVehicle(latitude, longitude, currentPage, CARS_PER_PAGE, filters)
+      setCars(data.vehicles)
+      setTotalPages(Math.ceil(data.total / CARS_PER_PAGE))
+    }
+    fetchvehilce()
+  }, [location.state, currentPage, filters])
 
   return (
     <>
@@ -48,7 +53,7 @@ export default function UserVehileList() {
         <div className="container mx-auto px-4 py-8">
           <div className="flex gap-8">
             {/* Sidebar */}
-            <FilterSidebar filters={filters} onFiltersChange={setFilters} />
+            <FilterSidebar filters={filters} onFiltersChange={handilfilter} />
 
             {/* Main Content */}
             <div className="flex-1">

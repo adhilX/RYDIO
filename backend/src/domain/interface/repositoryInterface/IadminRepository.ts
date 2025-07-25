@@ -17,5 +17,5 @@ export interface IadminRepository {
     idProofUprove(idProof_id:string,owner_id:string):Promise<boolean>
     idProofReject(idProof_id:string):Promise<boolean>
     setVeifedUser(userId:string):Promise<boolean>
-    vendorAccess(userId:string,vendorAccess:boolean):Promise<boolean>
+    vendorAccess(userId:string,vendor_access:boolean):Promise<boolean>
 }

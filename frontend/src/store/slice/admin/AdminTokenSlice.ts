@@ -2,22 +2,22 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 
 interface AdminTokenState {
-    token: string | null;
+    adminToken: string | null;
 }
 
 const initialState:AdminTokenState = {
-    token: null
+    adminToken: null
 }
 
 export const admintokenSlice = createSlice({
-    name: 'token',
+    name: 'adminToken',
     initialState,
     reducers: {
         addToken: (state, action:PayloadAction<string>) => {
-            state.token = action.payload
+            state.adminToken = action.payload
         },
         removeToken: (state) => {
-            state.token = null
+            state.adminToken = null
         }
     }
 })

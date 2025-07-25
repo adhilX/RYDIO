@@ -1,8 +1,11 @@
 import { ObjectId } from "mongoose";
+import { IVehicle } from "./vehcleEnties";
+import { IVerificationRequest } from "./IVerificationRequest";
 
 export enum BookingStatus {
   Pending = 'pending',
-  Confirmed = 'confirmed',
+   booked='booked',
+   ongoing = 'ongoing',
   Cancelled = 'cancelled',
   Completed = 'completed',
 }
@@ -18,17 +21,27 @@ export interface Ibooking {
   _id?: ObjectId;
   user_id: string;
   vehicle_id: string;
-  name: string;
-  phone: number;
   address: string;
   city: string;
   id_proof: string;
-  id_proof_verified: boolean;
   start_date: Date;
   end_date: Date;
   total_amount: number;
   status: BookingStatus;
-  cancellation_reason: string;
+  cancellation_reason?: string;
   payment_intent_id: string;
   payment_status: PaymentStatus;
+}
+
+
+export interface BookingData {
+  vehicle_id: string
+  start_date: Date
+  end_date: Date
+  total_amount: number
+  days: number
+  user_id:string
+  address:string
+  city:string
+  id_proof:IVerificationRequest
 }

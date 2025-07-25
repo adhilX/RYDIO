@@ -8,8 +8,8 @@ interface ProtectedRouteProps {
 }
 
 const UserProtectedRoute = ({ children }: ProtectedRouteProps) => {
-    const token = useSelector((state: RootState) => state.userToken.token);
-
+    const token = useSelector((state: RootState) => state.userToken.userToken);
+       
     if (!token) {
         return <Navigate to="/" replace />;
     }

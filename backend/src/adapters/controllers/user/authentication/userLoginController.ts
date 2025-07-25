@@ -13,7 +13,6 @@ export class UserLoginController {
         this.jwtService = jwtService
         this.loginUserUsecase = loginUserUsecase
         this.redisService = redisService
-
     }
     async handleLogin(req: Request, res: Response) {
         try {

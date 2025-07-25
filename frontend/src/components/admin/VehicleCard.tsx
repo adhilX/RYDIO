@@ -3,7 +3,7 @@ import type { Iuser } from '@/Types/User/Iuser';
 import type { Ilocation } from '@/Types/User/location';
 import { Button } from "../ui/button"
 import { motion } from "framer-motion"
-
+const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
 type VehicleCardProps = {
   vehicle: Vehicle & { owner_id: Iuser; location_id: Ilocation };
@@ -17,7 +17,7 @@ function VehicleCard({ vehicle, setSelectedVehicle }: VehicleCardProps) {
       className="bg-stone-600/35 backdrop-blur-xl border border-black/60 shadow-2xl rounded-xl p-4 flex flex-col transition-all duration-200"
     >
       <img
-        src={vehicle.image_urls[0]}
+        src={IMG_URL+vehicle.image_urls[0]}
         alt={vehicle.name}
         className="w-full h-40 object-cover rounded mb-2"
       />

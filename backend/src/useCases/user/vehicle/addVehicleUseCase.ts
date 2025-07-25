@@ -15,10 +15,14 @@ export class AddVehicleUsecase implements IaddvehicleUsecase{
         this.vehicleRepository = vehicleRepository
         this.locationRepository = locationRepository
     }
-
-
+    
   async addVehicle({ vehicle, location }: AddVehicleProps): Promise<IVehicle> {
     console.log(vehicle,location)
+    if(!location) throw new Error('Location is required');
+    if(!vehicle) throw new Error('Vehicle is required');
+
+    const isExistingVehicle = await this.vehicleRepository.isExistingVehicle(vehicle.registration_number);
+    if (isExistingVehicle) throw new Error('Vehicle already exists');
     const savedLocation = await this.locationRepository.findOrCreate(location);
     return this.vehicleRepository.addVehicle({
       ...vehicle,

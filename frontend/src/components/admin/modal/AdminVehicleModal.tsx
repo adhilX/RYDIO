@@ -8,7 +8,7 @@ import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router';
 
-
+const IMG_URL=import.meta.env.VITE_IMAGE_URL
 interface AdminVehicleModalProps {
   open: boolean;
   onClose: () => void;
@@ -86,7 +86,7 @@ const showBtn = pathname == '/admin/vehicle_requests'
                 {vehicle.image_urls.map((url, idx) => (
                   <img
                     key={idx}
-                    src={url}
+                    src={IMG_URL+url}
                     alt={`vehicle-${idx}`}
                     className="w-full h-32 object-cover rounded shadow"
                   />

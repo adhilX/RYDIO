@@ -17,6 +17,8 @@ import SignupPage from "@/forms/SignUp"
 import CheckoutForm from "@/pages/User/CheckoutForm"
 import { Elements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
+import PaymentSuccess from "@/pages/User/PaymentSuccess"
+import MyBooking from "@/components/user/Dashboard/MyBooking"
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 
 
@@ -32,8 +34,9 @@ export const UserRoutes = () => {
             <Route path='/vehicle-list' element={<UserVehicleList />} />
             <Route path='/vehicle-details/:id' element={<VehicleDetailPage />} />
             <Route path="/booking-confirmation" element={<BookingConfirmation />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route
-                path="/checkout"
+                path="/payment"
                 element={
                     <Elements stripe={stripePromise}>
                         <CheckoutForm />
@@ -82,6 +85,14 @@ export const UserRoutes = () => {
                     element={
                         <UserProtectedRoute>
                             <Wallet />
+                        </UserProtectedRoute>
+                    }
+                />
+                <Route
+                    path="my-bookings"
+                    element={
+                        <UserProtectedRoute>
+                            <MyBooking />
                         </UserProtectedRoute>
                     }
                 />

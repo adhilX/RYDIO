@@ -6,28 +6,23 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useNavigate, useLocation } from "react-router-dom"
-import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle"
 import toast from "react-hot-toast"
 import { getCheckoutSession } from "@/services/user/bookingService"
-
-interface BookingData {
-  vehicle: Vehicle
-  startDate: string
-  endDate: string
-  totalPrice: number
-  days: number
-}
+import { useSelector } from "react-redux"
+import type { RootState } from "@/store/store"
+import type { BookingData } from "@/Types/User/Booking/BookingData"
+const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
 const BookingConfirmation = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe'>('stripe')
   const [isProcessing, setIsProcessing] = useState(false)
-// const [name, setName] = useState('');
-// const [phone, setPhone] = useState('');
-// const [address, setAddress] = useState('');
-// const [city, setCity] = useState('');
-
+  const [address, setAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [errors, setErrors] = useState<{ address?: string; city?: string }>({})
+  const user = useSelector((state: RootState) => state.auth.user)
+  if (!user)return 
   const bookingData: BookingData = location.state?.bookingData
 
   if (!bookingData) {
@@ -48,8 +43,36 @@ const BookingConfirmation = () => {
       </div>
     )
   }
-  const { vehicle, startDate, endDate, totalPrice, days } = bookingData
+  const { vehicle, startDate, endDate,total_amount, days } = bookingData
 
+  const validateForm = () => {
+    const newErrors: { address?: string; city?: string } = {}
+    if (!address.trim()) {
+      newErrors.address = "Address is required"
+    } else if (address.trim().length < 5) {
+      newErrors.address = "Address must be at least 5 characters long"
+    }
+    if (!city.trim()) {
+      newErrors.city = "City is required"
+    } else if (city.trim().length < 2) {
+      newErrors.city = "City must be at least 2 characters long"
+    }
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const newBookingDate = {
+    vehicle_id: vehicle._id,
+    total_amount,
+    start_date: startDate,
+    end_date: endDate,
+    user_id: user?._id,
+    name: user?.name,
+    phone: user?.phone,
+    id_proof: user?.idproof_id,
+    city,
+    address
+  }
   const getFuelIcon = (fuel_type: string) => {
     switch (fuel_type) {
       case "petrol":
@@ -65,24 +88,27 @@ const BookingConfirmation = () => {
 
   const publishable_key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
 
-const handlePayment = async ()=> {
-  setIsProcessing(true);
-  try {
-      const stripeLib = await import("@stripe/stripe-js");
-      const stripeInstance = await stripeLib.loadStripe(publishable_key);
-      const response = await getCheckoutSession(bookingData);
-       console.log(stripeInstance)
-      if (stripeInstance) {
-        stripeInstance.redirectToCheckout({ sessionId: response.sessionId });
-      }
-      
-  } catch (error) {
-    console.error("Payment failed:", error);
-    toast.error("Payment failed. Please try again.");
-  } finally {
-    setIsProcessing(false);
+  const handlePayment = async () => {
+    if (!validateForm()) {
+      toast.error("Please fix the errors in the form")
+      return
+    }
+    setIsProcessing(true)
+    try {
+      const stripeLib = await import("@stripe/stripe-js")
+      const stripeInstance = await stripeLib.loadStripe(publishable_key)
+      const response = await getCheckoutSession({...bookingData,user_id:user._id!})
+      console.log(stripeInstance)
+      console.log(response.sessionId)
+
+      navigate('/payment', { state: { clientSecret: response.sessionId, bookingData: newBookingDate } })
+    } catch (error) {
+      console.error("Payment failed:", error)
+      toast.error(error instanceof Error ? error.message : "Payment failed")
+    } finally {
+      setIsProcessing(false)
+    }
   }
-};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#232b3a] via-[#1a1f2a] to-[#232b3a] text-white">
@@ -131,7 +157,7 @@ const handlePayment = async ()=> {
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    src={vehicle.image_urls[0] || "/placeholder.svg"}
+                    src={IMG_URL + vehicle.image_urls[0] || "/placeholder.svg"}
                     alt={vehicle.name}
                     className="w-32 h-24 rounded-xl object-cover shadow-lg"
                   />
@@ -172,7 +198,7 @@ const handlePayment = async ()=> {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {vehicle?.location_id? (
+                {vehicle?.location_id ? (
                   <div className="flex items-start gap-4">
                     <div className="p-3 bg-[#6DA5C0]/20 rounded-full">
                       <MapPin className="w-6 h-6 text-[#6DA5C0]" />
@@ -202,14 +228,14 @@ const handlePayment = async ()=> {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {vehicle.owner_id? (
+                {vehicle.owner_id ? (
                   <div className="flex items-start gap-6">
                     <div className="relative">
                       <motion.img
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.3 }}
-                        src={vehicle.owner_id.profile_image || "/placeholder.svg?height=60&width=60"}
+                        src={IMG_URL + vehicle.owner_id.profile_image || "/placeholder.svg?height=60&width=60"}
                         alt={vehicle.owner_id.name}
                         width={70}
                         height={70}
@@ -308,61 +334,69 @@ const handlePayment = async ()=> {
                   <div className="flex justify-between items-center text-xl font-bold">
                     <span className="text-white">Total Amount</span>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6DA5C0] to-[#4a90a8]">
-                      ₹{totalPrice.toLocaleString()}
+                      ₹{total_amount}
                     </span>
                   </div>
                 </div>
               </CardContent>
             </Card>
-{/* <Card className="bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
-  <CardHeader>
-    <CardTitle className="text-white">Your Contact Info</CardTitle>
-  </CardHeader>
-  <CardContent className="space-y-4">
-    <div className="space-y-3">
-      <div>
-        <label className="text-gray-300 block mb-1">Full Name</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your full name"
-          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
-        />
-      </div>
-      <div>
-        <label className="text-gray-300 block mb-1">Phone Number</label>
-        <input
-          type="text"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="Enter your phone number"
-          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
-        />
-      </div>
-      <div>
-        <label className="text-gray-300 block mb-1">Address</label>
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="Street address"
-          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
-        />
-      </div>
-      <div>
-        <label className="text-gray-300 block mb-1">City</label>
-        <input
-          type="text"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          placeholder="Enter city"
-          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
-        />
-      </div>
-    </div>
-  </CardContent>
-</Card> */}
+            <Card className="bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
+              <CardHeader>
+                <CardTitle className="text-white">Your Contact Info</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-gray-300 block mb-1">Address</label>
+                    <input
+                      type="text"
+                      value={address}
+                      onChange={(e) => {
+                        setAddress(e.target.value)
+                        setErrors((prev) => ({ ...prev, address: undefined }))
+                      }}
+                      placeholder="Street address"
+                      className={`w-full px-4 py-2 bg-white/10 border ${
+                        errors.address ? 'border-red-500' : 'border-white/20'
+                      } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#6DA5C0]`}
+                    />
+                    {errors.address && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-red-400 text-sm mt-1"
+                      >
+                        {errors.address}
+                      </motion.p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="text-gray-300 block mb-1">City</label>
+                    <input
+                      type="text"
+                      value={city}
+                      onChange={(e) => {
+                        setCity(e.target.value)
+                        setErrors((prev) => ({ ...prev, city: undefined }))
+                      }}
+                      placeholder="Enter city"
+                      className={`w-full px-4 py-2 bg-white/10 border ${
+                        errors.city ? 'border-red-500' : 'border-white/20'
+                      } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#6DA5C0]`}
+                    />
+                    {errors.city && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-red-400 text-sm mt-1"
+                      >
+                        {errors.city}
+                      </motion.p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Payment Method */}
             <Card className="bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
@@ -371,26 +405,6 @@ const handlePayment = async ()=> {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  {/* <motion.label
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex items-center gap-3 p-4 rounded-xl border border-white/20 cursor-pointer hover:bg-white/5 transition-all"
-                  >
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="wallet"
-                      checked={paymentMethod === 'wallet'}
-                      onChange={(e) => setPaymentMethod(e.target.value as 'wallet' | 'stripe')}
-                      className="text-[#6DA5C0]"
-                    />
-                    <Wallet className="w-6 h-6 text-[#6DA5C0]" />
-                    <div>
-                      <p className="font-semibold text-white">Wallet Payment</p>
-                      <p className="text-sm text-gray-400">Pay using your wallet balance</p>
-                    </div>
-                  </motion.label> */}
-
                   <motion.label
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -417,8 +431,8 @@ const handlePayment = async ()=> {
                 >
                   <Button
                     onClick={handlePayment}
-                    disabled={isProcessing}
-                    className="w-full bg-gradient-to-r from-[#6DA5C0] to-[#4a90a8] hover:from-[#5a8ba0] hover:to-[#3a7a8c] text-white font-semibold py-3 rounded-xl shadow-lg"
+                    disabled={isProcessing || !!errors.address || !!errors.city || !address || !city}
+                    className="w-full bg-gradient-to-r from-[#6DA5C0] to-[#4a90a8] hover:from-[#5a8ba0] hover:to-[#3a7a8c] text-white font-semibold py-3 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     size="lg"
                   >
                     {isProcessing ? (
@@ -427,7 +441,7 @@ const handlePayment = async ()=> {
                         Processing...
                       </div>
                     ) : (
-                      `Pay ₹${totalPrice.toLocaleString()}`
+                      `Pay ₹${total_amount}`
                     )}
                   </Button>
                 </motion.div>

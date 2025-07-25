@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { setLocation } from '@/store/slice/user/locationSlice';
 
 function Navbar() {
-  const token = useSelector((state: RootState) => state.userToken.token);
+  const token = useSelector((state: RootState) => state.userToken.userToken);
   const navigate = useNavigate()
   const { location, error } = useCurrentLocation();
   const dispatch = useDispatch()

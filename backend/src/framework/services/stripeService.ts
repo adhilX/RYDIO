@@ -13,7 +13,7 @@ export class StripeService implements IStripeService {
       currency: "inr",
       automatic_payment_methods: { enabled: true },
     });
-   console.log(paymentIntent.client_secret)
+   console.log(paymentIntent.client_secret,'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
     return paymentIntent.client_secret!
   }
 }

@@ -129,10 +129,10 @@ export const uploadIdProofController = new UploadIdProofController(uploadIdProof
 //----------create Booking------------
 
 const bookingRepository = new BookingRepository()
-const createBookingUsecase = new CreateBookingUsecase(bookingRepository)
+const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 
 //--------create payment intent------------
 const stripeService = new StripeService()
-const createPaymentIntentUsecase = new CreatePaymentIntentUsecase(stripeService)
+const createPaymentIntentUsecase = new CreatePaymentIntentUsecase(stripeService,redisService)
 export const createPaymentIntentController = new CreatePaymentIntentController(createPaymentIntentUsecase)

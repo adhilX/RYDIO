@@ -4,7 +4,7 @@ import type { Iuser } from '@/Types/User/Iuser';
 import type { IVerificationRequest } from '@/Types/User/UpdateProfile/IdVeificationType';
 import { actionIdProof } from '@/services/admin/idProofService';
 import toast from 'react-hot-toast';
-
+const IMG_URL = import.meta.env.VITE_IMAGE_URL
 interface IdProofDetailsProps {
     selectedRequest: Iuser & { idproof_id: IVerificationRequest };
     onBack: () => void;
@@ -70,7 +70,7 @@ function IdProofDetails({
                     <div className="w-20 h-20 sm:w-16 sm:h-16 bg-red-600 rounded-full flex items-center justify-center overflow-hidden">
                     {selectedRequest.profile_image ? (
                         <img
-                        src={selectedRequest.profile_image}
+                        src={IMG_URL+selectedRequest.profile_image}
                         alt="Profile"
                         className="w-full h-full object-cover"
                         />
@@ -140,7 +140,7 @@ function IdProofDetails({
                 <h3 className="text-base sm:text-lg font-semibold">Document Image</h3>
                 <div className="bg-gray-800/50 rounded-lg p-4 flex justify-center items-center">
                     <img
-                    src={selectedRequest.idproof_id.idProofUrl}
+                    src={IMG_URL+selectedRequest.idproof_id.idProofUrl}
                     alt="ID Proof Document"
                     className="w-full max-w-xs sm:max-w-sm md:max-w-md h-48 sm:h-64 object-cover rounded-lg mx-auto"
                     />

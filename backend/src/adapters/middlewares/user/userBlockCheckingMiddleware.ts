@@ -6,7 +6,7 @@ import { HttpStatus } from "../../../domain/entities/httpStatus";
 export const UserBlockCheckingMiddleware = (redisService: IredisService,userRepository: IuserRepository) => {
   return async (req: Request, res: Response, next: NextFunction) => {
       const user = (req as any).user;
-      console.log(user)
+      // console.log(user)
       let isBlocked = await redisService.get(`user:${user.role}:${user.userId}`);
       if (!isBlocked) {
         isBlocked = await userRepository.findStatusForMidddlewere(user.userId);

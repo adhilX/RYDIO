@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userProfileSchema, type UserProfileFormData } from "@/Types/User/validation/UpdateProfileSchema";
 import { addUser } from "@/store/slice/user/UserSlice";
 import { UploadIdProofModal } from "./modal/IdProof";
-
+const IMG_URL = import.meta.env.VITE_IMAGE_URL
 export default function UserProfile() {
   const user = useSelector((state: RootState) => state.auth.user);
   const [isEditing, setIsEditing] = useState(false);
@@ -95,7 +95,7 @@ export default function UserProfile() {
       <div className="w-full md:w-[340px] bg-white dark:bg-black rounded-xl shadow-lg border border-gray-200 dark:border-white/10 p-6 md:p-8 flex flex-col items-center mb-8 md:mb-0">
         <div className="relative group cursor-pointer mb-6" onClick={isEditing ? triggerFileInput : undefined}>
           <Avatar className="w-32 h-32 border-4 border-white dark:border-black shadow-lg group-hover:opacity-90 transition-opacity">
-            <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) : user.profile_image || ""} />
+            <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) :IMG_URL + user.profile_image || ""} />
             <AvatarFallback className="bg-gray-100 text-gray-600 text-6xl font-medium">
               {user.name?.[0]?.toUpperCase() || "?"}
             </AvatarFallback>

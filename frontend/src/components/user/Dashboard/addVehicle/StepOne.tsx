@@ -85,7 +85,7 @@ const StepOne = ({ onSubmit, defaultValues }: StepOneProps) => {
           <div className="mb-6">
             <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Car Type</label>
             <Field name="car_type" as="select" className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200">
-              {['sedan', 'hateback', 'xuv', 'suv', 'sports'].map((type) => (
+              {['sedan', 'hatchback', 'xuv', 'suv', 'sports'].map((type) => (
                 <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
               ))}
             </Field>

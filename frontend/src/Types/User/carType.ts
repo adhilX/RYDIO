@@ -8,8 +8,8 @@ export interface CarFilters {
   price_per_day: number
   is_available?: boolean
 }
-
 export interface FilterState {
+  search: string
   fuel_types: string[]
   seats: number[]
   car_types: string[]

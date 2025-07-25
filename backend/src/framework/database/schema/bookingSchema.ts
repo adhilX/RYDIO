@@ -6,12 +6,9 @@ export const BookingSchema = new Schema<IbookingModel>(
   {
     user_id: { type: String, required: true },
     vehicle_id: { type: String, required: true },
-    name: { type: String, required: true },
-    phone: { type: Number, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },
     id_proof: { type: String, required: true },
-    id_proof_verified: { type: Boolean, default: false },
     start_date: { type: Date, required: true },
     end_date: { type: Date, required: true },
     total_amount: { type: Number, required: true },
