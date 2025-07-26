@@ -10,15 +10,10 @@ export class SearchVehicleController {
   
 async searchVehicle(req: Request, res: Response): Promise<void> {
   try {
-    const { latitude, longitude, currentPage, limit, filters } = req.body;
+    const { latitude, longitude, currentPage, limit,user_id, filters } = req.body;
     const { search, fuel_types, seats, car_types, transmission } = filters || {};
 
-    const vehicles = await this.searchVehicleUsecase.searchVehicle(
-      latitude,
-      longitude,
-      search,
-      currentPage,
-      limit,
+    const vehicles = await this.searchVehicleUsecase.searchVehicle(latitude,longitude,search,currentPage,limit,user_id,
       {
         fuel_types,
         seats,
@@ -26,7 +21,6 @@ async searchVehicle(req: Request, res: Response): Promise<void> {
         transmission
       }
     );
-
     res.status(HttpStatus.OK).json(vehicles);
 
   } catch (error) {

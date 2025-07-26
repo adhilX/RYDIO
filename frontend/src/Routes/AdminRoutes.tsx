@@ -8,6 +8,7 @@ import { UserManagement } from "@/components/admin/UserManagment";
 import VehicleList from "@/components/admin/vehicleList";
 import RequestedVehiclesPage from "@/components/admin/RequestedVehicle";
 import IdproofRequest from "@/components/admin/IdproofRequest";
+import BookingList from "@/components/admin/BookingList";
 
 
 export const AdminRoutes = () => {
@@ -24,6 +25,7 @@ export const AdminRoutes = () => {
           <Route path="vehicle" element={<><VehicleList/></>} />
           <Route path="vehicle_requests" element={<><RequestedVehiclesPage/></>} />
           <Route path="idproof-requests" element={<><IdproofRequest/></>} />
+          <Route path="bookings" element={<><BookingList/></>} />
         </Route>
       </Route>
     </Routes>

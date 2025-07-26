@@ -39,12 +39,14 @@ import { SearchVehicleUsecase } from "../../useCases/user/vehicle/searchVehicleU
 import { SearchVehicleController } from "../../adapters/controllers/user/searchVehicleController"
 import { VehilceDetailsController } from "../../adapters/controllers/user/vehilceDetailsController"
 import { VehicleDetailsUsecase } from "../../useCases/user/vehicle/vehicleDetailsUsecase"
-import { BookingRepository } from "../../adapters/repository/booking/bookingRepository"
 import { CreateBookingUsecase } from "../../useCases/user/booking/createBookingUsecase"
 import { CreateBookingController } from "../../adapters/controllers/user/booking/createBookingController"
 import { CreatePaymentIntentController } from "../../adapters/controllers/user/booking/createPaymentIntentController"
 import { CreatePaymentIntentUsecase } from "../../useCases/user/booking/createPaymentIntentUsecase"
 import { StripeService } from "../services/paymentSerivce"
+import { MyBookingController } from "../../adapters/controllers/user/booking/myBookingController"
+import { MyBookingUsecase } from "../../useCases/user/booking/myBookingUsecase"
+import { BookingRepository } from "../../adapters/repository/booking/bookingRepository"
 
 // regester user 
 const otpService = new OtpService()
@@ -136,3 +138,7 @@ export const createBookingController = new CreateBookingController(createBooking
 const stripeService = new StripeService()
 const createPaymentIntentUsecase = new CreatePaymentIntentUsecase(stripeService,redisService)
 export const createPaymentIntentController = new CreatePaymentIntentController(createPaymentIntentUsecase)
+
+
+const myBookingUsecase = new MyBookingUsecase(bookingRepository)
+export const myBookingController = new MyBookingController(myBookingUsecase)

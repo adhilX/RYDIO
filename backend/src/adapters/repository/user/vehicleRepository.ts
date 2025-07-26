@@ -41,19 +41,8 @@ export class VehicleRepository implements IvehicleRepository {
     ]);
     return { vehicle, total };
   }
-  async findVehicle(
-  lat: number,
-  lon: number,
-  search: string,
-  page: number,
-  limit: number,
-  filters: {
-    fuel_types?: string[],
-    seats?: number[],
-    car_types?: string[],
-    transmission?: string[]
-  }
-): Promise<{ vehicles: IVehicle[], total: number } | null> {
+
+  async findVehicle(lat: number,lon: number,search: string,page: number,limit: number,user_id:string,filters: {fuel_types?: string[],seats?: number[],car_types?: string[],transmission?: string[]}): Promise<{ vehicles: IVehicle[], total: number } | null> {
   const locations = await locationModel.find({
     location: {
       $near: {
@@ -69,7 +58,8 @@ export class VehicleRepository implements IvehicleRepository {
 
   const query: any = {
     location_id: { $in: locationIds },
-    admin_approve: 'accepted'
+    admin_approve: 'accepted',
+    owner_id: { $ne: user_id }
   };
 
   if (search) {

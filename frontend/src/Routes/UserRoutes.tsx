@@ -1,3 +1,4 @@
+import React, { Suspense } from "react"
 import UserProfile from "@/components/user/Dashboard/userProfile"
 import AddVehicleForm from "@/pages/User/AddVehicleForm"
 import ForgotPassword from "@/pages/User/auth/ForgotPassword"
@@ -14,13 +15,12 @@ import UserVehicleList from "@/pages/User/UserVehicleList"
 import VehicleDetailPage from "@/pages/User/VehicleDetailPage"
 import BookingConfirmation from "@/pages/User/BookingConfirmation"
 import SignupPage from "@/forms/SignUp"
-import CheckoutForm from "@/pages/User/CheckoutForm"
 import { Elements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
 import PaymentSuccess from "@/pages/User/PaymentSuccess"
 import MyBooking from "@/components/user/Dashboard/MyBooking"
+const CheckoutForm = React.lazy(() => import("@/pages/User/CheckoutForm"))
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
-
 
 export const UserRoutes = () => {
 
@@ -29,7 +29,6 @@ export const UserRoutes = () => {
             <Route path='/login' element={<ProtectedRoute><Login /></ProtectedRoute>} />
             <Route path='/signup' element={<ProtectedRoute><SignupPage /></ProtectedRoute>} />
             <Route path='/forgetpassword' element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
-
             <Route path='/' element={<LandingPage />} />
             <Route path='/vehicle-list' element={<UserVehicleList />} />
             <Route path='/vehicle-details/:id' element={<VehicleDetailPage />} />
@@ -39,14 +38,18 @@ export const UserRoutes = () => {
                 path="/payment"
                 element={
                     <Elements stripe={stripePromise}>
-                        <CheckoutForm />
+                        <UserProtectedRoute>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <CheckoutForm />
+                            </Suspense>
+                        </UserProtectedRoute>
                     </Elements>
                 }
             />
             <Route
                 path="/userprofile"
                 element={
-                    <UserProtectedRoute>
+                    <UserProtectedRoute >
                         <Layout />
                     </UserProtectedRoute>
                 }

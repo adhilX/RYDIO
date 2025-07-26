@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, createBookingController, createPaymentIntentController, editProfileController, googleLoginController, myVehicleController, resendOtpController, searchVehicleController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, vehilceDetailsController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, createBookingController, createPaymentIntentController, editProfileController, googleLoginController, myBookingController, myVehicleController, resendOtpController, searchVehicleController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, vehilceDetailsController, verifyForgotPassowordOtpController } from "../../DI/userInject";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -63,5 +63,8 @@ export class UserRoutes {
     })
     this.UserRoutes.post('/create-payment-intent',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         createPaymentIntentController.createPaymentIntent(req,res)
+    })
+    this.UserRoutes.post('/my-booking',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+        myBookingController.myBooking(req,res)
     })
 }}

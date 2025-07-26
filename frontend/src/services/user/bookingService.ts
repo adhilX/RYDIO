@@ -36,3 +36,17 @@ export const createBooking = async (stripeIntentId: string,user_id: string, book
         throw new Error('Unexpected error while creating booking');
     }
 };
+
+export const getMyBooking = async (user_id: string, search = '',status = 'all', page = 1, limit = 10) => {
+  try {
+    const response = await axiosInstance.post("/my-booking", { user_id, search,status, page, limit });
+    return response?.data;
+  } catch (error) {
+    console.error('Error while fetching bookings:', error);
+    if (isAxiosError(error)) {
+      const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while fetching bookings';
+      throw new Error(errorMsg);
+    }
+    throw new Error('An unexpected error occurred while fetching bookings');
+  }
+};

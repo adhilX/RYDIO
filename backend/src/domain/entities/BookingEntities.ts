@@ -1,5 +1,4 @@
 import { ObjectId } from "mongoose";
-import { IVehicle } from "./vehcleEnties";
 import { IVerificationRequest } from "./IVerificationRequest";
 
 export enum BookingStatus {
@@ -19,11 +18,11 @@ export enum PaymentStatus {
 
 export interface Ibooking {
   _id?: ObjectId;
-  user_id: string;
-  vehicle_id: string;
+  user_id: string|ObjectId;
+  vehicle_id: ObjectId|string;
   address: string;
   city: string;
-  id_proof: string;
+  id_proof: string|ObjectId;
   start_date: Date;
   end_date: Date;
   total_amount: number;

@@ -1,5 +1,6 @@
 import { AdminLoginController } from "../../adapters/controllers/admin/AdminLoginController";
 import { BlockUserController } from "../../adapters/controllers/admin/BlockUsersController";
+import { GetBookingController } from "../../adapters/controllers/admin/bookingMangment/GetBookingController";
 import { GetAllUserController } from "../../adapters/controllers/admin/GetAllUserController";
 import { GetIdProofController } from "../../adapters/controllers/admin/getIdproofController";
 import { IdProofActionController } from "../../adapters/controllers/admin/idProofActionController";
@@ -10,9 +11,11 @@ import { PendingVehicleController } from "../../adapters/controllers/admin/vehic
 import { VehicleUpproveController } from "../../adapters/controllers/admin/vehicleManagment/VehicleUpproveController";
 import { VendorAccessController } from "../../adapters/controllers/admin/vendorAccessController";
 import { AdminRepository } from "../../adapters/repository/admin/adminRepository";
+import { BookingRepository } from "../../adapters/repository/booking/bookingRepository";
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository";
 import { LoginAdminUsecase } from "../../useCases/admin/AdminLoginUsecase";
 import { BlockUserUseCase } from "../../useCases/admin/BlockUserUsecase";
+import { GetBookingUsecase } from "../../useCases/admin/bookingMangment/getBookingUsecase";
 import { GetAllUserUsecase } from "../../useCases/admin/getAllUserUsecase";
 import { GetIdProofUscase } from "../../useCases/admin/getIdProofUscase";
 import { IdProofActionUsecase } from "../../useCases/admin/idProofActionUsecase";
@@ -77,3 +80,9 @@ export const idProofActionController = new IdProofActionController(idProofAction
 
 const vendorAccessUsecase = new VendorAccessUsecase(adminRepository)
 export const vendorAccessController = new VendorAccessController(vendorAccessUsecase)
+
+
+//-------get booking data--------
+const bookingRepository = new BookingRepository()
+const getBookingUsecase = new GetBookingUsecase(bookingRepository)
+export const getBookingController = new GetBookingController(getBookingUsecase)

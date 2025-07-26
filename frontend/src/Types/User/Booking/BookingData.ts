@@ -1,9 +1,10 @@
 import type { Vehicle } from "../addVehicle/Ivehicle";
+import type { Iuser } from "../Iuser";
 
 export interface IBooking {
   _id?: string;
-  user_id: string;
-  vehicle_id: string;
+  user_id: string| Iuser
+  vehicle_id: string | Vehicle
   name: string;
   phone: number;
   address: string;

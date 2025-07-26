@@ -11,6 +11,7 @@ export interface IvehicleRepository {
         search: string,
         currentPage: number,
         limit: number,
+        user_id: string,
         filters: {
             fuel_types?: string[],
             seats?: number[],
