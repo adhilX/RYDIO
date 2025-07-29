@@ -15,5 +15,6 @@ export interface FilterState {
   car_types: string[]
   transmission: string[]
   price_range: [number, number]
+  distance_range: number // in kilometers
   available_only: boolean
 }

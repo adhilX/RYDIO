@@ -17,8 +17,11 @@ export interface IvehicleRepository {
             seats?: number[],
             car_types?: string[],
             transmission?: string[]
+            distance_range?: number
         }
     ): Promise<{ vehicles: IVehicle[], total: number } | null>;
     getVehicleDetails(Id: string): Promise<IVehicle | null>
    isExistingVehicle(regiseration_number: string): Promise<boolean>
+   deleteVehicle(vehicleId:string):Promise<boolean>
+   changeVehicleStatus(vehicleId:string):Promise<boolean>
 }

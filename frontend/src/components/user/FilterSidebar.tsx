@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -16,20 +16,30 @@ interface FilterSidebarProps {
 const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState(filters.search || "");
+  const searchValueRef = useRef(searchValue);
+  const isInitialMount = useRef(true);
 
+  // Update search value when filters.search changes (e.g., when clearing filters)
   useEffect(() => {
-    if (filters.search !== searchValue) {
+    if (filters.search !== searchValueRef.current) {
       setSearchValue(filters.search || "");
+      searchValueRef.current = filters.search || "";
     }
   }, [filters.search]);
 
   // Debounce search input
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    
     const handler = setTimeout(() => {
       if (searchValue !== filters.search) {
         onFiltersChange({ ...filters, search: searchValue });
       }
-    }, 1000); 
+    }, 500);
+    
     return () => clearTimeout(handler);
   }, [searchValue]);
 
@@ -53,6 +63,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
       car_types: [],
       transmission: [],
       price_range: [0, 10000],
+      distance_range: 100,
       available_only: false,
     });
   };
@@ -135,6 +146,14 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
             placeholder="Search by make, model, or features..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                // Update the ref to prevent duplicate updates
+                searchValueRef.current = searchValue;
+                onFiltersChange({ ...filters, search: searchValue });
+              }
+            }}
             className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-500"
           />
         </div>
@@ -170,8 +189,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
         label="Transmission"
         filterKey="transmission"
         items={[
-          { value: "automatic", label: "Automatic" },
-          { value: "manual", label: "Manual" },
+          { value: "true", label: "Automatic" },
+          { value: "false", label: "Manual" },
         ]}
       />
     </div>

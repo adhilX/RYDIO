@@ -50,3 +50,17 @@ export const getMyBooking = async (user_id: string, search = '',status = 'all', 
     throw new Error('An unexpected error occurred while fetching bookings');
   }
 };
+
+export const getBookedDate = async (vehicleId: string) => {
+    try {
+        const response = await axiosInstance.get(`/booked-date/${vehicleId}`);
+        return response?.data;
+    } catch (error) {
+        console.error('Error while fetching booked dates:', error);
+        if (isAxiosError(error)) {
+        const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while fetching booked dates';
+        throw new Error(errorMsg);
+        }
+        throw new Error('An unexpected error occurred while fetching booked dates');
+    }
+};

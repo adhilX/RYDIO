@@ -1,23 +1,7 @@
-import type { IidProof_id } from "@/Types/User/IidProof";
+import type { Iuser } from "@/Types/User/Iuser";
 import { createSlice } from "@reduxjs/toolkit";
 
-interface User {
-    _id?: string
-    idproof_id?: IidProof_id,
-    vendor_access?: boolean,
-    email: string,
-    name: string,
-    phone: string,
-    profile_image?: string,
-    role: 'user',
-    is_verified_user?: boolean
-    is_blocked: boolean,
-    last_login?: Date;
-    created_at?: Date;
-    googleVerification?: boolean
-}
-
-const initialState: { user: User | null } = {
+const initialState: { user:Iuser | null } = {
     user: null
 }
 

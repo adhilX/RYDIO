@@ -1,16 +1,16 @@
-import React, { Suspense } from "react"
+import React, { lazy, Suspense } from "react"
 import UserProfile from "@/components/user/Dashboard/userProfile"
 import AddVehicleForm from "@/pages/User/AddVehicleForm"
 import ForgotPassword from "@/pages/User/auth/ForgotPassword"
 import Login from "@/forms/Login"
 import LandingPage from "@/pages/User/Landing"
-import Layout from "@/layout/user/layout"
 import { Route, Routes } from "react-router"
 import UserProtectedRoute from "./ProtectedRoutes/userProtectedRoute"
+const Layout = lazy(() => import("@/layout/user/layout"));
 import ProtectedRoute from "./ProtectedRoutes/ProtectedRoutes"
 import ChangePassword from "@/components/user/Dashboard/ChagePassword"
 import Wallet from "@/components/user/Dashboard/Wallet"
-import ListVehilce from "@/components/user/Dashboard/ListVehilce"
+import ListVehilce from "@/components/user/Dashboard/MyVehilce"
 import UserVehicleList from "@/pages/User/UserVehicleList"
 import VehicleDetailPage from "@/pages/User/VehicleDetailPage"
 import BookingConfirmation from "@/pages/User/BookingConfirmation"
@@ -30,10 +30,10 @@ export const UserRoutes = () => {
             <Route path='/signup' element={<ProtectedRoute><SignupPage /></ProtectedRoute>} />
             <Route path='/forgetpassword' element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
             <Route path='/' element={<LandingPage />} />
-            <Route path='/vehicle-list' element={<UserVehicleList />} />
-            <Route path='/vehicle-details/:id' element={<VehicleDetailPage />} />
-            <Route path="/booking-confirmation" element={<BookingConfirmation />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path='/vehicle-list' element={<UserProtectedRoute><UserVehicleList /></UserProtectedRoute>} />
+            <Route path='/vehicle-details/:id' element={<UserProtectedRoute><VehicleDetailPage /></UserProtectedRoute>} />
+            <Route path="/booking-confirmation" element={<UserProtectedRoute><BookingConfirmation /></UserProtectedRoute>} />
+            <Route path="/payment-success" element={<UserProtectedRoute><PaymentSuccess /></UserProtectedRoute>} />
             <Route
                 path="/payment"
                 element={
@@ -50,7 +50,9 @@ export const UserRoutes = () => {
                 path="/userprofile"
                 element={
                     <UserProtectedRoute >
-                        <Layout />
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Layout />
+                        </Suspense>
                     </UserProtectedRoute>
                 }
             >

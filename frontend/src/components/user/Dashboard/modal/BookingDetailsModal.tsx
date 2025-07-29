@@ -1,9 +1,9 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, Car, MapPin, User, Phone, Clock, CreditCard, AlertCircle, X } from 'lucide-react'
+import { Calendar, Car, MapPin, User, Clock, CreditCard} from 'lucide-react'
 import type { IbookedData } from '@/Types/User/Booking/bookedData'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
@@ -76,7 +76,7 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
     }
   };
 
-  const modal = {
+  const modal :Variants= {
     hidden: { 
       opacity: 0,
       y: 20,
@@ -95,7 +95,7 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
     }
   };
 
-  const item = {
+  const item :Variants= {
     hidden: { opacity: 0, y: 10 },
     visible: { 
       opacity: 1, 
@@ -143,7 +143,7 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
                       onClick={onClose}
                       className="h-10 w-10 p-0 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
                     >
-                      <X className="h-5 w-5" />
+                      {/* <X className="h-5 w-5" /> */}
                     </Button>
                   </div>
                 </DialogHeader>

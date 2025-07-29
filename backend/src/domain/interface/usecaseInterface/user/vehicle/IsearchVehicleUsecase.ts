@@ -5,6 +5,8 @@ export interface IsearchVehicleUsecase {
     lat: number,
     lon: number,
     search: string,
+    pickupDate: string,
+    returnDate: string,
     currentPage: number,
     limit: number,
     user_id:string,
@@ -13,6 +15,7 @@ export interface IsearchVehicleUsecase {
       seats?: number[],
       car_types?: string[],
       transmission?: string[]
+      distance_range?: number
     }
   ): Promise<{ vehicles: IVehicle[], total: number } | null>;
 }

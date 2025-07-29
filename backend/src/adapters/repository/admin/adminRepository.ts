@@ -104,9 +104,7 @@ export class AdminRepository implements IadminRepository {
  
     }
     async vendorAccess(userId: string, vendor_access: boolean): Promise<boolean> {
-      const success = await userModel.findByIdAndUpdate(userId, { vendor_access})
+      const success = await userModel.findByIdAndUpdate(userId, { vendor_access:!vendor_access })
       return !!success
     }
 }
-
-

@@ -1,17 +1,18 @@
 import { userLogout } from "@/services/user/authService";
 import { removeUser } from "@/store/slice/user/UserSlice";
 import { removeToken } from "@/store/slice/user/UserTokenSlice";
+import type { RootState } from "@/store/store";
 import { LogOut, User, Car, Wallet, LockKeyhole, X, Menu, Calendar } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useLocation, NavLink } from "react-router-dom";
 
 export function Sidebar() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
+  const user = useSelector((state:RootState)=>state.auth.user)
   const logout = async () => {
     try {
       await userLogout()
@@ -30,7 +31,7 @@ export function Sidebar() {
     { to: 'userProfile/vehicles', label: 'My Vehicles', icon: Car },
     { to: 'userProfile/wallet', label: 'Wallet', icon: Wallet },
     { to: 'userProfile/my-bookings', label: 'My Bookings', icon: Calendar },  
-    { to: 'userProfile/change-password', label: 'Change Password', icon: LockKeyhole },
+  ...(!user?.googleVerification ? [{ to: 'userProfile/change-password', label: 'Change Password', icon: LockKeyhole }] : [])
   ];
 
   const isActive = (path: string) => {

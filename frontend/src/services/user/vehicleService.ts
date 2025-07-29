@@ -31,20 +31,26 @@ export const getMyVehicle = async (owner_id: string, search = '', page = 1, limi
   }
 };
 
-export const SearchVehicle = async (
+export const  SearchVehicle = async (
   latitude: number|null,
   longitude: number|null,
+  pickupDate: string,
+  returnDate: string,
   currentPage: number,
   limit: number,
+  user_id: string,
   filters?: FilterState
 ) => {
   try {
-    console.log(latitude, longitude, currentPage, limit, filters)
+    console.log(latitude, longitude, pickupDate, returnDate, currentPage, limit, user_id, filters)
     const response = await axiosInstance.post("/search-vehicle", {
       latitude,
       longitude,
-      currentPage,
-      limit,
+      pickupDate,
+      returnDate,
+       currentPage,
+       limit,
+      user_id,
       filters, 
     });
     return response?.data
@@ -71,3 +77,31 @@ export const getVehicleDetails= async (id:string)=>{
     throw new Error('An unexpected error occurred while fetching vehicle details');
   }
 }
+
+export const updateVehicleStatus = async (vehicleId: string, status: boolean) => {
+  try {
+    const response = await axiosInstance.patch(`/vehicle-status/${vehicleId}`, { status });
+    return response?.data;
+  } catch (error) {
+    console.error('Error while updating vehicle status:', error);
+    if (isAxiosError(error)) {
+      const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while updating vehicle status';
+      throw new Error(errorMsg);
+    }
+    throw new Error('An unexpected error occurred while updating vehicle status');
+  }
+};
+
+export const deleteVehicle = async (vehicleId: string) => {
+  try {
+    const response = await axiosInstance.delete(`/vehicle/${vehicleId}`);
+    return response?.data;
+  } catch (error) {
+    console.error('Error while deleting vehicle:', error);
+    if (isAxiosError(error)) {
+      const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while deleting vehicle';
+      throw new Error(errorMsg);
+    }
+    throw new Error('An unexpected error occurred while deleting vehicle');
+  }
+};

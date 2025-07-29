@@ -19,39 +19,46 @@ import { ForgotPasswordUsecase } from "../../useCases/user/auth/SendforgotPasswo
 import { VerifyForgotPassowordOtpController } from "../../adapters/controllers/user/authentication/verifyForgotPasswordOtpController"
 import { ChangePasswordController } from "../../adapters/controllers/user/authentication/ChangePasswordController"
 import { ChangePasswordUseCase } from "../../useCases/user/auth/ChangePasswordUsecase"
-import { EditProfileController } from "../../adapters/controllers/user/editProfileController"
+import { EditProfileController } from "../../adapters/controllers/user/profile-managment/editProfileController"
 import { EditProfileUsecase } from "../../useCases/user/editProfileUsecase"
-import { AddVehicleController } from "../../adapters/controllers/user/addVehicleController"
+import { AddVehicleController } from "../../adapters/controllers/user/vehicle-mangment/addVehicleController"
 import { AddVehicleUsecase } from "../../useCases/user/vehicle/addVehicleUseCase"
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository"
 import { LocationRepository } from "../../adapters/repository/user/LocationRepository"
-import { ChangePasswordUserController } from "../../adapters/controllers/user/changePasswordController"
+import { ChangePasswordUserController } from "../../adapters/controllers/user/profile-managment/changePasswordController"
 import { ChangePassword } from "../../useCases/user/ChangePasswordUsecase"
-import { MyVehicleController } from "../../adapters/controllers/user/MyVehicleController"
+import { MyVehicleController } from "../../adapters/controllers/user/vehicle-mangment/MyVehicleController"
 import { MyVehicleUsecase } from "../../useCases/user/vehicle/MyvehicleUsecase"
 import { RedisService } from "../services/redisService"
 import { UserLogoutController } from "../../adapters/controllers/user/authentication/userLogoutController"
 import { UserLogoutUseCase } from "../../useCases/user/auth/LogoutUserUsecase"
-import { UploadIdProofController } from "../../adapters/controllers/user/uploadIDProofController"
+import { UploadIdProofController } from "../../adapters/controllers/user/profile-managment/uploadIDProofController"
 import { UploadIdProofUsecase } from "../../useCases/user/UploadIdProofUsecase"
 import { UploadIdProofRepository } from "../../adapters/repository/user/UploadIdProofRepository"
 import { SearchVehicleUsecase } from "../../useCases/user/vehicle/searchVehicleUsecase"
-import { SearchVehicleController } from "../../adapters/controllers/user/searchVehicleController"
-import { VehilceDetailsController } from "../../adapters/controllers/user/vehilceDetailsController"
+import { SearchVehicleController } from "../../adapters/controllers/user/vehicle-mangment/searchVehicleController"
+import { VehilceDetailsController } from "../../adapters/controllers/user/vehicle-mangment/vehilceDetailsController"
 import { VehicleDetailsUsecase } from "../../useCases/user/vehicle/vehicleDetailsUsecase"
 import { CreateBookingUsecase } from "../../useCases/user/booking/createBookingUsecase"
-import { CreateBookingController } from "../../adapters/controllers/user/booking/createBookingController"
-import { CreatePaymentIntentController } from "../../adapters/controllers/user/booking/createPaymentIntentController"
+import { CreateBookingController } from "../../adapters/controllers/user/booking-managment/createBookingController"
+import { CreatePaymentIntentController } from "../../adapters/controllers/user/booking-managment/createPaymentIntentController"
 import { CreatePaymentIntentUsecase } from "../../useCases/user/booking/createPaymentIntentUsecase"
 import { StripeService } from "../services/paymentSerivce"
-import { MyBookingController } from "../../adapters/controllers/user/booking/myBookingController"
+import { MyBookingController } from "../../adapters/controllers/user/booking-managment/myBookingController"
 import { MyBookingUsecase } from "../../useCases/user/booking/myBookingUsecase"
 import { BookingRepository } from "../../adapters/repository/booking/bookingRepository"
+import { DeleteVehicleUsecase } from "../../useCases/user/vehicle/deleteVehicleUsecase"
+import { DeleteVehicleController } from "../../adapters/controllers/user/vehicle-mangment/deleteVehicleController"
+import { ChangeVehicleStatusUsecase } from "../../useCases/user/vehicle/changeVehicleStatusUsecase"
+import { ChangeVehicleStatusController } from "../../adapters/controllers/user/vehicle-mangment/changeVehicleStatusController"
+import { GetBookedVehicleController } from "../../adapters/controllers/user/booking-managment/getBookedVehicleController"
+import { GetBookedVehicleUsecase } from "../../useCases/user/booking/GetBookedVehicleUsecase"
 
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
 const userRepostory = new UserRepostory()
+const bookingRepository = new BookingRepository()
 const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRepostory)
 const verifyOtpUsecase = new VerifyOtpUsecase(otpService)
 const hashPassword = new HashPassword()
@@ -102,7 +109,6 @@ const locationRepository = new LocationRepository()
 const addVehicleUsecase = new AddVehicleUsecase(vehicleRepository,locationRepository)
 export const addVehicleController = new AddVehicleController(addVehicleUsecase)
 
-
 //-----change password---------
 
 const changePasswordUserUsecase = new ChangePassword(userRepostory,hashPassword)
@@ -114,13 +120,14 @@ const myvehicleUsecase = new MyVehicleUsecase(vehicleRepository)
 export const myVehicleController = new MyVehicleController(myvehicleUsecase)
 
 //-------search vehicle------------
-const searchVehicleUsecase = new SearchVehicleUsecase(vehicleRepository)
+
+const searchVehicleUsecase = new SearchVehicleUsecase(vehicleRepository,bookingRepository)
 export const searchVehicleController = new SearchVehicleController(searchVehicleUsecase)
 
 //----get vehicle details------
 
 const vehicleDetailsUsecase = new VehicleDetailsUsecase(vehicleRepository)
-export const vehilceDetailsController = new VehilceDetailsController(vehicleDetailsUsecase)
+export const vehicleDetailsController = new VehilceDetailsController(vehicleDetailsUsecase)
 
 //-------upload Id prooof-------------
 
@@ -130,7 +137,6 @@ export const uploadIdProofController = new UploadIdProofController(uploadIdProof
 
 //----------create Booking------------
 
-const bookingRepository = new BookingRepository()
 const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 
@@ -139,6 +145,20 @@ const stripeService = new StripeService()
 const createPaymentIntentUsecase = new CreatePaymentIntentUsecase(stripeService,redisService)
 export const createPaymentIntentController = new CreatePaymentIntentController(createPaymentIntentUsecase)
 
-
 const myBookingUsecase = new MyBookingUsecase(bookingRepository)
 export const myBookingController = new MyBookingController(myBookingUsecase)
+
+
+//------delete vehicle---------
+const deleteVehicleUsecase = new DeleteVehicleUsecase(vehicleRepository)
+export const deleteVehicleController = new DeleteVehicleController(deleteVehicleUsecase)
+
+//------change vehicle status---------
+const changeVehicleStatusUsecase = new ChangeVehicleStatusUsecase(vehicleRepository)
+export const changeVehicleStatusController = new ChangeVehicleStatusController(changeVehicleStatusUsecase)
+
+
+//------get booked vehicle details---------
+
+const getBookedVehicleUsecase = new GetBookedVehicleUsecase(bookingRepository)
+export const getBookedVehicleController = new GetBookedVehicleController(getBookedVehicleUsecase)

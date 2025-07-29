@@ -22,7 +22,10 @@ function IdProofDetails({
     const approveId = async (id: string,owner_id:string) => {
         try {
             const response = await actionIdProof(id, owner_id,'approved')
-            if (response) toast.success('id Accpted')
+            if (response) {
+                toast.success('id Accepted');
+                onBack();
+            }
         } catch (error) {
             console.error(error);
             toast.error('Failed to accept idProof');
@@ -32,7 +35,10 @@ function IdProofDetails({
     const rejectId = async (id: string,owner_id:string) => {
         try {
             const response = await actionIdProof(id,owner_id, 'rejected')
-            if (response) toast.success('id Reject')
+            if (response){
+                toast.success('id Rejected');
+                onBack(); 
+            }
         } catch (error) {
             console.error(error);
             toast.error('Failed to reject idProof');

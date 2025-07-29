@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
 import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
@@ -42,7 +42,7 @@ export class VehicleRepository implements IvehicleRepository {
     return { vehicle, total };
   }
 
-  async findVehicle(lat: number,lon: number,search: string,page: number,limit: number,user_id:string,filters: {fuel_types?: string[],seats?: number[],car_types?: string[],transmission?: string[]}): Promise<{ vehicles: IVehicle[], total: number } | null> {
+  async findVehicle(lat: number,lon: number,search: string, page: number,limit: number,user_id:string,filters: {fuel_types?: string[],seats?: number[],car_types?: string[],transmission?: string[],distance_range?: number}): Promise<{ vehicles: IVehicle[], total: number } | null> {
   const locations = await locationModel.find({
     location: {
       $near: {
@@ -55,13 +55,12 @@ export class VehicleRepository implements IvehicleRepository {
   if (!locations.length) return null;
 
   const locationIds = locations.map(loc => loc._id.toString());
-
   const query: any = {
     location_id: { $in: locationIds },
     admin_approve: 'accepted',
-    owner_id: { $ne: user_id }
+    is_available : true,
+    owner_id: { $ne:user_id},
   };
-
   if (search) {
     query.$or = [
       { name: { $regex: search, $options: "i" } },
@@ -83,12 +82,12 @@ export class VehicleRepository implements IvehicleRepository {
     }
 
     if (filters.transmission?.length) {
-      query.transmission = { $in: filters.transmission };
+      query.automatic = { $in: filters.transmission };
     }
   }
 
   const skip = (page - 1) * limit;
-
+console.log(query)
   const [vehicles, total] = await Promise.all([
     VehicleModel.find(query).skip(skip).limit(limit),
     VehicleModel.countDocuments(query)
@@ -104,5 +103,17 @@ export class VehicleRepository implements IvehicleRepository {
   const result = await VehicleModel.findOne({ registration_number : regiseration_number });
   return result !== null;
  }
+ async deleteVehicle(vehicleId:string):Promise<boolean>{
+    const result = await VehicleModel.findByIdAndDelete(vehicleId);
+    return result !== null;
+ }
+ async changeVehicleStatus(vehicleId: string): Promise<boolean> {
+  const vehicle = await VehicleModel.findById(vehicleId);
+  if (!vehicle) return false;
 
+  vehicle.is_available = !vehicle.is_available;
+  await vehicle.save();
+
+  return true;
+}
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { IsearchVehicleUsecase } from "../../../domain/interface/usecaseInterface/user/vehicle/IsearchVehicleUsecase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { IsearchVehicleUsecase } from "../../../../domain/interface/usecaseInterface/user/vehicle/IsearchVehicleUsecase";
+import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class SearchVehicleController {
 
@@ -10,15 +10,16 @@ export class SearchVehicleController {
   
 async searchVehicle(req: Request, res: Response): Promise<void> {
   try {
-    const { latitude, longitude, currentPage, limit,user_id, filters } = req.body;
-    const { search, fuel_types, seats, car_types, transmission } = filters || {};
+    const { latitude, longitude,pickupDate,returnDate, currentPage, limit,user_id, filters } = req.body;
+    const { search, fuel_types, seats, car_types, transmission ,distance_range} = filters || {};
 
-    const vehicles = await this.searchVehicleUsecase.searchVehicle(latitude,longitude,search,currentPage,limit,user_id,
+    const vehicles = await this.searchVehicleUsecase.searchVehicle(latitude,longitude,search,pickupDate,returnDate,currentPage,limit,user_id,
       {
         fuel_types,
         seats,
         car_types,
-        transmission
+        transmission,
+        distance_range
       }
     );
     res.status(HttpStatus.OK).json(vehicles);

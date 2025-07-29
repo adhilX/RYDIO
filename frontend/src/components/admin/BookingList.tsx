@@ -19,15 +19,13 @@ export default function BookingList() {
   const [totalBookings, setTotalBookings] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const limit = 6;
-const IMG_URL = import.meta.env.VITE_IMAGE_URL;
-
-
+  const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
   // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
-      setCurrentPage(1); 
+      setCurrentPage(1);
     }, 500);
 
     return () => clearTimeout(timer);
@@ -82,7 +80,6 @@ const IMG_URL = import.meta.env.VITE_IMAGE_URL;
     return <Badge variant={statusValue.variant} className="ml-2">{statusValue.label}</Badge>;
   };
 
-  // Helper to get user data (handles both direct object and populated user)
   const getUserData = (booking: IbookedData) => {
     if (typeof booking.user._id === 'string') {
       return booking.user || { name: 'Guest User', email: 'No email provided' };
@@ -90,7 +87,6 @@ const IMG_URL = import.meta.env.VITE_IMAGE_URL;
     return booking.user;
   };
 
-  // Helper to get vehicle data (handles both direct object and populated vehicle)
   const getVehicleData = (booking: IbookedData) => {
     if (typeof booking.vehicle._id === 'string') {
       return booking.vehicle || { brand: 'Unknown', name: 'Vehicle', registration_number: 'N/A' };
@@ -104,7 +100,7 @@ const IMG_URL = import.meta.env.VITE_IMAGE_URL;
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="p-6 space-y-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -178,7 +174,7 @@ const IMG_URL = import.meta.env.VITE_IMAGE_URL;
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="w-10 h-10 mr-2">
-                        <img src={IMG_URL+booking.vehicle?.image_urls[0]} alt="" />
+                            <img src={IMG_URL + booking.vehicle?.image_urls[0]} alt="" />
                           </div>
                           <div>
                             <div className="text-sm font-medium text-white">
@@ -233,15 +229,16 @@ const IMG_URL = import.meta.env.VITE_IMAGE_URL;
             </div>
           </div>
 
-          {totalBookings > 1 && (
-            <div className="flex justify-end">
+          {totalBookings > limit && (
+            <div className="flex justify-center mt-4">
               <Pagination
                 currentPage={currentPage}
-                totalPages={totalBookings}
+                totalPages={Math.ceil(totalBookings / limit)} 
                 onPageChange={setCurrentPage}
               />
             </div>
           )}
+
         </>
       )}
     </motion.div>

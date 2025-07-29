@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, createBookingController, createPaymentIntentController, editProfileController, googleLoginController, myBookingController, myVehicleController, resendOtpController, searchVehicleController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, vehilceDetailsController, verifyForgotPassowordOtpController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, googleLoginController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController } from "../../DI/userInject";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -52,11 +52,11 @@ export class UserRoutes {
     this.UserRoutes.post('/upload-idproof',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         uploadIdProofController.uploadIdProof(req,res)
     })
-    this.UserRoutes.post('/search-vehicle',(req:Request,res:Response)=>{
+    this.UserRoutes.post('/search-vehicle',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         searchVehicleController.searchVehicle(req,res)
     })
-    this.UserRoutes.get('/vehicle-details/:id',(req:Request,res:Response)=>{ 
-         vehilceDetailsController.getVehicleDetails(req,res)
+    this.UserRoutes.get('/vehicle-details/:id',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{ 
+         vehicleDetailsController.getVehicleDetails(req,res)
     })
     this.UserRoutes.post('/create-booking',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
          createBookingController.createBooking(req,res)
@@ -66,5 +66,14 @@ export class UserRoutes {
     })
     this.UserRoutes.post('/my-booking',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         myBookingController.myBooking(req,res)
+    })
+    this.UserRoutes.delete('/vehicle/:vehicleId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+        deleteVehicleController.deleteVehicle(req,res)
+    })
+    this.UserRoutes.patch('/vehicle-status/:vehicleId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+        changeVehicleStatusController.changeVehicleStatus(req,res)
+    })
+    this.UserRoutes.get('/booked-date/:vehicleId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+        getBookedVehicleController.getBookedVehicleDetails(req,res)
     })
 }}

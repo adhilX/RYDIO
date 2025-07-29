@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { IuploadIdProofUsecase } from "../../../domain/interface/usecaseInterface/user/userProfile/IuploadIdProofUsecase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { IuploadIdProofUsecase } from "../../../../domain/interface/usecaseInterface/user/userProfile/IuploadIdProofUsecase";
+import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class UploadIdProofController {
 

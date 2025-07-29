@@ -1,0 +1,21 @@
+import { Request, Response } from "express";
+import { IdeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/user/vehicle/IdeleteVehicleUsecase";
+
+export class DeleteVehicleController {
+    constructor(private deleteVehicleUseCase:IdeleteVehicleUsecase) {
+    }
+    async deleteVehicle(req:Request,res:Response){
+        try {
+            const {vehicleId} = req.params;
+            const result = await this.deleteVehicleUseCase.execute(vehicleId);
+            res.status(200).json({message:'vehicle deleted successfully',success:true});
+        } catch (error) {
+            console.log('error while deleting vehicle',error)
+            res.status(400).json({
+                message:'error while deleting vehicle',
+                error:error instanceof Error ? error.message : 'error while deleting vehicle',
+                success:false
+            })
+        }
+    }
+}
