@@ -19,7 +19,6 @@ interface Suggestion {
   lon: number;
 }
 
-
 function VehicleSearchBar() {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
