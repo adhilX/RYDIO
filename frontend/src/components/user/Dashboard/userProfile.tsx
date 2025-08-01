@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ImageCropper } from "@/components/modal/ImageCroper";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { uploadToCloudinary } from "@/lib/utils/cloudinaryUpload";
 import { updateProfile } from "@/services/user/UpdateProfileService";
@@ -11,17 +11,18 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userProfileSchema, type UserProfileFormData } from "@/Types/User/validation/UpdateProfileSchema";
-import { addUser } from "@/store/slice/user/UserSlice";
 import { UploadIdProofModal } from "./modal/IdProof";
+import { getUser } from "@/services/user/authService";
+import type { Iuser } from "@/Types/User/Iuser";
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 export default function UserProfile() {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const { user } = useSelector((state: RootState) => state.auth)
   const [isEditing, setIsEditing] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
   const [croppedImage, setCroppedImage] = useState<File | null>(null);
   const [showCropper, setShowCropper] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch()
+  const [userDate, setUserData] = useState<Iuser>({ name: '', phone: '', email: '', role: 'user', _id: '', profile_image: '', is_verified_user: false })
 
   const [open, SetOpen] = useState(false)
   const {
@@ -38,14 +39,37 @@ export default function UserProfile() {
   });
 
   useEffect(() => {
-    if (user) {
-      reset({
-        name: user.name || "",
-        phone: user.phone || "",
-      });
-    }
-  }, [user, reset]);
+    const fetchUser = async () => {
+      if (!user?._id) return;
 
+      try {
+        const foundUser = await getUser(user._id);
+        reset({
+          name: foundUser.name || '',
+          phone: foundUser.phone || ''
+        });
+        setUserData(prev => ({
+          ...prev,
+          name: foundUser.name || '',
+          phone: foundUser.phone || '',
+          email: foundUser.email || '',
+          role: foundUser.role || 'user',
+          _id: foundUser._id || '',
+          profile_image: foundUser.profile_image || '',
+          is_verified_user: foundUser.is_verified_user || false,
+          idproof_id: foundUser.idproof_id || prev.idproof_id
+        }));
+        setIsEditing(false);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        toast.error('Failed to load user data');
+      }
+    };
+
+    fetchUser();
+  }, [user?._id, reset]);
+
+  if (!user) return null
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -64,18 +88,18 @@ export default function UserProfile() {
 
   const handleUpdateUser = async (userData: UserProfileFormData) => {
     try {
-      if (!user) {
+      if (!userData) {
         toast.error("User data not available");
         return;
       }
-      let imageUrl: string = user.profile_image || "";
+      let imageUrl: string = userDate.profile_image || "";
       if (croppedImage) {
         imageUrl = await uploadToCloudinary(croppedImage);
       }
-      const updatedData = { ...userData, email: user.email };
+      const updatedData = { ...userData, email: userDate.email };
       const { newUser } = await updateProfile(imageUrl, updatedData);
+      setUserData(newUser)
       toast.success("Profile updated successfully!");
-      dispatch(addUser(newUser))
       setIsEditing(false);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -85,7 +109,7 @@ export default function UserProfile() {
   };
 
   // Handle loading state
-  if (!user) {
+  if (!userDate) {
     return <div className="text-center p-8">Loading user data...</div>;
   }
 
@@ -95,9 +119,9 @@ export default function UserProfile() {
       <div className="w-full md:w-[340px] bg-white dark:bg-black rounded-xl shadow-lg border border-gray-200 dark:border-white/10 p-6 md:p-8 flex flex-col items-center mb-8 md:mb-0">
         <div className="relative group cursor-pointer mb-6" onClick={isEditing ? triggerFileInput : undefined}>
           <Avatar className="w-32 h-32 border-4 border-white dark:border-black shadow-lg group-hover:opacity-90 transition-opacity">
-            <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) :IMG_URL + user.profile_image || ""} />
+            <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) : IMG_URL + userDate.profile_image || ""} />
             <AvatarFallback className="bg-gray-100 text-gray-600 text-6xl font-medium">
-              {user.name?.[0]?.toUpperCase() || "?"}
+              {userDate.name?.[0]?.toUpperCase() || "?"}
             </AvatarFallback>
           </Avatar>
           {isEditing && (
@@ -115,8 +139,8 @@ export default function UserProfile() {
           title="Upload profile image"
         />
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-          {user.name || "Not set"}
-          {user.is_verified_user && (
+          {userDate.name || "Not set"}
+          {userDate.is_verified_user && (
             <svg
               fill="#000000"
               width="24"
@@ -150,15 +174,27 @@ export default function UserProfile() {
           )}
 
         </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{user.email || "Not set"}</p>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{user.phone || "Add your phone number"}</p>
-        {user.idproof_id ? (
-          user.idproof_id.status !== 'approved' ? (
-            <div className="mb-2 p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 flex items-center">
-              <span className="font-semibold">ID Proof Status:</span>
-              <span className="capitalize">{user.idproof_id.status}</span>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{userDate.email || "Not set"}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{userDate.phone || "Add your phone number"}</p>
+        {userDate.idproof_id ? (
+          userDate.idproof_id.status === 'rejected' ? (
+            <div className="mb-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 flex flex-col gap-1">
+              <div>
+                <span className="font-semibold">ID Proof Status:</span>
+                <span className="capitalize ml-2">{userDate.idproof_id.status}</span>
+              </div>
+              <div>
+                <span className="font-semibold">Reason:</span>
+                <span className="ml-2">{userDate.idproof_id.reason || "No reason provided"}</span>
+              </div>
             </div>
-          ) : null
+          ) :
+            userDate.idproof_id.status !== 'approved' ? (
+              <div className="mb-2 p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 flex items-center">
+                <span className="font-semibold">ID Proof Status:</span>
+                <span className="capitalize">{userDate.idproof_id.status}</span>
+              </div>
+            ) : null
         ) : (
           <Button
             className="w-full bg-[#6DA5C0] hover:bg-[#5b8ca3] text-white font-semibold py-2 rounded-md transition-all duration-200 shadow-sm mb-2"
@@ -203,13 +239,13 @@ export default function UserProfile() {
                 {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
               </div>
             ) : (
-              <p className="text-gray-900 dark:text-white font-medium">{user.name || "Not set"}</p>
+              <p className="text-gray-900 dark:text-white font-medium">{userDate.name || "Not set"}</p>
             )}
           </div>
           {/* Email Field (read-only) */}
           <div>
             <Label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">Email</Label>
-            <p className="text-gray-900 dark:text-white font-medium">{user.email || "Not set"}</p>
+            <p className="text-gray-900 dark:text-white font-medium">{userDate.email || "Not set"}</p>
             <span className="text-xs text-yellow-600 mt-1 block">Email cannot be changed</span>
           </div>
           {/* Phone Field */}
@@ -224,7 +260,7 @@ export default function UserProfile() {
                 {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>}
               </div>
             ) : (
-              <p className="text-gray-900 dark:text-white font-medium">{user.phone || "Add your phone number"}</p>
+              <p className="text-gray-900 dark:text-white font-medium">{userDate.phone || "Add your phone number"}</p>
             )}
           </div>
           {/* Save/Cancel Buttons */}

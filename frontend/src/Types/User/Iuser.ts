@@ -1,7 +1,7 @@
 import type { IidProof_id } from "./IidProof";
 
 export interface Iuser {
-  _id?: string; 
+  _id: string; 
   idproof_id?: IidProof_id;
   name: string;
   email: string;

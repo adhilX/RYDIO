@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import Pagination from '../Pagination';
 import { toast } from 'react-hot-toast';
 import type { IbookedData } from '@/Types/User/Booking/bookedData';
+import BookingDetailsModal from '../modal/BookingDetailsModal';
 
 
 export default function BookingList() {
@@ -18,6 +19,8 @@ export default function BookingList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalBookings, setTotalBookings] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<IbookedData | null>(null);
   const limit = 6;
   const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
@@ -97,6 +100,12 @@ export default function BookingList() {
   const formatDate = (dateInput: string | Date) => {
     const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
     return format(date, 'MMM dd, yyyy');
+  };
+
+
+  const openDetailsModal = (booking: IbookedData) => {
+    setSelectedBooking(booking);
+    setIsModalOpen(true);
   };
 
   return (
@@ -218,7 +227,7 @@ export default function BookingList() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Button variant="outline" size="sm" className="text-xs">
+                        <Button onClick={()=>openDetailsModal(booking)} variant="outline" size="sm" className="text-xs">
                           View Details
                         </Button>
                       </td>
@@ -228,7 +237,16 @@ export default function BookingList() {
               </table>
             </div>
           </div>
-
+          {isModalOpen && (
+            <BookingDetailsModal
+              booking={selectedBooking}
+              isOpen={isModalOpen}
+              onClose={() => {
+                setIsModalOpen(false);
+                setSelectedBooking(null);
+              }}
+            />
+          )}
           {totalBookings > limit && (
             <div className="flex justify-center mt-4">
               <Pagination

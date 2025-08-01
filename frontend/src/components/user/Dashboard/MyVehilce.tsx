@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PlusCircle, Search, Edit, Trash2, Check, X } from 'lucide-react';
+import { PlusCircle, Search, Trash2, Check, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { getMyVehicle, updateVehicleStatus, deleteVehicle } from '@/services/user/vehicleService';
@@ -89,7 +89,7 @@ const ListVehilce = () => {
 
   
     return (
-        <div className="w-full p-4 md:p-8 font-sans">
+        <div className="w-full  p-4 md:p-8 font-sans">
             <div className="flex items-center justify-between mb-8">
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight">My Vehicles</h1>
                 <motion.div className="bg-black/80 backdrop-blur-xl border border-black/60 shadow-2xl p-3 rounded-xl">
@@ -200,7 +200,7 @@ const ListVehilce = () => {
                                     <td className="px-4 py-4">
                                         <div className="flex justify-center space-x-3">
                                             <div className="flex items-center space-x-2">
-                                                <button
+                                                {/* <button
                                                     onClick={() => {
                                                         if (vehicle._id) {
                                                             navigate(`/userProfile/edit-vehicle/${vehicle._id}`);
@@ -210,7 +210,7 @@ const ListVehilce = () => {
                                                     title="Edit Vehicle"
                                                 >
                                                     <Edit className="w-4 h-4" />
-                                                </button>
+                                                </button> */}
                                                 <div className="relative">
                                                     {showDeleteConfirm === vehicle._id ? (
                                                         <div className="absolute right-0 z-10 flex items-center bg-white rounded-lg shadow-lg p-1 space-x-1">

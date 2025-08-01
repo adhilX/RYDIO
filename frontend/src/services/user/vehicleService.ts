@@ -16,7 +16,8 @@ export const postVehicle = async (vehicle: Vehicle, location: StepThreeFormData)
     }
     throw new Error('An unexpected error occurred while adding vehicle');
   }
-};
+}
+
 export const getMyVehicle = async (owner_id: string, search = '', page = 1, limit = 10) => {
   try {
     const response = await axiosInstance.post("/my-vehicle", { owner_id, search, page, limit });

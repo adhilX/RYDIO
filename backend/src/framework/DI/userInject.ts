@@ -53,6 +53,8 @@ import { ChangeVehicleStatusUsecase } from "../../useCases/user/vehicle/changeVe
 import { ChangeVehicleStatusController } from "../../adapters/controllers/user/vehicle-mangment/changeVehicleStatusController"
 import { GetBookedVehicleController } from "../../adapters/controllers/user/booking-managment/getBookedVehicleController"
 import { GetBookedVehicleUsecase } from "../../useCases/user/booking/GetBookedVehicleUsecase"
+import { GetUserController } from "../../adapters/controllers/user/profile-managment/getUserController"
+import { GetUserUsecase} from "../../useCases/user/auth/GetuserUsecase"
 
 // regester user 
 const otpService = new OtpService()
@@ -102,6 +104,11 @@ export const userlogoutController = new UserLogoutController(userLogoutUseCase)
 const editProfileUseCase = new EditProfileUsecase(userRepostory)
 export const editProfileController = new EditProfileController(editProfileUseCase)
 
+
+//---------get user details-------------
+
+const getUserUsecase = new GetUserUsecase(userRepostory)
+export const getUserController = new GetUserController(getUserUsecase)
 //------ add vehicle--------------
 
 const vehicleRepository = new VehicleRepository()

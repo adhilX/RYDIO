@@ -10,10 +10,10 @@ export class IdProofActionController {
 
     async idProofAction (req:Request,res:Response):Promise<void>{
         try {
-            const {action,owner_id} = req.body
+            const {action,owner_id,reason} = req.body
             const {id}= req.params
             console.log(action,id)
-            const response = await this.idProofActionUsecase.setAction(id,owner_id,action)
+            const response = await this.idProofActionUsecase.setAction(id,owner_id,action,reason)
             res.status(HttpStatus.OK).json({message:action+' success'})   
         } catch (error) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

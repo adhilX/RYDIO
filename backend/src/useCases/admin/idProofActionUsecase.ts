@@ -7,12 +7,12 @@ export class IdProofActionUsecase implements IidProofActionUsecase{
         this.adminRepository = adminRepository
     }
 
-    async setAction(idProof_id: string,owner_id:string, action: "rejected" | "approved"): Promise<boolean> {
+    async setAction(idProof_id: string,owner_id:string, action: "rejected" | "approved",reason:string): Promise<boolean> {
         
         if(action == 'approved'){
             await this.adminRepository.setVeifedUser(owner_id)
           return  await this.adminRepository.idProofUprove(idProof_id,owner_id)
         }
-        return await this.adminRepository.idProofReject(idProof_id)
+        return await this.adminRepository.idProofReject(idProof_id,reason)
     }
 } 

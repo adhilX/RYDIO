@@ -19,7 +19,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
   const searchValueRef = useRef(searchValue);
   const isInitialMount = useRef(true);
 
-  // Update search value when filters.search changes (e.g., when clearing filters)
   useEffect(() => {
     if (filters.search !== searchValueRef.current) {
       setSearchValue(filters.search || "");
@@ -41,7 +40,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     }, 500);
     
     return () => clearTimeout(handler);
-  }, [searchValue]);
+  }, [searchValue, filters, onFiltersChange]);
 
   const updateFilters = (key: keyof (FilterState & { search?: string }), value: string | number | (string | number)[]) => {
     onFiltersChange({ ...filters, [key]: value });
@@ -149,7 +148,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                // Update the ref to prevent duplicate updates
                 searchValueRef.current = searchValue;
                 onFiltersChange({ ...filters, search: searchValue });
               }

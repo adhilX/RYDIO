@@ -30,7 +30,7 @@ export default function SignupPage() {
       navigate("/login");
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-      toast.error(`Signup failed: ${errorMessage}`);
+      toast.error(errorMessage);
       console.error("Signup Error:", error);
     }
   };

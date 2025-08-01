@@ -93,8 +93,8 @@ export class AdminRepository implements IadminRepository {
      }
      return !!success
     }
-    async idProofReject(idProof_id:string):Promise<boolean>{
-     const success =  await verificationRequestModel.findByIdAndUpdate(idProof_id,{status:'rejected'})
+    async idProofReject(idProof_id:string,reason:string):Promise<boolean>{
+     const success =  await verificationRequestModel.findByIdAndUpdate(idProof_id,{status:'rejected',reason})
      return !!success
     }
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation} from "react-router";
 import { toast } from "react-hot-toast";
 import type { FilterState } from "@/Types/User/carType";
@@ -65,10 +65,10 @@ export default function UserVehicleList() {
     fetchVehicles();
   }, [user, searchParams, currentPage, filters]);
 
-  const handleFilter = (updated: Partial<FilterState>) => {
+  const handleFilter = useCallback((updated: Partial<FilterState>) => {
     setFilters((prev) => ({ ...prev, ...updated }));
     setCurrentPage(1);
-  };
+  }, []);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -83,7 +83,7 @@ export default function UserVehicleList() {
           <div className="mb-8">
             <VehicleSearchBar />
           </div>
-          <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8">
+          <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8 px-15">
             <div className="lg:w-1/4 w-full">
               <FilterSidebar 
                 filters={filters} 
@@ -134,7 +134,7 @@ export default function UserVehicleList() {
                       </div>
                     )}
                   </div>
-                  {totalPages > 1 && (
+                  {totalPages >1 && (
                     <div className="mt-8">
                       <Pagination
                         currentPage={currentPage}

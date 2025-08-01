@@ -29,6 +29,11 @@ const IdproofRequest: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const itemsPerPage = 6;
   const totalPage =total/itemsPerPage
+
+const handleBackToList = React.useCallback(() => {
+  setSelectedRequest(null);
+}, []);
+
   useEffect(() => {
     const fetchIdProofRequests = async () => {
       try {
@@ -45,7 +50,7 @@ const IdproofRequest: React.FC = () => {
       }
     };
     fetchIdProofRequests();
-  }, [statusFilter,currentPage]);
+  }, [statusFilter,currentPage,selectedRequest]);
 
   // Responsive status badge
   const getStatusBadge = (status: string) => {
@@ -74,9 +79,6 @@ const IdproofRequest: React.FC = () => {
     });
   };
 
-  const handleBackToList = () => {
- setSelectedRequest(null)
-  };
 
   // Loading state
   if (loading) {

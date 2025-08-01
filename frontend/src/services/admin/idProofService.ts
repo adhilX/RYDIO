@@ -10,9 +10,13 @@ export const getIdProof=async(status:string,currentPage=1,itemsPerPage=6)=>{
     }
 }
 
-export const actionIdProof=async(id:string,owner_id:string,action:'approved'|'rejected')=>{
+export const actionIdProof=async(id:string, owner_id:string, action:'approved'|'rejected', reason?: string)=>{
     try {
-        const response = await axiosInstance.post(`/admin/idproof-action/${id}`,{action,owner_id})
+        const response = await axiosInstance.post(`/admin/idproof-action/${id}`,{
+            action,
+            owner_id,
+            ...(action === 'rejected' && reason && { reason })
+        })
         return response.data
     } catch (error) {
         console.log('Error while idproof action:', error);

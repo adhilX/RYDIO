@@ -114,3 +114,18 @@ export const googleLogin = async (user:Client) => {
         throw new Error('error while client login')
       }
 };
+
+export const getUser = async(userId : string)=>{
+  try {
+    console.log(userId)
+    const response = await axiosInstance.get(`/get-user/${userId}`);
+    console.log(response)
+    return response.data.user
+  } catch (error) {
+    console.log('error while fetching user', error);
+    if (isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || 'Error while fetching user');
+    }
+    throw new Error('Error while fetching user');
+  }
+}

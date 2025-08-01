@@ -100,15 +100,15 @@ function VehicleSearchBar() {
       toast.error(error || 'Invalid search parameters');
       return;
     }
-
+    
+    if (!user) {
+      toast.error('Please login to perform search');
+      return;
+    }
     setShowSparkles(true);
     setIsLoading(true);
 
     try {
-      if (!user) {
-        toast.error('Please login to perform search');
-        return;
-      }
       const searchParams: SearchParams = {
         latitude: selectedLocation!.latitude,
         longitude: selectedLocation!.longitude,

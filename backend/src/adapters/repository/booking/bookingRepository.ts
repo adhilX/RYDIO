@@ -88,7 +88,8 @@ export class BookingRepository implements IbookingRepostory {
                },
 
                { $skip: skip },
-               { $limit: limit }
+               { $limit: limit },
+               {$sort:{'createdAt':-1}}
           ]);
           const total = bookings.length
           return { bookings, total }

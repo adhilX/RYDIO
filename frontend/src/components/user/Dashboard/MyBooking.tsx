@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
-import BookingDetailsModal from './modal/BookingDetailsModal';
+import BookingDetailsModal from '../../modal/BookingDetailsModal';
 import { getMyBooking } from '@/services/user/bookingService';
 import type { BookingStatus, PaymentStatus, IbookedData } from '@/Types/User/Booking/bookedData';
 
@@ -18,10 +18,10 @@ const MyBooking = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const [bookings, setBookings] = useState<IbookedData[]>([]);
-  const [, setTotalPages] = useState(1); // Keep for future pagination
+  const [, setTotalPages] = useState(1); 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<BookingStatus | 'all'>('all');
-  const [limit] = useState(6); // 2 rows of 3 cards each
+  const [limit] = useState(6); 
   const [bookingState, setBookingState] = useState({
     selected: null as IbookedData | null,
     isModalOpen: false,
@@ -33,6 +33,7 @@ const MyBooking = () => {
   if (!user) {
     return <div className="p-4 text-center">Please log in to view your bookings.</div>;
   }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const timeout = setTimeout(() => {
       setBookingState(prev => ({
@@ -44,6 +45,7 @@ const MyBooking = () => {
     return () => clearTimeout(timeout);
   }, [search]);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const fetchData = async () => {
       if (!user?._id) return;

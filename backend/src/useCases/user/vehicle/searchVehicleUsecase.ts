@@ -17,21 +17,30 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
       distance_range?: number
     }
   ): Promise<{ vehicles: IVehicle[], total: number } | null> {
+// get all vehicles
+    const allVehiclesResult = await this.vehicleRepsitory.findVehicle(lat, lon, search, 1, 10000, user_id, filters);
+    if (!allVehiclesResult) return null;
+ // get all booked vehicle ids
+    const bookedVehicleIds = await this.bookigRepository.bookedVehicle(pickupDate, returnDate);
+    
+    // get all available vehicles
+    const allAvailableVehicles = allVehiclesResult.vehicles.filter(v => !bookedVehicleIds.includes(v._id!.toString()));
+    const totalAvailable = allAvailableVehicles.length;
 
-const result = await this.vehicleRepsitory.findVehicle(lat, lon, search, currentPage, limit, user_id, filters);
-if (!result) return null;
+    // get paginated result
+    const paginatedResult = await this.vehicleRepsitory.findVehicle(lat, lon, search, currentPage, limit, user_id, filters);
+    if (!paginatedResult) return null;
 
-const { vehicles } = result;
-const bookedVehicleIds = await this.bookigRepository.bookedVehicle(pickupDate, returnDate);
+    const { vehicles } = paginatedResult;
+    // get paginated available vehicles
+    const paginatedAvailableVehicles = vehicles.filter(v => !bookedVehicleIds.includes(v._id!.toString()));
+    const plainVehicles = JSON.parse(JSON.stringify(paginatedAvailableVehicles));
 
-const availableVehicles = vehicles.filter(v => !bookedVehicleIds.includes(v._id!.toString()));
-const  plainVehicles = JSON.parse(JSON.stringify(availableVehicles))
+    const cleanVehicles = (plainVehicles as any[]).map(({ owner_id, location_id, is_available, admin_approve, createdAt, updatedAt, registration_number, description, ...rest }) => rest);
 
-const cleanVehicles = (plainVehicles as any[]).map(({ owner_id, location_id, is_available, admin_approve, createdAt, updatedAt,registration_number, description, ...rest }) => rest);
-
-return {
-  vehicles: cleanVehicles,
-  total: availableVehicles.length
-};
-}
+    return {
+      vehicles: cleanVehicles,
+      total: totalAvailable 
+    };
+  } 
 }
