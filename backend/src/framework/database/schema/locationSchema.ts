@@ -8,6 +8,19 @@ export const locationSchema = new Schema<Location>({
   state: { type: String, required: true },
   country: { type: String, required: true },
   pincode: { type: String, required: true },
-  latitude: { type: Number, required: true },
-  longitude: { type: Number, required: true },
-}, { timestamps: true }); 
+
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true,
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  }
+
+}, { timestamps: true });
+locationSchema.index({ location: "2dsphere" });

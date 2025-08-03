@@ -10,6 +10,8 @@ import Pagination from '../Pagination';
 import type { Iuser } from '@/Types/User/Iuser';
 import type { Ilocation } from '@/Types/User/location';
 
+const CARS_PER_PAGE = 6
+
 export default function AdminRequestedVehicles() {
   const [showRejected, setShowRejected] = useState(false);
   const [search, setSearch] = useState('');
@@ -24,16 +26,15 @@ export default function AdminRequestedVehicles() {
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       setDebouncedSearch(search);
-    }, 500);
-
-    return () => clearTimeout(delayDebounce);
+    }, 1000);
+   return () => clearTimeout(delayDebounce);
   }, [search]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await getPendingVehicle(debouncedSearch, currentPage, 6);
-      setVehicles(response?.vehicles || []);
-      setTotalPage(response?.total)
+      setVehicles(response?.vehicle || []);
+      setTotalPage(response?.total/CARS_PER_PAGE)
     };
     fetchData();
   }, [debouncedSearch, currentPage, showRejected, selectedVehicle]);
@@ -48,12 +49,12 @@ export default function AdminRequestedVehicles() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex flex-col md:flex-row text-white justify-end p-4 items-center gap-4">
+      <div className="flex flex-col md:flex-row text-white justify-end p-4  items-center gap-4">
         <Input
           placeholder="Search vehicle..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm bg-black/60 border border-black/60 text-white focus:outline-none focus:ring-2 focus:ring-[#e63946] rounded-lg"
+          className="max-w-sm bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-[#e63946] rounded-lg"
         />
         <Button
           variant="outline"
@@ -66,7 +67,7 @@ export default function AdminRequestedVehicles() {
           {showRejected ? 'Show Requested' : 'Show Rejected'}
         </Button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[200px]"></div>
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[200px]"></div> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredVehicles.length ? filteredVehicles.map((vehicle, idx) => (
           <motion.div
@@ -83,7 +84,6 @@ export default function AdminRequestedVehicles() {
           </div>
         )}
       </div>
-
       {/* Pagination */}
 
       {totalPage > 1 ? <Pagination currentPage={currentPage} onPageChange={setCurrentPage} totalPages={totalPage} /> : <></>}

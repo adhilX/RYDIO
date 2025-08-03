@@ -11,7 +11,7 @@ export class UserRepostory implements IuserRepository{
     return await userModel.findOne({email}).populate('idproof_id')
     }
     async findById(_id:string){
-    return await userModel.findById(_id).populate('idproof_id')
+    return await userModel.findOne({_id,role:'user'}).populate('idproof_id')
     }
     
     async googleLogin(user: User): Promise<User | null> {

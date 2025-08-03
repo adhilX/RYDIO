@@ -19,7 +19,7 @@ export class RefreshTokenUseCase implements IrefreshTokenUseCase {
     }
 
     async execute(token: string): Promise<string> {
-        const payload = this.jwtService.verifyRefreshToken(token, process.env.REFRESHTOKEN_SECRET_KEY as string)
+        const payload = this.jwtService.verifyRefreshToken(token, process.env.REFRESH_TOKEN_KEY as string)
         if (!payload) throw new Error('Invalid or Expired Refresh Token')
         console.log('refresh token here')
         const userId = payload.userId
@@ -29,10 +29,7 @@ export class RefreshTokenUseCase implements IrefreshTokenUseCase {
         const role = client ? 'user' : admin ? 'admin' : null;
         if (!user || !role) throw new Error('User Not Found')
 
-        const newAccessToken = this.jwtService.createAccessToken(process.env.ACCESSTOKEN_SECRET_KEY as string,
-            userId,
-            role)
-
+        const newAccessToken = this.jwtService.createAccessToken(process.env.ACCESS_TOKEN_KEY as string, userId, role)
         return newAccessToken
     }
 }

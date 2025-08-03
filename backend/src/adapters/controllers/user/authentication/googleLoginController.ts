@@ -21,16 +21,16 @@ export class GoogleLoginController {
             const { user } = req.body;
             const createUser = await this.GoogleLoginUsecase.googleLogin(user);
             if(!createUser)throw new Error('error while ')
-            const ACCESSTOKEN_SECRET_KEY = process.env.ACCESSTOKEN_SECRET_KEY as string;
-            const REFRESHTOKEN_SECRET_KEY = process.env.REFRESHTOKEN_SECRET_KEY as string;
+            const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string;
+            const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string;
 
             const accessToken = this.jwtService.createAccessToken(
-                ACCESSTOKEN_SECRET_KEY,
+                ACCESS_TOKEN_KEY,
                 createUser._id?.toString() || "",
                 createUser.role
             );
             const refreshToken = this.jwtService.createRefreshToken(
-                REFRESHTOKEN_SECRET_KEY,
+                REFRESH_TOKEN_KEY,
                 createUser._id?.toString() || ""
             );
             await this.redisService.set(

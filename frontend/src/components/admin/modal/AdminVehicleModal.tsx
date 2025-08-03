@@ -6,8 +6,9 @@ import type { Ilocation } from '@/Types/User/location';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useLocation } from 'react-router';
 
-
+const IMG_URL=import.meta.env.VITE_IMAGE_URL
 interface AdminVehicleModalProps {
   open: boolean;
   onClose: () => void;
@@ -15,8 +16,9 @@ interface AdminVehicleModalProps {
 }
 
 export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onClose, vehicle }) => {
+  const {pathname} = useLocation()
   if (!vehicle) return null;
-  
+const showBtn = pathname == '/admin/vehicle_requests'
   const handleAccept = async()=>{
    const response = await handleVehicle(vehicle._id!,'accepted')
   toast.success(response.message)
@@ -84,7 +86,7 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
                 {vehicle.image_urls.map((url, idx) => (
                   <img
                     key={idx}
-                    src={url}
+                    src={IMG_URL+url}
                     alt={`vehicle-${idx}`}
                     className="w-full h-32 object-cover rounded shadow"
                   />
@@ -93,7 +95,8 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
             </div>
           )}
         </motion.div>
-        <div className="flex justify-end gap-4 px-6 pb-6">
+
+        {showBtn && vehicle.admin_approve == 'pending'?<div className="flex justify-end gap-4 px-6 pb-6">
           <button
           onClick={handleAccept}
             className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded cursor-pointer transition-colors"
@@ -106,7 +109,7 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
           >
             Reject
           </button>
-        </div>
+        </div>:<></>}
       </DialogContent>
     </Dialog>
   );

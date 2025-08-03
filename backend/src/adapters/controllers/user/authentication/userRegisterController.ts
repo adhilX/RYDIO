@@ -21,7 +21,7 @@ export class UserRegisterController {
                 const newUser = await this.createuserUsecase.createUser(user);
                 res.status(201).json({ message: 'user created', newUser });
             } else {
-                res.status(400).json({ error: 'OTP verification failed' });
+                res.status(400).json({ error: 'Invalid OTP' });
             }
         } catch (error) { 
             res.status(400).json({

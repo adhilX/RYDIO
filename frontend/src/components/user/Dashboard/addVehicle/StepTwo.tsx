@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ImageCropper } from '@/components/modal/ImageCroper';
@@ -20,8 +21,19 @@ export default function StepTwo({ onSubmit, defaultValues }: StepTwoProps) {
   const formik = useFormik<StepTwoFormData>({
     initialValues: defaultValues || { image_urls: [] },
     onSubmit: (values) => {
-      onSubmit(values); 
+      onSubmit(values);
     },
+    validationSchema: Yup.object().shape({
+      image_urls: Yup.array()
+        .of(Yup.mixed()
+          .test('fileType', 'Only image files are allowed', (file) =>
+            file instanceof File &&
+            ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'].includes(file.type)
+          )
+        )
+        .min(1, 'Please upload at least one image')
+        .max(5, 'You can upload up to 5 images')
+    }),
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +63,7 @@ export default function StepTwo({ onSubmit, defaultValues }: StepTwoProps) {
   };
 
   const handleRemoveImage = (index: number) => {
-    const images = Array.isArray(formik.values.image_urls)? formik.values.image_urls: [formik.values.image_urls];
+    const images = Array.isArray(formik.values.image_urls) ? formik.values.image_urls : [formik.values.image_urls];
     const updatedImages = images.filter((_, i) => i !== index);
     const updatedPreviews = previews.filter((_, i) => i !== index);
     formik.setFieldValue('image_urls', updatedImages);
@@ -64,6 +76,9 @@ export default function StepTwo({ onSubmit, defaultValues }: StepTwoProps) {
       <div className="flex flex-col items-center justify-center border-2 border-dashed border-[#6DA5C0] bg-[#f8fafc] dark:bg-white/5 rounded-xl p-6 mb-4 transition-all duration-200 hover:bg-[#eaf6fa] dark:hover:bg-[#1a232a] cursor-pointer group">
         <Input type="file" accept="image/*" onChange={handleFileChange} className="w-full text-gray-700 dark:text-gray-200" />
         <span className="text-xs text-gray-400 mt-2">Drag & drop or click to select images. Only image files are allowed.</span>
+        {formik.errors.image_urls && typeof formik.errors.image_urls === 'string' && (
+          <p className="text-red-500 text-sm mt-2">{formik.errors.image_urls}</p>
+        )}
         <motion.div
           className="absolute inset-0 pointer-events-none rounded-xl"
           initial={{ opacity: 0 }}

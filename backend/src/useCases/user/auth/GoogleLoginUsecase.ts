@@ -9,7 +9,7 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
     constructor(userRepository: IuserRepository) {
         this.userRepository = userRepository
     }
-    async googleLogin(user: User): Promise<User> {
+    async googleLogin(user: User): Promise<Omit<User, 'password'>> {
         const existingUser = await this.userRepository.findByEmail(user.email)
         if (existingUser) {
             if (existingUser.is_blocked) throw new Error('user is blocked')
@@ -18,7 +18,8 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
         else {
             const createUser = await this.userRepository.googleLogin(user)
             if (!createUser) throw new Error('error while creating new user using google login')
-            return createUser
+                const { password: _, ...userWithoutPassword } = createUser as User;
+            return userWithoutPassword
         }
     }
 }

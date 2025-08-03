@@ -65,7 +65,7 @@ const navigate = useNavigate()
 
     const vehicle: Vehicle = {
       ...formData.stepOne,
-      owner_id: user._id,
+      owner_id: user,
       admin_approve: 'pending',
       image_urls: Array.isArray(formData.stepTwo.image_urls)
         ? formData.stepTwo.image_urls

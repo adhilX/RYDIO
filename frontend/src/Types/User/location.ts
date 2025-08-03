@@ -7,6 +7,10 @@ export interface Ilocation {
   state: string;
   country: string;
   pincode: string;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
+   location: {
+    type: 'Point';
+    coordinates: [number, number]; 
+  };
 }

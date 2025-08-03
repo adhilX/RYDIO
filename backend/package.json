@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "nodemon --watch src --ext ts --exec ts-node src/app.ts"
+    "dev": "nodemon --exec ts-node src/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +23,8 @@
     "morgan": "^1.10.0",
     "node-cache": "^5.1.2",
     "nodemailer": "^7.0.3",
-    "redis": "^5.5.6"
+    "redis": "^5.5.6",
+    "stripe": "^18.3.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

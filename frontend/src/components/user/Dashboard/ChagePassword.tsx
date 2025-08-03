@@ -91,7 +91,7 @@ const handleSubmit = async (values: ChangePasswordValues,{ setSubmitting, resetF
                 autoComplete="new-password"
                 className={`w-full px-4 py-3 border ${touched.newPass && errors.newPass ? 'border-red-500' : status?.success ? 'border-green-500' : 'border-gray-300 dark:border-white/10'} rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200`}
               />
-              <ErrorMessage name="new" component="div" className="mt-1 text-sm text-red-500" />
+              <ErrorMessage name="newPass" component="div" className="mt-1 text-sm text-red-500" />
             </div>
             <div>
               <Label htmlFor="confirm" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Confirm New Password</Label>

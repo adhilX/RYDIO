@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/UserInterceptors";
+import axiosInstance from "@/axios/AdminInterceptors";
 
 export const getPendingVehicle = async (search= '',page = 1, limit = 6) => {
   try {
@@ -9,6 +9,18 @@ export const getPendingVehicle = async (search= '',page = 1, limit = 6) => {
     return response?.data;
   } catch (error) {
     console.log('Error while fetching pending vehicles:', error);
+    throw error;
+  }
+};
+export const getAprovedVehicle = async (search= '',page = 1, limit = 6) => {
+  try {
+    const response = await axiosInstance.get("/admin/aproved-vehicle", {
+       params: {search,page, limit }
+    });
+    console.log(response.data)
+    return response?.data;
+  } catch (error) {
+    console.log('Error while fetching aproved vehicles:', error);
     throw error;
   }
 };
@@ -24,3 +36,13 @@ export const handleVehicle = async (vehicle_id:string, action: 'accepted'|'rejec
     throw error;
   }
 };
+
+export const getVehilceDetails = async (id:string) =>{
+  try {
+    const response = await axiosInstance.get(`/vehicle-details/${id}`)
+    console.log(response.data)
+  } catch (error) {
+        console.log('Error while fetching vehicle details:', error);
+    throw error;
+  }
+}

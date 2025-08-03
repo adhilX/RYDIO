@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { LeafletMouseEvent } from "leaflet";
+import { findLocation } from "@/services/user/locationService";
 
 interface StepThreeProps {
   onSubmit: (data: StepThreeFormData) => void;
@@ -46,11 +47,8 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
 
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-      );
-      const data = await res.json();
+  
+      const data =  await findLocation(lat,lng)
       const address = data.address || {};
 
       setFieldValue("latitude", lat);
@@ -61,9 +59,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
       setFieldValue("country", address.country || "");
       setFieldValue("pincode", address.postcode || "");
       setMarker([lat, lng]);
-    } catch (error) {
-      console.error("Reverse geocoding failed:", error);
-    }
+   
   };
 
   const MapClickHandler = ({ setFieldValue }: { setFieldValue: FormikHelpers<StepThreeFormData>["setFieldValue"]; }) => {
@@ -131,7 +127,6 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
               <Field
                 name="address"
                 as={Input}
-                readOnly
                 className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
               />
               <ErrorMessage
@@ -142,7 +137,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">City</label>
-              <Field name="city" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <Field name="city" as={Input}  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
               <ErrorMessage
                 name="city"
                 component="div"
@@ -151,7 +146,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">State</label>
-              <Field name="state" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <Field name="state" as={Input}  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
               <ErrorMessage
                 name="state"
                 component="div"
@@ -160,7 +155,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Country</label>
-              <Field name="country" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <Field name="country" as={Input}  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
               <ErrorMessage
                 name="country"
                 component="div"
@@ -169,7 +164,7 @@ export default function StepThree({ onSubmit, defaultValues }: StepThreeProps) {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Pincode</label>
-              <Field name="pincode" as={Input} readOnly className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
+              <Field name="pincode" as={Input}  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200" />
               <ErrorMessage
                 name="pincode"
                 component="div"

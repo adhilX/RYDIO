@@ -1,23 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
-import { Calendar, MapPin, Search, Car, Sparkles} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useEffect, useRef } from 'react';
+import { MapPin, Car, Sparkles} from 'lucide-react';
+
 import { Card } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
+import {Carousel,CarouselContent,CarouselItem,} from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Navbar from '@/components/user/Navbar';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
+import { findLocation } from '@/services/user/locationService';
+import VehicleSearchBar from '@/components/user/VehicleSearchBar';
+import { setLocation } from '@/store/slice/user/locationSlice';
+import { resetSearchDate } from '@/store/slice/user/SearchDateSlice';
 
 const LandingPage = () => {
-  const [location, setLocation] = useState('');
-  const [pickupDate, setPickupDate] = useState('');
-  const [returnDate, setReturnDate] = useState('');
-  const [isFormComplete, setIsFormComplete] = useState(false);
-  const [showSparkles, setShowSparkles] = useState(false);
-
   // Hero carousel images
   const heroImages = [
     "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
@@ -25,24 +20,30 @@ const LandingPage = () => {
     "https://images.unsplash.com/photo-1471479917193-f00955256257?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
   ];
-
+const dispatch = useDispatch()
   // Auto-play plugin for the carousel
   const plugin = useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false })
   );
 
+const {latitude,longitude} = useSelector((state:RootState)=>state.location)
+const fetchLocation = async (latitude: number, longitude: number) => {
+  const data = await findLocation(latitude, longitude);
+  return data.display_name;
+}
+
+useEffect(() => {
+  dispatch(resetSearchDate())
+    if (latitude && longitude) {
+      (async () => {
+        const address = await fetchLocation(latitude, longitude);
+        setLocation(address);
+      })();
+    }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [latitude, longitude]);
 
 
-  useEffect(() => {
-    const complete = location && pickupDate && returnDate;
-    setIsFormComplete(!!complete);
-  }, [location, pickupDate, returnDate]);
-
-  const handleDateChange = (setter: (value: string) => void, value: string) => {
-    setter(value);
-    setShowSparkles(true);
-    setTimeout(() => setShowSparkles(false), 1000);
-  };
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -89,97 +90,9 @@ const LandingPage = () => {
             Premium vehicles, warm service, and unforgettable journeys await you
           </p>
         </div>
-
+        <div className="h-30"></div>
         {/* Search Form */}
-        <div className="max-w-7xl mx-auto mt-50 mb-16">
-          <Card className={`max-w-4xl mx-auto p-8 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-md border-white/20 transition-all duration-500 ${
-            isFormComplete ? 'ring-2 ring-white/50 shadow-white/20' : ''
-          }`}>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="relative group">
-                <label className="block text-sm font-medium text-gray-200 mb-2">
-                  Pick-up Location
-                </label>
-                <div className="relative">
-                  <Input
-                    type="text"
-                    placeholder="Enter city or airport"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    className="pl-12 h-14 rounded-xl border-2 border-white/30 focus:border-white transition-all duration-300 hover:scale-[1.02] text-lg bg-white/10 backdrop-blur-sm text-white placeholder:text-gray-300"
-                  />
-                  <MapPin 
-                    className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-300 transition-all duration-300 ${
-                      location ? 'animate-bounce text-white' : ''
-                    }`} 
-                    size={20} 
-                  />
-                </div>
-              </div>
-
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-200 mb-2">
-                  Pick-up Date
-                </label>
-                <div className="relative">
-                  <Input
-                    type="date"
-                    value={pickupDate}
-                    onChange={(e) => handleDateChange(setPickupDate, e.target.value)}
-                    className="pl-12 h-14 rounded-xl border-2 border-white/30 focus:border-white transition-all duration-300 hover:scale-[1.02] text-lg bg-white/10 backdrop-blur-sm text-white"
-                  />
-                  <Calendar 
-                    className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-300 transition-all duration-300 ${
-                      pickupDate ? 'animate-pulse text-white' : ''
-                    }`} 
-                    size={20} 
-                  />
-                </div>
-              </div>
-
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-200 mb-2">
-                  Return Date
-                </label>
-                <div className="relative">
-                  <Input
-                    type="date"
-                    value={returnDate}
-                    onChange={(e) => handleDateChange(setReturnDate, e.target.value)}
-                    className="pl-12 h-14 rounded-xl border-2 border-white/30 focus:border-white transition-all duration-300 hover:scale-[1.02] text-lg bg-white/10 backdrop-blur-sm text-white"
-                  />
-                  <Calendar 
-                    className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-300 transition-all duration-300 ${
-                      returnDate ? 'animate-pulse text-white' : ''
-                    }`} 
-                    size={20} 
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-end">
-                <Button 
-                  className="w-full h-14 bg-white hover:bg-gray-200 text-black rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 active:rotate-3 transform shadow-lg hover:shadow-xl"
-                  onClick={() => {
-                    console.log('Search clicked!');
-                  }}
-                >
-                  <Search className="mr-2" size={20} />
-                  Search Cars
-                </Button>
-              </div>
-            </div>
-
-            {showSparkles && (
-              <div className="absolute inset-0 pointer-events-none">
-                <Sparkles className="absolute top-4 right-4 text-white animate-ping" size={16} />
-                <Sparkles className="absolute bottom-4 left-4 text-white animate-ping animation-delay-200" size={12} />
-                <Sparkles className="absolute top-1/2 left-1/2 text-white animate-ping animation-delay-400" size={14} />
-              </div>
-            )}
-          </Card>
-        </div>
-
+        <VehicleSearchBar/>
         {/* Feature Cards */}
         <div className="max-w-7xl mx-auto pb-24">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
