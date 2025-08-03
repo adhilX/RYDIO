@@ -20,7 +20,8 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
 // get all vehicles
     const allVehiclesResult = await this.vehicleRepsitory.findVehicle(lat, lon, search, 1, 10000, user_id, filters);
     if (!allVehiclesResult) return null;
- // get all booked vehicle ids
+    console.log(allVehiclesResult,'allVehiclesResult')
+// get all booked vehicle ids
     const bookedVehicleIds = await this.bookigRepository.bookedVehicle(pickupDate, returnDate);
     
     // get all available vehicles
@@ -37,7 +38,6 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
     const plainVehicles = JSON.parse(JSON.stringify(paginatedAvailableVehicles));
 
     const cleanVehicles = (plainVehicles as any[]).map(({ owner_id, location_id, is_available, admin_approve, createdAt, updatedAt, registration_number, description, ...rest }) => rest);
-
     return {
       vehicles: cleanVehicles,
       total: totalAvailable 

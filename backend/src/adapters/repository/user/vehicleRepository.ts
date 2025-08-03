@@ -41,25 +41,28 @@ export class VehicleRepository implements IvehicleRepository {
     ]);
     return { vehicle, total };
   }
-
-  async findVehicle(lat: number,lon: number,search: string, page: number,limit: number,user_id:string,filters: {fuel_types?: string[],seats?: number[],car_types?: string[],transmission?: string[],distance_range?: number}): Promise<{ vehicles: IVehicle[], total: number } | null> {
+async findVehicle(lat: number, lon: number, search: string, page: number, limit: number, user_id: string, filters: any): Promise<{ vehicles: IVehicle[], total: number } | null> {
+  
   const locations = await locationModel.find({
     location: {
       $near: {
         $geometry: { type: 'Point', coordinates: [lon, lat] },
-        $maxDistance: 10000
+        $maxDistance: filters.distance_range * 1000
       }
     }
   });
 
-  if (!locations.length) return null;
+  if (!locations.length) {
+    return null;
+  }
 
-  const locationIds = locations.map(loc => loc._id.toString());
+  const locationIds = locations.map(loc => loc._id);
+  
   const query: any = {
     location_id: { $in: locationIds },
     admin_approve: 'accepted',
-    is_available : true,
-    owner_id: { $ne:user_id},
+    is_available: true,
+    owner_id: { $ne: user_id }
   };
   if (search) {
     query.$or = [
@@ -85,17 +88,15 @@ export class VehicleRepository implements IvehicleRepository {
       query.automatic = { $in: filters.transmission };
     }
   }
-
+  
   const skip = (page - 1) * limit;
-console.log(query)
   const [vehicles, total] = await Promise.all([
     VehicleModel.find(query).skip(skip).limit(limit),
     VehicleModel.countDocuments(query)
   ]);
-
+ 
   return { vehicles, total };
 }
-
   async getVehicleDetails(Id: string): Promise<IVehicle | null> {
     return await VehicleModel.findById(Id).populate('owner_id').populate('location_id')
   }

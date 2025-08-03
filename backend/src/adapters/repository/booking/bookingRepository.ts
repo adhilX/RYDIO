@@ -54,7 +54,7 @@ export class BookingRepository implements IbookingRepostory {
                { "user.name": { $regex: search, $options: "i" } },
                { "vehicle.name": { $regex: search, $options: "i" } },
                { "vehicle.brand": { $regex: search, $options: "i" } },
-               // { "_id": { $regex: search, $options: "i" } }
+               { "booking_id": { $regex: search, $options: "i" } }
           ];
 
            if (isValidObjectId(search)) {

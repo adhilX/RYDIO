@@ -8,7 +8,8 @@ import {
   Home,
   LogOut,
   Car,
-  MessageCircleWarning
+  MessageCircleWarning,
+  Wallet
 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -28,7 +29,8 @@ const menuItems = [
   { id: 'vehicle', label: 'vehicle Management', icon: Car, path:'/admin/vehicle' },
   { id: 'vehicle_requests', label: 'vehicle Requests', icon:MessageCircleWarning, path:'/admin/vehicle_requests'},
   { id: 'idproof-requests', label: 'ID proof Requests', icon:MessageCircleWarning, path:'/admin/idproof-requests'},
-  {id:'bookings',label:'Bookings',icon:MessageCircleWarning,path:'/admin/bookings'}
+  {id:'bookings',label:'Bookings',icon:MessageCircleWarning,path:'/admin/bookings'},
+  {id:'wallet',label:'Wallet',icon:Wallet,path:'/admin/wallet'}
 ];
 
 export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollapse, onLogout }: SidebarProps) {
@@ -48,7 +50,7 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
 
   return (
     <motion.div
-      className="bg-black/90 backdrop-blur-xl border-r border-[#e63946]/30 shadow-2xl flex flex-col h-screen relative z-50 rounded-r-2xl"
+      className="bg-black/90 backdrop-blur-xl border-r border-[#e63946]/30 shadow-2xl flex flex-col h-screen sticky top-0 z-50 rounded-r-2xl"
       variants={sidebarVariants}
       animate={isCollapsed ? 'collapsed' : 'expanded'}
       transition={{ duration: 0.3, ease: 'easeInOut' }}

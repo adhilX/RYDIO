@@ -55,6 +55,9 @@ import { GetBookedVehicleController } from "../../adapters/controllers/user/book
 import { GetBookedVehicleUsecase } from "../../useCases/user/booking/GetBookedVehicleUsecase"
 import { GetUserController } from "../../adapters/controllers/user/profile-managment/getUserController"
 import { GetUserUsecase} from "../../useCases/user/auth/GetuserUsecase"
+import { GetWishlistController } from "../../adapters/controllers/user/wishlist-magagment/getWishlistController"
+import { GetWishlistUseCase } from "../../useCases/user/wishlist/getWishlistUseCase"
+import { WishlistRepository } from "../../adapters/repository/user/wishlistRepository"
 
 // regester user 
 const otpService = new OtpService()
@@ -169,3 +172,9 @@ export const changeVehicleStatusController = new ChangeVehicleStatusController(c
 
 const getBookedVehicleUsecase = new GetBookedVehicleUsecase(bookingRepository)
 export const getBookedVehicleController = new GetBookedVehicleController(getBookedVehicleUsecase)
+
+
+//------get wishlist details---------
+const wishlistRepository = new WishlistRepository() 
+const getWishlistUseCase = new GetWishlistUseCase(wishlistRepository)
+export const getWishlistController = new GetWishlistController(getWishlistUseCase)

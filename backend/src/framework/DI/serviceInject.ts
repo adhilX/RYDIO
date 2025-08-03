@@ -5,6 +5,7 @@ import { UserBlockCheckingMiddleware } from "../../adapters/middlewares/user/use
 import { AdminRepository } from "../../adapters/repository/admin/adminRepository";
 import { UserRepostory } from "../../adapters/repository/user/userRepository";
 import { RefreshTokenUseCase } from "../../useCases/auth/RefreshTokenUsecase";
+import { IdGeneratorService } from "../services/idGenerotorSevice";
 import { JwtService } from "../services/jwtService";
 import { RedisService } from "../services/redisService";
 import { TokenService } from "../services/tokenService";
@@ -26,5 +27,7 @@ export const injectedVerfyToken = verifyTokenAndCheckBlackList(tokenService)
 
 const refreshTokenUseCase = new RefreshTokenUseCase(jwtService,userRepository,adminRepository)
 export const refreshTokenController = new RefreshTokenController(refreshTokenUseCase)
-
 export const tokenTimeExpiryValidationMiddleware = TokenTimeExpiryValidationMiddleware(jwtService)
+
+
+export const idGeneratorService = new IdGeneratorService();

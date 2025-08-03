@@ -17,6 +17,7 @@ export enum PaymentStatus {
 }
 
 export interface Ibooking {
+  booking_id: string;
   _id?: ObjectId;
   user_id: string|ObjectId;
   vehicle_id: ObjectId|string;

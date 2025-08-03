@@ -2,6 +2,7 @@ import { BookingData, BookingStatus, Ibooking, PaymentStatus } from "../../../do
 import { IbookingRepostory } from "../../../domain/interface/repositoryInterface/IbookingRepository"
 import { IredisService } from "../../../domain/interface/serviceInterface/IredisService"
 import { IcreateBookingUsecase } from "../../../domain/interface/usecaseInterface/user/booking/IcreateBookingUsecase"
+import { idGeneratorService } from "../../../framework/DI/serviceInject"
 
 export class CreateBookingUsecase implements IcreateBookingUsecase {
   constructor(private bookingRepository: IbookingRepostory, private redisService: IredisService) {
@@ -18,9 +19,10 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
     const existingBooking = await this.bookingRepository.findByPaymentIntentId(stripeIntentId);
     if (existingBooking) return existingBooking;
 
-    
+    const booking_id = await idGeneratorService.generateBookingId();
 console.log(bookingData)
     const newBooking: Ibooking = {
+      booking_id,
       user_id,
       vehicle_id: bookingData.vehicle_id,
       address: bookingData.address,

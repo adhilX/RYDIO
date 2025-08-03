@@ -2,6 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Input } from '@/components/ui/input';
 import type { StepOneFormData } from '@/Types/User/addVehicle/TaddVehicle';
+import React from 'react';
 
 
 
@@ -116,4 +117,4 @@ const StepOne = ({ onSubmit, defaultValues }: StepOneProps) => {
   );
 };
 
-export default StepOne;
+export default React.memo(StepOne);

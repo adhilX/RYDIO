@@ -56,28 +56,38 @@ const navigate = useNavigate()
   }
 
   const handleApi = async () => {
-    console.log(formData)
-    if (!formData.stepOne || !formData.stepTwo || !formData.stepThree || !user?._id) {
-      alert("Missing form data or user info.");
-      return;
-    }
+    try {
+      console.log(formData)
+      if (!formData.stepOne || !formData.stepTwo || !formData.stepThree || !user?._id) {
+        alert("Missing form data or user info.");
+        return;
+      }
+    
   
-
-    const vehicle: Vehicle = {
-      ...formData.stepOne,
-      owner_id: user,
-      admin_approve: 'pending',
-      image_urls: Array.isArray(formData.stepTwo.image_urls)
-        ? formData.stepTwo.image_urls
-        : [],
-    };
-
-    const Location = {...formData.stepThree}
-    await postVehicle(vehicle,Location);
-    toast.success("Vehicle uploaded successfully.");
-    setStep(1);
-    navigate('/userProfile/vehicles')
-    setFormData({});
+      const vehicle: Vehicle = {
+        ...formData.stepOne,
+        owner_id: user,
+        admin_approve: 'pending',
+        image_urls: Array.isArray(formData.stepTwo.image_urls)
+          ? formData.stepTwo.image_urls
+          : [],
+      };
+  
+      const Location = {...formData.stepThree}
+      await postVehicle(vehicle,Location);
+      toast.success("Vehicle uploaded successfully.");
+      setStep(1);
+      navigate('/userProfile/vehicles')
+      setFormData({});
+      
+    } catch (error) {
+    if (error instanceof Error) {
+      toast.error(error.message); 
+    } else {
+      toast.error("Something went wrong");
+    }
+      console.error('Error while submitting vehicle:', error);
+    }
 
   };
 
