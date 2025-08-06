@@ -39,20 +39,20 @@ import { SearchVehicleUsecase } from "../../useCases/user/vehicle/searchVehicleU
 import { SearchVehicleController } from "../../adapters/controllers/user/vehicle-mangment/searchVehicleController"
 import { VehilceDetailsController } from "../../adapters/controllers/user/vehicle-mangment/vehilceDetailsController"
 import { VehicleDetailsUsecase } from "../../useCases/user/vehicle/vehicleDetailsUsecase"
-import { CreateBookingUsecase } from "../../useCases/user/booking/createBookingUsecase"
+import { CreateBookingUsecase } from "../../useCases/booking/createBookingUsecase"
 import { CreateBookingController } from "../../adapters/controllers/user/booking-managment/createBookingController"
 import { CreatePaymentIntentController } from "../../adapters/controllers/user/booking-managment/createPaymentIntentController"
-import { CreatePaymentIntentUsecase } from "../../useCases/user/booking/createPaymentIntentUsecase"
+import { CreatePaymentIntentUsecase } from "../../useCases/booking/createPaymentIntentUsecase"
 import { StripeService } from "../services/paymentSerivce"
 import { MyBookingController } from "../../adapters/controllers/user/booking-managment/myBookingController"
-import { MyBookingUsecase } from "../../useCases/user/booking/myBookingUsecase"
+import { MyBookingUsecase } from "../../useCases/booking/myBookingUsecase"
 import { BookingRepository } from "../../adapters/repository/booking/bookingRepository"
 import { DeleteVehicleUsecase } from "../../useCases/user/vehicle/deleteVehicleUsecase"
 import { DeleteVehicleController } from "../../adapters/controllers/user/vehicle-mangment/deleteVehicleController"
 import { ChangeVehicleStatusUsecase } from "../../useCases/user/vehicle/changeVehicleStatusUsecase"
 import { ChangeVehicleStatusController } from "../../adapters/controllers/user/vehicle-mangment/changeVehicleStatusController"
 import { GetBookedVehicleController } from "../../adapters/controllers/user/booking-managment/getBookedVehicleController"
-import { GetBookedVehicleUsecase } from "../../useCases/user/booking/GetBookedVehicleUsecase"
+import { GetBookedVehicleUsecase } from "../../useCases/booking/GetBookedVehicleUsecase"
 import { GetUserController } from "../../adapters/controllers/user/profile-managment/getUserController"
 import { GetUserUsecase} from "../../useCases/user/auth/GetuserUsecase"
 import { GetWishlistController } from "../../adapters/controllers/user/wishlist-magagment/getWishlistController"
@@ -61,6 +61,7 @@ import { WishlistRepository } from "../../adapters/repository/user/wishlistRepos
 import { WalletRepository } from "../../adapters/repository/wallet/walletRepository"
 import { GetWalletUsecase } from "../../useCases/user/wallet/getWalletUsecase"
 import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController"
+import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository"
 
 // regester user 
 const otpService = new OtpService()
@@ -72,6 +73,7 @@ const verifyOtpUsecase = new VerifyOtpUsecase(otpService)
 const hashPassword = new HashPassword()
 const redisService = new RedisService()
 const walletRepository = new WalletRepository()
+const adminWalletRepository = new AdminWalletRepository()
 const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword,walletRepository)
 export const sendendOtpController = new SendOtpController(sendOtpUserUsecase)
 export const  userRegisterController = new UserRegisterController(verifyOtpUsecase,createUserUsecase)
@@ -151,7 +153,7 @@ export const uploadIdProofController = new UploadIdProofController(uploadIdProof
 
 //----------create Booking------------
 
-const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,walletRepository,vehicleRepository)
+const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 
 //--------create payment intent------------

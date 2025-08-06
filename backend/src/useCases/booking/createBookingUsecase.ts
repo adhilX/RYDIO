@@ -1,17 +1,17 @@
-import { BookingData, BookingStatus, Ibooking, PaymentStatus, PaymentType } from "../../../domain/entities/BookingEntities"
-import { IbookingRepostory } from "../../../domain/interface/repositoryInterface/IbookingRepository"
-import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository"
-import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository"
-import { IredisService } from "../../../domain/interface/serviceInterface/IredisService"
-import { IcreateBookingUsecase } from "../../../domain/interface/usecaseInterface/user/booking/IcreateBookingUsecase"
-import { idGeneratorService } from "../../../framework/DI/serviceInject"
+import { BookingData, BookingStatus, Ibooking, PaymentStatus, PaymentType } from "../../domain/entities/BookingEntities"
+import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository"
+import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
+import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository"
+import { IredisService } from "../../domain/interface/serviceInterface/IredisService"
+import { IcreateBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/IcreateBookingUsecase"
+import { idGeneratorService } from "../../framework/DI/serviceInject"
 
 export class CreateBookingUsecase implements IcreateBookingUsecase {
-  constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _walletRepository: IWalletRepository, private _vehicleRepository: IvehicleRepository) {
+  constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository) {
     this._bookingRepository = _bookingRepository
     this._redisService = _redisService
-    this._walletRepository = _walletRepository
     this._vehicleRepository = _vehicleRepository
+    this._adminWalletRepository = _adminWalletRepository
   }
 
   async createBooking({ bookingData, user_id, stripeIntentId }: { bookingData: BookingData, user_id: string, stripeIntentId: string }): Promise<any> {
@@ -24,16 +24,16 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
     const existingBooking = await this._bookingRepository.findByPaymentIntentId(stripeIntentId);
     if (existingBooking) return existingBooking;
 
-    await this._walletRepository.updateWalletBalance(owner_id, -bookingData.total_amount);
+    await this._adminWalletRepository.updateWalletBalance(bookingData.total_amount);
     const booking_id = await idGeneratorService.generateBookingId();
-console.log(bookingData)
+
     const newBooking: Ibooking = {
       booking_id,
       user_id,
       vehicle_id: bookingData.vehicle_id,
       address: bookingData.address,
       city: bookingData.city,
-      payment_type: PaymentType.Card,
+      payment_type: PaymentType.Card, 
       start_date: new Date(bookingData.start_date),
       end_date: new Date(bookingData.end_date),
       total_amount: bookingData.total_amount,

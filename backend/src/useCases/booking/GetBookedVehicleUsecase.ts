@@ -1,5 +1,5 @@
-import { IbookingRepostory } from "../../../domain/interface/repositoryInterface/IbookingRepository";
-import { IGetBookedVehicleUsecase } from "../../../domain/interface/usecaseInterface/user/booking/IGetBookedVehicleUsecase";
+import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IGetBookedVehicleUsecase } from "../../domain/interface/usecaseInterface/user/booking/IGetBookedVehicleUsecase";
 
 export class GetBookedVehicleUsecase implements IGetBookedVehicleUsecase {
     private bookingRepository: IbookingRepostory;

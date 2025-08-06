@@ -1,6 +1,6 @@
-import { Ibooking } from "../../../domain/entities/BookingEntities";
-import { IbookingRepostory } from "../../../domain/interface/repositoryInterface/IbookingRepository";
-import { ImyBookingUsecase } from "../../../domain/interface/usecaseInterface/user/booking/ImyBookingUsecase";
+import { Ibooking } from "../../domain/entities/BookingEntities";
+import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { ImyBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/ImyBookingUsecase";
 
 export class MyBookingUsecase implements ImyBookingUsecase{
     constructor(private bookingRepository:IbookingRepostory){
