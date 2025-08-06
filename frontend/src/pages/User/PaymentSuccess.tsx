@@ -1,12 +1,12 @@
 import { motion } from "framer-motion"
 import { CheckCircle, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import QRGenerator from "@/components/user/QRGenerator"
 
 const PaymentSuccess = () => {
   const navigate = useNavigate()
-
+  const {booking_id} = useLocation().state as { booking_id: string } 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#232b3a] via-[#1a1f2a] to-[#232b3a] text-white flex items-center justify-center">
       <div className="max-w-md mx-auto px-4">
@@ -36,7 +36,7 @@ const PaymentSuccess = () => {
             Booking Successful!
           </motion.h1>
 
-          <QRGenerator  />
+          <QRGenerator booking_id={booking_id}/>
           {/* Success Message */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}

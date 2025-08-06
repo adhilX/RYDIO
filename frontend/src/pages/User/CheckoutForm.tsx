@@ -63,7 +63,7 @@ const CheckoutForm = () => {
         console.log(bookedData)
         setPaymentStatus("Payment Successful");
         toast.success("Booking successful");
-        navigate("/payment-success",{replace:true});
+        navigate("/payment-success",{replace:true, state: { booking_id: bookedData.booking_id } });
       } catch (error) {
         console.log(error)
         setErrorMsg("Booking failed. Please contact support.");
