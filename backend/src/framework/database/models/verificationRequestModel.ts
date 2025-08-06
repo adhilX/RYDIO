@@ -1,6 +1,6 @@
 
 import { Document, model, ObjectId } from "mongoose";
-import { IVerificationRequest } from "../../../domain/entities/IVerificationRequest";
+import { IVerificationRequest } from "../../../domain/entities/VerificationRequest";
 import { verificationRequestSchema } from "../schema/VerificationRequestSchema";
 
 export interface IVerificationRequestModel extends Omit<IVerificationRequest, '_id'>, Document {

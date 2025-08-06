@@ -39,7 +39,15 @@ console.log(bookingData)
       total_amount: bookingData.total_amount,
       payment_intent_id: stripeIntentId,
       status: BookingStatus.booked,
-      payment_status: PaymentStatus.Paid
+      payment_status: PaymentStatus.Paid,
+      
+      finance: {
+        security_deposit: 1000,
+        fine_amount: 0,
+        admin_commission: Math.round(bookingData.total_amount * 0.1),
+        owner_earnings: Math.round(bookingData.total_amount * 0.9),
+        is_late_return: false
+      }
     }
 
     return await this._bookingRepository.createBooking(newBooking)

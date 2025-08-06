@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import { IVerificationRequest } from "./IVerificationRequest";
+import { IVerificationRequest } from "./VerificationRequest";
 
 export enum BookingStatus {
   Pending = 'pending',
@@ -22,9 +22,9 @@ export enum PaymentType {
 
 export interface Ibooking {
   booking_id: string;
-  _id?: ObjectId;
-  user_id: string | ObjectId;
-  vehicle_id: string | ObjectId;
+  _id?: string;
+  user_id: string|ObjectId;
+  vehicle_id: string|ObjectId;
   address: string;
   city: string;
 

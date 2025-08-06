@@ -1,4 +1,4 @@
-import { IVerificationRequest } from "../../../domain/entities/IVerificationRequest";
+import { IVerificationRequest } from "../../../domain/entities/VerificationRequest";
 import { User } from "../../../domain/entities/userEntities";
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
 import { IadminRepository } from "../../../domain/interface/repositoryInterface/IadminRepository";
@@ -75,11 +75,21 @@ export class AdminRepository implements IadminRepository {
  async getIdProof(status: "pending" | "approved" | "rejected", page: number, limit: number): Promise<{idProof:IVerificationRequest[]; total:number }| null> {
 
     const skip = (page - 1) * limit;
-    const [idProof,total]= await Promise.all([
+    const [idProofDocs,total]= await Promise.all([
 
         verificationRequestModel.find({status}).skip(skip).limit(limit),
         verificationRequestModel.countDocuments({status})
     ])
+    
+    const idProof: IVerificationRequest[] = idProofDocs.map(doc => ({
+        _id: doc._id.toString(),
+        idProofUrl: doc.idProofUrl,
+        status: doc.status,
+        reason: doc.reason,
+        createdAt: doc.createdAt,
+        updatedAt: doc.updatedAt
+    }));
+    
     return {idProof,total}
     }
 
