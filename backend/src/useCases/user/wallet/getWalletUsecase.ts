@@ -1,11 +1,11 @@
 import { IWallet } from "../../../domain/entities/walletEnties";
-import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
+import { IAdminWalletRepository } from "../../../domain/interface/repositoryInterface/IAdminWalletRepository";
 import { IgetWalletUsecase } from "../../../domain/interface/usecaseInterface/user/wallet/IgetWalletUsecase";
 
 export class GetWalletUsecase implements IgetWalletUsecase {
-    constructor(private walletRepository: IWalletRepository) {}
+    constructor(private _adminWalletRepository: IAdminWalletRepository) {}
 
-    async getWalletByUserId(userId: string): Promise<IWallet | null> {
-        return this.walletRepository.getWalletByUserId(userId);
+    async getWalletByUserId(): Promise<IWallet | null> {
+        return this._adminWalletRepository.getwalletDetails();
     }
 }

@@ -1,119 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Wallet, 
-  TrendingUp, 
-  DollarSign, 
-  Calendar,
-  Filter,
-  Download,
-  RefreshCw,
-  CreditCard,
-  ArrowUpRight,
-  ArrowDownLeft,
-  Eye,
-  EyeOff
-} from 'lucide-react';
+import { Wallet, TrendingUp, DollarSign, Calendar,Filter,RefreshCw,CreditCard,ArrowUpRight,ArrowDownLeft} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Pagination from '@/components/Pagination';
+import { getwallet } from '@/services/admin/walletServece';
 
 // Dummy transaction data
 const dummyTransactions = [
-  {
-    id: 'TXN001',
-    type: 'credit',
-    amount: 2500.00,
-    description: 'Commission from Vehicle Booking #VB2024001',
-    date: '2024-08-03T10:30:00Z',
-    status: 'completed',
-    category: 'commission'
-  },
-  {
-    id: 'TXN002',
-    type: 'debit',
-    amount: 150.00,
-    description: 'Platform Maintenance Fee',
-    date: '2024-08-03T09:15:00Z',
-    status: 'completed',
-    category: 'fee'
-  },
-  {
-    id: 'TXN003',
-    type: 'credit',
-    amount: 1800.00,
-    description: 'Commission from Vehicle Booking #VB2024002',
-    date: '2024-08-02T16:45:00Z',
-    status: 'completed',
-    category: 'commission'
-  },
-  {
-    id: 'TXN004',
-    type: 'credit',
-    amount: 3200.00,
-    description: 'Premium Subscription Revenue',
-    date: '2024-08-02T14:20:00Z',
-    status: 'completed',
-    category: 'subscription'
-  },
-  {
-    id: 'TXN005',
-    type: 'debit',
-    amount: 500.00,
-    description: 'Refund to User #U2024015',
-    date: '2024-08-02T11:30:00Z',
-    status: 'completed',
-    category: 'refund'
-  },
-  {
-    id: 'TXN006',
-    type: 'credit',
-    amount: 4500.00,
-    description: 'Commission from Vehicle Booking #VB2024003',
-    date: '2024-08-01T18:00:00Z',
-    status: 'completed',
-    category: 'commission'
-  },
-  {
-    id: 'TXN007',
-    type: 'debit',
-    amount: 200.00,
-    description: 'Payment Gateway Charges',
-    date: '2024-08-01T15:45:00Z',
-    status: 'completed',
-    category: 'fee'
-  },
-  {
-    id: 'TXN008',
-    type: 'credit',
-    amount: 2100.00,
-    description: 'Late Fee Collection',
-    date: '2024-08-01T12:15:00Z',
-    status: 'completed',
-    category: 'fee'
-  }
+
 ];
 
 type TransactionType = 'all' | 'credit' | 'debit';
 type TransactionCategory = 'all' | 'commission' | 'fee' | 'subscription' | 'refund';
 
 function WalletManagement() {
-  const [balanceVisible, setBalanceVisible] = useState(true);
   const [filterType, setFilterType] = useState<TransactionType>('all');
   const [filterCategory, setFilterCategory] = useState<TransactionCategory>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
+  const [totalBalance, setTotalBalance] = useState(0);
 
-  // Calculate totals
-  const totalBalance = 45750.00;
-  const totalCredits = dummyTransactions
-    .filter(t => t.type === 'credit')
-    .reduce((sum, t) => sum + t.amount, 0);
-  const totalDebits = dummyTransactions
-    .filter(t => t.type === 'debit')
-    .reduce((sum, t) => sum + t.amount, 0);
+  useEffect(() => {
+ const fetchData = async () => {
+    const walletData = await getwallet()
+    setTotalBalance(walletData.balance || 0);
+
+ }
+fetchData()
+setCurrentPage(1);
+  }, [filterType, filterCategory]);
 
   // Filter transactions
   const filteredTransactions = dummyTransactions.filter(transaction => {
@@ -142,13 +60,6 @@ function WalletManagement() {
     setIsRefreshing(false);
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 2
-    }).format(amount);
-  };
 
   const formatDate = (dateString: string) => {
     return new Intl.DateTimeFormat('en-IN', {
@@ -204,19 +115,12 @@ function WalletManagement() {
             size="sm"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="bg-black/80 border-black/60 text-white hover:bg-black/60 backdrop-blur-xl"
+            className="bg-black/80 border-black/60 text-white cursor-pointer hover:bg-black/60 backdrop-blur-xl"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="bg-black/80 border-black/60 text-white hover:bg-black/60 backdrop-blur-xl"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
+
         </div>
       </motion.div>
 
@@ -228,20 +132,13 @@ function WalletManagement() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium opacity-90">Total Balance</CardTitle>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setBalanceVisible(!balanceVisible)}
-                  className="h-6 w-6 p-0 text-white hover:bg-white/20"
-                >
-                  {balanceVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                </Button>
+
                 <DollarSign className="w-5 h-5" />
               </div>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">
-                {balanceVisible ? formatCurrency(totalBalance) : '••••••••'}
+              {totalBalance }
               </div>
               <p className="text-xs opacity-80 mt-1">
                 <TrendingUp className="w-3 h-3 inline mr-1" />
@@ -260,7 +157,7 @@ function WalletManagement() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {balanceVisible ? formatCurrency(totalCredits) : '••••••••'}
+                  ••••••••
               </div>
               <p className="text-xs text-green-400 mt-1">
                 +8 transactions this month
@@ -278,7 +175,7 @@ function WalletManagement() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {balanceVisible ? formatCurrency(totalDebits) : '••••••••'}
+                ••••••••
               </div>
               <p className="text-xs text-red-400 mt-1">
                 3 transactions this month
@@ -374,7 +271,7 @@ function WalletManagement() {
                       transaction.type === 'credit' ? 'text-green-400' : 'text-red-400'
                     }`}>
                       {transaction.type === 'credit' ? '+' : '-'}
-                      {balanceVisible ? formatCurrency(transaction.amount) : '••••••'}
+                      '••••••'
                     </p>
                     <p className="text-xs text-gray-400 uppercase">{transaction.status}</p>
                   </div>

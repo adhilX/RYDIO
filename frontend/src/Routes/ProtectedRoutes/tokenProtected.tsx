@@ -16,7 +16,7 @@ const TokenProtected: React.FC<ProtectedRouteProps> = ({ children, isAdmin = fal
     );
   
     if (!token) {
-      return <Navigate to={isAdmin ? "/admin/login" : "/login"} replace />;
+      return <Navigate to={isAdmin ? "/admin/login" : "/"} replace />;
     }
   
     return <>{children}</>;

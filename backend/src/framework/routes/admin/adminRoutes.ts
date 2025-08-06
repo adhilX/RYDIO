@@ -1,9 +1,7 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController } from "../../DI/adminInject";
+import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, getWalletController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController } from "../../DI/adminInject";
 import { injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
-import { myBookingController } from "../../DI/userInject";
-
 export class AdminRoutes {
     public AdminRoute: Router
 
@@ -45,8 +43,11 @@ export class AdminRoutes {
         this.AdminRoute.patch('/vendor-access/:userId',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
            vendorAccessController.handleVendorAccess(req,res)
          })
-        this.AdminRoute.post    ('/bookings',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
+        this.AdminRoute.post('/bookings',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
            getBookingController.getBookingData(req,res)
+        })
+        this.AdminRoute.get('/get-wallet',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
+           getWalletController.getWalletDetails(req,res)
         })
     }
 }
