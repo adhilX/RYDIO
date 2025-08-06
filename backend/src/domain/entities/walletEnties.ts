@@ -1,4 +1,5 @@
 export interface IWallet{
-    user_id: string;
+    userId: string;
     balance: number;
-}
+    transcations: string[]
+    }

@@ -3,8 +3,15 @@ import { IWallet } from "../../../domain/entities/walletEnties";
 
 export const walletSchema = new Schema<IWallet>(
     {
-        user_id: { type: String, required: true },
+        userId: { type: String, required: true },
         balance: { type: Number, required: true, default: 0 },
+        transcations: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'transaction',
+                required: true
+            }
+        ]
     }
-    ,{timestamps:true}
+    , { timestamps: true }
 )
