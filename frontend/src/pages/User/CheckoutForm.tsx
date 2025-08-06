@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { CardElement, useElements, useStripe, } from "@stripe/react-stripe-js";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createBooking } from "@/services/user/bookingService";
@@ -138,4 +138,4 @@ const CheckoutForm = () => {
   );
 };
 
-export default CheckoutForm;
+export default React.memo(CheckoutForm);

@@ -3,9 +3,9 @@ import { HttpStatus } from "../../../domain/entities/httpStatus";
 import { IrefreshTokenUseCase } from "../../../domain/interface/usecaseInterface/auth/IrefreshTokenUseCase";
 
 export class RefreshTokenController {
-    private refreshTokenUseCase: IrefreshTokenUseCase
+    private _refreshTokenUseCase: IrefreshTokenUseCase
     constructor(refreshTokenUseCase: IrefreshTokenUseCase) {
-        this.refreshTokenUseCase = refreshTokenUseCase
+        this._refreshTokenUseCase = refreshTokenUseCase
     }
     async handleRefreshToken(req: Request, res: Response): Promise<void> {
         try {
@@ -14,7 +14,7 @@ export class RefreshTokenController {
                 res.status(HttpStatus.BAD_REQUEST).json({ error: "No refreshToken found" })
                 return
             }
-            const newAccessToken = await this.refreshTokenUseCase.execute(refreshToken)
+            const newAccessToken = await this._refreshTokenUseCase.execute(refreshToken)
             res.status(HttpStatus.OK).json({message:'New Access Token Created',newAccessToken})
         } catch (error) {
             console.log('error while handling refresh Token', error)

@@ -6,9 +6,10 @@ import type { Ilocation } from "../location"
 
 export type BookingStatus = 'pending' | 'booked' | 'ongoing' | 'cancelled' | 'completed'
 export type PaymentStatus = 'pending' | 'succeeded' | 'failed' | 'paid'
-
+export type PaymentType = 'card' | 'wallet'
 export interface IbookedData {
     _id?: string
+    booking_id: string
     vehicle: Vehicle
     location:Ilocation
     user: Iuser
@@ -22,5 +23,6 @@ export interface IbookedData {
     payment_intent_id: string
     status: BookingStatus      
     payment_status: PaymentStatus
+    payment_type: PaymentType;
     createdAt: Date
 }

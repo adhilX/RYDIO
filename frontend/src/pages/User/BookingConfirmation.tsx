@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { motion } from "framer-motion"
 import { ArrowLeft, Car, Fuel, Users, Settings, MapPin, Phone, Mail, CheckCircle, Calendar, CreditCard, Sparkles } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -454,4 +454,4 @@ const BookingConfirmation = () => {
   )
 }
 
-export default BookingConfirmation
+export default React.memo(BookingConfirmation)

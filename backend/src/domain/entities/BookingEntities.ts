@@ -1,5 +1,6 @@
 import { ObjectId } from "mongoose";
 import { IVerificationRequest } from "./IVerificationRequest";
+import path from "path";
 
 export enum BookingStatus {
   Pending = 'pending',
@@ -15,7 +16,10 @@ export enum PaymentStatus {
   Failed = 'failed',
   Paid = 'paid',
 }
-
+export enum PaymentType {
+  Card = 'card',
+  Wallet = 'wallet',
+}
 export interface Ibooking {
   booking_id: string;
   _id?: ObjectId;
@@ -23,10 +27,10 @@ export interface Ibooking {
   vehicle_id: ObjectId|string;
   address: string;
   city: string;
-  id_proof: string|ObjectId;
   start_date: Date;
   end_date: Date;
   total_amount: number;
+  payment_type: PaymentType;
   status: BookingStatus;
   cancellation_reason?: string;
   payment_intent_id: string;

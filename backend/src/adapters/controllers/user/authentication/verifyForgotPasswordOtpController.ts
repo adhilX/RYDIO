@@ -2,17 +2,17 @@ import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/
 import { Request, Response } from "express";
 
 export class VerifyForgotPassowordOtpController {
-    private verifyOtpUsecase : IverfyOtpUsecase
+    private _verifyOtpUsecase : IverfyOtpUsecase
 
 
     constructor(verifyOtpUsecase:IverfyOtpUsecase){
-        this.verifyOtpUsecase = verifyOtpUsecase
+        this._verifyOtpUsecase = verifyOtpUsecase
     }
      async verify(req: Request, res: Response): Promise<void> {
 
         const { email, otp } = req.body as { email: string; otp: string };
         try {
-            const verify = await this.verifyOtpUsecase.verifyOtp(email, otp);
+            const verify = await this._verifyOtpUsecase.verifyOtp(email, otp);
             if (verify) {
                 res.status(200).json({ message: 'OTP verified successfully', data: verify });
             } else {

@@ -58,6 +58,9 @@ import { GetUserUsecase} from "../../useCases/user/auth/GetuserUsecase"
 import { GetWishlistController } from "../../adapters/controllers/user/wishlist-magagment/getWishlistController"
 import { GetWishlistUseCase } from "../../useCases/user/wishlist/getWishlistUseCase"
 import { WishlistRepository } from "../../adapters/repository/user/wishlistRepository"
+import { WalletRepository } from "../../adapters/repository/wallet/walletRepository"
+import { GetWalletUsecase } from "../../useCases/user/wallet/getWalletUsecase"
+import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController"
 
 // regester user 
 const otpService = new OtpService()
@@ -68,7 +71,8 @@ const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRe
 const verifyOtpUsecase = new VerifyOtpUsecase(otpService)
 const hashPassword = new HashPassword()
 const redisService = new RedisService()
-const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword)
+const walletRepository = new WalletRepository()
+const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword,walletRepository)
 export const sendendOtpController = new SendOtpController(sendOtpUserUsecase)
 export const  userRegisterController = new UserRegisterController(verifyOtpUsecase,createUserUsecase)
 
@@ -76,12 +80,12 @@ export const  userRegisterController = new UserRegisterController(verifyOtpUseca
 //----------login User-----------
 
 const jwtService = new JwtService()
-const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword)
+const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword,walletRepository)
 export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService)
 
 //-------Google Login ---------
 
-const googleLoginUsecase = new GoogleLoginUsecase(userRepostory)
+const googleLoginUsecase = new GoogleLoginUsecase(userRepostory,walletRepository)
 export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase,redisService)
 
 //-----resendOtp ------------
@@ -147,7 +151,7 @@ export const uploadIdProofController = new UploadIdProofController(uploadIdProof
 
 //----------create Booking------------
 
-const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService)
+const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,walletRepository,vehicleRepository)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 
 //--------create payment intent------------
@@ -173,7 +177,10 @@ export const changeVehicleStatusController = new ChangeVehicleStatusController(c
 const getBookedVehicleUsecase = new GetBookedVehicleUsecase(bookingRepository)
 export const getBookedVehicleController = new GetBookedVehicleController(getBookedVehicleUsecase)
 
-
+//------get wallet details---------
+const getWalletUsecase = new GetWalletUsecase(walletRepository)
+export const getWalletController = new GetWalletController(getWalletUsecase)
+    
 //------get wishlist details---------
 const wishlistRepository = new WishlistRepository() 
 const getWishlistUseCase = new GetWishlistUseCase(wishlistRepository)

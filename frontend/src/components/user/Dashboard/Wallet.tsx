@@ -1,7 +1,9 @@
+import { getWallet } from '@/services/wallet /walletService';
+import type { RootState } from '@/store/store';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-const dummyBalance = 2450.75;
 const dummyTransactions = [
   { id: 1, type: 'credit', amount: 1200, date: '2024-06-01', description: 'Refund from RYDIO' },
   { id: 2, type: 'debit', amount: 350, date: '2024-05-28', description: 'Car Booking Payment' },
@@ -9,19 +11,33 @@ const dummyTransactions = [
   { id: 4, type: 'debit', amount: 200, date: '2024-05-15', description: 'Service Fee' },
   { id: 5, type: 'debit', amount: 100, date: '2024-05-10', description: 'Car Booking Payment' },
 ];
-
 export default function Wallet() {
+  const user = useSelector((state:RootState) => state.auth.user);
+  if (!user) {
+    throw new Error('User ID is not available');
+  }
   const [page, setPage] = useState(1);
+  const [balance, setBalance] = useState(454);
   const perPage = 3;
   const totalPages = Math.ceil(dummyTransactions.length / perPage);
   const paginatedTx = dummyTransactions.slice((page - 1) * perPage, page * perPage);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getWallet(user._id!);
+      setBalance(data.balance);
+    };
+    fetchData();
+  }, [user._id]);
 
   return (
     <div className="w-full p-4 md:p-8 font-sans">
       {/* Balance Card */}
       <div className="bg-gradient-to-r from-[#6DA5C0]/90 to-[#232b3a] rounded-2xl shadow-lg p-8 flex flex-col items-center mb-8">
         <span className="uppercase text-sm tracking-widest text-white/70 font-semibold mb-2">Wallet Balance</span>
-        <span className="text-4xl md:text-5xl font-extrabold text-white mb-2">₹{dummyBalance.toLocaleString()}</span>
+        <span className="text-4xl md:text-5xl font-extrabold text-white mb-2">₹{balance}</span>
         <span className="text-white/60 text-xs">Updated just now</span>
       </div>
 

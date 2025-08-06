@@ -8,4 +8,11 @@ export class IdGeneratorService  implements IIdGeneratorService{
     return `BK${date}${id}`;
   }
 
+  async generateWalletId(): Promise<string> {
+    const date = new Date().toISOString().slice(2, 10).replace(/-/g, ''); 
+    const id = nanoid(6).toUpperCase(); 
+    return `WL${date}${id}`;
+  }
+
 }
+

@@ -3,14 +3,14 @@ import { IgetBookingUsecase } from "../../../../domain/interface/usecaseInterfac
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
 
 export class GetBookingController {
-    constructor(private getBookingUsecase: IgetBookingUsecase) {
-        this.getBookingUsecase = getBookingUsecase
+    constructor(private _getBookingUsecase: IgetBookingUsecase) {
+        this._getBookingUsecase = _getBookingUsecase
     }
 
     async getBookingData(req: Request, res: Response) {
         try {
             const { search, limit, page } = req.body
-            const response = await this.getBookingUsecase.getBookingData(search, limit, page)
+            const response = await this._getBookingUsecase.getBookingData(search, limit, page)
             res.status(HttpStatus.OK).json(response)
 
         } catch (error) {

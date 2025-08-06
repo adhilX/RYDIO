@@ -3,14 +3,14 @@ import { HttpStatus } from "../../../domain/entities/httpStatus";
 import { IgetIdProofUscase } from "../../../domain/interface/usecaseInterface/admin/IgetIdProofUscase";
 
 export class GetIdProofController {
-    constructor(private getIdProofUscase: IgetIdProofUscase) {
-        this.getIdProofUscase = getIdProofUscase;
+    constructor(private _getIdProofUscase: IgetIdProofUscase) {
+        this._getIdProofUscase = _getIdProofUscase;
     }
 
     async getIdProof(req: Request, res: Response): Promise<void> {
         try {
             const {status,currentPage,itemsPerPage} = req.body
-            const vehicle = await this.getIdProofUscase.getIdProof(status,currentPage,itemsPerPage);
+            const vehicle = await this._getIdProofUscase.getIdProof(status,currentPage,itemsPerPage);
             res.status(HttpStatus.OK).json(vehicle);
         } catch (error) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { CheckCircle, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
+import QRGenerator from "@/components/user/QRGenerator"
 
 const PaymentSuccess = () => {
   const navigate = useNavigate()
@@ -35,6 +36,7 @@ const PaymentSuccess = () => {
             Booking Successful!
           </motion.h1>
 
+          <QRGenerator  />
           {/* Success Message */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}

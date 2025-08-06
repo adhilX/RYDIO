@@ -3,12 +3,12 @@ import { IGetWishlistUseCase } from "../../../../domain/interface/usecaseInterfa
 import { Request, Response } from "express"
 
 export class GetWishlistController {
-    constructor(private getWishlistUseCase:IGetWishlistUseCase){}
+    constructor(private _getWishlistUseCase:IGetWishlistUseCase){}
 
     async handleGetWishlist(req:Request,res:Response){
         try {
             const {user_id} = req.body
-            const response = await this.getWishlistUseCase.getWishlistItem(user_id)
+            const response = await this._getWishlistUseCase.getWishlistItem(user_id)
             res.status(HttpStatus.OK).json(response)
         } catch (error) {
             console.log('error while fetching my booking ', error)

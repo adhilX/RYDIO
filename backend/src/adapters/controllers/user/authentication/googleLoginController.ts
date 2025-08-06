@@ -7,33 +7,33 @@ import { IgoogleloginUsecase } from "../../../../domain/interface/usecaseInterfa
 import { IredisService } from "../../../../domain/interface/serviceInterface/IredisService";
 
 export class GoogleLoginController {
-    private jwtService: IjwtService
-    private GoogleLoginUsecase: IgoogleloginUsecase
-    private redisService: IredisService
+    private _jwtService: IjwtService
+    private _GoogleLoginUsecase: IgoogleloginUsecase
+    private _redisService: IredisService
     constructor(jwtService: IjwtService, GoogleLoginUsecase: IgoogleloginUsecase, redisService: IredisService) {
-        this.jwtService = jwtService
-        this.GoogleLoginUsecase = GoogleLoginUsecase
-        this.redisService = redisService
+        this._jwtService = jwtService
+        this._GoogleLoginUsecase = GoogleLoginUsecase
+        this._redisService = redisService
     }
 
     async handleLogin(req: Request, res: Response) {
         try {
             const { user } = req.body;
-            const createUser = await this.GoogleLoginUsecase.googleLogin(user);
+            const createUser = await this._GoogleLoginUsecase.googleLogin(user);
             if(!createUser)throw new Error('error while ')
             const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string;
             const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string;
 
-            const accessToken = this.jwtService.createAccessToken(
+            const accessToken = this._jwtService.createAccessToken(
                 ACCESS_TOKEN_KEY,
                 createUser._id?.toString() || "",
                 createUser.role
             );
-            const refreshToken = this.jwtService.createRefreshToken(
+            const refreshToken = this._jwtService.createRefreshToken(
                 REFRESH_TOKEN_KEY,
                 createUser._id?.toString() || ""
             );
-            await this.redisService.set(
+            await this._redisService.set(
                 `user:${createUser.role}:${createUser._id}`,
                 15 * 60,
                 JSON.stringify(createUser.is_blocked)

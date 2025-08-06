@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { IdeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/user/vehicle/IdeleteVehicleUsecase";
 
 export class DeleteVehicleController {
-    constructor(private deleteVehicleUseCase:IdeleteVehicleUsecase) {
+    constructor(private _deleteVehicleUseCase:IdeleteVehicleUsecase) {
     }
     async deleteVehicle(req:Request,res:Response){
         try {
             const {vehicleId} = req.params;
-            const result = await this.deleteVehicleUseCase.execute(vehicleId);
+            const result = await this._deleteVehicleUseCase.execute(vehicleId);
             res.status(200).json({message:'vehicle deleted successfully',success:true});
         } catch (error) {
             console.log('error while deleting vehicle',error)

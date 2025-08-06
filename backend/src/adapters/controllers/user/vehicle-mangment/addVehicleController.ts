@@ -3,15 +3,15 @@ import { IaddvehicleUsecase } from "../../../../domain/interface/usecaseInterfac
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class AddVehicleController {
-    private addVehicleUsecase : IaddvehicleUsecase
+    private _addVehicleUsecase : IaddvehicleUsecase
     constructor(addVehicleUsecase:IaddvehicleUsecase){
-        this.addVehicleUsecase = addVehicleUsecase
+        this._addVehicleUsecase = addVehicleUsecase
     }
 
     async addVehicle(req:Request,res:Response):Promise<void>{
         try {
             const {vehicle,location} = req.body
-           const response= await this.addVehicleUsecase.addVehicle({vehicle,location})
+           const response= await this._addVehicleUsecase.addVehicle({vehicle,location})
             res.status(HttpStatus.CREATED).json({message:'vehicle added'})
         } catch (error) {
               console.log('error while adding vehicle', error)

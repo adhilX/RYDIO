@@ -31,6 +31,7 @@ export function Sidebar() {
     { to: 'userProfile/vehicles', label: 'My Vehicles', icon: Car },
     { to: 'userProfile/wallet', label: 'Wallet', icon: Wallet },
     { to: 'userProfile/my-bookings', label: 'My Bookings', icon: Calendar },  
+    {to: 'userProfile/', label: 'Ride History', icon: Calendar},
   ...(!user?.googleVerification ? [{ to: 'userProfile/change-password', label: 'Change Password', icon: LockKeyhole }] : [])
   ];
 

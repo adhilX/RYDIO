@@ -6,18 +6,18 @@ import { setCookie } from "../../../../framework/services/tokenCookieSet";
 import { IredisService } from "../../../../domain/interface/serviceInterface/IredisService";
 
 export class UserLoginController {
-    private jwtService: IjwtService
-    private loginUserUsecase: IloginUserUsecase
-    private redisService: IredisService
+    private _jwtService: IjwtService
+    private _loginUserUsecase: IloginUserUsecase
+    private _redisService: IredisService
     constructor(jwtService: IjwtService, loginUserUsecase: IloginUserUsecase, redisService: IredisService) {
-        this.jwtService = jwtService
-        this.loginUserUsecase = loginUserUsecase
-        this.redisService = redisService
+        this._jwtService = jwtService
+        this._loginUserUsecase = loginUserUsecase
+        this._redisService = redisService
     }
     async handleLogin(req: Request, res: Response) {
         try {
             const { email, password } = req.body
-            const user = await this.loginUserUsecase.loginUser(email, password)
+            const user = await this._loginUserUsecase.loginUser(email, password)
             if (!user) {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: 'user not found' })
                 return
@@ -25,9 +25,9 @@ export class UserLoginController {
             const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string
             const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string
 
-            const accessToken = this.jwtService.createAccessToken(ACCESS_TOKEN_KEY, user._id?.toString() || "", user.role)
-            const refreshToken = this.jwtService.createRefreshToken(REFRESH_TOKEN_KEY, user._id?.toString() || "")
-            await this.redisService.set(`user:${user.role}:${user._id}`, 15 * 60, JSON.stringify(user.is_blocked))
+            const accessToken = this._jwtService.createAccessToken(ACCESS_TOKEN_KEY, user._id?.toString() || "", user.role)
+            const refreshToken = this._jwtService.createRefreshToken(REFRESH_TOKEN_KEY, user._id?.toString() || "")
+            await this._redisService.set(`user:${user.role}:${user._id}`, 15 * 60, JSON.stringify(user.is_blocked))
             setCookie(res, refreshToken)
             const selectedFields = {
                 email: user.email,

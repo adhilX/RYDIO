@@ -4,14 +4,14 @@ import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class VehilceDetailsController {
 
-    constructor(private vehicleDetailsUsecase: IvehicleDetailsUsecase) {
-        this.vehicleDetailsUsecase = vehicleDetailsUsecase
+    constructor(private _vehicleDetailsUsecase: IvehicleDetailsUsecase) {
+        this._vehicleDetailsUsecase = _vehicleDetailsUsecase
     }
 
     async getVehicleDetails(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params
-            const vehicle = await this.vehicleDetailsUsecase.getVehicleDetails(id)
+            const vehicle = await this._vehicleDetailsUsecase.getVehicleDetails(id)
             if (!vehicle) {
                 res.status(HttpStatus.NOT_FOUND).json({ message: 'Vehicle not found' });
                 return

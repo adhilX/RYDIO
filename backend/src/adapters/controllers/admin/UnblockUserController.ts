@@ -3,14 +3,14 @@ import { HttpStatus } from "../../../domain/entities/httpStatus";
 import { IunblockUserUseCase } from "../../../domain/interface/usecaseInterface/admin/IunblockUserUsecase";
 
 export class UnblockUserController {
-    private userUnblockUseCase: IunblockUserUseCase
+    private _userUnblockUseCase: IunblockUserUseCase
     constructor(userUnblockUseCase:IunblockUserUseCase ) {
-        this.userUnblockUseCase = userUnblockUseCase
+        this._userUnblockUseCase = userUnblockUseCase
     }
     async handleClientBlock(req: Request, res: Response): Promise<void> {
         try {
              const {userId}= req.params
-            await this.userUnblockUseCase.unblockUser(userId)
+            await this._userUnblockUseCase.unblockUser(userId)
             res.status(HttpStatus.OK).json({ message: "Client Blocked" })
         } catch (error) {
             console.log('error while blocking user', error)

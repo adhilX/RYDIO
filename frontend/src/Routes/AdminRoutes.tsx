@@ -1,9 +1,9 @@
-// src/routes/AdminRoutes.tsx
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AdminLogin from "@/pages/Admin/Login";
-import AdminLayout from "@/layout/admin/AdminLayout";
 import { Dashboard } from "@/components/admin/Dashboard";
 import { UserManagement } from "@/components/admin/UserManagment";
+const AdminLayout = React.lazy(() => import("@/layout/admin/AdminLayout"));
 import VehicleList from "@/components/admin/vehicleList";
 import RequestedVehiclesPage from "@/components/admin/RequestedVehicle";
 import IdproofRequest from "@/components/admin/IdproofRequest";

@@ -3,15 +3,15 @@ import { IGetBookedVehicleUsecase } from "../../../../domain/interface/usecaseIn
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class GetBookedVehicleController {
-    private getBookedVehicleUsecase: IGetBookedVehicleUsecase;
+    private _getBookedVehicleUsecase: IGetBookedVehicleUsecase;
 
     constructor(getBookedVehicleUsecase: IGetBookedVehicleUsecase) {
-        this.getBookedVehicleUsecase = getBookedVehicleUsecase;
+        this._getBookedVehicleUsecase = getBookedVehicleUsecase;
     }
     async getBookedVehicleDetails(req: Request, res: Response): Promise<void> {
         try {
             const { vehicleId } = req.params;
-            const bookedVehicles = await this.getBookedVehicleUsecase.execute(vehicleId);
+            const bookedVehicles = await this._getBookedVehicleUsecase.execute(vehicleId);
             res.status(HttpStatus.OK).json(bookedVehicles);
         } catch (error) {
             console.error('Error while fetching booked vehicles', error);

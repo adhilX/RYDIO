@@ -13,6 +13,7 @@ import { VendorAccessController } from "../../adapters/controllers/admin/vendorA
 import { AdminRepository } from "../../adapters/repository/admin/adminRepository";
 import { BookingRepository } from "../../adapters/repository/booking/bookingRepository";
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository";
+import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
 import { LoginAdminUsecase } from "../../useCases/admin/AdminLoginUsecase";
 import { BlockUserUseCase } from "../../useCases/admin/BlockUserUsecase";
 import { GetBookingUsecase } from "../../useCases/admin/bookingMangment/getBookingUsecase";
@@ -32,7 +33,8 @@ import { JwtService } from "../services/jwtService";
 const adminRepository = new AdminRepository()
 const hashPassword = new HashPassword()
 const jwtService = new JwtService()
-const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword)
+const walletRepository = new WalletRepository()
+const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,walletRepository)
 export const adminLoginController = new AdminLoginController(loginAdminUsecase,jwtService)
 
 //------get All Usersss-------------
