@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { ArrowLeft, Car, Fuel, Users, Settings, MapPin, Phone, Mail, CheckCircle, Calendar, CreditCard, Sparkles } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useNavigate, useLocation } from "react-router-dom"
 import toast from "react-hot-toast"
-import { getCheckoutSession } from "@/services/user/bookingService"
+import { getCheckoutSession, getSecurityDeposit } from "@/services/user/bookingService"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import type { BookingData } from "@/Types/User/Booking/BookingData"
@@ -20,9 +20,20 @@ const BookingConfirmation = () => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [address, setAddress] = useState('')
   const [city, setCity] = useState('')
+  const [securityDeposit, setSecurityDeposit] = useState(0)
   const [errors, setErrors] = useState<{ address?: string; city?: string }>({})
+
+  useEffect(() => {
+    const fetchdepostdata = async () => {
+     const deposit = await getSecurityDeposit()
+     setSecurityDeposit(deposit)
+    }
+    fetchdepostdata()
+  }, [])
+
   const user = useSelector((state: RootState) => state.auth.user)
   if (!user)return 
+ 
   const bookingData: BookingData = location.state?.bookingData
 
   if (!bookingData) {
@@ -63,7 +74,7 @@ const BookingConfirmation = () => {
 
   const newBookingDate = {
     vehicle_id: vehicle._id,
-    total_amount,
+    total_amount:total_amount+securityDeposit,
     start_date: startDate,
     end_date: endDate,
     user_id: user?._id,
@@ -330,11 +341,15 @@ const BookingConfirmation = () => {
                     <span className="text-gray-400">Duration</span>
                     <span className="text-white font-medium">{days} day{days > 1 ? 's' : ''}</span>
                   </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-400">Security Deposit</span>
+                    <span className="text-white font-medium">₹{securityDeposit}</span>
+                  </div>
                   <Separator className="bg-white/20" />
                   <div className="flex justify-between items-center text-xl font-bold">
                     <span className="text-white">Total Amount</span>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6DA5C0] to-[#4a90a8]">
-                      ₹{total_amount}
+                      ₹{total_amount + securityDeposit}
                     </span>
                   </div>
                 </div>

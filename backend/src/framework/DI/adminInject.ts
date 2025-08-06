@@ -28,13 +28,15 @@ import { VehicleUpproveUsecase } from "../../useCases/admin/vehicleManagment/veh
 import { VendorAccessUsecase } from "../../useCases/admin/vendorAccessUsecase";
 import { HashPassword } from "../services/hashPassword";
 import { JwtService } from "../services/jwtService";
+import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
 
 //-----------admin login------------
 const adminRepository = new AdminRepository()
 const hashPassword = new HashPassword()
 const jwtService = new JwtService()
 const walletRepository = new WalletRepository()
-const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,walletRepository)
+const adminWalletRepository = new AdminWalletRepository()
+const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,adminWalletRepository)
 export const adminLoginController = new AdminLoginController(loginAdminUsecase,jwtService)
 
 //------get All Usersss-------------

@@ -62,6 +62,9 @@ import { WalletRepository } from "../../adapters/repository/wallet/walletReposit
 import { GetWalletUsecase } from "../../useCases/user/wallet/getWalletUsecase"
 import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController"
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository"
+import { SecurityDepositRepository } from "../../adapters/repository/booking/SecurityDepositRepository"
+import { GetSecurityDepositUsecase } from "../../useCases/booking/getSecurityDepositUsecase"
+import { GetSecurityDepositController } from "../../adapters/controllers/user/booking-managment/getSecurityDepositController"
 
 // regester user 
 const otpService = new OtpService()
@@ -187,3 +190,8 @@ export const getWalletController = new GetWalletController(getWalletUsecase)
 const wishlistRepository = new WishlistRepository() 
 const getWishlistUseCase = new GetWishlistUseCase(wishlistRepository)
 export const getWishlistController = new GetWishlistController(getWishlistUseCase)
+
+//------get security deposit details---------
+const securityDepositRepository = new SecurityDepositRepository()
+const getSecurityDepositUsecase = new GetSecurityDepositUsecase(securityDepositRepository)
+export const getSecurityDepositController = new GetSecurityDepositController(getSecurityDepositUsecase)

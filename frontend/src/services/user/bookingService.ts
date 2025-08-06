@@ -64,3 +64,18 @@ export const getBookedDate = async (vehicleId: string) => {
         throw new Error('An unexpected error occurred while fetching booked dates');
     }
 };
+
+export const getSecurityDeposit = async () => {
+    try {
+        const response = await axiosInstance.get("/security-deposit");
+        return response?.data;
+        
+    } catch (error) {
+        console.error('Error while fetching security deposit:', error);
+        if (isAxiosError(error)) {
+        const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while fetching security deposit';
+        throw new Error(errorMsg);
+        }
+        throw new Error('An unexpected error occurred while fetching security deposit');
+    }
+};

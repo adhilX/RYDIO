@@ -5,6 +5,7 @@ import { IvehicleRepository } from "../../domain/interface/repositoryInterface/I
 import { IredisService } from "../../domain/interface/serviceInterface/IredisService"
 import { IcreateBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/IcreateBookingUsecase"
 import { idGeneratorService } from "../../framework/DI/serviceInject"
+import { setings } from "../../shared/constent"
 
 export class CreateBookingUsecase implements IcreateBookingUsecase {
   constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository) {
@@ -42,7 +43,7 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
       payment_status: PaymentStatus.Paid,
       
       finance: {
-        security_deposit: 1000,
+        security_deposit: setings.securityDeposit,
         fine_amount: 0,
         admin_commission: Math.round(bookingData.total_amount * 0.1),
         owner_earnings: Math.round(bookingData.total_amount * 0.9),
