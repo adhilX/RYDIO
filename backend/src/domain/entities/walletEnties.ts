@@ -1,5 +1,8 @@
+import { ObjectId } from "mongoose";
+
 export interface IWallet{
-    userId: string;
+    userId: string|ObjectId
     balance: number;
-    transcations: string[]
+    is_frozen: boolean;
+    transactions: string|ObjectId[]
     }

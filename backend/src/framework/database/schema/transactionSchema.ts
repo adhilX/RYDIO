@@ -1,29 +1,35 @@
-const mongoose = require('mongoose');
+import { Schema, Types } from 'mongoose';
+import { ITransaction } from '../../../domain/entities/transactionEntities';
 
-export const transactionSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
+
+export const transactionSchema= new Schema<ITransaction>({
+  from: {
+    type: Types.ObjectId,
+    required: true,
     ref: 'user',
-    required: true
   },
-  bookingId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'booking',
-    required: true
+  to: {
+    type: Types.ObjectId,
+    required: true,
+    ref: 'user',
   },
   amount: {
     type: Number,
-    required: true
+    required: true,
   },
-  paymentMethod: {
-    type: String,
-    enum: ['card', 'wallet'],
-    required: true
+  bookingId: {
+    type: Types.ObjectId,
+    ref: 'booking',
+    required: true 
   },
   transactionType: {
     type: String,
-    enum: ['debit', 'credit'], // debit = payment, credit = refund
-    required: true
-  }
-});
-
+    enum: ['debit', 'credit'],
+    default: 'debit',
+  },
+  purpose: {
+    type: String,
+    enum: ['booking', 'refund', 'penalty', 'deposit', 'release', 'commission'], 
+    default: 'booking',
+  },
+},{timestamps:true});

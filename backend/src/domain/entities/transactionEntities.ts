@@ -1,9 +1,11 @@
-import { Types } from 'mongoose';
+import { ObjectId } from "mongoose";
 
 export interface ITransaction {
-  userId: Types.ObjectId;
-  bookingId: Types.ObjectId;
+  _id?: string; 
+  from: string|ObjectId; 
+  to: string|ObjectId  
   amount: number;
-  paymentMethod: 'card' | 'wallet';
-  transactionType: 'debit' | 'credit'; // debit = payment, credit = refund
+  purpose: 'booking' | 'refund' | 'penalty'; 
+  bookingId: string|ObjectId; 
+  transactionType: 'debit' | 'credit'; // debit = payment, credit =
 }
