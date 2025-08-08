@@ -9,7 +9,7 @@ import { getwallet } from '@/services/admin/walletServece';
 
 // Dummy transaction data
 const dummyTransactions = [
-
+ 
 ];
 
 type TransactionType = 'all' | 'credit' | 'debit';
@@ -26,7 +26,7 @@ function WalletManagement() {
   useEffect(() => {
  const fetchData = async () => {
     const walletData = await getwallet()
-    setTotalBalance(walletData.balance || 0);
+    setTotalBalance(walletData.walletDetails.balance || 0);
 
  }
 fetchData()

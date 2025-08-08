@@ -92,6 +92,7 @@ const StepThree = ({ onSubmit, defaultValues }: StepThreeProps) => {
             }
             validationSchema={validationSchema}
             onSubmit={(values) => conform(values)}
+            validateOnChange={false}
         >
             {({ setFieldValue, validateForm, values, setValues }) => {
                 const fetchCurrentLocation = async () => {

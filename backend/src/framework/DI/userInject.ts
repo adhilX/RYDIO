@@ -183,7 +183,7 @@ const getBookedVehicleUsecase = new GetBookedVehicleUsecase(bookingRepository)
 export const getBookedVehicleController = new GetBookedVehicleController(getBookedVehicleUsecase)
 
 //------get wallet details---------
-const getWalletUsecase = new GetWalletUsecase(adminWalletRepository)
+const getWalletUsecase = new GetWalletUsecase(walletRepository)
 export const getWalletController = new GetWalletController(getWalletUsecase)
     
 //------get wishlist details---------

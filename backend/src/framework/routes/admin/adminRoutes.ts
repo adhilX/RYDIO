@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, getWalletController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController } from "../../DI/adminInject";
+import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, getAdminWalletController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController } from "../../DI/adminInject";
 import { injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 export class AdminRoutes {
@@ -47,7 +47,7 @@ export class AdminRoutes {
            getBookingController.getBookingData(req,res)
         })
         this.AdminRoute.get('/get-wallet',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
-           getWalletController.getWalletDetails(req,res)
+           getAdminWalletController.getWalletDetails(req,res)
         })
     }
 }

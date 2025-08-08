@@ -14,37 +14,75 @@ export class BookingRepository implements IbookingRepostory {
           return await bookingModel.findOne({ payment_intent_id })
      }
 
-     async findByUserId(user_id: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: Ibooking[], total: number } | null> {
-          console.log(user_id, limit, page, search, status)
-          const skip = (page - 1) * limit;
-          let match: any = { "user_id": new mongoose.Types.ObjectId(user_id), "vehicle.name": { $regex: search, $options: "i" } }
-          if (status !== "all") {
-               match.status = status
-          }
-          const bookings = await bookingModel.aggregate([
-               {
-                    $lookup: {
-                         from: "vehicles",
-                         localField: "vehicle_id",
-                         foreignField: "_id",
-                         as: "vehicle"
-                    }
-               },
-               { $unwind: "$vehicle" },
-               {
-                    $lookup: {
-                         from: 'locations',
-                         localField: 'vehicle.location_id',
-                         foreignField: '_id',
-                         as: 'location'
-                    }
-               },
-               { $unwind: '$location' },
-               { $match: match },
-               { $skip: skip },
-               { $limit: limit }
-          ]);
-          return { bookings, total: bookings.length }
+async findByUserId(user_id: string,limit: number,page: number,search: string,status: string): Promise<{ bookings: Ibooking[], total: number } | null> {
+  const skip = (page - 1) * limit;
+
+  // Create the match condition
+  const match: any = {
+    user_id: new mongoose.Types.ObjectId(user_id),
+    "vehicle.name": { $regex: search, $options: "i" }
+  };
+
+  if (status !== "all") {
+    match.status = status;
+  }
+
+  // Fetch paginated bookings
+  const bookings = await bookingModel.aggregate([
+    {
+      $lookup: {
+        from: "vehicles",
+        localField: "vehicle_id",
+        foreignField: "_id",
+        as: "vehicle"
+      }
+    },
+    { $unwind: "$vehicle" },
+    {
+      $lookup: {
+        from: "locations",
+        localField: "vehicle.location_id",
+        foreignField: "_id",
+        as: "location"
+      }
+    },
+    { $unwind: "$location" },
+    { $match: match },
+    { $skip: skip },
+    { $limit: limit }
+  ]);
+
+  // Count total matching bookings (no pagination)
+  const totalCount = await bookingModel.aggregate([
+    {
+      $lookup: {
+        from: "vehicles",
+        localField: "vehicle_id",
+        foreignField: "_id",
+        as: "vehicle"
+      }
+    },
+    { $unwind: "$vehicle" },
+    {
+      $lookup: {
+        from: "locations",
+        localField: "vehicle.location_id",
+        foreignField: "_id",
+        as: "location"
+      }
+    },
+    { $unwind: "$location" },
+    { $match: match },
+    {
+      $count: "total"
+    }
+  ]);
+
+  const total = totalCount[0]?.total || 0;
+
+  return { bookings, total };
+
+          
      }
      async getBookingData(search: string, limit: number, page: number): Promise<{ bookings: Ibooking[], total: number } | null> {
           const skip = (page - 1) * limit;

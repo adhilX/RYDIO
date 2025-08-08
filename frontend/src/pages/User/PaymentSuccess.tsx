@@ -55,7 +55,7 @@ const PaymentSuccess = () => {
             className="space-y-4"
           >
             <Button
-              onClick={() => navigate('/userProfile',{replace:true})}
+              onClick={() => navigate('/userProfile/my-bookings',{replace:true})}
               className="w-full bg-gradient-to-r from-[#6DA5C0] to-[#4a90a8] hover:from-[#5a8ba0] hover:to-[#3a7a8c] text-white font-semibold py-3 rounded-xl shadow-lg"
             >
               Go to Dashboard

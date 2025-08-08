@@ -31,6 +31,8 @@ import { JwtService } from "../services/jwtService";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
 import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController";
 import { GetWalletUsecase } from "../../useCases/user/wallet/getWalletUsecase";
+import { GetAdminWalletUsecase } from "../../useCases/admin/walletManagment/getAdminWalletUsecase";
+import { GetAdminWalletController } from "../../adapters/controllers/admin/WalletManagment/GetWalletController";
 
 //-----------admin login------------
 const adminRepository = new AdminRepository()
@@ -95,5 +97,5 @@ export const getBookingController = new GetBookingController(getBookingUsecase)
 
 
 //------get wallet details---------
-const getWalletUsecase = new GetWalletUsecase(adminWalletRepository)
-export const getWalletController = new GetWalletController(getWalletUsecase)
+const getAdminWalletUsecase = new GetAdminWalletUsecase(adminWalletRepository)
+export const getAdminWalletController = new GetAdminWalletController(getAdminWalletUsecase)

@@ -2,7 +2,7 @@ import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { IgetAdminWalletUsecase } from "../../../../domain/interface/usecaseInterface/admin/walletManagment/IgetAdminWalletUsecase";
 import { Request, Response } from "express";
 
-export class GetWalletController {
+export class GetAdminWalletController {
     constructor(private getAdminWalletUsecase: IgetAdminWalletUsecase){}
     async getWalletDetails(req: Request, res: Response){
         try {
