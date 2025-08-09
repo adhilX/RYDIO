@@ -15,7 +15,7 @@ export class EmailService implements IemailServise {
     })
    }
     async sendOtp(email: string, otp: string): Promise<void> {
-        // console.log(email,'ehhhhhhhhhhhhhhhhhhhhh')
+
         const mailOption= {
             from: process.env.EMAIL,
             to: email,

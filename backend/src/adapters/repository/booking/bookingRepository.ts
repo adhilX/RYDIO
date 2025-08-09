@@ -14,75 +14,76 @@ export class BookingRepository implements IbookingRepostory {
           return await bookingModel.findOne({ payment_intent_id })
      }
 
-async findByUserId(user_id: string,limit: number,page: number,search: string,status: string): Promise<{ bookings: Ibooking[], total: number } | null> {
-  const skip = (page - 1) * limit;
+     async findByUserId(user_id: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: Ibooking[], total: number } | null> {
+          const skip = (page - 1) * limit;
 
-  // Create the match condition
-  const match: any = {
-    user_id: new mongoose.Types.ObjectId(user_id),
-    "vehicle.name": { $regex: search, $options: "i" }
-  };
+          // Create the match condition
+          const match: any = {
+               user_id: new mongoose.Types.ObjectId(user_id),
+               "vehicle.name": { $regex: search, $options: "i" }
+          };
 
-  if (status !== "all") {
-    match.status = status;
-  }
+          if (status !== "all") {
+               match.status = status;
+          }
 
-  // Fetch paginated bookings
-  const bookings = await bookingModel.aggregate([
-    {
-      $lookup: {
-        from: "vehicles",
-        localField: "vehicle_id",
-        foreignField: "_id",
-        as: "vehicle"
-      }
-    },
-    { $unwind: "$vehicle" },
-    {
-      $lookup: {
-        from: "locations",
-        localField: "vehicle.location_id",
-        foreignField: "_id",
-        as: "location"
-      }
-    },
-    { $unwind: "$location" },
-    { $match: match },
-    { $skip: skip },
-    { $limit: limit }
-  ]);
+          // Fetch paginated bookings
+          const bookings = await bookingModel.aggregate([
+               {
+                    $lookup: {
+                         from: "vehicles",
+                         localField: "vehicle_id",
+                         foreignField: "_id",
+                         as: "vehicle"
+                    }
+               },
+               { $unwind: "$vehicle" },
+               {
+                    $lookup: {
+                         from: "locations",
+                         localField: "vehicle.location_id",
+                         foreignField: "_id",
+                         as: "location"
+                    }
+               },
+               { $unwind: "$location" },
+               { $match: match },
+               { $skip: skip },
+               { $limit: limit },
+               { $sort: { 'createdAt': -1 } }
+          ]);
 
-  // Count total matching bookings (no pagination)
-  const totalCount = await bookingModel.aggregate([
-    {
-      $lookup: {
-        from: "vehicles",
-        localField: "vehicle_id",
-        foreignField: "_id",
-        as: "vehicle"
-      }
-    },
-    { $unwind: "$vehicle" },
-    {
-      $lookup: {
-        from: "locations",
-        localField: "vehicle.location_id",
-        foreignField: "_id",
-        as: "location"
-      }
-    },
-    { $unwind: "$location" },
-    { $match: match },
-    {
-      $count: "total"
-    }
-  ]);
+          // Count total matching bookings (no pagination)
+          const totalCount = await bookingModel.aggregate([
+               {
+                    $lookup: {
+                         from: "vehicles",
+                         localField: "vehicle_id",
+                         foreignField: "_id",
+                         as: "vehicle"
+                    }
+               },
+               { $unwind: "$vehicle" },
+               {
+                    $lookup: {
+                         from: "locations",
+                         localField: "vehicle.location_id",
+                         foreignField: "_id",
+                         as: "location"
+                    }
+               },
+               { $unwind: "$location" },
+               { $match: match },
+               {
+                    $count: "total"
+               }
+          ]);
 
-  const total = totalCount[0]?.total || 0;
+          const total = totalCount[0]?.total || 0;
 
-  return { bookings, total };
+          return { bookings, total };
 
-          
+
      }
      async getBookingData(search: string, limit: number, page: number): Promise<{ bookings: Ibooking[], total: number } | null> {
           const skip = (page - 1) * limit;
@@ -95,9 +96,9 @@ async findByUserId(user_id: string,limit: number,page: number,search: string,sta
                { "booking_id": { $regex: search, $options: "i" } }
           ];
 
-           if (isValidObjectId(search)) {
-    matchConditions.push({ _id: new Types.ObjectId(search) });
-  }
+          if (isValidObjectId(search)) {
+               matchConditions.push({ _id: new Types.ObjectId(search) });
+          }
 
           const bookings = await bookingModel.aggregate([
                {
@@ -127,7 +128,7 @@ async findByUserId(user_id: string,limit: number,page: number,search: string,sta
 
                { $skip: skip },
                { $limit: limit },
-               {$sort:{'createdAt':-1}}
+               { $sort: { 'createdAt': -1 } }
           ]);
           const total = bookings.length
           return { bookings, total }
@@ -173,5 +174,12 @@ async findByUserId(user_id: string,limit: number,page: number,search: string,sta
           });
 
           return unavailableDates;
+     }
+
+     async getBookingById(booking_id: string): Promise<Ibooking | null> {
+          return await bookingModel.findById(booking_id)
+     }
+     async changeBookingStatus(booking_id: string, status: string): Promise<Ibooking | null> {
+          return await bookingModel.findByIdAndUpdate(booking_id, { status })
      }
 }

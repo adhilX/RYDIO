@@ -1,6 +1,7 @@
 import { BookingData, BookingStatus, Ibooking, PaymentStatus, PaymentType } from "../../domain/entities/BookingEntities"
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository"
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
+import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ItrasationRepository"
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository"
 import { IredisService } from "../../domain/interface/serviceInterface/IredisService"
 import { IcreateBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/IcreateBookingUsecase"
@@ -8,11 +9,12 @@ import { idGeneratorService } from "../../framework/DI/serviceInject"
 import { setings } from "../../shared/constent"
 
 export class CreateBookingUsecase implements IcreateBookingUsecase {
-  constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository) {
+  constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository, private _trasationRepository: ItrasationRepository) {
     this._bookingRepository = _bookingRepository
     this._redisService = _redisService
     this._vehicleRepository = _vehicleRepository
     this._adminWalletRepository = _adminWalletRepository
+    this._trasationRepository = _trasationRepository
   }
 
   async createBooking({ bookingData, user_id, stripeIntentId }: { bookingData: BookingData, user_id: string, stripeIntentId: string }): Promise<any> {
@@ -51,6 +53,7 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
       }
     }
 
+    await this._trasationRepository.createTrasation(user_id,bookingData.total_amount,'booking',booking_id,'debit')
     return await this._bookingRepository.createBooking(newBooking)
   }
 }

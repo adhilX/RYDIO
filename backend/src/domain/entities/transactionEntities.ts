@@ -7,5 +7,5 @@ export interface ITransaction {
   amount: number;
   purpose: 'booking' | 'refund' | 'penalty'; 
   bookingId: string|ObjectId; 
-  transactionType: 'debit' | 'credit'; // debit = payment, credit =
+  transactionType: 'debit' | 'credit'; 
 }

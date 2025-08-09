@@ -7,4 +7,6 @@ export interface IbookingRepostory {
     getBookingData(search: string, limit: number, page: number): Promise<{ bookings: Ibooking[], total: number } | null>
    bookedVehicle(pickupDate: string, returnDate: string): Promise<string[]>
    getBookedVehiclesByVehicleId(vehicle_id:string): Promise<string[]|null>
+   getBookingById(booking_id:string): Promise<Ibooking | null>
+   changeBookingStatus(booking_id:string,status:string): Promise<Ibooking | null>
 }

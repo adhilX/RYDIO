@@ -65,7 +65,11 @@ import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWal
 import { SecurityDepositRepository } from "../../adapters/repository/booking/SecurityDepositRepository"
 import { GetSecurityDepositUsecase } from "../../useCases/booking/getSecurityDepositUsecase"
 import { GetSecurityDepositController } from "../../adapters/controllers/user/booking-managment/getSecurityDepositController"
-
+import { TrasationRepository } from "../../adapters/repository/transation/TrasationRepository"
+import { RideStartUsecase } from "../../useCases/booking/rideStartUsecase"
+import { RideStartController } from "../../adapters/controllers/admin/bookingMangment/rideStartController"
+import { RideEndUsecase } from "../../useCases/booking/rideEndUsecase"
+import { RideEndController } from "../../adapters/controllers/admin/bookingMangment/rideEndController"
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
@@ -77,6 +81,7 @@ const hashPassword = new HashPassword()
 const redisService = new RedisService()
 const walletRepository = new WalletRepository()
 const adminWalletRepository = new AdminWalletRepository()
+const trasationRepository = new TrasationRepository()
 const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword,walletRepository)
 export const sendendOtpController = new SendOtpController(sendOtpUserUsecase)
 export const  userRegisterController = new UserRegisterController(verifyOtpUsecase,createUserUsecase)
@@ -156,7 +161,7 @@ export const uploadIdProofController = new UploadIdProofController(uploadIdProof
 
 //----------create Booking------------
 
-const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository)
+const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository,trasationRepository)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 
 //--------create payment intent------------
@@ -195,3 +200,11 @@ export const getWishlistController = new GetWishlistController(getWishlistUseCas
 const securityDepositRepository = new SecurityDepositRepository()
 const getSecurityDepositUsecase = new GetSecurityDepositUsecase(securityDepositRepository)
 export const getSecurityDepositController = new GetSecurityDepositController(getSecurityDepositUsecase)
+
+//------ride start---------
+const rideStartUsecase = new RideStartUsecase(bookingRepository,vehicleRepository)
+export const rideStartController = new RideStartController(rideStartUsecase)
+
+//------ride end---------
+const rideEndUsecase = new RideEndUsecase(bookingRepository,vehicleRepository)
+export const rideEndController = new RideEndController(rideEndUsecase)

@@ -100,6 +100,7 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
               {booking.payment_status === 'paid' ? 'Paid' : 'Pending'}
             </span>
             <span className="text-sm text-gray-300">
+              
               {booking.payment_type === 'card' ? 'Card Payment' : 'Wallet Payment'}
             </span>
           </div>
@@ -107,7 +108,12 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
 
         {/* QR Code Section */}
         <section>
-          <QRGenerator booking_id={booking.booking_id} />
+          {booking.status === 'booked' && (
+            <QRGenerator booking_id={booking.booking_id} action="start" />
+          )}
+          {booking.status === 'ongoing' && (
+            <QRGenerator booking_id={booking.booking_id} action="end" />
+          )}
         </section>
 
         {/* Location Info */}
