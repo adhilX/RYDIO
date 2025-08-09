@@ -5,25 +5,25 @@ import { IgoogleloginUsecase } from "../../../domain/interface/usecaseInterface/
 
 export class GoogleLoginUsecase implements IgoogleloginUsecase {
 
-    private userRepository: IuserRepository
-    private walletRepository: IWalletRepository
+    private _userRepository: IuserRepository
+    private _walletRepository: IWalletRepository
 
     constructor(userRepository: IuserRepository,walletRepository: IWalletRepository) {
-        this.userRepository = userRepository
-        this.walletRepository = walletRepository
+        this._userRepository = userRepository
+        this._walletRepository = walletRepository
     }
     async googleLogin(user: User): Promise<Omit<User, 'password'>> {
-        const existingWallet = await this.walletRepository.getWalletByUserId(user._id?.toString()!);
+        const existingWallet = await this._walletRepository.getWalletByUserId(user._id?.toString()!);
         if (!existingWallet) {
-            await this.walletRepository.createWallet(user._id?.toString()!)
+            await this._walletRepository.createWallet(user._id?.toString()!)
         }
-        const existingUser = await this.userRepository.findByEmail(user.email)
+        const existingUser = await this._userRepository.findByEmail(user.email)
         if (existingUser) {
             if (existingUser.is_blocked) throw new Error('user is blocked')
             return existingUser
         }
         else {
-            const createUser = await this.userRepository.googleLogin(user)
+            const createUser = await this._userRepository.googleLogin(user)
             if (!createUser) throw new Error('error while creating new user using google login')
                 const { password: _, ...userWithoutPassword } = createUser as User;
             // Create a wallet for the new user

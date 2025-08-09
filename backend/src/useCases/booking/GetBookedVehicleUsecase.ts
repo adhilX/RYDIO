@@ -2,14 +2,14 @@ import { IbookingRepostory } from "../../domain/interface/repositoryInterface/Ib
 import { IGetBookedVehicleUsecase } from "../../domain/interface/usecaseInterface/user/booking/IGetBookedVehicleUsecase";
 
 export class GetBookedVehicleUsecase implements IGetBookedVehicleUsecase {
-    private bookingRepository: IbookingRepostory;
+    private _bookingRepository: IbookingRepostory;
 
     constructor(bookingRepository: IbookingRepostory) {
-        this.bookingRepository = bookingRepository;
+        this._bookingRepository = bookingRepository;
     }
 
     async execute(userId: string): Promise<string[] | null> {
-        const bookedVehicles = await this.bookingRepository.getBookedVehiclesByVehicleId(userId);
+        const bookedVehicles = await this._bookingRepository.getBookedVehiclesByVehicleId(userId);
             if (!bookedVehicles) {
                 return null; 
             }

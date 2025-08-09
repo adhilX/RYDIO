@@ -4,16 +4,16 @@ import { IresendOtpUsecase } from "../../../../domain/interface/usecaseInterface
 
 export class ResendOtpUsecase implements IresendOtpUsecase{
 
-    private otpService: IotpService
-    private emailService :IemailServise
+    private _otpService: IotpService
+    private _emailService :IemailServise
     constructor(otpSevice:IotpService, emailService: IemailServise){
-        this.otpService = otpSevice
-        this.emailService = emailService
+        this._otpService = otpSevice
+        this._emailService = emailService
     }
 
    async resendOtp(email: string): Promise<void> {
-       const otp =  this.otpService.genarateOtp()
-       await this.otpService.storeOtp(email,otp)
-       await this.emailService.sendOtp(email,otp)
+       const otp =  this._otpService.genarateOtp()
+       await this._otpService.storeOtp(email,otp)
+       await this._emailService.sendOtp(email,otp)
    }
 }

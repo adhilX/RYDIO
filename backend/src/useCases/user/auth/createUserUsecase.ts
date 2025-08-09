@@ -8,10 +8,10 @@ export class CreateUserUsecase implements IcreateUserUsecase{
     private userRepository :IuserRepository
     private hashPassword: IhashPassword
     private walletRepository: IWalletRepository
-    constructor(userRepository:IuserRepository, hashPassword:IhashPassword, walletRepository:IWalletRepository){
-        this.hashPassword = hashPassword
-        this.userRepository = userRepository
-        this.walletRepository = walletRepository
+    constructor(_userRepository:IuserRepository, _hashPassword:IhashPassword, _walletRepository:IWalletRepository){
+        this.hashPassword = _hashPassword
+        this.userRepository = _userRepository
+        this.walletRepository = _walletRepository
     }
 
     async createUser(user: User): Promise<Omit<User, 'password'> | null> {

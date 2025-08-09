@@ -4,14 +4,14 @@ import { ImyVehicleUsecase } from "../../../domain/interface/usecaseInterface/us
 
 
 export class MyVehicleUsecase implements ImyVehicleUsecase {
-    private vehicleRepository : IvehicleRepository
+    private _vehicleRepository : IvehicleRepository
     constructor(vehicleRepository:IvehicleRepository){
-        this.vehicleRepository = vehicleRepository
+        this._vehicleRepository = vehicleRepository
     }
 
 
   async getMyvehicle(owner_id: string, search: string, page: string, limit: string ): Promise<{ vehicle: IVehicle[]; total: number; } | null> {
-        return this.vehicleRepository.myVehicle(owner_id,search,page,limit)
+        return this._vehicleRepository.myVehicle(owner_id,search,page,limit)
 
   }
 }

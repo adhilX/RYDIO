@@ -3,15 +3,15 @@ import { IuserRepository } from "../../domain/interface/repositoryInterface/Iuse
 import { IeditProfileUsecase } from "../../domain/interface/usecaseInterface/user/userProfile/IeditProfileUsecase";
 
 export class EditProfileUsecase implements IeditProfileUsecase{
-    private userRepository:IuserRepository
+    private _userRepository:IuserRepository
     constructor(userRepository:IuserRepository){
-        this.userRepository =userRepository
+        this._userRepository =userRepository
     }
         
     async handleEditProfile(userData: { name: string; email: string; phone?: string; ImageUrl?: string; }): Promise<Omit<User, 'password'>> {
         const { name, email, phone, ImageUrl } = userData;
         console.log(ImageUrl)
-        const updatedUser = await this.userRepository.updateProfile(
+        const updatedUser = await this._userRepository.updateProfile(
             email,
             phone ?? "",
             name,

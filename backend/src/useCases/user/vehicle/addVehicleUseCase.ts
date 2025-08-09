@@ -9,11 +9,11 @@ interface AddVehicleProps {
   location: Location
 }
 export class AddVehicleUsecase implements IaddvehicleUsecase{
-    private vehicleRepository : IvehicleRepository
-    private locationRepository : ILocationRepository
+    private _vehicleRepository : IvehicleRepository
+    private _locationRepository : ILocationRepository
     constructor(vehicleRepository:IvehicleRepository,locationRepository:ILocationRepository){
-        this.vehicleRepository = vehicleRepository
-        this.locationRepository = locationRepository
+        this._vehicleRepository = vehicleRepository
+        this._locationRepository = locationRepository
     }
     
   async addVehicle({ vehicle, location }: AddVehicleProps): Promise<IVehicle> {
@@ -21,10 +21,10 @@ export class AddVehicleUsecase implements IaddvehicleUsecase{
     if(!location) throw new Error('Location is required');
     if(!vehicle) throw new Error('Vehicle is required');
 
-    const isExistingVehicle = await this.vehicleRepository.isExistingVehicle(vehicle.registration_number);
+    const isExistingVehicle = await this._vehicleRepository.isExistingVehicle(vehicle.registration_number);
     if (isExistingVehicle) throw new Error('Vehicle already exists');
-    const savedLocation = await this.locationRepository.findOrCreate(location);
-    return this.vehicleRepository.addVehicle({
+    const savedLocation = await this._locationRepository.findOrCreate(location);
+    return this._vehicleRepository.addVehicle({
       ...vehicle,
       location_id: savedLocation._id!,
     });
