@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, googleLoginController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController, getUserController, getWishlistController, getWalletController, getSecurityDepositController, rideStartController, rideEndController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, googleLoginController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController, getUserController, getWalletController, getSecurityDepositController, rideStartController, rideEndController, incomingBookingController } from "../../DI/userInject";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -81,6 +81,9 @@ export class UserRoutes {
     })
     this.UserRoutes.get('/security-deposit',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         getSecurityDepositController.handleGetSecurityDeposit(req,res)
+    })
+    this.UserRoutes.post('/incoming-bookings/:userId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+        incomingBookingController.getBookingDetails(req,res)
     })
     this.UserRoutes.get('/get-wallet/:userId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         getWalletController.getWalletDetails(req,res)

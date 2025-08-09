@@ -25,10 +25,10 @@ export const getAprovedVehicle = async (search= '',page = 1, limit = 6) => {
   }
 };
 
-export const handleVehicle = async (vehicle_id:string, action: 'accepted'|'rejected') => {
+export const handleVehicle = async (vehicle_id:string, action: 'accepted'|'rejected', reason?: string) => {
   try {
     console.log(action)
-    const response = await axiosInstance.post(`/admin/vehicle-upprove/${vehicle_id}`,{action})
+    const response = await axiosInstance.post(`/admin/vehicle-action/${vehicle_id}`,{action,reason})
     // console.log(response.data)
     return response?.data;
   } catch (error) {

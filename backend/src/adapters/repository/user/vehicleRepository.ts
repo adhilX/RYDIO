@@ -17,8 +17,8 @@ export class VehicleRepository implements IvehicleRepository {
     return result !== null;
   }
 
-  async rejectVehicle(id: string, action: string): Promise<boolean> {
-    const result = await VehicleModel.findByIdAndUpdate(id, { admin_approve: action });
+  async rejectVehicle(id: string, action: string,reason?:string): Promise<boolean> {
+    const result = await VehicleModel.findByIdAndUpdate(id, { admin_approve: action,reject_reason:reason });
     return result !== null;
   }
   async myVehicle(owner_id: string, search: string, page: string, limit: string): Promise<{ vehicle: IVehicle[], total: number } | null> {

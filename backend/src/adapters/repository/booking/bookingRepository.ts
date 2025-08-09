@@ -182,4 +182,76 @@ export class BookingRepository implements IbookingRepostory {
      async changeBookingStatus(booking_id: string, status: string): Promise<Ibooking | null> {
           return await bookingModel.findByIdAndUpdate(booking_id, { status })
      }
+     async getOwnerBookings(userId: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: Ibooking[], total: number } | null> {
+          const skip = (page - 1) * limit;
+
+          const match: any = {
+               "vehicle.owner_id": new mongoose.Types.ObjectId(userId)
+          };
+
+          if (search && search.trim() !== '') {
+               match["vehicle.name"] = { $regex: search, $options: "i" };
+          }
+
+          if (status !== "all") {
+               match.status = status;
+          }
+
+          const pipeline: any[] = [
+               {
+                    $lookup: {
+                         from: "vehicles",
+                         localField: "vehicle_id",
+                         foreignField: "_id",
+                         as: "vehicle"
+                    }
+               },
+               { $unwind: "$vehicle" },
+               {
+                    $lookup: {
+                         from: "locations",
+                         localField: "vehicle.location_id",
+                         foreignField: "_id",
+                         as: "location"
+                    }
+               },
+               { $unwind: "$location" },
+               { $match: match },
+               { $sort: { createdAt: -1 } },
+               { $skip: skip },
+               { $limit: limit }
+          ];
+
+          const countPipeline: any[] = [
+               {
+                    $lookup: {
+                         from: "vehicles",
+                         localField: "vehicle_id",
+                         foreignField: "_id",
+                         as: "vehicle"
+                    }
+               },
+               { $unwind: "$vehicle" },
+               {
+                    $lookup: {
+                         from: "locations",
+                         localField: "vehicle.location_id",
+                         foreignField: "_id",
+                         as: "location"
+                    }
+               },
+               { $unwind: "$location" },
+               { $match: match },
+               { $count: "total" }
+          ];
+
+          const [bookings, totalResult] = await Promise.all([
+               bookingModel.aggregate(pipeline),
+               bookingModel.aggregate(countPipeline)
+          ]);
+
+          const total = totalResult[0]?.total || 0;
+
+          return { bookings, total };
+     }
 }

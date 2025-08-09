@@ -18,7 +18,7 @@ const ReasonModal = ({
   onClose,
   onSubmit,
   title = 'Reason for Rejection',
-  description = 'Please provide a reason for rejecting this ID proof.',
+  description = 'Please provide a reason for rejecting this.',
   submitButtonText = 'Submit',
   cancelButtonText = 'Cancel',
   placeholder = 'Enter the reason for rejection...'

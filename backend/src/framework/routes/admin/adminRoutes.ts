@@ -31,7 +31,7 @@ export class AdminRoutes {
         this.AdminRoute.get('/aproved-vehicle',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'), (req: Request, res: Response) => {
             ApprovedVehiceController.approveVehicle(req, res)
         })
-        this.AdminRoute.post('/vehicle-upprove/:id',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'), (req: Request, res: Response) => {
+        this.AdminRoute.post('/vehicle-action/:id',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'), (req: Request, res: Response) => {
             vehicleUpproveController.approveVehicle(req, res)
         })
         this.AdminRoute.post('/get-idproof',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{

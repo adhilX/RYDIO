@@ -70,6 +70,8 @@ import { RideStartUsecase } from "../../useCases/booking/rideStartUsecase"
 import { RideStartController } from "../../adapters/controllers/admin/bookingMangment/rideStartController"
 import { RideEndUsecase } from "../../useCases/booking/rideEndUsecase"
 import { RideEndController } from "../../adapters/controllers/admin/bookingMangment/rideEndController"
+import { IncomingBookingUsecase } from "../../useCases/booking/incomingBookingUsecase"
+import { IncomingBookingController } from "../../adapters/controllers/user/booking-managment/incomingBookingController"
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
@@ -208,3 +210,8 @@ export const rideStartController = new RideStartController(rideStartUsecase)
 //------ride end---------
 const rideEndUsecase = new RideEndUsecase(bookingRepository,vehicleRepository)
 export const rideEndController = new RideEndController(rideEndUsecase)
+
+
+//------incoming booking---------
+const incomingBookingUsecase = new IncomingBookingUsecase(bookingRepository)
+export const incomingBookingController = new IncomingBookingController(incomingBookingUsecase)

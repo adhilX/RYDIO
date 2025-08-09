@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router';
+import { useState } from 'react';
+import ReasonModal from '@/components/modal/ReasonModal';
 
 const IMG_URL=import.meta.env.VITE_IMAGE_URL
 interface AdminVehicleModalProps {
@@ -17,19 +19,39 @@ interface AdminVehicleModalProps {
 
 export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onClose, vehicle }) => {
   const {pathname} = useLocation()
+  const [showReasonModal, setShowReasonModal] = useState(false);
+  
   if (!vehicle) return null;
-const showBtn = pathname == '/admin/vehicle_requests'
+  
+  const showBtn = pathname == '/admin/vehicle_requests'
+  
   const handleAccept = async()=>{
    const response = await handleVehicle(vehicle._id!,'accepted')
-  toast.success(response.message)
-  onClose()
+   toast.success(response.message)
+   onClose()
   }
-  const handleReject = async()=>{
-   const response = await handleVehicle(vehicle._id!,'rejected')
-  toast.success(response.message)
-  onClose()
+  
+  const handleReject = () => {
+    setShowReasonModal(true);
+  }
+  
+  const handleReasonSubmit = async (reason: string) => {
+    try {
+      const response = await handleVehicle(vehicle._id!, 'rejected', reason)
+      toast.success(response.message)
+      setShowReasonModal(false);
+      onClose()
+    } catch (error) {
+      console.error('Error rejecting vehicle:', error);
+      toast.error('Failed to reject vehicle');
+    }
+  }
+  
+  const handleReasonModalClose = () => {
+    setShowReasonModal(false);
   }
   return (
+    <>
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl p-0 overflow-hidden bg-neutral-900">
         <motion.div
@@ -112,5 +134,17 @@ const showBtn = pathname == '/admin/vehicle_requests'
         </div>:<></>}
       </DialogContent>
     </Dialog>
+    
+    <ReasonModal
+      isOpen={showReasonModal}
+      onClose={handleReasonModalClose}
+      onSubmit={handleReasonSubmit}
+      title="Reason for Vehicle Rejection"
+      description="Please provide a reason for rejecting this vehicle registration."
+      placeholder="Enter the reason for rejecting this vehicle..."
+      submitButtonText="Reject Vehicle"
+      cancelButtonText="Cancel"
+    />
+    </>
   );
 };

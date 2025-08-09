@@ -9,4 +9,5 @@ export interface IbookingRepostory {
    getBookedVehiclesByVehicleId(vehicle_id:string): Promise<string[]|null>
    getBookingById(booking_id:string): Promise<Ibooking | null>
    changeBookingStatus(booking_id:string,status:string): Promise<Ibooking | null>
+   getOwnerBookings(userId:string,limit:number,page:number,search:string,status:string): Promise<{bookings:Ibooking[],total:number}|null>
 }

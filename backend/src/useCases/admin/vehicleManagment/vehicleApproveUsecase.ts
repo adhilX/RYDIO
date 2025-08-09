@@ -6,10 +6,10 @@ export class VehicleUpproveUsecase implements IvehicleAproveUsecase {
     constructor(vehicleRepository: VehicleRepository) {
         this._vehicleRepository = vehicleRepository
     }
-    approveVehicle(id: string,action:'accepted'|'rejected'): Promise<boolean> {
+    approveVehicle(id: string,action:'accepted'|'rejected',reason?:string): Promise<boolean> {
         if(action=='accepted'){
           return this._vehicleRepository.approveVehicle(id,action)
         }
-        return this._vehicleRepository.rejectVehicle(id,action)
+        return this._vehicleRepository.rejectVehicle(id,action,reason)
     }
 }
