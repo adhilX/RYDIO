@@ -2,14 +2,13 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Filter, X, RotateCcw, Search, ArrowUpDown } from "lucide-react";
+import { Filter, X, RotateCcw, ArrowUpDown } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import type { FilterState } from "@/Types/User/carType";
 
-export type SortOption = 'price_low_high' | 'price_high_low' | 'distance' | 'rating' | 'newest' | 'oldest';
+export type SortOption = 'price_low_high' | 'price_high_low'
 
 interface FilterSidebarProps {
   filters: FilterState & { search?: string; sortBy?: SortOption };
@@ -20,10 +19,6 @@ interface FilterSidebarProps {
 const SORT_OPTIONS = [
   { value: 'price_low_high' as SortOption, label: 'Price: Low to High' },
   { value: 'price_high_low' as SortOption, label: 'Price: High to Low' },
-  { value: 'distance' as SortOption, label: 'Distance: Nearest First' },
-  { value: 'rating' as SortOption, label: 'Rating: Highest First' },
-  { value: 'newest' as SortOption, label: 'Newest First' },
-  { value: 'oldest' as SortOption, label: 'Oldest First' },
 ];
 
 // Define filter option arrays outside component
@@ -184,7 +179,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
       <Separator className="bg-white/20" />
 
       {/* Search Bar */}
-      <div className="space-y-3">
+      {/* <div className="space-y-3">
         <Label className="text-sm font-medium text-gray-300">Search Cars</Label>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -202,7 +197,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
             className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-500"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Sort Options */}
       <div className="space-y-3">
@@ -255,7 +250,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
         items={TRANSMISSION_OPTIONS}
       />
     </div>
-  ), [activeFiltersCount, clearFilters, searchValue, filters, onFiltersChange, CheckboxGroup, updateFilters]);
+  ), [activeFiltersCount, clearFilters, filters, CheckboxGroup, updateFilters]);
 
   return (
     <>

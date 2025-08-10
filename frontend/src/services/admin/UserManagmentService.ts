@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/AdminInterceptors";
+import axiosInstance from "@/axios/Instance";
 import { isAxiosError } from "axios";
 
 export const UserBlock = async (userId:string) => {

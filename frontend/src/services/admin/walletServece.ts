@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/UserInterceptors";
+import axiosInstance from "@/axios/Instance";
 
 export const getwallet = async () => {
     try {

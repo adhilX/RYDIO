@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/AdminInterceptors";
+import axiosInstance from "@/axios/Instance";
 import type { IbookedData } from "@/Types/User/Booking/bookedData";
 
 export const getBookings = async (search = "", page = 1, limit = 6): Promise<{bookings: IbookedData[], total: number}> => {

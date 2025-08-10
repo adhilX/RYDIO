@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/AdminInterceptors";
+import axiosInstance from "@/axios/Instance";
 
 export const getPendingVehicle = async (search= '',page = 1, limit = 6) => {
   try {

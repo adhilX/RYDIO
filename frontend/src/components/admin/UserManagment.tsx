@@ -176,8 +176,8 @@ export function UserManagement() {
                       <button
                         onClick={() => handleBlock(user._id, user.is_blocked)}
                         className={`text-sm font-medium px-3 py-1 rounded-lg transition-all duration-200 shadow-sm ${user.is_blocked
-                            ? 'bg-[#e63946]/20 text-[#e63946] hover:bg-[#e63946]/30'
-                            : 'bg-green-900/30 text-green-400 hover:bg-black/60'
+                          ? 'bg-[#e63946]/20 text-[#e63946] hover:bg-[#e63946]/30'
+                          : 'bg-green-900/30 text-green-400 hover:bg-black/60'
                           }`}
                       >
                         {user.is_blocked ? 'Unblock' : 'Block'}
@@ -187,8 +187,8 @@ export function UserManagement() {
                       <button
                         onClick={() => handleVendorAccess(user._id, user.vendor_access)}
                         className={`text-sm font-medium px-3 py-1 rounded-lg transition-all duration-200 shadow-sm ${user.vendor_access
-                            ? 'bg-[#e63946]/20 text-[#e63946] hover:bg-[#e63946]/30'
-                            : 'bg-black/60 text-gray-300 hover:bg-black/80'
+                          ? 'bg-[#e63946]/20 text-[#e63946] hover:bg-[#e63946]/30'
+                          : 'bg-black/60 text-gray-300 hover:bg-black/80'
                           }`}
                       >
                         {user.vendor_access ? 'True' : 'False'}
