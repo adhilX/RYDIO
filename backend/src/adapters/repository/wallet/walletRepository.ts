@@ -30,4 +30,12 @@ export class WalletRepository implements IWalletRepository {
       { new: true }
     )
   }
+
+  async addTransaction(userId: string, transactionId: string): Promise<IWallet | null> {
+    return await WalletModel.findOneAndUpdate(
+      { user_id: userId },
+      { $push: { transactions: transactionId } },
+      { new: true }
+    )
+  }
 }

@@ -20,7 +20,6 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
         if (!booking) {
             throw new Error('Booking not found');
         }
-
         if (booking.status === BookingStatus.Cancelled) {
             throw new Error('Booking is already cancelled');
         }
@@ -33,16 +32,7 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
             throw new Error('Cannot cancel an ongoing booking');
         }
 
-        const currentTime = new Date();
-        const bookingStartTime = new Date(booking.start_date);
-        const timeDifference = bookingStartTime.getTime() - currentTime.getTime();
-        const hoursDifference = timeDifference / (1000 * 3600);
-
-        if (hoursDifference < 24) {
-            throw new Error('Cannot cancel booking less than 24 hours before start time');
-        }
-
-        const vehicle = await this._vehicleRepository.getVehicleDetails(booking.vehicle_id.toString());
+        const vehicle = await this._vehicleRepository.getVehicle(booking.vehicle_id.toString());
         if (!vehicle) {
             throw new Error('Vehicle not found');
         }
@@ -55,34 +45,42 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
         const ownerCompensation = Math.round(totalAmount * 0.3);
 
         try {
-            await this._bookingRepository.cancelBooking(bookingId, reason);
-
+            await this._bookingRepository.cancelBooking(bookingId, reason);            
             await this._adminWalletRepository.updateWalletBalance(-totalAmount);
-
-            await this._walletRepository.updateWallet(userId, userRefund);
-
-            await this._trasationRepository.createTrasation(
+            const userTransaction = await this._trasationRepository.createTrasation(
                 'admin',   
                 userId,    
                 userRefund,
                 'refund',
                 bookingId,
                 'credit'
-            );
-            await this._walletRepository.updateWallet(ownerId, ownerCompensation);
-
-            await this._trasationRepository.createTrasation(
+            );            
+            if (userTransaction && userTransaction._id) {
+                await this._adminWalletRepository.addTransaction(userTransaction._id.toString());
+            }
+            await this._walletRepository.updateWallet(userId, userRefund);
+            if (userTransaction && userTransaction._id) {
+                await this._walletRepository.addTransaction(userId, userTransaction._id.toString());
+            }
+            const ownerTransaction = await this._trasationRepository.createTrasation(
                 'admin',
                 ownerId,
-                ownerCompensation,
+                ownerCompensation, 
                 'refund',
                 bookingId,
                 'credit'
-            );
-
+            );            
+            if (ownerTransaction && ownerTransaction._id) {
+                await this._adminWalletRepository.addTransaction(ownerTransaction._id.toString());
+            }
+            await this._walletRepository.updateWallet(ownerId, ownerCompensation);
+            if (ownerTransaction && ownerTransaction._id) {
+                await this._walletRepository.addTransaction(ownerId, ownerTransaction._id.toString());
+            }
             return true;
         } catch (error) {
-            throw error
+            console.error('Cancel booking error:', error);
+            throw error;
         }
     }
 }

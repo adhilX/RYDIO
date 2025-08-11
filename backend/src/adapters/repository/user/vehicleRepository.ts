@@ -117,4 +117,7 @@ async findVehicle(lat: number, lon: number, search: string, page: number, limit:
 
   return true;
 }
+async getVehicle(vehicleId:string):Promise<IVehicle | null>{
+    return await VehicleModel.findById(vehicleId)
+}
 }

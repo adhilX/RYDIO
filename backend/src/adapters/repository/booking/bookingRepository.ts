@@ -177,7 +177,7 @@ export class BookingRepository implements IbookingRepostory {
      }
 
      async getBookingById(booking_id: string): Promise<Ibooking | null> {
-          return await bookingModel.findById(booking_id)
+          return await bookingModel.findOne({booking_id})
      }
      async changeBookingStatus(booking_id: string, status: string): Promise<Ibooking | null> {
           return await bookingModel.findByIdAndUpdate(booking_id, { status })
@@ -255,7 +255,7 @@ export class BookingRepository implements IbookingRepostory {
           return { bookings, total };
      }
      async cancelBooking(booking_id:string,reason:string): Promise<boolean> {
-          await bookingModel.findByIdAndUpdate(booking_id, { status: "cancelled", cancellation_reason: reason });
+          await bookingModel.findOneAndUpdate({booking_id}, { status: "cancelled", cancellation_reason: reason });
           return true;
      }
 }

@@ -53,7 +53,6 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
     }
 
     setIsCancelling(true)
-    console.log('Cancelling booking:', booking.booking_id, 'Reason:', cancelReason)
     
     try {
       await cancelBooking(booking.booking_id, cancelReason)
@@ -61,7 +60,8 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
       setCancelReason('')
       onClose()
     } catch (error) {
-      toast.error('Failed to cancel booking')
+      const errorMessage = error instanceof Error ? error.message : 'Failed to cancel booking'
+      toast.error(errorMessage)
       console.error('Cancel booking error:', error)
     } finally {
       setIsCancelling(false)

@@ -42,7 +42,7 @@ const CancelConfirmationModal: React.FC<CancelConfirmationModalProps> = ({
               ⚠️ Refund Policy
             </p>
             <p className="text-yellow-100 text-sm">
-              You will only receive <strong>70% refund</strong> of the total amount (₹{refundAmount.toLocaleString('en-IN')}) if you cancel this booking.
+              You will only receive <strong>70% refund</strong> of the total amount (₹{refundAmount}) if you cancel this booking.
             </p>
           </div>
           <div className="p-3 bg-gray-800 rounded-lg">

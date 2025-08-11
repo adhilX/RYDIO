@@ -7,8 +7,8 @@ export class CancelBookingController {
     async cancelBooking(req:Request,res:Response){
         try {
             const {reason} = req.body;
-            const {booking_id}= req.params
-            await this.cancelBookingUseCase.execute(booking_id,reason);
+            const {bookingId}= req.params
+            await this.cancelBookingUseCase.execute(bookingId,reason);
             res.status(HttpStatus.OK).json({message:"Booking Cancelled"})
         } catch (error) {
             console.log('error while canceling booking ', error)

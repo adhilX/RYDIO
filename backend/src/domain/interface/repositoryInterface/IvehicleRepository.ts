@@ -24,4 +24,5 @@ export interface IvehicleRepository {
    isExistingVehicle(regiseration_number: string): Promise<boolean>
    deleteVehicle(vehicleId:string):Promise<boolean>
    changeVehicleStatus(vehicleId:string):Promise<boolean>
+   getVehicle(vehicleId:string):Promise<IVehicle | null>
 }

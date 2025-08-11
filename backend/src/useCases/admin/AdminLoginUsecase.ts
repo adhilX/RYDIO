@@ -3,6 +3,7 @@ import { IadminRepository } from "../../domain/interface/repositoryInterface/Iad
 import { IhashPassword } from "../../domain/interface/serviceInterface/IhashPassword";
 import { IadminLoginUseCase } from "../../domain/interface/usecaseInterface/admin/Auth/IadminLoginUsecase";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
+import { IAdminWallet } from "../../domain/entities/adminWalletEntities";
 
 export class LoginAdminUsecase implements IadminLoginUseCase {
 
@@ -19,7 +20,10 @@ async handleLogin(email: string, password: string): Promise<Pick<User, '_id' | '
         const admin = await this._adminRepository.findByEmail(email)
         if (!admin) throw new Error('admin not exist with this Email')
         if (admin.role !== 'admin') throw new Error('this is not admin')
+        const existingWallet: IAdminWallet | null = await this._adminWalletRepository.getwalletDetails();
+        if (!existingWallet) {
             await this._adminWalletRepository.createWallet()
+        }
         const matchPass = await this._hashPassword.comparePassword(password, admin.password)
         if (!matchPass) throw new Error('password not match')
         return {

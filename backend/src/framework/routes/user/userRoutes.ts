@@ -91,7 +91,7 @@ export class UserRoutes {
     this.UserRoutes.get('/start-ride/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         rideStartController.handleRideStart(req,res)
     })
-    this.UserRoutes.get('/cancel-booking/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/cancel-booking/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         cancelBookingController.cancelBooking(req,res)
     })
     this.UserRoutes.get('/end-ride/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{

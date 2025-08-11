@@ -6,6 +6,6 @@ export interface ITransaction {
   to: string;   
   amount: number;
   purpose: 'booking' | 'refund' | 'penalty' | 'deposit' | 'release' | 'commission'; 
-  bookingId: string|ObjectId; 
+  bookingId: string; 
   transactionType: 'debit' | 'credit'; 
 }
