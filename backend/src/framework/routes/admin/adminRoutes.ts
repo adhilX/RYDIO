@@ -49,5 +49,6 @@ export class AdminRoutes {
         this.AdminRoute.get('/get-wallet',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
            getAdminWalletController.getWalletDetails(req,res)
         })
+
     }
 }

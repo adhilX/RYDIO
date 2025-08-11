@@ -1,9 +1,9 @@
 import axiosInstance from "@/axios/UserInterceptors";
 import { isAxiosError } from "axios";
 
-export const getWallet = async (userId: string) => {
+export const getWallet = async (userId: string, page: number, limit: number) => {
   try {
-    const response = await axiosInstance.get(`/get-wallet/${userId}`);
+    const response = await axiosInstance.get(`/get-wallet/${userId}?page=${page}&limit=${limit}`);
     return response.data;
   } catch (error) {
     console.log('error while fetching wallet', error);

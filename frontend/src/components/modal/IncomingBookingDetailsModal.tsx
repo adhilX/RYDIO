@@ -21,64 +21,9 @@ import {
 } from 'lucide-react'
 import { format } from 'date-fns'
 import React from 'react'
+import type { IncomingBooking } from '@/Types/User/Booking/IncomingBooking';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
-
-// Define types based on the API response
-interface Vehicle {
-  _id: string
-  name: string
-  brand: string
-  registration_number: string
-  fuel_type: string
-  seats: number
-  car_type: string
-  automatic: boolean
-  price_per_day: number
-  description: string
-  image_urls: string[]
-  is_available: boolean
-}
-
-interface Location {
-  _id: string
-  name: string
-  address: string
-  city: string
-  state: string
-  country: string
-  pincode: string
-}
-
-interface Finance {
-  security_deposit: number
-  fine_amount: number
-  admin_commission: number
-  owner_earnings: number
-  is_late_return: boolean
-}
-
-interface IncomingBooking {
-  _id: string
-  booking_id: string
-  user_id: string
-  vehicle_id: string
-  address: string
-  city: string
-  start_date: string
-  end_date: string
-  total_amount: number
-  finance?: Finance
-  status: 'pending' | 'booked' | 'ongoing' | 'completed' | 'cancelled'
-  payment_type: string
-  cancellation_reason: string
-  payment_intent_id: string
-  payment_status: 'pending' | 'paid' | 'failed' | 'succeeded'
-  createdAt: string
-  updatedAt: string
-  vehicle: Vehicle
-  location: Location
-}
 
 interface IncomingBookingDetailsModalProps {
   booking: IncomingBooking | null

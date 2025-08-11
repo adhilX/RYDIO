@@ -13,7 +13,7 @@ export class WalletRepository implements IWalletRepository {
   }
 
   async getWalletByUserId(userId: string): Promise<IWallet | null> {
-    return await WalletModel.findOne({ user_id: userId })
+    return await WalletModel.findOne({ user_id: userId }).populate('transactions')
   }
 
   async updateWalletBalance(userId: string, amount: number): Promise<IWallet | null> {
