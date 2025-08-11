@@ -79,3 +79,18 @@ export const getSecurityDeposit = async () => {
         throw new Error('An unexpected error occurred while fetching security deposit');
     }
 };
+
+export const cancelBooking = async (booking_id: string,reason: string) => {
+    try {
+        const response = await axiosInstance.post(`/cancel-booking/${booking_id}`,{reason});
+        return response?.data;
+    } catch (error) {
+        console.error('Error while canceling booking:', error);
+        if (isAxiosError(error)) {
+        const errorMsg = error.response?.data?.error || error.message || 'An unknown error occurred while canceling booking';
+        throw new Error(errorMsg);
+        }
+        throw new Error('An unexpected error occurred while canceling booking');
+    }
+};
+        

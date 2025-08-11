@@ -72,6 +72,8 @@ import { RideEndUsecase } from "../../useCases/booking/rideEndUsecase"
 import { RideEndController } from "../../adapters/controllers/admin/bookingMangment/rideEndController"
 import { IncomingBookingUsecase } from "../../useCases/booking/incomingBookingUsecase"
 import { IncomingBookingController } from "../../adapters/controllers/user/booking-managment/incomingBookingController"
+import { CancelBookingUseCase } from "../../useCases/booking/cancelBookingUseCase"
+import { CancelBookingController } from "../../adapters/controllers/user/booking-managment/cancelBookingController"
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
@@ -215,3 +217,7 @@ export const rideEndController = new RideEndController(rideEndUsecase)
 //------incoming booking---------
 const incomingBookingUsecase = new IncomingBookingUsecase(bookingRepository)
 export const incomingBookingController = new IncomingBookingController(incomingBookingUsecase)
+
+//------cancel booking---------
+const cancelBookingUsecase = new CancelBookingUseCase(bookingRepository,walletRepository,adminWalletRepository,trasationRepository,vehicleRepository)
+export const cancelBookingController = new CancelBookingController(cancelBookingUsecase)

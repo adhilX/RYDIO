@@ -40,7 +40,7 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
       const response = await handleVehicle(vehicle._id!, 'rejected', reason)
       toast.success(response.message)
       setShowReasonModal(false);
-      onClose()
+      onClose() 
     } catch (error) {
       console.error('Error rejecting vehicle:', error);
       toast.error('Failed to reject vehicle');
@@ -52,7 +52,7 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
   }
   return (
     <>
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={showReasonModal ? () => {} : onClose}>
       <DialogContent className="max-w-3xl p-0 overflow-hidden bg-neutral-900">
         <motion.div
           className="w-full"

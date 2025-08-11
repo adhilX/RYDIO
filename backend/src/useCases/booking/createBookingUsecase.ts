@@ -19,6 +19,7 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
 
   async createBooking({ bookingData, user_id, stripeIntentId }: { bookingData: BookingData, user_id: string, stripeIntentId: string }): Promise<any> {
     console.log('sdfsdfsdfsdf', bookingData)
+    try{
     const redisKey = `hold:vehicle:${bookingData.vehicle_id},startDate:${bookingData.start_date},endDate:${bookingData.end_date}`;
     const owner_id= await this._vehicleRepository.getVehicleDetails(bookingData.vehicle_id).then(vehicle => vehicle?.owner_id.toString());
     if (!owner_id) throw new Error('Vehicle owner not found');
@@ -53,7 +54,10 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
       }
     }
 
-    await this._trasationRepository.createTrasation(user_id,bookingData.total_amount,'booking',booking_id,'debit')
+    await this._trasationRepository.createTrasation(user_id,'admin',bookingData.total_amount,'booking',booking_id,'debit')
     return await this._bookingRepository.createBooking(newBooking)
-  }
+    }catch(error){
+        throw error
+        }
+    }
 }

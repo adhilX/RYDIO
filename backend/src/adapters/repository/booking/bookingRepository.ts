@@ -254,4 +254,8 @@ export class BookingRepository implements IbookingRepostory {
 
           return { bookings, total };
      }
+     async cancelBooking(booking_id:string,reason:string): Promise<boolean> {
+          await bookingModel.findByIdAndUpdate(booking_id, { status: "cancelled", cancellation_reason: reason });
+          return true;
+     }
 }

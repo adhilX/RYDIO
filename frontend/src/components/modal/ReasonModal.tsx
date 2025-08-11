@@ -1,6 +1,6 @@
-import { motion, AnimatePresence } from 'framer-motion';
 import { X, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 interface ReasonModalProps {
   isOpen: boolean;
@@ -27,6 +27,7 @@ const ReasonModal = ({
   const [error, setError] = useState('');
 
   useEffect(() => {
+    console.log(isOpen,'isOpen')
     if (isOpen) {
       setReason('');
       setError('');
@@ -44,27 +45,22 @@ const ReasonModal = ({
 
   if (!isOpen) return null;
 
-  return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[100] overflow-y-auto">
+  return createPortal(
+      <div className="fixed inset-0 z-[9999] overflow-y-auto pointer-events-auto">
         <div className="flex min-h-screen items-center justify-center p-4 text-center sm:block sm:p-0">
           {/* Background overlay */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-40"
-            onClick={onClose}
+          <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9998] pointer-events-auto"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onClose();
+            }}
           />
 
           {/* Modal panel */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2 }}
-            className="inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-900 border border-gray-700 text-left align-middle shadow-2xl transition-all sm:my-8 sm:max-w-lg relative z-50"
+          <div
+            className="inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-900 border border-gray-700 text-left align-middle shadow-2xl transition-all sm:my-8 sm:max-w-lg relative z-[9999] pointer-events-auto"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 sm:p-6 pb-0">
@@ -91,7 +87,7 @@ const ReasonModal = ({
                   <label htmlFor="reason" className="block text-sm font-medium text-gray-300 mb-2">
                     Reason
                   </label>
-                  <div className="relative">
+                  <div className="relative ">
                     <textarea
                       id="reason"
                       rows={4}
@@ -101,9 +97,12 @@ const ReasonModal = ({
                       placeholder={placeholder}
                       value={reason}
                       onChange={(e) => {
+                        console.log('Input change:', e.target.value);
                         setReason(e.target.value);
                         if (error) setError('');
                       }}
+                      onFocus={() => console.log('Input focused')}
+                      onKeyDown={(e) => console.log('Key pressed:', e.key)}
                     />
                     {error && (
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -122,24 +121,24 @@ const ReasonModal = ({
                 <div className="mt-6 flex flex-col sm:flex-row-reverse gap-3">
                   <button
                     type="submit"
-                    className="inline-flex w-full justify-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-colors"
+                    className="inline-flex w-full justify-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-colors"
                   >
                     {submitButtonText}
                   </button>
                   <button
                     type="button"
                     onClick={onClose}
-                    className="inline-flex w-full justify-center rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 transition-colors"
+                    className="inline-flex w-full justify-center rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 transition-colors"
                   >
                     {cancelButtonText}
                   </button>
                 </div>
               </div>
             </form>
-          </motion.div>
+          </div>
         </div>
-      </div>
-    </AnimatePresence>
+      </div>,
+    document.body
   );
 };
 

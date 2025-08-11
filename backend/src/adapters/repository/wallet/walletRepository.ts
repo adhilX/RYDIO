@@ -22,5 +22,12 @@ export class WalletRepository implements IWalletRepository {
       { $inc: { balance: amount } },
       { new: true }
     )
-  } 
+  }
+  async updateWallet(userId: string, amount: number): Promise<IWallet | null> {
+    return await WalletModel.findOneAndUpdate(
+      { user_id: userId},
+      { $inc: { balance: amount } },
+      { new: true }
+    )
+  }
 }

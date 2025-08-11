@@ -2,10 +2,10 @@ import { ObjectId } from "mongoose";
 
 export interface ITransaction {
   _id?: string; 
-  from: string|ObjectId; 
-  to: string|ObjectId  
+  from: string; 
+  to: string;   
   amount: number;
-  purpose: 'booking' | 'refund' | 'penalty'; 
+  purpose: 'booking' | 'refund' | 'penalty' | 'deposit' | 'release' | 'commission'; 
   bookingId: string|ObjectId; 
   transactionType: 'debit' | 'credit'; 
 }

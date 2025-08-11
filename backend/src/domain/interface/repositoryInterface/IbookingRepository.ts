@@ -10,4 +10,5 @@ export interface IbookingRepostory {
    getBookingById(booking_id:string): Promise<Ibooking | null>
    changeBookingStatus(booking_id:string,status:string): Promise<Ibooking | null>
    getOwnerBookings(userId:string,limit:number,page:number,search:string,status:string): Promise<{bookings:Ibooking[],total:number}|null>
+   cancelBooking(booking_id:string,reason:string): Promise<boolean>
 }

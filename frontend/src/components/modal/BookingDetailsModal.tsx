@@ -4,10 +4,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Car, Clock, MapPin, User } from 'lucide-react'
+import { Car, Clock, MapPin, User, X } from 'lucide-react'
 import type { IbookedData } from '@/Types/User/Booking/bookedData'
 import QRGenerator from '../user/QRGenerator'
-import React from 'react'
+import React, { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import CancelReasonModal from './CancelReasonModal'
+import CancelConfirmationModal from './CancelConfirmationModal'
+import { cancelBooking } from '@/services/user/bookingService'
+import { toast } from 'react-hot-toast'
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
@@ -17,8 +22,11 @@ interface BookingDetailsModalProps {
   onClose: () => void
 }
 
-const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalProps) => {
-  if (!booking) return null
+const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOpen, onClose }) => {
+  const [showReasonModal, setShowReasonModal] = useState(false)
+  const [cancelReason, setCancelReason] = useState('')
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [isCancelling, setIsCancelling] = useState(false)
 
   const calculateDays = (startDate: string | Date, endDate: string | Date) => {
     const start = new Date(startDate)
@@ -27,20 +35,57 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   }
 
+  const handleCancelBooking = () => {
+    setShowReasonModal(true)
+  }
+
+  const handleReasonSubmit = () => {
+    if (cancelReason.trim()) {
+      setShowReasonModal(false)
+      setShowConfirmation(true)
+    }
+  }
+
+  const handleConfirmCancel = async () => {
+    if (!booking?.booking_id) {
+      toast.error('Invalid booking data')
+      return
+    }
+
+    setIsCancelling(true)
+    console.log('Cancelling booking:', booking.booking_id, 'Reason:', cancelReason)
+    
+    try {
+      await cancelBooking(booking.booking_id, cancelReason)
+      toast.success('Booking cancelled successfully!')
+      setCancelReason('')
+      onClose()
+    } catch (error) {
+      toast.error('Failed to cancel booking')
+      console.error('Cancel booking error:', error)
+    } finally {
+      setIsCancelling(false)
+      setShowConfirmation(false)
+    }
+  }
+
+  if (!booking) return null
+
   return (
-  <Dialog open={isOpen} onOpenChange={onClose}>
-    <DialogContent className="w-full bg-gray-900 text-white p-6 rounded-lg">
-      <DialogHeader>
-        <DialogTitle className="text  -xl font-semibold">Booking Details</DialogTitle>
-      </DialogHeader>
+    <>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="w-full max-w-2xl max-h-[90vh] bg-gray-900 text-white p-6 rounded-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">Booking Details</DialogTitle>
+          </DialogHeader>
 
-      <div className="mt-4 space-y-6">
+          <div className="mt-4 space-y-6 overflow-y-auto max-h-[70vh] pr-2">
 
-        {/* Booking ID */}
-        <section>
-          <p className="text-sm text-gray-400">Booking ID</p>
-          <p className="text-lg font-mono">{booking.booking_id}</p>
-        </section>
+            {/* Booking ID */}
+            <section>
+              <p className="text-sm text-gray-400">Booking ID</p>
+              <p className="text-lg font-mono">{booking.booking_id}</p>
+            </section>
 
         {/* Vehicle Info */}
         <section className="flex gap-4">
@@ -76,7 +121,7 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
         <section>
           <p className="text-sm text-gray-400 mb-1">Booking Duration</p>
           <p className="text-md font-medium">
-            {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
+            {new Date(booking.start_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })} - {new Date(booking.end_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
           <p className="text-sm text-gray-400">{calculateDays(booking.start_date, booking.end_date)} day(s)</p>
         </section>
@@ -106,6 +151,20 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
           </div>
         </section>
 
+            {/* Cancel Booking Button */}
+            {booking.status === 'booked' && (
+              <section>
+                <Button 
+                  onClick={handleCancelBooking}
+                  variant="destructive"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Cancel Booking
+                </Button>
+              </section>
+            )}
+
         {/* QR Code Section */}
         <section>
           {booking.status === 'booked' && (
@@ -127,9 +186,28 @@ const BookingDetailsModal = ({ booking, isOpen, onClose }: BookingDetailsModalPr
           </section>
         )}
       </div>
-    </DialogContent>
-  </Dialog>
-)
+      </DialogContent>
+      </Dialog>
+
+      {/* Separate Cancel Modal Components */}
+      <CancelReasonModal
+        isOpen={showReasonModal}
+        onClose={() => setShowReasonModal(false)}
+        onSubmit={handleReasonSubmit}
+        reason={cancelReason}
+        onReasonChange={setCancelReason}
+      />
+
+      <CancelConfirmationModal
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={handleConfirmCancel}
+        totalAmount={booking.total_amount}
+        reason={cancelReason}
+        isLoading={isCancelling}
+      />
+    </>
+  )
 
 }
 
