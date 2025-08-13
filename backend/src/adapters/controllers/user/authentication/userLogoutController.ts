@@ -17,7 +17,7 @@ export class UserLogoutController {
             }
             const token = authHeader.split(' ')[1];
 
-            await this._logoutUserusecase.clientLogout(token);
+            await this._logoutUserusecase.clientLogout({token});
             res.status(HttpStatus.OK).json({ message: "Logout successful" });
 
         } catch (error) {

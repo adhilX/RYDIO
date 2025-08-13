@@ -1,5 +1,5 @@
-import { User } from "../../../../entities/userEntities";
+import { GetUserInputDto, GetUserOutputDto } from "../../../DTOs/userDto/AuthDto";
 
 export interface IGetUserUsecase {
-    getUser(userId: string): Promise<User | null>;
+    getUser(input: GetUserInputDto): Promise<GetUserOutputDto>;
 }

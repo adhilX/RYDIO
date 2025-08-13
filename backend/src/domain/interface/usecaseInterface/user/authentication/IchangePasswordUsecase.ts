@@ -1,4 +1,4 @@
-import { User } from "../../../../entities/userEntities";
+import { ChangePasswordInputDto, ChangePasswordOutputDto } from "../../../DTOs/userDto/AuthDto";
 
 export interface IchangePasswordUsecase {
- ChangePassword(email: string, newPassword: string): Promise<Omit<User, 'password'>>}
+ ChangePassword(input: ChangePasswordInputDto): Promise<ChangePasswordOutputDto>}

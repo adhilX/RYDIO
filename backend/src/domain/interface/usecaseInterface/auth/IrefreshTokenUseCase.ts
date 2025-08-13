@@ -1,3 +1,5 @@
+import { RefreshTokenInputDto, RefreshTokenOutputDto } from "../../DTOs/userDto/AuthDto";
+
 export interface IrefreshTokenUseCase{
-    execute(token: string): Promise<string>
+    execute(input: RefreshTokenInputDto): Promise<RefreshTokenOutputDto>
 }

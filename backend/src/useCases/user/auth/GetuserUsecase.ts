@@ -1,11 +1,12 @@
-import { User } from "../../../domain/entities/userEntities";
+import { GetUserInputDto, GetUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IGetUserUsecase } from "../../../domain/interface/usecaseInterface/user/userProfile/IgetUserUsecase";
 
 export class GetUserUsecase implements IGetUserUsecase {
     constructor(private _userRepository: IuserRepository) {}
 
-    async getUser(userId: string): Promise<User | null> {
+    async getUser(input: GetUserInputDto): Promise<GetUserOutputDto> {
+        const { userId } = input;
         if (!userId) {
             throw new Error("User ID is required");
         }
@@ -13,6 +14,20 @@ export class GetUserUsecase implements IGetUserUsecase {
         if (!user) {
             throw new Error("User not found");
         }
-        return user;
+        
+        return {
+            _id: user._id?.toString(),
+            email: user.email,
+            name: user.name,
+            phone: user.phone,
+            idproof_id: typeof user.idproof_id === 'string' ? user.idproof_id : user.idproof_id?.toString(),
+            profile_image: user.profile_image,
+            role: user.role,
+            is_blocked: user.is_blocked,
+            is_verified_user: user.is_verified_user,
+            last_login: user.last_login,
+            vendor_access: user.vendor_access,
+            googleVerification: user.googleVerification
+        };
     }
 }

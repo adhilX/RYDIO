@@ -1,3 +1,5 @@
+import { SendForgotPasswordOtpInputDto, SendForgotPasswordOtpOutputDto } from "../../../../DTOs/userDto/AuthDto";
+
 export interface IsendOptUsecase{
-    execute(email:string):Promise<void>
+    execute(input: SendForgotPasswordOtpInputDto): Promise<SendForgotPasswordOtpOutputDto>
 }

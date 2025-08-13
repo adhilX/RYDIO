@@ -1,4 +1,5 @@
+import { LogoutUserInputDto, LogoutUserOutputDto } from "../../../DTOs/userDto/AuthDto";
 
 export interface IuserLogoutUsecase {
-    clientLogout(token:string):Promise<boolean>
+    clientLogout(input: LogoutUserInputDto): Promise<LogoutUserOutputDto>
 }

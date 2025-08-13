@@ -1,5 +1,5 @@
-import { User } from "../../../../entities/userEntities";
+import { GoogleLoginInputDto, GoogleLoginOutputDto } from "../../../DTOs/userDto/AuthDto";
 
 export interface IgoogleloginUsecase {
-    googleLogin(user: User): Promise<Omit<User, 'password'>>
+    googleLogin(input: GoogleLoginInputDto): Promise<GoogleLoginOutputDto>
 }

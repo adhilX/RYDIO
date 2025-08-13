@@ -1,5 +1,5 @@
 import { IWallet } from "../../../domain/entities/walletEnties";
-import { LoginUserInputDto, LoginUserOutputDto } from "../../../domain/interface/DTOs/userDto/LoginUserDto";
+import { LoginUserInputDto, LoginUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
 import { IhashPassword } from "../../../domain/interface/serviceInterface/IhashPassword";

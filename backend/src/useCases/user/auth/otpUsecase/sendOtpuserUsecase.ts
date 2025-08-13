@@ -1,3 +1,4 @@
+import { SendForgotPasswordOtpInputDto, SendForgotPasswordOtpOutputDto } from "../../../../domain/interface/DTOs/userDto/AuthDto";
 import { IuserRepository } from "../../../../domain/interface/repositoryInterface/IuserRepository";
 import { IemailServise } from "../../../../domain/interface/serviceInterface/IemailService";
 import { IotpService } from "../../../../domain/interface/serviceInterface/IotpService";
@@ -13,12 +14,18 @@ export class SendOtpUserUsecase implements IsendOptUsecase{
         this._userRepository = userRepository
      }
 
-     async execute(email: string): Promise<void> {
+     async execute(input: SendForgotPasswordOtpInputDto): Promise<SendForgotPasswordOtpOutputDto> {
+        const { email } = input;
         const existingUser = await this._userRepository.findByEmail(email)
         if(existingUser)throw new Error('user already exist')
         const otp = this._otpService.genarateOtp()
          console.log(otp)
         await this._otpService.storeOtp(email,otp)
         await this._emailService.sendOtp(email,otp)
+        
+        return {
+            success: true,
+            message: 'OTP sent successfully to your email'
+        };
      }
 }

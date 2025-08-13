@@ -10,7 +10,7 @@ export class ChangePasswordController {
     async handleForgetPassword(req: Request, res: Response): Promise<void> {
         try {
             const { email, newPassword } = req.body
-            const forgettingPassWord = await this._changePasswordUsecase.ChangePassword(email, newPassword)
+            const forgettingPassWord = await this._changePasswordUsecase.ChangePassword({ email, newPassword })
             if (!forgettingPassWord) {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: 'error while forget password user' })
                 return
