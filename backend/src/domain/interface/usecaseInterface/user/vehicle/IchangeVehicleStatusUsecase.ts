@@ -1,3 +1,5 @@
+import { ChangeVehicleStatusInputDto, ChangeVehicleStatusOutputDto } from "../../../DTOs/userDto/VehicleDto";
+
 export interface IchangeVehicleStatusUsecase {
-    execute(vehicleId:string):Promise<boolean>
+    execute({ vehicleId }: ChangeVehicleStatusInputDto): Promise<ChangeVehicleStatusOutputDto>
 }

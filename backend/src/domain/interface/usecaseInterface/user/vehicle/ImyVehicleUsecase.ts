@@ -1,5 +1,5 @@
-import { IVehicle } from "../../../../entities/vehcleEnties";
+import { MyVehicleInputDto, MyVehicleOutputDto } from "../../../DTOs/userDto/VehicleDto";
 
 export interface ImyVehicleUsecase {
-    getMyvehicle(owner_id:string,search:string,page:string,limit:string): Promise<{vehicle:IVehicle[],total:number}|null>
+    getMyvehicle({ owner_id, search, page, limit }: MyVehicleInputDto): Promise<MyVehicleOutputDto | null>
 }

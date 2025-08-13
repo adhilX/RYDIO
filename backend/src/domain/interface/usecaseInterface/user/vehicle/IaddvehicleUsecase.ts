@@ -1,10 +1,5 @@
-import { Location } from "../../../../entities/LocationEnties";
-import { IVehicle } from "../../../../entities/vehcleEnties";
-interface AddVehicleProps {
-  vehicle: Omit<IVehicle, 'location_id'>;
-  location: Location
-}
-export interface IaddvehicleUsecase {
+import { AddVehicleInputDto, AddVehicleOutputDto } from "../../../DTOs/userDto/VehicleDto";
 
-    addVehicle({ vehicle, location }: AddVehicleProps): Promise<IVehicle>
+export interface IaddvehicleUsecase {
+    addVehicle({ vehicle, location }: AddVehicleInputDto): Promise<AddVehicleOutputDto>
 }

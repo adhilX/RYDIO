@@ -1,7 +1,7 @@
-import { IVehicle } from "../../../domain/entities/vehcleEnties";
 import { IbookingRepostory } from "../../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
 import { IsearchVehicleUsecase } from "../../../domain/interface/usecaseInterface/user/vehicle/IsearchVehicleUsecase";
+import { SearchVehicleInputDto, SearchVehicleOutputDto } from "../../../domain/interface/DTOs/userDto/VehicleDto";
 
 export class SearchVehicleUsecase implements IsearchVehicleUsecase {
 
@@ -9,14 +9,7 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
     this._vehicleRepsitory = _vehicleRepsitory;
   }
 
-  async searchVehicle(lat: number,lon: number, search: string,pickupDate: string,returnDate: string, currentPage: number,limit: number,user_id:string,filters: {
-    fuel_types?: string[],
-      seats?: number[],
-      car_types?: string[],
-      transmission?: string[],
-      distance_range?: number
-    }
-  ): Promise<{ vehicles: IVehicle[], total: number } | null> {
+  async searchVehicle({ lat, lon, search, pickupDate, returnDate, currentPage, limit, user_id, filters }: SearchVehicleInputDto): Promise<SearchVehicleOutputDto | null> {
 // get all vehicles
     const allVehiclesResult = await this._vehicleRepsitory.findVehicle(lat, lon, search, 1, 10000, user_id, filters);
     if (!allVehiclesResult) return null;
@@ -37,7 +30,17 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
     const paginatedAvailableVehicles = vehicles.filter(v => !bookedVehicleIds.includes(v._id!.toString()));
     const plainVehicles = JSON.parse(JSON.stringify(paginatedAvailableVehicles));
 
-    const cleanVehicles = (plainVehicles as any[]).map(({ owner_id, location_id, is_available, admin_approve, createdAt, updatedAt, registration_number, description, ...rest }) => rest);
+    const cleanVehicles = (plainVehicles as any[]).map(({ owner_id, location_id, is_available, admin_approve, createdAt, updatedAt, registration_number, description, ...rest }) => ({
+      _id: rest._id,
+      name: rest.name,
+      brand: rest.brand,
+      fuel_type: rest.fuel_type,
+      seats: rest.seats,
+      car_type: rest.car_type,
+      automatic: rest.automatic,
+      price_per_day: rest.price_per_day,
+      image_urls: rest.image_urls
+    }));
     return {
       vehicles: cleanVehicles,
       total: totalAvailable 

@@ -11,7 +11,7 @@ export class VehilceDetailsController {
     async getVehicleDetails(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params
-            const vehicle = await this._vehicleDetailsUsecase.getVehicleDetails(id)
+            const vehicle = await this._vehicleDetailsUsecase.getVehicleDetails({id})
             if (!vehicle) {
                 res.status(HttpStatus.NOT_FOUND).json({ message: 'Vehicle not found' });
                 return

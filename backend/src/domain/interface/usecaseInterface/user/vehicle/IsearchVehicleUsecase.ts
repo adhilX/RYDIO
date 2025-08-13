@@ -1,21 +1,5 @@
-import { IVehicle } from "../../../../entities/vehcleEnties";
+import { SearchVehicleInputDto, SearchVehicleOutputDto } from "../../../DTOs/userDto/VehicleDto";
 
 export interface IsearchVehicleUsecase {
-  searchVehicle(
-    lat: number,
-    lon: number,
-    search: string,
-    pickupDate: string,
-    returnDate: string,
-    currentPage: number,
-    limit: number,
-    user_id:string,
-    filters: {
-      fuel_types?: string[],
-      seats?: number[],
-      car_types?: string[],
-      transmission?: string[]
-      distance_range?: number
-    }
-  ): Promise<{ vehicles: IVehicle[], total: number } | null>;
+  searchVehicle({ lat, lon, search, pickupDate, returnDate, currentPage, limit, user_id, filters }: SearchVehicleInputDto): Promise<SearchVehicleOutputDto | null>
 }
