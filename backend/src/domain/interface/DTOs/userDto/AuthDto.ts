@@ -50,15 +50,6 @@ export interface CreateUserOutputDto extends BaseUserOutputDto {
   _id: string; // Required for create user
 }
 
-//---refresh token dto
-export interface RefreshTokenInputDto {
-  token: string;
-}
-
-export interface RefreshTokenOutputDto {
-  accessToken: string;
-}
-
 //---get user dto
 export interface GetUserInputDto {
   userId: string;

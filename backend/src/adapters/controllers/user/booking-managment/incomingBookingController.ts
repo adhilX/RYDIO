@@ -9,7 +9,7 @@ export class IncomingBookingController {
         try {
             const {userId} = req.params
             const {limit,page,search,status} = req.body
-            const result = await this._incomingBookingUsecase.execute(userId,limit,page,search,status)
+            const result = await this._incomingBookingUsecase.execute({ owner_id: userId, page, limit,search,status})
             res.json(result)
         } catch (error) {
             console.log('error while fetching booking details',error)

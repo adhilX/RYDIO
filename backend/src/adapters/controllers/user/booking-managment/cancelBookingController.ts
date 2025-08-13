@@ -8,7 +8,7 @@ export class CancelBookingController {
         try {
             const {reason} = req.body;
             const {bookingId}= req.params
-            await this.cancelBookingUseCase.execute(bookingId,reason);
+            await this.cancelBookingUseCase.execute({ booking_id: bookingId, cancellation_reason: reason });
             res.status(HttpStatus.OK).json({message:"Booking Cancelled"})
         } catch (error) {
             console.log('error while canceling booking ', error)

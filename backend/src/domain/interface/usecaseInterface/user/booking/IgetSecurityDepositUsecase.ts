@@ -1,3 +1,3 @@
 export interface IgetSecurityDepositUsecase {
-getSecurityDeposit(): Promise<number>
+    getSecurityDeposit(): Promise<number>
 }

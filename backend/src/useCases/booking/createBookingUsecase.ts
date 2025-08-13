@@ -1,6 +1,6 @@
-import { BookingData, BookingStatus, Ibooking, PaymentStatus, PaymentType } from "../../domain/entities/BookingEntities"
-import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository"
+import { BookingStatus, Ibooking, PaymentStatus, PaymentType, BookingData } from "../../domain/entities/BookingEntities"
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
+import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository"
 import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ItrasationRepository"
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository"
 import { IredisService } from "../../domain/interface/serviceInterface/IredisService"
@@ -17,7 +17,7 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
     this._trasationRepository = _trasationRepository
   }
 
-  async createBooking({ bookingData, user_id, stripeIntentId }: { bookingData: BookingData, user_id: string, stripeIntentId: string }): Promise<any> {
+  async createBooking({bookingData,user_id,stripeIntentId}: {bookingData:BookingData,user_id:string,stripeIntentId:string}): Promise<Ibooking> {
     console.log('sdfsdfsdfsdf', bookingData)
     try{
     const redisKey = `hold:vehicle:${bookingData.vehicle_id},startDate:${bookingData.start_date},endDate:${bookingData.end_date}`;
@@ -26,7 +26,27 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
     await this._redisService.del(redisKey);
 
     const existingBooking = await this._bookingRepository.findByPaymentIntentId(stripeIntentId);
-    if (existingBooking) return existingBooking;
+    if (existingBooking) {
+      return {
+        _id: existingBooking._id,
+        booking_id: existingBooking.booking_id,
+        user_id: existingBooking.user_id.toString(),
+        vehicle_id: existingBooking.vehicle_id.toString(),
+        address: existingBooking.address,
+        city: existingBooking.city,
+        start_date: existingBooking.start_date,
+        end_date: existingBooking.end_date,
+        ride_start_time: existingBooking.ride_start_time,
+        ride_end_time: existingBooking.ride_end_time,
+        total_amount: existingBooking.total_amount,
+        finance: existingBooking.finance,
+        payment_type: existingBooking.payment_type,
+        status: existingBooking.status,
+        payment_status: existingBooking.payment_status,
+        payment_intent_id: existingBooking.payment_intent_id,
+        cancellation_reason: existingBooking.cancellation_reason
+      };
+    }
 
     await this._adminWalletRepository.updateWalletBalance(bookingData.total_amount);
     const booking_id = await idGeneratorService.generateBookingId();
@@ -57,7 +77,27 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
     }
 
     await this._trasationRepository.create({from:user_id,to:'admin',amount:bookingData.total_amount,purpose:'booking',bookingId:booking_id,transactionType:'debit'})
-    return await this._bookingRepository.create(newBooking)
+    const savedBooking = await this._bookingRepository.create(newBooking);
+    
+    return {
+      _id: savedBooking._id,
+      booking_id: savedBooking.booking_id,
+      user_id: savedBooking.user_id.toString(),
+      vehicle_id: savedBooking.vehicle_id.toString(),
+      address: savedBooking.address,
+      city: savedBooking.city,
+      start_date: savedBooking.start_date,
+      end_date: savedBooking.end_date,
+      ride_start_time: savedBooking.ride_start_time,
+      ride_end_time: savedBooking.ride_end_time,
+      total_amount: savedBooking.total_amount,
+      finance: savedBooking.finance,
+      payment_type: savedBooking.payment_type,
+      status: savedBooking.status,
+      payment_status: savedBooking.payment_status,
+      payment_intent_id: savedBooking.payment_intent_id,
+      cancellation_reason: savedBooking.cancellation_reason
+    };
     }catch(error){
         throw error
         }

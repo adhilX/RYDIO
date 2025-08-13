@@ -82,7 +82,6 @@ export class BookingRepository extends BaseRepository<Ibooking> implements Ibook
 
           return { bookings, total };
 
-
      }
      async getBookingData(search: string, limit: number, page: number): Promise<{ bookings: Ibooking[], total: number } | null> {
           const skip = (page - 1) * limit;

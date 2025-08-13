@@ -5,6 +5,7 @@ import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWal
 import { TrasationRepository } from "../../adapters/repository/transation/TrasationRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
 import { BookingStatus } from "../../domain/entities/BookingEntities";
+import { CancelBookingInputDto, CancelBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 
 export class CancelBookingUseCase implements IcancelBookingUseCase  {
     constructor(
@@ -15,8 +16,8 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
         private _vehicleRepository: IvehicleRepository
     ){}
 
-    async execute(bookingId: string, reason: string): Promise<boolean> {
-        const booking = await this._bookingRepository.findById(bookingId);
+    async execute({ booking_id, cancellation_reason }: CancelBookingInputDto): Promise<CancelBookingOutputDto> {
+        const booking = await this._bookingRepository.findById(booking_id);
         if (!booking) {
             throw new Error('Booking not found');
         }
@@ -45,14 +46,14 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
         const ownerCompensation = Math.round(totalAmount * 0.3);
 
         try {
-            await this._bookingRepository.cancelBooking(bookingId, reason);            
+            await this._bookingRepository.cancelBooking(booking_id, cancellation_reason);            
             await this._adminWalletRepository.updateWalletBalance(-totalAmount);
             const userTransaction = await this._trasationRepository.create({
                from: 'admin',   
                to: userId,    
                amount: userRefund,
                purpose: 'refund',
-               bookingId,
+               bookingId: booking_id,
                transactionType:'credit'
         });            
             if (userTransaction && userTransaction._id) {
@@ -67,7 +68,7 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
                to: ownerId,    
                amount: ownerCompensation,
                purpose: 'refund',
-               bookingId,
+               bookingId: booking_id,
                transactionType:'credit'
             });            
             if (ownerTransaction && ownerTransaction._id) {
@@ -77,7 +78,11 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
             if (ownerTransaction && ownerTransaction._id) {
                 await this._walletRepository.addTransaction(ownerId, ownerTransaction._id.toString());
             }
-            return true;
+            return {
+                success: true,
+                message: 'Booking cancelled successfully',
+                refund_amount: userRefund
+            };
         } catch (error) {
             console.error('Cancel booking error:', error);
             throw error;

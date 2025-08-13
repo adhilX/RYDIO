@@ -15,8 +15,8 @@ async getVehicleDetails({ id }: VehicleDetailsInputDto): Promise<VehicleDetailsO
  
  return {
    _id: vehicle._id,
-   owner_id: vehicle.owner_id.toString(),
-   location_id: vehicle.location_id.toString(),
+   owner_id: typeof vehicle.owner_id === 'object' && vehicle.owner_id !== null ? vehicle.owner_id : (vehicle.owner_id?.toString() || ''),
+   location_id: typeof vehicle.location_id === 'object' && vehicle.location_id !== null ? vehicle.location_id : (vehicle.location_id?.toString() || ''),
    name: vehicle.name,
    brand: vehicle.brand,
    registration_number: vehicle.registration_number,

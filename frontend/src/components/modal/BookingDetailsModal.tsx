@@ -13,6 +13,7 @@ import CancelReasonModal from './CancelReasonModal'
 import CancelConfirmationModal from './CancelConfirmationModal'
 import { cancelBooking } from '@/services/user/bookingService'
 import { toast } from 'react-hot-toast'
+import { useNavigate } from 'react-router'
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
@@ -27,7 +28,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
   const [cancelReason, setCancelReason] = useState('')
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [isCancelling, setIsCancelling] = useState(false)
-
+  const navigate = useNavigate()
   const calculateDays = (startDate: string | Date, endDate: string | Date) => {
     const start = new Date(startDate)
     const end = new Date(endDate)
@@ -91,9 +92,10 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
         <section className="flex gap-4">
           <div className="w-32 h-24 overflow-hidden rounded-md border border-gray-700">
             <img
+            onClick={()=>navigate(`/vehicle-details/${booking.vehicle._id}`)}
               src={IMG_URL + booking.vehicle.image_urls[0]}
               alt={booking.vehicle.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full cursor-pointer object-cover"
             />
           </div>
           <div className="flex-1">

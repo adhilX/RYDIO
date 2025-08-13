@@ -1,5 +1,5 @@
-import { Ibooking } from "../../../../entities/BookingEntities";
+import { MyBookingInputDto, MyBookingOutputDto } from "../../../DTOs/bookingDto/BookingDto";
 
 export interface ImyBookingUsecase {
-    execute(user_id: string,limit: number,page: number,search: string,status:string): Promise<{bookings:Ibooking[],total:number}|null>;
+    execute({ user_id, page, limit,search,status }: MyBookingInputDto): Promise<MyBookingOutputDto | null>;
 }

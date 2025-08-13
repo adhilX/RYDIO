@@ -57,8 +57,8 @@ const ListVehilce = () => {
         setIsLoading(true);
         try {
             const response = await getMyVehicle(user._id, debouncedSearch, currentPage, limit);
-            if (response?.vehicle) {
-                setVehicles(response.vehicle);
+            if (response?.vehicles) {
+                setVehicles(response.vehicles);
                 setTotalPages(Math.ceil((response.total || 0) / limit));
             }
         } catch (error) {
@@ -146,121 +146,121 @@ const ListVehilce = () => {
                         </thead>
                         <tbody>
                             {vehicles.map((vehicle, index) => (
-                                <tr key={index} className="border-b border-stone-700 hover:bg-stone-800/50 transition-colors">
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center space-x-4">
-                                            <div className="flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden">
-                                                <img
-                                                    src={IMG_URL + vehicle.image_urls[0]}
-                                                    alt={vehicle.name}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-white font-medium">{vehicle.name}</h3>
-                                                <p className="text-sm text-gray-300">{vehicle.brand}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-4 text-center text-gray-300 capitalize">
-                                        {vehicle.fuel_type}
-                                    </td>
-                                    <td className="px-4 py-4 text-center">
-                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${vehicle.admin_approve === 'accepted'
-                                            ? 'bg-green-100 text-green-800'
-                                            : vehicle.admin_approve === 'pending'
-                                                ? 'bg-red-100 text-red-800'
-                                                : 'bg-yellow-100 text-yellow-800'
-                                            }`}>
-                                            {vehicle.admin_approve}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        <div className="flex flex-col items-center space-y-1.5">
-                                            <button
-                                                onClick={() => {
-                                                    handleStatusToggle(vehicle._id!, !!vehicle.is_available);
-                                                }}
-                                                disabled={updatingStatus[vehicle._id!]}
-                                                className={`relative inline-flex items-center h-7 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${vehicle.is_available ? 'bg-green-200' : 'bg-gray-400'}`}
-                                            >
-                                                <span className={`inline-block w-5 h-5 transform transition-transform bg-white rounded-full shadow-md ${vehicle.is_available ? 'translate-x-8' : 'translate-x-1'}`} />
-                                                {updatingStatus[vehicle._id!] && (
-                                                    <div className="absolute inset-0 flex items-center justify-center">
-                                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                                    </div>
-                                                )}
-                                            </button>
-                                            <span className={`text-xs font-medium ${vehicle.is_available ? 'text-white' : 'text-gray-400'}`}>
-                                                {updatingStatus[vehicle._id!] ? 'Updating...' : vehicle.is_available ? 'Listed' : 'Unlisted'}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        <div className="flex justify-center space-x-3">
-                                            <div className="flex items-center space-x-2">
-                                                {/* <button
-                                                    onClick={() => {
-                                                        if (vehicle._id) {
-                                                            navigate(`/userProfile/edit-vehicle/${vehicle._id}`);
-                                                        }
-                                                    }}
-                                                    className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
-                                                    title="Edit Vehicle"
-                                                >
-                                                    <Edit className="w-4 h-4" />
-                                                </button> */}
-                                                <div className="relative">
-                                                    {showDeleteConfirm === vehicle._id ? (
-                                                        <div className="absolute right-0 z-10 flex items-center bg-white rounded-lg shadow-lg p-1 space-x-1">
-                                                            <span className="px-2 text-sm text-gray-700 whitespace-nowrap">Delete?</span>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    if (vehicle._id) {
-                                                                        handleDelete(vehicle._id);
-                                                                    }
-                                                                }}
-                                                                disabled={deletingId === vehicle._id}
-                                                                className="p-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
-                                                                title="Confirm Delete"
-                                                            >
-                                                                {deletingId === vehicle._id ? (
-                                                                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                                                ) : (
-                                                                    <Check className="w-3.5 h-3.5" />
-                                                                )}
-                                                            </button>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    setShowDeleteConfirm(null);
-                                                                }}
-                                                                className="p-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                                                                title="Cancel"
-                                                            >
-                                                                <X className="w-3.5 h-3.5" />
-                                                            </button>
-                                                        </div>
-                                                    ) : (
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                if (vehicle._id) {
-                                                                    setShowDeleteConfirm(vehicle._id);
-                                                                }
-                                                            }}
-                                                            className="p-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors shadow-md hover:shadow-lg"
-                                                            title="Delete Vehicle"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                         <tr key={index} className="border-b border-stone-700 hover:bg-stone-800/50 transition-colors">
+                         <td className="px-6 py-4">
+                             <div className="flex items-center space-x-4">
+                                 <div className="flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden">
+                                     <img
+                                         src={IMG_URL + vehicle.image_urls[0]}
+                                         alt={vehicle.name}
+                                         className="w-full h-full object-cover"
+                                     />
+                                 </div>
+                                 <div>
+                                     <h3 className="text-white font-medium">{vehicle.name}</h3>
+                                     <p className="text-sm text-gray-300">{vehicle.brand}</p>
+                                 </div>
+                             </div>
+                         </td>
+                         <td className="px-4 py-4 text-center text-gray-300 capitalize">
+                             {vehicle.fuel_type}
+                         </td>
+                         <td className="px-4 py-4 text-center">
+                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${vehicle.admin_approve === 'accepted'
+                                 ? 'bg-green-100 text-green-800'
+                                 : vehicle.admin_approve === 'pending'
+                                     ? 'bg-red-100 text-red-800'
+                                     : 'bg-yellow-100 text-yellow-800'
+                                 }`}>
+                                 {vehicle.admin_approve}
+                             </span>
+                         </td>
+                         <td className="px-4 py-4">
+                             <div className="flex flex-col items-center space-y-1.5">
+                                 <button
+                                     onClick={() => {
+                                         handleStatusToggle(vehicle._id!, !!vehicle.is_available);
+                                     }}
+                                     disabled={updatingStatus[vehicle._id!]}
+                                     className={`relative inline-flex items-center h-7 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${vehicle.is_available ? 'bg-green-200' : 'bg-gray-400'}`}
+                                 >
+                                     <span className={`inline-block w-5 h-5 transform transition-transform bg-white rounded-full shadow-md ${vehicle.is_available ? 'translate-x-8' : 'translate-x-1'}`} />
+                                     {updatingStatus[vehicle._id!] && (
+                                         <div className="absolute inset-0 flex items-center justify-center">
+                                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                         </div>
+                                     )}
+                                 </button>
+                                 <span className={`text-xs font-medium ${vehicle.is_available ? 'text-white' : 'text-gray-400'}`}>
+                                     {updatingStatus[vehicle._id!] ? 'Updating...' : vehicle.is_available ? 'Listed' : 'Unlisted'}
+                                 </span>
+                             </div>
+                         </td>
+                         <td className="px-4 py-4">
+                             <div className="flex justify-center space-x-3">
+                                 <div className="flex items-center space-x-2">
+                                     {/* <button
+                                         onClick={() => {
+                                             if (vehicle._id) {
+                                                 navigate(`/userProfile/edit-vehicle/${vehicle._id}`);
+                                             }
+                                         }}
+                                         className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+                                         title="Edit Vehicle"
+                                     >
+                                         <Edit className="w-4 h-4" />
+                                     </button> */}
+                                     <div className="relative">
+                                         {showDeleteConfirm === vehicle._id ? (
+                                             <div className="absolute right-0 z-10 flex items-center bg-white rounded-lg shadow-lg p-1 space-x-1">
+                                                 <span className="px-2 text-sm text-gray-700 whitespace-nowrap">Delete?</span>
+                                                 <button
+                                                     onClick={(e) => {
+                                                         e.stopPropagation();
+                                                         if (vehicle._id) {
+                                                             handleDelete(vehicle._id);
+                                                         }
+                                                     }}
+                                                     disabled={deletingId === vehicle._id}
+                                                     className="p-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
+                                                     title="Confirm Delete"
+                                                 >
+                                                     {deletingId === vehicle._id ? (
+                                                         <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                     ) : (
+                                                         <Check className="w-3.5 h-3.5" />
+                                                     )}
+                                                 </button>
+                                                 <button
+                                                     onClick={(e) => {
+                                                         e.stopPropagation();
+                                                         setShowDeleteConfirm(null);
+                                                     }}
+                                                     className="p-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                                                     title="Cancel"
+                                                 >
+                                                     <X className="w-3.5 h-3.5" />
+                                                 </button>
+                                             </div>
+                                         ) : (
+                                             <button
+                                                 onClick={(e) => {
+                                                     e.stopPropagation();
+                                                     if (vehicle._id) {
+                                                         setShowDeleteConfirm(vehicle._id);
+                                                     }
+                                                 }}
+                                                 className="p-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors shadow-md hover:shadow-lg"
+                                                 title="Delete Vehicle"
+                                             >
+                                                 <Trash2 className="w-4 h-4" />
+                                             </button>
+                                         )}
+                                     </div>
+                                 </div>
+                             </div>
+                         </td>
+                     </tr>
                             ))}
                         </tbody>
                     </table>

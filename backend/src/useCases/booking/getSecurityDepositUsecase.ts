@@ -6,6 +6,7 @@ export class GetSecurityDepositUsecase implements IgetSecurityDepositUsecase{
 constructor(private _SecurityDepositRepository: ISecurityDepositRepository){}
 
 async getSecurityDeposit(): Promise<number> {
-    return this._SecurityDepositRepository.getSecurityDeposit()
+    const securityDeposit = await this._SecurityDepositRepository.getSecurityDeposit();
+    return securityDeposit;
 }
 }

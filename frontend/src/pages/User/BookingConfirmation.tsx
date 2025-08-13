@@ -26,10 +26,11 @@ const BookingConfirmation = () => {
   useEffect(() => {
     const fetchdepostdata = async () => {
      const deposit = await getSecurityDeposit()
-     setSecurityDeposit(deposit)
+     setSecurityDeposit(deposit*days)
     }
     fetchdepostdata()
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   const user = useSelector((state: RootState) => state.auth.user)
   if (!user)return 

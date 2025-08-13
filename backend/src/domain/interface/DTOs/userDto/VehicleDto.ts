@@ -33,8 +33,8 @@ export interface AddVehicleInputDto {
 }
 
 export interface AddVehicleOutputDto extends BaseVehicleDto {
-  owner_id: string;
-  location_id: string;
+  owner_id: string | object;
+  location_id: string | object;
   registration_number: string;
   description: string;
   admin_approve: 'pending' | 'accepted' | 'rejected';
@@ -85,9 +85,7 @@ export interface VehicleDetailsInputDto {
   id: string;
 }
 
-export interface VehicleDetailsOutputDto extends AddVehicleOutputDto {
-  // Includes all vehicle details with location and owner info
-}
+export interface VehicleDetailsOutputDto extends AddVehicleOutputDto {}
 
 //=================== Change Vehicle Status DTO ===================
 export interface ChangeVehicleStatusInputDto {

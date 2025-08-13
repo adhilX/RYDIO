@@ -1,3 +1,5 @@
+import { CancelBookingInputDto, CancelBookingOutputDto } from "../../../DTOs/bookingDto/BookingDto";
+
 export interface IcancelBookingUseCase {
-    execute(bookingId: string,reason:string): Promise<boolean>
+    execute({ booking_id, cancellation_reason }: CancelBookingInputDto): Promise<CancelBookingOutputDto>
 }
