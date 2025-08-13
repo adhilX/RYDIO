@@ -9,7 +9,7 @@ export interface BaseBookingDto {
   _id?: string;
   booking_id: string;
   user_id: string;
-  vehicle_id: string;
+  vehicle_id:IVehicle;
   address: string;
   city: string;
   start_date: Date;
@@ -36,7 +36,6 @@ export interface BaseOutputDto {
 
 //============================================
 
-// Note: CreateBookingInputDto removed - using original BookingData pattern
 
 export interface CreateBookingOutputDto extends BaseBookingDto {
   ride_start_time?: Date;
@@ -75,7 +74,16 @@ export interface IncomingBookingInputDto extends Omit<BaseInputDto ,'user_id'> {
   owner_id: string;
 }
 
-export interface IncomingBookingOutputDto extends BaseOutputDto{}
+export interface IncomingBookingItemDto extends Omit<CreateBookingOutputDto, 'vehicle_id'> {
+  vehicle: IVehicle;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IncomingBookingOutputDto {
+  bookings: IncomingBookingItemDto[];
+  total: number;
+}
 
 
 // Cancel Booking DTOs

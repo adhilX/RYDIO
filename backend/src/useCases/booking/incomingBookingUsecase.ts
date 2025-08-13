@@ -1,6 +1,11 @@
 import { IIncomingBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/IIncomingBookingUsecase"
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
-import { IncomingBookingInputDto, IncomingBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
+import { IncomingBookingInputDto, IncomingBookingOutputDto, IncomingBookingItemDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
+import { Ibooking } from "../../domain/entities/BookingEntities"
+import { IVehicle } from "../../domain/entities/vehcleEnties"
+
+// Type for aggregated booking result with populated vehicle
+type BookingWithVehicle = Ibooking & { vehicle: IVehicle }
 
 export class IncomingBookingUsecase implements IIncomingBookingUsecase{
     
@@ -11,11 +16,11 @@ export class IncomingBookingUsecase implements IIncomingBookingUsecase{
         if (!result) return null;
         
         return {
-            bookings: result.bookings.map(booking => ({
+            bookings: (result.bookings).map((booking: any) => ({
                 _id: booking._id,
                 booking_id: booking.booking_id,
                 user_id: booking.user_id.toString(),
-                vehicle_id: booking.vehicle_id.toString(),
+                vehicle: booking.vehicle,
                 address: booking.address,
                 city: booking.city,
                 start_date: booking.start_date,
@@ -28,7 +33,9 @@ export class IncomingBookingUsecase implements IIncomingBookingUsecase{
                 status: booking.status,
                 payment_status: booking.payment_status,
                 payment_intent_id: booking.payment_intent_id,
-                cancellation_reason: booking.cancellation_reason
+                cancellation_reason: booking.cancellation_reason,
+                createdAt: booking.createdAt,
+                updatedAt: booking.updatedAt
             })),
             total: result.total
         };

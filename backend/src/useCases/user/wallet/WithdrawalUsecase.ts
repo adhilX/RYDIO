@@ -16,7 +16,7 @@ export class WithdrawalUsecase implements IWithdrawalUsecase{
     ) {}
      async userWithdrawal(bookingId: string, userId: string): Promise<boolean> {
         try {
-            const booking = await this._bookingRepository.getBookingById(bookingId);
+            const booking = await this._bookingRepository.findById(bookingId);
             if (!booking) {
                 throw new Error("Booking not found");
             }
@@ -72,13 +72,13 @@ export class WithdrawalUsecase implements IWithdrawalUsecase{
             }
 
             // Create withdrawal transaction
-            const withdrawalTransaction = await this._transactionRepository.createTrasation(
-                'admin',
-                userId,
-                withdrawalAmount,
-                isBookingUser ? 'refund' : 'commission',
-                bookingId,
-                'credit'
+            const withdrawalTransaction = await this._transactionRepository.create(
+              {from: 'admin',
+               to: userId,
+               amount: withdrawalAmount,
+              purpose  :isBookingUser ? 'refund' : 'commission',
+             bookingId,
+             transactionType :'credit'}
             );
 
             // Update user wallet

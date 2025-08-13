@@ -10,40 +10,57 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
   }
 
   async searchVehicle({ lat, lon, search, pickupDate, returnDate, currentPage, limit, user_id, filters }: SearchVehicleInputDto): Promise<SearchVehicleOutputDto | null> {
-// get all vehicles
-    const allVehiclesResult = await this._vehicleRepsitory.findVehicle(lat, lon, search, 1, 10000, user_id, filters);
-    if (!allVehiclesResult) return null;
-    console.log(allVehiclesResult,'allVehiclesResult')
-// get all booked vehicle ids
-    const bookedVehicleIds = await this.bookigRepository.bookedVehicle(pickupDate, returnDate);
-    
-    // get all available vehicles
-    const allAvailableVehicles = allVehiclesResult.vehicles.filter(v => !bookedVehicleIds.includes(v._id!.toString()));
-    const totalAvailable = allAvailableVehicles.length;
-
-    // get paginated result
-    const paginatedResult = await this._vehicleRepsitory.findVehicle(lat, lon, search, currentPage, limit, user_id, filters);
-    if (!paginatedResult) return null;
-
-    const { vehicles } = paginatedResult;
-    // get paginated available vehicles
-    const paginatedAvailableVehicles = vehicles.filter(v => !bookedVehicleIds.includes(v._id!.toString()));
-    const plainVehicles = JSON.parse(JSON.stringify(paginatedAvailableVehicles));
-
-    const cleanVehicles = (plainVehicles as any[]).map(({ owner_id, location_id, is_available, admin_approve, createdAt, updatedAt, registration_number, description, ...rest }) => ({
-      _id: rest._id,
-      name: rest.name,
-      brand: rest.brand,
-      fuel_type: rest.fuel_type,
-      seats: rest.seats,
-      car_type: rest.car_type,
-      automatic: rest.automatic,
-      price_per_day: rest.price_per_day,
-      image_urls: rest.image_urls
-    }));
-    return {
-      vehicles: cleanVehicles,
-      total: totalAvailable 
-    };
+    try {
+      // Get all booked vehicle ids for the date range
+      const bookedVehicleIds = await this.bookigRepository.bookedVehicle(pickupDate, returnDate);
+      console.log('Booked vehicle IDs:', bookedVehicleIds);
+      
+      // Get all vehicles matching the search criteria (for total count)
+      const allVehiclesResult = await this._vehicleRepsitory.findVehicle(lat, lon, search, 1, 10000, user_id, filters);
+      if (!allVehiclesResult) {
+        console.log('No vehicles found from repository');
+        return { vehicles: [], total: 0 };
+      }
+      
+      console.log('All vehicles found:', allVehiclesResult.vehicles.length);
+      
+      // Filter out booked vehicles to get available vehicles
+      const allAvailableVehicles = allVehiclesResult.vehicles.filter(v => {
+        const vehicleId = v._id?.toString();
+        const isBooked = bookedVehicleIds.includes(vehicleId!);
+        return !isBooked;
+      });
+      
+      const totalAvailable = allAvailableVehicles.length;
+      console.log('Total available vehicles:', totalAvailable);
+      
+      // Apply pagination to available vehicles
+      const startIndex = (currentPage - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedAvailableVehicles = allAvailableVehicles.slice(startIndex, endIndex);
+      
+      console.log(`Paginated vehicles (${startIndex}-${endIndex}):`, paginatedAvailableVehicles.length);
+      
+      // Clean and format the vehicle data
+      const cleanVehicles = paginatedAvailableVehicles.map(vehicle => ({
+        _id: vehicle._id,
+        name: vehicle.name,
+        brand: vehicle.brand,
+        fuel_type: vehicle.fuel_type,
+        seats: vehicle.seats,
+        car_type: vehicle.car_type,
+        automatic: vehicle.automatic,
+        price_per_day: vehicle.price_per_day,
+        image_urls: vehicle.image_urls
+      }));
+      
+      return {
+        vehicles: cleanVehicles,
+        total: totalAvailable 
+      };
+    } catch (error) {
+      console.error('Error in searchVehicle:', error);
+      return null;
+    }
   } 
 }
