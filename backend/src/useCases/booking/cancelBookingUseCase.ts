@@ -16,7 +16,7 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
     ){}
 
     async execute(bookingId: string, reason: string): Promise<boolean> {
-        const booking = await this._bookingRepository.getBookingById(bookingId);
+        const booking = await this._bookingRepository.findById(bookingId);
         if (!booking) {
             throw new Error('Booking not found');
         }
@@ -47,14 +47,14 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
         try {
             await this._bookingRepository.cancelBooking(bookingId, reason);            
             await this._adminWalletRepository.updateWalletBalance(-totalAmount);
-            const userTransaction = await this._trasationRepository.createTrasation(
-                'admin',   
-                userId,    
-                userRefund,
-                'refund',
-                bookingId,
-                'credit'
-            );            
+            const userTransaction = await this._trasationRepository.create({
+               from: 'admin',   
+               to: userId,    
+               amount: userRefund,
+               purpose: 'refund',
+               bookingId,
+               transactionType:'credit'
+        });            
             if (userTransaction && userTransaction._id) {
                 await this._adminWalletRepository.addTransaction(userTransaction._id.toString());
             }
@@ -62,14 +62,14 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
             if (userTransaction && userTransaction._id) {
                 await this._walletRepository.addTransaction(userId, userTransaction._id.toString());
             }
-            const ownerTransaction = await this._trasationRepository.createTrasation(
-                'admin',
-                ownerId,
-                ownerCompensation, 
-                'refund',
-                bookingId,
-                'credit'
-            );            
+            const ownerTransaction = await this._trasationRepository.create({
+               from: 'admin',   
+               to: ownerId,    
+               amount: ownerCompensation,
+               purpose: 'refund',
+               bookingId,
+               transactionType:'credit'
+            });            
             if (ownerTransaction && ownerTransaction._id) {
                 await this._adminWalletRepository.addTransaction(ownerTransaction._id.toString());
             }

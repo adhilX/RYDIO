@@ -20,7 +20,9 @@ export const BookingSchema = new Schema<Ibooking>({
     fine_amount: { type: Number, default: 0 },
     admin_commission: { type: Number, default: 0 },
     owner_earnings: { type: Number, default: 0 },
-    is_late_return: { type: Boolean, default: false }
+    is_late_return: { type: Boolean, default: false },
+    user_withdraw:{type :Boolean,default :false},
+    owner_withdraw:{type:Boolean,default:false}
   },
 
   status: {

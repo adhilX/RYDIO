@@ -1,8 +1,8 @@
-import {ObjectId} from 'mongoose'
+import { IVerificationRequest } from './VerificationRequest';
 
 export interface User {
-  _id?: ObjectId; 
-  idproof_id?:ObjectId;
+  _id?: string; 
+  idproof_id?:string|IVerificationRequest;
   name: string;
   email: string;
   password: string;

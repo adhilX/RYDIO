@@ -5,12 +5,12 @@ import { IadminRepository } from "../../../domain/interface/repositoryInterface/
 import { userModel } from "../../../framework/database/models/userModel";
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
 import { verificationRequestModel } from "../../../framework/database/models/verificationRequestModel";
+import { BaseRepository } from "../base/BaseRepo";
 
-export class AdminRepository implements IadminRepository {
-  async findByEmail(email: string): Promise<User | null> {
-    return userModel.findOne({ email })
+export class AdminRepository extends BaseRepository<User> implements IadminRepository {
+  constructor() {
+    super(userModel);
   }
-
   async getAllUsers(): Promise<User[] | null> {
     return userModel.find()
   }
@@ -69,9 +69,6 @@ export class AdminRepository implements IadminRepository {
   return { vehicles, total };
 }
 
-    async findById(_id:string):Promise<User|null>{
-    return await userModel.findOne({_id,role:'admin'})
-    }
  async getIdProof(status: "pending" | "approved" | "rejected", page: number, limit: number): Promise<{idProof:IVerificationRequest[]; total:number }| null> {
 
     const skip = (page - 1) * limit;

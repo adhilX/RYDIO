@@ -1,8 +1,7 @@
 import { User } from "../../entities/userEntities";
+import { IBaseRepository } from "./IbaseRepo";
 
-export interface IuserRepository{
-
-    createUser(user:User) : Promise<User | null>
+export interface IuserRepository extends IBaseRepository<User>{
     findByEmail(email:string) :Promise<User| null>
     findById(_id:string):Promise<User|null>
     googleLogin(user:User):Promise<User|null>

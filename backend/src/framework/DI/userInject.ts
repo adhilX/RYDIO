@@ -1,6 +1,6 @@
 import { SendOtpController } from "../../adapters/controllers/user/authentication/sendlOtpController"
 import { UserRegisterController } from "../../adapters/controllers/user/authentication/userRegisterController"
-import { UserRepostory } from "../../adapters/repository/user/userRepository"
+import { UserRepository } from "../../adapters/repository/user/userRepository"
 import { CreateUserUsecase } from "../../useCases/user/auth/createUserUsecase"
 import { SendOtpUserUsecase } from "../../useCases/user/auth/otpUsecase/sendOtpuserUsecase"
 import { VerifyOtpUsecase } from "../../useCases/user/auth/otpUsecase/verfyOtpUsecase"
@@ -77,16 +77,16 @@ import { CancelBookingController } from "../../adapters/controllers/user/booking
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
-const userRepostory = new UserRepostory()
+const userRepository = new UserRepository()
 const bookingRepository = new BookingRepository()
-const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRepostory)
+const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRepository)
 const verifyOtpUsecase = new VerifyOtpUsecase(otpService)
 const hashPassword = new HashPassword()
 const redisService = new RedisService()
 const walletRepository = new WalletRepository()
 const adminWalletRepository = new AdminWalletRepository()
 const trasationRepository = new TrasationRepository()
-const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword,walletRepository)
+const createUserUsecase = new CreateUserUsecase(userRepository,hashPassword,walletRepository)
 export const sendendOtpController = new SendOtpController(sendOtpUserUsecase)
 export const  userRegisterController = new UserRegisterController(verifyOtpUsecase,createUserUsecase)
 
@@ -94,12 +94,12 @@ export const  userRegisterController = new UserRegisterController(verifyOtpUseca
 //----------login User-----------
 
 const jwtService = new JwtService()
-const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword,walletRepository)
+const loginUserUsecase = new LoginUserUsecase(userRepository,hashPassword,walletRepository)
 export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService)
 
 //-------Google Login ---------
 
-const googleLoginUsecase = new GoogleLoginUsecase(userRepostory,walletRepository)
+const googleLoginUsecase = new GoogleLoginUsecase(userRepository,walletRepository)
 export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase,redisService)
 
 //-----resendOtp ------------
@@ -107,14 +107,14 @@ const resendOtpUsecase = new ResendOtpUsecase(otpService,emailService)
 export const resendOtpController = new ResendOtpController(resendOtpUsecase)
 
 //------forgotpassword-------
-const forgotPasswordUsecase = new ForgotPasswordUsecase(otpService,emailService,userRepostory)
+const forgotPasswordUsecase = new ForgotPasswordUsecase(otpService,emailService,userRepository)
 export const sendOtpForgotPasswordController = new SendOtpForgotPasswordController(forgotPasswordUsecase)
 
 //------verifyforgotPassword---------
 export const verifyForgotPassowordOtpController = new VerifyForgotPassowordOtpController(verifyOtpUsecase)
 
 //--------change-Passoword--------
-const changePasswordUsecase = new ChangePasswordUseCase(userRepostory,hashPassword)
+const changePasswordUsecase = new ChangePasswordUseCase(userRepository,hashPassword)
 export const changePasswordController = new ChangePasswordController(changePasswordUsecase)
 
 //-------logout ----------------
@@ -122,13 +122,13 @@ const userLogoutUseCase = new UserLogoutUseCase(redisService,jwtService)
 export const userlogoutController = new UserLogoutController(userLogoutUseCase)
 
 //-------update profile------------
-const editProfileUseCase = new EditProfileUsecase(userRepostory)
+const editProfileUseCase = new EditProfileUsecase(userRepository)
 export const editProfileController = new EditProfileController(editProfileUseCase)
 
 
 //---------get user details-------------
 
-const getUserUsecase = new GetUserUsecase(userRepostory)
+const getUserUsecase = new GetUserUsecase(userRepository)
 export const getUserController = new GetUserController(getUserUsecase)
 //------ add vehicle--------------
 
@@ -139,7 +139,7 @@ export const addVehicleController = new AddVehicleController(addVehicleUsecase)
 
 //-----change password---------
 
-const changePasswordUserUsecase = new ChangePassword(userRepostory,hashPassword)
+const changePasswordUserUsecase = new ChangePassword(userRepository,hashPassword)
 export const changePasswordUserController = new ChangePasswordUserController(changePasswordUserUsecase)
 
 //---get my vehicle---

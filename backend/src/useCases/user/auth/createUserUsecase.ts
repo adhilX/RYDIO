@@ -1,4 +1,5 @@
 import { User } from "../../../domain/entities/userEntities";
+import { CreateUserInputDto, CreateUserOutputDto } from "../../../domain/interface/DTOs/userDto/createUserDto";
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
 import { IhashPassword } from "../../../domain/interface/serviceInterface/IhashPassword";
@@ -14,16 +15,16 @@ export class CreateUserUsecase implements IcreateUserUsecase{
         this.walletRepository = _walletRepository
     }
 
-    async createUser(user: User): Promise<Omit<User, 'password'> | null> {
-        
-        const existUser = await this.userRepository.findByEmail(user.email)
+    async createUser(payload: CreateUserInputDto): Promise<CreateUserOutputDto | null> {
+
+        const existUser = await this.userRepository.findByEmail(payload.email)
         if(existUser)throw new Error('user already exist')
-            const {password,email,name,phone} = user as User
+            const {password,email,name,phone} = payload
 
         let hashPassword = null
         if(password)hashPassword = await this.hashPassword.hashPassword(password)
 
-        const newUser = await this.userRepository.createUser({
+        const newUser = await this.userRepository.create({
             name,
             phone,
             email,
@@ -34,8 +35,19 @@ export class CreateUserUsecase implements IcreateUserUsecase{
         })
 
 if (!newUser) throw new Error('Error while creating user')
- await this.walletRepository.createWallet(newUser?._id?.toString()!)
-const { password: _, ...userWithoutPassword } = newUser as User;
-return userWithoutPassword
+ await this.walletRepository.create({user_id:newUser?._id?.toString()!,balance:0,is_frozen:false,transactions:[]})
+
+const returnUser: CreateUserOutputDto ={
+    _id: newUser._id?.toString()!,
+    email: newUser.email,
+    name: newUser.name,
+    phone: newUser.phone,
+    role: newUser.role,
+    is_verified_user: newUser.is_verified_user,
+    last_login: newUser.last_login,
+    vendor_access: newUser.vendor_access,
+    googleVerification: newUser.googleVerification
+} 
+     return returnUser
     }
 }

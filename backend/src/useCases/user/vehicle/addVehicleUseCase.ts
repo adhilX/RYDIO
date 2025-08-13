@@ -24,7 +24,7 @@ export class AddVehicleUsecase implements IaddvehicleUsecase{
     const isExistingVehicle = await this._vehicleRepository.isExistingVehicle(vehicle.registration_number);
     if (isExistingVehicle) throw new Error('Vehicle already exists');
     const savedLocation = await this._locationRepository.findOrCreate(location);
-    return this._vehicleRepository.addVehicle({
+    return this._vehicleRepository.create({
       ...vehicle,
       location_id: savedLocation._id!,
     });

@@ -2,14 +2,13 @@ import mongoose, { isValidObjectId, Types } from "mongoose";
 import { Ibooking } from "../../../domain/entities/BookingEntities";
 import { IbookingRepostory } from "../../../domain/interface/repositoryInterface/IbookingRepository";
 import { bookingModel } from "../../../framework/database/models/bookingModel";
+import { BaseRepository } from "../base/BaseRepo";
 
-export class BookingRepository implements IbookingRepostory {
-     async createBooking(booking: Ibooking): Promise<Ibooking> {
-          if (typeof booking.vehicle_id == "string") {
-               booking.vehicle_id = new Types.ObjectId(booking.vehicle_id) as unknown as typeof booking.vehicle_id
-          }
-          return await bookingModel.create(booking);
+export class BookingRepository extends BaseRepository<Ibooking> implements IbookingRepostory {
+     constructor() {
+          super(bookingModel);
      }
+
      async findByPaymentIntentId(payment_intent_id: string): Promise<Ibooking | null> {
           return await bookingModel.findOne({ payment_intent_id })
      }
@@ -176,9 +175,6 @@ export class BookingRepository implements IbookingRepostory {
           return unavailableDates;
      }
 
-     async getBookingById(booking_id: string): Promise<Ibooking | null> {
-          return await bookingModel.findOne({booking_id})
-     }
      async changeBookingStatus(booking_id: string, status: string): Promise<Ibooking | null> {
           return await bookingModel.findByIdAndUpdate(booking_id, { status })
      }
@@ -257,5 +253,25 @@ export class BookingRepository implements IbookingRepostory {
      async cancelBooking(booking_id:string,reason:string): Promise<boolean> {
           await bookingModel.findOneAndUpdate({booking_id}, { status: "cancelled", cancellation_reason: reason });
           return true;
+     }
+
+     async endRide(booking: Ibooking): Promise<Ibooking | null> {
+          return await bookingModel.findOneAndUpdate(
+               { booking_id: booking.booking_id }, 
+               { 
+                    ride_end_time: booking.ride_end_time,
+                    status: "completed",
+                    finance: booking.finance
+               },
+               { new: true }
+          );
+     }
+
+     async updateBookingFinance(booking_id: string, updateData: any): Promise<Ibooking | null> {
+          return await bookingModel.findOneAndUpdate(
+               { booking_id },
+               { $set: updateData },
+               { new: true }
+          );
      }
 }

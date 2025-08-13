@@ -11,18 +11,20 @@ export default function QrScanner() {
     );
 
     scanner.render(
-      (decodedText) => {
-        console.log("QR Code:", decodedText);
-       startEndRide(decodedText)
-      },
+      (decodedText, decodedResult) => {
+        console.log("Scanned text:", decodedText);
+        console.log("Full result:", decodedResult);
+        startEndRide(decodedText);
+      }, 
       (error) => {
         console.warn(error);
       }
     );
 
     return () => {
-      scanner.clear();
+      scanner.clear().catch(err => console.error("Clear failed", err));
     };
+    
   }, []);
 
   return <div id="reader" style={{ width: "300px" }}></div>;

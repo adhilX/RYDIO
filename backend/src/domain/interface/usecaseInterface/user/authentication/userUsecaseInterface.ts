@@ -1,4 +1,4 @@
-import { User } from "../../../../entities/userEntities";
+import { CreateUserInputDto, CreateUserOutputDto } from "../../../DTOs/userDto/createUserDto";
 
 export interface IcreateUserUsecase{
-createUser(user: User): Promise<Omit<User, 'password'> | null>}
+createUser(payload: CreateUserInputDto): Promise<CreateUserOutputDto | null>}

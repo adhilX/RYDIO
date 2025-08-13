@@ -6,5 +6,5 @@ import { IAdminWallet } from "../../../domain/entities/adminWalletEntities";
     commission_balance:{type: Number, required: true, default: 0},
     penalty_balance:{type: Number, required: true, default: 0},
     total_balance:{type: Number, required: true, default: 0},
-    transactions:[{type: Types.ObjectId, ref: 'transaction'}]
+    transactions:[{type: Types.ObjectId, ref: 'transaction',default:[]}]
   })

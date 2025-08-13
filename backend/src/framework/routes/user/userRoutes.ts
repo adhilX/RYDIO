@@ -97,5 +97,8 @@ export class UserRoutes {
     this.UserRoutes.get('/end-ride/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         rideEndController.handleRideEnd(req,res)
     })
+    this.UserRoutes.post('/withdrawal',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+        
+    })
 }
 }

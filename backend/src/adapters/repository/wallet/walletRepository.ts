@@ -1,15 +1,15 @@
 import { IWallet } from "../../../domain/entities/walletEnties";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
 import { WalletModel } from "../../../framework/database/models/walletModel";
+import { BaseRepository } from "../base/BaseRepo";
 
-export class WalletRepository implements IWalletRepository {
-
-  async createWallet(userId: string): Promise<IWallet> {
-    const newWallet = new WalletModel({ user_id: userId, balance: 0 });
-    return await newWallet.save();
+export class WalletRepository extends BaseRepository<IWallet> implements IWalletRepository {
+  constructor() {
+    super(WalletModel);
   }
+
   async getWalletById(walletId: string): Promise<IWallet | null> {
-    return await WalletModel.findById(walletId)
+    return await this.findById(walletId);
   }
 
   async getWalletByUserId(userId: string): Promise<IWallet | null> {

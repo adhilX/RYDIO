@@ -1,5 +1,5 @@
-import { User } from "../../../../entities/userEntities";
+import { LoginUserInputDto, LoginUserOutputDto } from "../../../DTOs/userDto/LoginUserDto";
 
 export interface IloginUserUsecase {
-    loginUser(email: string, password: string): Promise<Omit<User, 'password'>>
+    loginUser(payload: LoginUserInputDto): Promise<LoginUserOutputDto>
 }

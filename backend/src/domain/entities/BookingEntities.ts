@@ -40,8 +40,10 @@ export interface Ibooking {
     admin_commission: number;
     owner_earnings: number;
     is_late_return: boolean;
+    user_withdraw: boolean;
+    owner_withdraw: boolean;
   };
-
+  
   payment_type: PaymentType;
   status: BookingStatus;
   cancellation_reason?: string;

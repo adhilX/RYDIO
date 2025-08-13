@@ -17,7 +17,7 @@ export class UserLoginController {
     async handleLogin(req: Request, res: Response) {
         try {
             const { email, password } = req.body
-            const user = await this._loginUserUsecase.loginUser(email, password)
+            const user = await this._loginUserUsecase.loginUser({ email, password })
             if (!user) {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: 'user not found' })
                 return
@@ -27,7 +27,7 @@ export class UserLoginController {
 
             const accessToken = this._jwtService.createAccessToken(ACCESS_TOKEN_KEY, user._id?.toString() || "", user.role)
             const refreshToken = this._jwtService.createRefreshToken(REFRESH_TOKEN_KEY, user._id?.toString() || "")
-            await this._redisService.set(`user:${user.role}:${user._id}`, 15 * 60, JSON.stringify(user.is_blocked))
+            await this._redisService.set(`user:${user.role}:${user._id}`, 15 * 60                   , JSON.stringify(user.is_blocked))
             setCookie(res, refreshToken)
             const selectedFields = {
                 email: user.email,

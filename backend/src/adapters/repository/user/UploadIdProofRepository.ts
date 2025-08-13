@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { IUploadIdProofRepository } from "../../../domain/interface/repositoryInterface/IUploadIdProofRepository";
 import { verificationRequestModel } from "../../../framework/database/models/verificationRequestModel";
 import { userModel } from "../../../framework/database/models/userModel";

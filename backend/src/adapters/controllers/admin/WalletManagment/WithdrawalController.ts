@@ -1,0 +1,18 @@
+import { Request, Response } from "express";
+import { IWithdrawalUsecase } from "../../../../domain/interface/usecaseInterface/user/wallet/IuserWithdrawalUsecase";
+import { HttpStatus } from "../../../../domain/entities/httpStatus";
+
+export class UserWithdrawalController {
+    constructor(private _WithdrawalUsecase:IWithdrawalUsecase){}
+
+    async withdrawal(req:Request, res:Response):Promise<void> {
+        const { userId, bookingId } = req.body;
+        try {
+            await this._WithdrawalUsecase.userWithdrawal(bookingId, userId);
+
+            res.status(HttpStatus.OK).json({message:"Withdrawal request successfull"});
+        } catch (error) {
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "Withdrawal request failed", error });
+        }
+    }
+}

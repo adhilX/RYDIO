@@ -33,7 +33,7 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
 
     const newBooking: Ibooking = {
       booking_id,
-      user_id,
+      user_id,  
       vehicle_id: bookingData.vehicle_id,
       address: bookingData.address,
       city: bookingData.city,
@@ -50,12 +50,14 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
         fine_amount: 0,
         admin_commission: Math.round(bookingData.total_amount * 0.1),
         owner_earnings: Math.round(bookingData.total_amount * 0.9),
-        is_late_return: false
+        is_late_return: false,
+        owner_withdraw:false,
+        user_withdraw:false
       }
     }
 
-    await this._trasationRepository.createTrasation(user_id,'admin',bookingData.total_amount,'booking',booking_id,'debit')
-    return await this._bookingRepository.createBooking(newBooking)
+    await this._trasationRepository.create({from:user_id,to:'admin',amount:bookingData.total_amount,purpose:'booking',bookingId:booking_id,transactionType:'debit'})
+    return await this._bookingRepository.create(newBooking)
     }catch(error){
         throw error
         }

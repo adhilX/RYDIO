@@ -51,10 +51,9 @@ const ListVehilce = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (!user?._id) return;
-            if (!user?.idproof_id && vehicles.length >= 1) {
+            if ((!user?.idproof_id || !user.is_verified_user) && vehicles.length >= 1) {
                 setDisableAddBtn(true);
-            }
-        
+            };
         setIsLoading(true);
         try {
             const response = await getMyVehicle(user._id, debouncedSearch, currentPage, limit);
@@ -70,7 +69,7 @@ const ListVehilce = () => {
     }
     
     fetchData();
-    }, [debouncedSearch, currentPage, limit, user?._id, user?.idproof_id, vehicles.length]);
+    }, [debouncedSearch, currentPage, limit, user?._id, user?.idproof_id,user?.is_verified_user, vehicles.length]);
     
     const handleStatusToggle =useCallback( async (vehicleId: string, currentStatus: boolean) => {
         if (!vehicleId) return;

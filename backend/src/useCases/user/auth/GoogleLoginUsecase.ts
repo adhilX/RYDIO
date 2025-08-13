@@ -15,7 +15,7 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
     async googleLogin(user: User): Promise<Omit<User, 'password'>> {
         const existingWallet = await this._walletRepository.getWalletByUserId(user._id?.toString()!);
         if (!existingWallet) {
-            await this._walletRepository.createWallet(user._id?.toString()!)
+            await this._walletRepository.create({user_id:user._id?.toString()!,balance:0,is_frozen:false,transactions:[]})
         }
         const existingUser = await this._userRepository.findByEmail(user.email)
         if (existingUser) {

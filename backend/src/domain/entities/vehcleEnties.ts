@@ -1,8 +1,8 @@
 import { ObjectId } from "mongoose";
 
 export interface IVehicle {
-    _id?:ObjectId
-    owner_id: string| ObjectId
+    _id?:string
+    owner_id: string|ObjectId
     location_id: string|ObjectId
     name: string;
     brand: string;
