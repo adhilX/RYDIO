@@ -12,4 +12,5 @@ export interface IbookingRepostory extends BaseRepository<Ibooking>{
    cancelBooking(booking_id:string,reason:string): Promise<boolean>
    endRide(booking:Ibooking): Promise<Ibooking | null>
    updateBookingFinance(booking_id: string, updateData: any): Promise<Ibooking | null>
+   findByBookingId(booking_id:string): Promise<Ibooking | null>
 }

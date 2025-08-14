@@ -31,7 +31,7 @@ export class MyVehicleUsecase implements ImyVehicleUsecase {
                 image_urls: vehicle.image_urls,
                 admin_approve: vehicle.admin_approve,
                 reject_reason: vehicle.reject_reason,
-                is_available: vehicle.is_available || true,
+                is_available: vehicle.is_available!,
                 created_at: vehicle.created_at || new Date()
             })),
             total: result.total

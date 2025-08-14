@@ -175,8 +175,9 @@ export class BookingRepository extends BaseRepository<Ibooking> implements Ibook
      }
 
      async changeBookingStatus(booking_id: string, status: string): Promise<Ibooking | null> {
-          return await bookingModel.findByIdAndUpdate(booking_id, { status })
-     }
+        return await bookingModel.findOneAndUpdate({ booking_id }, { status }, { new: true })
+    }
+
      async getOwnerBookings(userId: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: Ibooking[], total: number } | null> {
           const skip = (page - 1) * limit;
 
@@ -272,5 +273,9 @@ export class BookingRepository extends BaseRepository<Ibooking> implements Ibook
                { $set: updateData },
                { new: true }
           );
+     }
+
+     async findByBookingId(booking_id:string): Promise<Ibooking | null> {
+          return await bookingModel.findOne({booking_id})
      }
 }

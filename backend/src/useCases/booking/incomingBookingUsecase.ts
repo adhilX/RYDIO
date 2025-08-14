@@ -21,6 +21,7 @@ export class IncomingBookingUsecase implements IIncomingBookingUsecase{
                 booking_id: booking.booking_id,
                 user_id: booking.user_id.toString(),
                 vehicle: booking.vehicle,
+                location: booking.location,
                 address: booking.address,
                 city: booking.city,
                 start_date: booking.start_date,

@@ -56,18 +56,28 @@ export default function QrScanner() {
               console.error("Error processing QR code:", err);
               setError(err instanceof Error ? err.message : "Failed to process QR code");
               setSuccess(null);
+              setIsScanning(false);
+              setIsLoading(false);
               
-              // Auto-restart scanning after 3 seconds
-              setTimeout(() => {
-                setError(null);
-                setIsScanning(true);
-                setIsLoading(false);
-              }, 3000);
+              // Stop scanning on error - require manual retry
+              // This prevents infinite requests when the same problematic QR code is scanned repeatedly
             }
           }, 
           (error) => {
-            // Only log scanning errors, don't show them to user as they're frequent
-            if (!error.includes("No QR code found")) {
+            // Filter out common scanning errors that occur during normal operation
+            const commonErrors = [
+              "No QR code found",
+              "No MultiFormat Readers were able to detect the code",
+              "NotFoundException",
+              "QR code parse error"
+            ];
+            
+            const isCommonError = commonErrors.some(commonError => 
+              error.toString().includes(commonError)
+            );
+            
+            // Only log unexpected errors, not the common scanning errors
+            if (!isCommonError) {
               console.warn("QR Scanner error:", error);
             }
           }

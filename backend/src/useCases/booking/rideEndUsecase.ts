@@ -1,7 +1,6 @@
 import { IRideEndUsecase } from "../../domain/interface/usecaseInterface/user/booking/IRideEndUsecase";
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
-import { BookingStatus, Ibooking } from "../../domain/entities/BookingEntities";
 import { setings } from "../../shared/constent";
 
 export class RideEndUsecase implements IRideEndUsecase{
@@ -11,7 +10,7 @@ export class RideEndUsecase implements IRideEndUsecase{
     ) {}
     async execute(bookingId: string, scanner_user_id: string): Promise<boolean> {
         try {
-            const booking = await this._bookingRepository.findById(bookingId);
+            const booking = await this._bookingRepository.findByBookingId(bookingId);
             if (!booking) throw new Error("Booking not found");
             
             if (booking.status !== 'ongoing') {
@@ -23,7 +22,11 @@ export class RideEndUsecase implements IRideEndUsecase{
                 throw new Error("Vehicle not found");
             }
             
-            if (vehicleData.owner_id.toString() !== scanner_user_id) {
+            const vehicleOwnerId = typeof vehicleData.owner_id === 'object' && vehicleData.owner_id !== null && '_id' in vehicleData.owner_id
+                ? (vehicleData.owner_id as any)._id.toString()
+                : vehicleData.owner_id.toString();
+            
+            if (vehicleOwnerId !== scanner_user_id) {
                 throw new Error("Access denied. Only the vehicle owner can end this ride.");
             }
 

@@ -21,9 +21,7 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
         console.log('No vehicles found from repository');
         return { vehicles: [], total: 0 };
       }
-      
-      console.log('All vehicles found:', allVehiclesResult.vehicles.length);
-      
+            
       // Filter out booked vehicles to get available vehicles
       const allAvailableVehicles = allVehiclesResult.vehicles.filter(v => {
         const vehicleId = v._id?.toString();
@@ -32,14 +30,12 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
       });
       
       const totalAvailable = allAvailableVehicles.length;
-      console.log('Total available vehicles:', totalAvailable);
       
       // Apply pagination to available vehicles
       const startIndex = (currentPage - 1) * limit;
       const endIndex = startIndex + limit;
       const paginatedAvailableVehicles = allAvailableVehicles.slice(startIndex, endIndex);
       
-      console.log(`Paginated vehicles (${startIndex}-${endIndex}):`, paginatedAvailableVehicles.length);
       
       // Clean and format the vehicle data
       const cleanVehicles = paginatedAvailableVehicles.map(vehicle => ({

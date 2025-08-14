@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Filter, X, RotateCcw, Search, ArrowUpDown } from "lucide-react";
+// import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Filter, X, RotateCcw, Search } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import type { FilterState } from "@/Types/User/carType";
@@ -17,14 +17,14 @@ interface FilterSidebarProps {
 }
 
 // Define sort options outside component to prevent recreation
-const SORT_OPTIONS = [
-  { value: 'price_low_high' as SortOption, label: 'Price: Low to High' },
-  { value: 'price_high_low' as SortOption, label: 'Price: High to Low' },
-  { value: 'distance' as SortOption, label: 'Distance: Nearest First' },
-  { value: 'rating' as SortOption, label: 'Rating: Highest First' },
-  { value: 'newest' as SortOption, label: 'Newest First' },
-  { value: 'oldest' as SortOption, label: 'Oldest First' },
-];
+// const SORT_OPTIONS = [
+//   { value: 'price_low_high' as SortOption, label: 'Price: Low to High' },
+  // { value: 'price_high_low' as SortOption, label: 'Price: High to Low' },
+  // { value: 'distance' as SortOption, label: 'Distance: Nearest First' },
+  // { value: 'rating' as SortOption, label: 'Rating: Highest First' },
+  // { value: 'newest' as SortOption, label: 'Newest First' },
+  // { value: 'oldest' as SortOption, label: 'Oldest First' },
+// ];
 
 // Define filter option arrays outside component
 const FUEL_TYPE_OPTIONS = [
@@ -205,7 +205,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
       </div>
 
       {/* Sort Options */}
-      <div className="space-y-3">
+      {/* <div className="space-y-3">
         <Label className="text-sm font-medium text-gray-300">Sort By</Label>
         <div className="bg-white/5 rounded-lg p-3 border border-white/10">
           <Select
@@ -217,8 +217,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
                 <ArrowUpDown className="w-4 h-4 text-gray-400" />
                 <SelectValue placeholder="Select sorting option" />
               </div>
-            </SelectTrigger>
-            <SelectContent className="bg-gray-900 border-white/20">
+            </SelectTrigger> */}
+            {/* <SelectContent className="bg-gray-900 border-white/20">
               {SORT_OPTIONS.map((option) => (
                 <SelectItem 
                   key={option.value} 
@@ -228,10 +228,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
                   {option.label}
                 </SelectItem>
               ))}
-            </SelectContent>
-          </Select>
+            </SelectContent> */}
+          {/* </Select>
         </div>
-      </div>
+      </div> */}
 
       {/* Filter Groups */}
       <CheckboxGroup
@@ -255,7 +255,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
         items={TRANSMISSION_OPTIONS}
       />
     </div>
-  ), [activeFiltersCount, clearFilters, searchValue, filters, onFiltersChange, CheckboxGroup, updateFilters]);
+  ), [activeFiltersCount, clearFilters, searchValue, filters, onFiltersChange, CheckboxGroup]);
 
   return (
     <>

@@ -9,7 +9,7 @@ export class RideStartUsecase implements IrideStartUsecase {
   ) {}
 
   async rideStart(booking_id: string, scanner_user_id: string): Promise<boolean> {
-    const bookingData = await this._bookingRepository.findById(booking_id);
+    const bookingData = await this._bookingRepository.findByBookingId(booking_id);
     if (!bookingData) {
       throw new Error("Booking not found");
     }
@@ -23,7 +23,12 @@ export class RideStartUsecase implements IrideStartUsecase {
       throw new Error("Vehicle not found");
     }
 
-    if (vehicleData.owner_id.toString() !== scanner_user_id) {
+    // Extract the actual user ID from the populated owner object or direct ID
+    const vehicleOwnerId = typeof vehicleData.owner_id === 'object' && vehicleData.owner_id !== null && '_id' in vehicleData.owner_id
+      ? (vehicleData.owner_id as any)._id.toString()
+      : vehicleData.owner_id.toString();
+    
+    if (vehicleOwnerId !== scanner_user_id) {
       throw new Error("Access denied. Only the vehicle owner can start this ride.");
     }
     const updatedBooking = await this._bookingRepository.changeBookingStatus(booking_id, "ongoing");

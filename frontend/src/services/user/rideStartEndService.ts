@@ -3,7 +3,7 @@ import { isAxiosError } from "axios";
 
 export const startEndRide = async (url:string) => {
     try {
-        const response = await axiosInstance.post(url);
+        const response = await axiosInstance.get(url);
         return response?.data;
     } catch (error) {
         console.error('Error while starting/ending ride:', error);

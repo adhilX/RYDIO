@@ -17,11 +17,11 @@ const ReasonModal = ({
   isOpen,
   onClose,
   onSubmit,
-  title = 'Reason for Rejection',
-  description = 'Please provide a reason for rejecting this.',
-  submitButtonText = 'Submit',
-  cancelButtonText = 'Cancel',
-  placeholder = 'Enter the reason for rejection...'
+  title ,
+  description,
+  submitButtonText,
+  cancelButtonText,
+  placeholder,
 }: ReasonModalProps) => {
   const [reason, setReason] = useState('');
   const [error, setError] = useState('');

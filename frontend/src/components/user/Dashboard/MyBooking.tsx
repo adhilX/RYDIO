@@ -147,7 +147,7 @@ const MyBooking = () => {
 
       <div className="mb-6">
         <div className="flex items-center space-x-2 overflow-x-auto pb-2">
-          {(['all', 'pending', 'booked', 'ongoing', 'completed', 'cancelled'] as const).map((status) => (
+          {(['all', 'booked', 'ongoing', 'completed', 'cancelled'] as const).map((status) => (
             <Button
               key={status}
               variant={statusFilter === status ? 'default' : 'outline'}

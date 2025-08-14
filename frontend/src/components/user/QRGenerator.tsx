@@ -1,8 +1,7 @@
 import { QRCodeCanvas } from 'qrcode.react';
 
-const baseURL = import.meta.env.VITE_API_BASEURL
 const QRGenerator = ({booking_id,action}:{booking_id:string,action:string}) => {
-  const valueToEncode = action === 'start' ? `${baseURL}/ride-start/${booking_id}` : `${baseURL}/ride-end/${booking_id}`;
+  const valueToEncode = action === 'start' ? `/ride-start/${booking_id}` : `/ride-end/${booking_id}`;
 
   return (
     <div className='flex flex-col items-center bg-white justify-center p-3 rounded-lg shadow-lg'>

@@ -88,13 +88,13 @@ export class UserRoutes {
     this.UserRoutes.get('/get-wallet/:userId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         getWalletController.getWalletDetails(req,res)
     })
-    this.UserRoutes.get('/start-ride/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.get('/ride-start/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         rideStartController.handleRideStart(req,res)
     })
     this.UserRoutes.post('/cancel-booking/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         cancelBookingController.cancelBooking(req,res)
     })
-    this.UserRoutes.get('/end-ride/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.get('/ride-end/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         rideEndController.handleRideEnd(req,res)
     })
     this.UserRoutes.post('/withdrawal',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{

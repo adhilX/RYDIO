@@ -28,7 +28,7 @@ function IncomingBookings() {
   const [bookings, setBookings] = useState<IncomingBooking[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'booked' | 'ongoing' | 'completed' | 'cancelled'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all'| 'booked' | 'ongoing' | 'completed' | 'cancelled'>('all');
   const [limit] = useState(6);
   
   const [bookingState, setBookingState] = useState({
@@ -213,7 +213,7 @@ function IncomingBookings() {
 
       <div className="mb-6">
         <div className="flex items-center space-x-2 overflow-x-auto pb-2">
-          {(['all', 'pending', 'booked', 'ongoing', 'completed', 'cancelled'] as const).map((status) => (
+          {(['all', 'booked', 'ongoing', 'completed', 'cancelled'] as const).map((status) => (
             <Button
               key={status}
               variant={statusFilter === status ? 'default' : 'outline'}
