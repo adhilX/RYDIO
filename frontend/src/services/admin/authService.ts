@@ -1,4 +1,5 @@
-import axiosInstance from "@/axios/AdminInterceptors";
+import { adminAxios as axiosInstance } from "@/axios/interceptors";
+
 import type { TloginForm } from "@/Types/User/auth/Tloginform";
 import { isAxiosError } from "axios";
 

@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/UserInterceptors";
+import { userAxios as axiosInstance } from "@/axios/interceptors";
 import { isAxiosError } from "axios";
 
 export const startEndRide = async (url:string) => {

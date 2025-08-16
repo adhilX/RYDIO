@@ -50,7 +50,7 @@ export class AdminRepository extends BaseRepository<User> implements IadminRepos
   ]);
   return { vehicles, total };
 }
-  async getApprovedVehicle(search='',page = 1, limit = 10): Promise<{ vehicles: IVehicle[]; total: number } | null> {
+  async getApprovedVehicle(search='',page = 1, limit = 10): Promise<{ vehicles: IVehicle[]; total: number,totalCount:number } | null> {
   const skip = (page - 1) * limit;
   console.log(search)
   const searchFilter = search
@@ -62,11 +62,12 @@ export class AdminRepository extends BaseRepository<User> implements IadminRepos
       }
       : {};
       const filter = { admin_approve: 'accepted',...searchFilter};
-  const [vehicles, total] = await Promise.all([
+  const [vehicles, total,totalCount] = await Promise.all([
     VehicleModel.find(filter).populate('owner_id').populate('location_id').skip(skip).limit(limit),
-    VehicleModel.countDocuments(filter)
+    VehicleModel.countDocuments(filter),
+    VehicleModel.countDocuments()
   ]);
-  return { vehicles, total };
+  return { vehicles, total, totalCount };
 }
 
  async getIdProof(status: "pending" | "approved" | "rejected", page: number, limit: number): Promise<{idProof:IVerificationRequest[]; total:number }| null> {

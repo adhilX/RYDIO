@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/UserInterceptors";
+import { userAxios as axiosInstance } from "@/axios/interceptors";
 import type { userData } from "@/Types/User/UpdateProfile/TpdateUserData";
 import { isAxiosError } from "axios";
 
