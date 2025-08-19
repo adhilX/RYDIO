@@ -1,4 +1,5 @@
-export interface IvehicleAproveUsecase {
+import { VehicleApprovalInputDto, VehicleApprovalOutputDto } from "../../../DTOs/adminDto/AdminDto";
 
-    approveVehicle(id:string, action :'accepted'|'rejected',reason?:string):Promise<boolean>
+export interface IvehicleAproveUsecase {
+    approveVehicle(input: VehicleApprovalInputDto): Promise<VehicleApprovalOutputDto>
 }

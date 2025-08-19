@@ -13,7 +13,7 @@ export class VehicleUpproveController{
         try {
             const { id } = req.params
             const {action,reason}= req.body
-            const response = await this._vehicleUpproveUsecase.approveVehicle(id,action,reason)
+            await this._vehicleUpproveUsecase.approveVehicle({id,action,reason})
             res.status(HttpStatus.OK).json({ message: `Vehicle ${action} successfully` })
         } catch (error) {
             console.log('Error while approving vehicle:', error)

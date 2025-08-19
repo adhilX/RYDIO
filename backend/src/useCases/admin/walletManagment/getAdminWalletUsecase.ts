@@ -1,12 +1,23 @@
 import { AdminWalletRepository } from "../../../adapters/repository/wallet/adminWalletRepository"
 import { IAdminWallet } from "../../../domain/entities/adminWalletEntities"
 import { IgetAdminWalletUsecase } from "../../../domain/interface/usecaseInterface/admin/walletManagment/IgetAdminWalletUsecase"
+import { GetAdminWalletOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto"
 
 export class GetAdminWalletUsecase implements IgetAdminWalletUsecase {
     constructor(private _adminWalletRepository: AdminWalletRepository){}
     
-    async getWalletDetails(): Promise<IAdminWallet|null> {
+    async getWalletDetails(): Promise<GetAdminWalletOutputDto | null> {
         const walletDetails = await this._adminWalletRepository.getwalletDetails()
-        return walletDetails
+        if (!walletDetails) return null;
+        
+        return {
+            wallet: {
+                _id: walletDetails._id!,
+                balance: walletDetails.balance,
+                totalEarnings: walletDetails.commission_balance || 0,
+                totalWithdrawals: walletDetails.penalty_balance || 0,
+                pendingAmount: walletDetails.total_balance || 0
+            }
+        };
     }
 }

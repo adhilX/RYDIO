@@ -1,5 +1,5 @@
-import { User } from "../../../../entities/userEntities";
+import { UploadIdProofInputDto, UploadIdProofOutputDto } from "../../../DTOs/userDto/UserProfileDto";
 
 export interface IuploadIdProofUsecase{
-    uploadProof(idProofUrl:string,userId:string):Promise<User|null>
+    uploadProof(input: UploadIdProofInputDto): Promise<UploadIdProofOutputDto | null>
 }

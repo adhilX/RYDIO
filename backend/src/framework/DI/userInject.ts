@@ -14,8 +14,8 @@ import { GoogleLoginUsecase } from "../../useCases/user/auth/GoogleLoginUsecase"
 import { GoogleLoginController } from "../../adapters/controllers/user/authentication/googleLoginController"
 import { ResendOtpController } from "../../adapters/controllers/user/authentication/resendOtpController"
 import { ResendOtpUsecase } from "../../useCases/user/auth/otpUsecase/resendOtpUsecase"
-import { SendOtpForgotPasswordController } from "../../adapters/controllers/user/authentication/sendOtpforgotPasswordController"
-import { ForgotPasswordUsecase } from "../../useCases/user/auth/SendforgotPasswordOtpUsecase"
+import { SendOtpForgotPasswordController } from "../../adapters/controllers/user/authentication/forgotPasswordController"
+import { ForgotPasswordUsecase } from "../../useCases/user/auth/forgotPasswordOtpUsecase"
 import { VerifyForgotPassowordOtpController } from "../../adapters/controllers/user/authentication/verifyForgotPasswordOtpController"
 import { ChangePasswordController } from "../../adapters/controllers/user/authentication/ChangePasswordController"
 import { ChangePasswordUseCase } from "../../useCases/user/auth/ChangePasswordUsecase"
@@ -201,8 +201,7 @@ const getWishlistUseCase = new GetWishlistUseCase(wishlistRepository)
 export const getWishlistController = new GetWishlistController(getWishlistUseCase)
 
 //------get security deposit details---------
-const securityDepositRepository = new SecurityDepositRepository()
-const getSecurityDepositUsecase = new GetSecurityDepositUsecase(securityDepositRepository)
+const getSecurityDepositUsecase = new GetSecurityDepositUsecase()
 export const getSecurityDepositController = new GetSecurityDepositController(getSecurityDepositUsecase)
 
 //------ride start---------

@@ -1,3 +1,5 @@
+import { VendorAccessInputDto, VendorAccessOutputDto } from "../../DTOs/adminDto/AdminDto";
+
 export interface IvendorAccessUsecase {
-    vendorAccess(userId:string,vendorAccess:boolean):Promise<boolean>
+    vendorAccess(input: VendorAccessInputDto): Promise<VendorAccessOutputDto>
 }

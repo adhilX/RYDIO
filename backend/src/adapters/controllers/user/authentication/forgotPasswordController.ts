@@ -16,7 +16,7 @@ export class SendOtpForgotPasswordController {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: "Email is required" });
                 return;
             }
-            await this._forgotPasswordUsecase.execute(email);
+            await this._forgotPasswordUsecase.execute({email});
             res.status(HttpStatus.OK).json({ message: "Otp sent to your email." });
         } catch (error) {
             console.error("Error in forgot password:", error);

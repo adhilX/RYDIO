@@ -17,7 +17,7 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
     ){}
 
     async execute({ booking_id, cancellation_reason }: CancelBookingInputDto): Promise<CancelBookingOutputDto> {
-        const booking = await this._bookingRepository.findById(booking_id);
+        const booking = await this._bookingRepository.findByBookingId(booking_id);
         if (!booking) {
             throw new Error('Booking not found');
         }

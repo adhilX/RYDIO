@@ -1,6 +1,7 @@
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
 import { IadminRepository } from "../../../domain/interface/repositoryInterface/IadminRepository";
 import { IpendingVehicleUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicleManagment/IpendingVehicleUsecase";
+import { PendingVehicleInputDto, PendingVehicleOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto";
 
     export class PendingVehicleusercase implements IpendingVehicleUsecase {
         private _adminRepository : IadminRepository
@@ -9,8 +10,8 @@ import { IpendingVehicleUsecase } from "../../../domain/interface/usecaseInterfa
             this._adminRepository = adminRepository
         }
 
-    async getPendingVehicle( page:number, limit: number): Promise<{ vehicle: IVehicle[]; total: number; } | null> {
-        const result = await this._adminRepository.getPendingVehicle(page, limit);
+    async getPendingVehicle(input: PendingVehicleInputDto): Promise<PendingVehicleOutputDto | null> {
+        const result = await this._adminRepository.getPendingVehicle(input.page, input.limit);
         if (!result) return null;
         return { vehicle: result.vehicles, total: result.total };
     }

@@ -1,5 +1,4 @@
 import { ChangePasswordInputDto, ChangePasswordOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
-import { User } from "../../../domain/entities/userEntities"
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository"
 import { IhashPassword } from "../../../domain/interface/serviceInterface/IhashPassword"
 import { IchangePasswordUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IchangePasswordUsecase"

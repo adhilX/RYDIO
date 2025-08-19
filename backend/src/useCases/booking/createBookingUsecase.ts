@@ -7,6 +7,7 @@ import { IredisService } from "../../domain/interface/serviceInterface/IredisSer
 import { IcreateBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/IcreateBookingUsecase"
 import { idGeneratorService } from "../../framework/DI/serviceInject"
 import { setings } from "../../shared/constent"
+import { CreateBookingInputDto, CreateBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
 
 export class CreateBookingUsecase implements IcreateBookingUsecase {
   constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository, private _trasationRepository: ItrasationRepository) {
@@ -17,9 +18,9 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
     this._trasationRepository = _trasationRepository
   }
 
-  async createBooking({bookingData,user_id,stripeIntentId}: {bookingData:BookingData,user_id:string,stripeIntentId:string}): Promise<Ibooking> {
-    console.log('sdfsdfsdfsdf', bookingData)
-    try{
+  async createBooking(input: CreateBookingInputDto): Promise<CreateBookingOutputDto> {
+    const { bookingData, user_id, stripeIntentId } = input;
+    console.log('createBooking data:', bookingData);
     const redisKey = `hold:vehicle:${bookingData.vehicle_id},startDate:${bookingData.start_date},endDate:${bookingData.end_date}`;
     const owner_id= await this._vehicleRepository.getVehicleDetails(bookingData.vehicle_id).then(vehicle => vehicle?.owner_id.toString());
     if (!owner_id) throw new Error('Vehicle owner not found');
@@ -98,8 +99,5 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
       payment_intent_id: savedBooking.payment_intent_id,
       cancellation_reason: savedBooking.cancellation_reason
     };
-    }catch(error){
-        throw error
-        }
     }
 }

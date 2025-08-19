@@ -34,7 +34,7 @@ export class UserRoutes {
     this.UserRoutes.get('/logout',(req:Request, res:Response)=>{
        userlogoutController.handleClientLogout(req,res)
     })
-    this.UserRoutes.patch('/changepassword',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request, res:Response)=>{
+    this.UserRoutes.patch('/changepassword',(req:Request, res:Response)=>{
        changePasswordController.handleForgetPassword(req,res)
     })
     this.UserRoutes.patch('/editProfile',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
@@ -97,7 +97,7 @@ export class UserRoutes {
     this.UserRoutes.get('/ride-end/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
         rideEndController.handleRideEnd(req,res)
     })
-    this.UserRoutes.post('/withdrawal',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/withdrawal',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(_req:Request,_res:Response)=>{
         
     })
 }

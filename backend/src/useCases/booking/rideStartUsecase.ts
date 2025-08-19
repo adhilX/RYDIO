@@ -1,6 +1,7 @@
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IrideStartUsecase } from "../../domain/interface/usecaseInterface/user/booking/IrideStartUsecase";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
+import { RideStartInputDto, RideStartOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 
 export class RideStartUsecase implements IrideStartUsecase {    
   constructor(
@@ -8,8 +9,8 @@ export class RideStartUsecase implements IrideStartUsecase {
     private _vehicleRepository: IvehicleRepository
   ) {}
 
-  async rideStart(booking_id: string, scanner_user_id: string): Promise<boolean> {
-    const bookingData = await this._bookingRepository.findByBookingId(booking_id);
+  async rideStart(input: RideStartInputDto, scanner_user_id: string): Promise<RideStartOutputDto> {
+    const bookingData = await this._bookingRepository.findByBookingId(input.bookingId);
     if (!bookingData) {
       throw new Error("Booking not found");
     }
@@ -31,12 +32,15 @@ export class RideStartUsecase implements IrideStartUsecase {
     if (vehicleOwnerId !== scanner_user_id) {
       throw new Error("Access denied. Only the vehicle owner can start this ride.");
     }
-    const updatedBooking = await this._bookingRepository.changeBookingStatus(booking_id, "ongoing");
+    const updatedBooking = await this._bookingRepository.changeBookingStatus(input.bookingId, "ongoing");
     
     if (!updatedBooking) {
       throw new Error("Failed to update booking status");
     }
 
-    return true;
+    return {
+      success: true,
+      message: "Ride started successfully"
+    };
   }
 }

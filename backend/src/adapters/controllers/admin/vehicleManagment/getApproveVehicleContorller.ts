@@ -13,7 +13,7 @@ export class GetApprovedVehicleController{
             const page = req.query.page ? Number(req.query.page as string) : 1;
             const limit = req.query.limit ? Number(req.query.limit as string) : 10;
             const search = req.query.search as string
-            const response = await this._approvedVehicleUsecase.getApprovedVehicle(search,page, limit)
+            const response = await this._approvedVehicleUsecase.getApprovedVehicle({search,page, limit})
             res.status(HttpStatus.OK).json(response )
         } catch (error) {
             console.error('Error while fetching approved vehicles:', error)

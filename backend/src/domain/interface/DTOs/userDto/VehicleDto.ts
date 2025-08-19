@@ -85,7 +85,7 @@ export interface VehicleDetailsInputDto {
   id: string;
 }
 
-export interface VehicleDetailsOutputDto extends AddVehicleOutputDto {}
+export type VehicleDetailsOutputDto = AddVehicleOutputDto;
 
 //=================== Change Vehicle Status DTO ===================
 export interface ChangeVehicleStatusInputDto {

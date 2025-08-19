@@ -19,11 +19,11 @@ const MyBooking = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const [bookings, setBookings] = useState<IbookedData[]>([]);
-  const [totalPages, setTotalPages] = useState(1); 
+  const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<BookingStatus | 'all'>('all');
-  const [limit] = useState(6); 
-  
+  const [limit] = useState(6);
+
   const [bookingState, setBookingState] = useState({
     selected: null as IbookedData | null,
     isModalOpen: false,
@@ -33,7 +33,7 @@ const MyBooking = () => {
   })
   const { currentPage } = bookingState;
 
-    
+
   if (!user) {
     return <div className="p-4 text-center">Please log in to view your bookings.</div>;
   }
@@ -53,7 +53,7 @@ const MyBooking = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!user?._id) return;
-      
+
       try {
         setBookingState(prev => ({ ...prev, isLoading: true }));
         const response = await getMyBooking(user._id, bookingState.debouncedSearch, statusFilter, bookingState.currentPage, limit);
@@ -66,7 +66,7 @@ const MyBooking = () => {
         setBookingState(prev => ({ ...prev, isLoading: false }));
       }
     };
-    
+
     fetchData();
   }, [user?._id, bookingState.debouncedSearch, statusFilter, bookingState.currentPage, limit]);
 
@@ -165,107 +165,108 @@ const MyBooking = () => {
         <div className="space-y-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {bookings.map((booking) => (
-                <Card key={booking._id} className="h-full flex flex-col overflow-hidden transition-all hover:shadow-md w-full max-w-sm mx-auto">
-                  <CardContent className="p-3 flex flex-col h-full">
-                    <div className="relative aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden h-32">
-                      {booking.vehicle?.image_urls ? (
-                        <img
-                          src={`${IMG_URL}${booking.vehicle.image_urls[0]}`}
-                          alt={booking.vehicle.name || 'Vehicle'}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-700">
-                          <Car className="h-12 w-12 text-gray-400" />
-                        </div>
-                      )}
-                      {booking.vehicle?.car_type && (
-                        <Badge className="absolute top-2 left-2" variant="secondary">
-                          {booking.vehicle.car_type}
+              <Card key={booking._id} className="h-full flex flex-col overflow-hidden transition-all hover:shadow-md w-full max-w-sm mx-auto">
+                <CardContent className="p-3 flex flex-col h-full">
+                  <div className="relative aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden h-32">
+                    {booking.vehicle?.image_urls ? (
+                      <img
+                        src={`${IMG_URL}${booking.vehicle.image_urls[0]}`}
+                        alt={booking.vehicle.name || 'Vehicle'}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-700">
+                        <Car className="h-12 w-12 text-gray-400" />
+                      </div>
+                    )}
+                    {booking.vehicle?.car_type && (
+                      <Badge className="absolute top-2 left-2" variant="secondary">
+                        {booking.vehicle.car_type}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="mt-3 flex flex-col flex-1 space-y-2">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="font-semibold text-lg">{booking.vehicle?.name || 'Unnamed Vehicle'}</h3>
+                        {booking.vehicle?.location_id?.city && (
+                          <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                            <MapPin className="h-3.5 w-3.5" />
+                            {booking.vehicle.location_id.city}
+                            {booking.vehicle.location_id.state && `, ${booking.vehicle.location_id.state}`}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className={getStatusColor(booking.status)}>
+                          {booking.status}
                         </Badge>
-                      )}
-                    </div>
-                    <div className="mt-3 flex flex-col flex-1 space-y-2">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-semibold text-lg">{booking.vehicle?.name || 'Unnamed Vehicle'}</h3>
-                          {booking.vehicle?.location_id?.city && (
-                            <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-                              <MapPin className="h-3.5 w-3.5" />
-                              {booking.vehicle.location_id.city}
-                              {booking.vehicle.location_id.state && `, ${booking.vehicle.location_id.state}`}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={getStatusColor(booking.status)}>
-                            {booking.status}
-                          </Badge>
-                          <Badge variant="outline" className={getPaymentStatusColor(booking.payment_status)}>
-                            {booking.payment_status}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <p className="text-gray-500 dark:text-gray-400">Booking ID</p>
-                          <p className="font-medium">{booking._id?.substring(0, 8)}...</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500 dark:text-gray-400">Duration</p>
-                          <p className="font-medium">
-                            {calculateDays(booking.start_date, booking.end_date)} days
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500 dark:text-gray-400">Pickup</p>
-                          <p className="font-medium">{formatDate(booking.start_date)}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500 dark:text-gray-400">Drop-off</p>
-                          <p className="font-medium">{formatDate(booking.end_date)}</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 flex justify-between items-center">
-                        <div>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Total Amount</p>
-                          <p className="text-lg font-bold">
-                            ₹{booking.total_amount?.toLocaleString() || 'N/A'}
-                          </p>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setBookingState(prev => ({
-                              ...prev,
-                              selected: booking,
-                              isModalOpen: true
-                            }));
-                          }}
-                        >
-                          View Details
-                        </Button>
+                        <Badge variant="outline" className={getPaymentStatusColor(booking.payment_status)}>
+                          {booking.payment_status}
+                        </Badge>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-<Pagination
-  currentPage={currentPage}
-  totalPages={totalPages}
-  onPageChange={(page) =>
-    setBookingState(prev => ({
-      ...prev,
-      currentPage: page
-    }))
-  }
-/>
+
+                    <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400">Booking ID</p>
+                        <p className="font-medium">{booking._id?.substring(0, 8)}...</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400">Duration</p>
+                        <p className="font-medium">
+                          {calculateDays(booking.start_date, booking.end_date)} days
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400">Pickup</p>
+                        <p className="font-medium">{formatDate(booking.start_date)}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400">Drop-off</p>
+                        <p className="font-medium">{formatDate(booking.end_date)}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex justify-between items-center">
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Amount</p>
+                        <p className="text-lg font-bold">
+                          ₹{booking.total_amount?.toLocaleString() || 'N/A'}
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setBookingState(prev => ({
+                            ...prev,
+                            selected: booking,
+                            isModalOpen: true
+                          }));
+                        }}
+                      >
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        ) : (
+          {totalPages > 1 &&
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) =>
+                setBookingState(prev => ({
+                  ...prev,
+                  currentPage: page
+                }))
+              }
+            />}
+        </div>
+      ) : (
         <div className="text-center py-12">
           <div className="mx-auto w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
             <Calendar className="h-8 w-8 text-gray-400" />
@@ -276,7 +277,7 @@ const MyBooking = () => {
           </p>
         </div>
       )}
-      
+
       {bookingState.selected && bookingState.isModalOpen && (
         <BookingDetailsModal
           booking={bookingState.selected}

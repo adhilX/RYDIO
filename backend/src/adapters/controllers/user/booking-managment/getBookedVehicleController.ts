@@ -11,7 +11,7 @@ export class GetBookedVehicleController {
     async getBookedVehicleDetails(req: Request, res: Response): Promise<void> {
         try {
             const { vehicleId } = req.params;
-            const bookedVehicles = await this._getBookedVehicleUsecase.execute(vehicleId);
+            const bookedVehicles = await this._getBookedVehicleUsecase.execute({vehicleId});
             res.status(HttpStatus.OK).json(bookedVehicles);
         } catch (error) {
             console.error('Error while fetching booked vehicles', error);

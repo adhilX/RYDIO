@@ -19,8 +19,14 @@ export class UploadIdProofController {
                });
             return 
            }
-          const newUser =  await this._uploadIdProofUsecase.uploadProof(idProofUrl, userId);
-           res.status(HttpStatus.OK).json({ message: 'Id proof submitted successfully', newUser});
+           
+           const input = {
+               userId: userId,
+               imageUrl: idProofUrl
+           };
+           
+           const updatedUser = await this._uploadIdProofUsecase.uploadProof(input);
+           res.status(HttpStatus.OK).json({ message: 'ID proof uploaded successfully', user: updatedUser});
        } catch (error) {
            console.error('Error while uploading ID proof:', error);
            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

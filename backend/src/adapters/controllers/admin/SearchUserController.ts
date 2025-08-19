@@ -15,7 +15,7 @@ export class SearchUserController {
             const pageNum: number = Number(String(page))
             const limitNum:number = Number(String(limit))
 
-            const users = await this._searchUserUsecase.searchUser(searchStr, pageNum, limitNum);
+            const users = await this._searchUserUsecase.searchUser({search: searchStr, page: pageNum, limit: limitNum});
             // console.log('gggggggggggggggggggggggg',users)
             res.status(HttpStatus.OK).json(users)
 

@@ -1,5 +1,5 @@
-import { IWallet } from "../../../../entities/walletEnties";
+import { GetWalletInputDto, GetWalletOutputDto } from "../../../DTOs/userDto/WalletDto";
 
 export interface IgetWalletUsecase {
-    getWalletByUserId(userId:string): Promise<IWallet | null>;
+    getWalletByUserId(input: GetWalletInputDto): Promise<GetWalletOutputDto | null>;
 }

@@ -1,4 +1,3 @@
-import { User } from "../../../domain/entities/userEntities";
 import { CreateUserInputDto, CreateUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
@@ -35,10 +34,14 @@ export class CreateUserUsecase implements IcreateUserUsecase{
         })
 
 if (!newUser) throw new Error('Error while creating user')
- await this.walletRepository.create({user_id:newUser?._id?.toString()!,balance:0,is_frozen:false,transactions:[]})
+
+// Create wallet for the new user
+if (newUser._id) {
+    await this.walletRepository.create({user_id:newUser._id.toString(),balance:0,is_frozen:false,transactions:[]})
+}
 
 const returnUser: CreateUserOutputDto ={
-    _id: newUser._id?.toString()!,
+    _id: newUser._id?.toString() || '',
     email: newUser.email,
     name: newUser.name,
     phone: newUser.phone,

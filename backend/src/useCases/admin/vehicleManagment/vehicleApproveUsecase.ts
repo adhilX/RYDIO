@@ -1,15 +1,24 @@
 import { VehicleRepository } from "../../../adapters/repository/user/vehicleRepository";
 import { IvehicleAproveUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicleManagment/IvehicleUpproveUsecase";
+import { VehicleApprovalInputDto, VehicleApprovalOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class VehicleUpproveUsecase implements IvehicleAproveUsecase {
     private _vehicleRepository: VehicleRepository
     constructor(vehicleRepository: VehicleRepository) {
         this._vehicleRepository = vehicleRepository
     }
-    approveVehicle(id: string,action:'accepted'|'rejected',reason?:string): Promise<boolean> {
-        if(action=='accepted'){
-          return this._vehicleRepository.approveVehicle(id,action)
+    async approveVehicle(input: VehicleApprovalInputDto): Promise<VehicleApprovalOutputDto> {
+        if(input.action == 'accepted'){
+          await this._vehicleRepository.approveVehicle(input.id, input.action)
+          return {
+            success: true,
+            message: 'Vehicle approved successfully'
+          };
         }
-        return this._vehicleRepository.rejectVehicle(id,action,reason)
+        await this._vehicleRepository.rejectVehicle(input.id, input.action, input.reason)
+        return {
+          success: true,
+          message: 'Vehicle rejected successfully'
+        };
     }
 }

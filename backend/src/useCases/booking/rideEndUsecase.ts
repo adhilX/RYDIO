@@ -2,15 +2,16 @@ import { IRideEndUsecase } from "../../domain/interface/usecaseInterface/user/bo
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
 import { setings } from "../../shared/constent";
+import { RideEndInputDto, RideEndOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 
 export class RideEndUsecase implements IRideEndUsecase{
     constructor(
         private _bookingRepository: IbookingRepostory, 
         private _vehicleRepository: IvehicleRepository,
     ) {}
-    async execute(bookingId: string, scanner_user_id: string): Promise<boolean> {
+    async execute(input: RideEndInputDto, scanner_user_id: string): Promise<RideEndOutputDto> {
         try {
-            const booking = await this._bookingRepository.findByBookingId(bookingId);
+            const booking = await this._bookingRepository.findByBookingId(input.bookingId);
             if (!booking) throw new Error("Booking not found");
             
             if (booking.status !== 'ongoing') {
@@ -52,7 +53,10 @@ export class RideEndUsecase implements IRideEndUsecase{
                 throw new Error("Failed to end ride and update booking");
             }
             
-            return true;
+            return {
+                success: true,
+                message: "Ride ended successfully"
+            };
         } catch (error) {
             console.error('Ride end error:', error);
             throw error;

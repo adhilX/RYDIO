@@ -1,5 +1,5 @@
-import { IAdminWallet } from "../../../../entities/adminWalletEntities";
+import { GetAdminWalletOutputDto } from "../../../DTOs/adminDto/AdminDto";
 
 export interface IgetAdminWalletUsecase {
-    getWalletDetails(): Promise<IAdminWallet|null>
+    getWalletDetails(): Promise<GetAdminWalletOutputDto | null>
 }

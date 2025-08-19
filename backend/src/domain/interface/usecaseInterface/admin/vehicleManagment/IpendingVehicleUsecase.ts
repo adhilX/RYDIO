@@ -1,5 +1,5 @@
-import { IVehicle } from "../../../../entities/vehcleEnties";
+import { PendingVehicleInputDto, PendingVehicleOutputDto } from "../../../DTOs/adminDto/AdminDto";
 
 export interface IpendingVehicleUsecase {
-    getPendingVehicle( page:number, limit: number): Promise<{ vehicle: IVehicle[]; total: number; } | null>
+    getPendingVehicle(input: PendingVehicleInputDto): Promise<PendingVehicleOutputDto | null>
 }

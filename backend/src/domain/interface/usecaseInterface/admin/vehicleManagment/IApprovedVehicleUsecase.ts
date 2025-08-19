@@ -1,6 +1,5 @@
-import { IVehicle } from "../../../../entities/vehcleEnties";
+import { ApprovedVehicleInputDto, ApprovedVehicleOutputDto } from "../../../DTOs/adminDto/AdminDto";
 
 export interface IapprovedVehicleUsecase {
-
-    getApprovedVehicle(search:string, page:number, limit: number): Promise<{ vehicle: IVehicle[]; total: number,totalCount:number } | null>
+    getApprovedVehicle(input: ApprovedVehicleInputDto): Promise<ApprovedVehicleOutputDto | null>
 }

@@ -1,3 +1,5 @@
+import { BlockUserInputDto, BlockUserOutputDto } from "../../DTOs/adminDto/AdminDto";
+
 export interface IblockUserUseCase{
-    blockUser(userId:string):Promise<boolean>
+    blockUser(input: BlockUserInputDto): Promise<BlockUserOutputDto>
 }

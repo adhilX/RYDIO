@@ -16,6 +16,7 @@ export class ForgotPasswordUsecase implements IsendOptUsecase{
 
      async execute(input: SendForgotPasswordOtpInputDto): Promise<SendForgotPasswordOtpOutputDto> {
         const { email } = input;
+        console.log(email)
         const existingUser = await this._userRepository.findByEmail(email)
         if(!existingUser)throw new Error('user not found with this email')
         const otp = this._otpService.genarateOtp()

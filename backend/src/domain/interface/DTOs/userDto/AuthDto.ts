@@ -1,5 +1,3 @@
-
-
 // Common Interfaces
 interface IVerificationRequest {
   _id?: string;
@@ -36,7 +34,7 @@ export interface LoginUserInputDto {
   password: string;
 }
 
-export interface LoginUserOutputDto extends BaseUserOutputDto {}
+export type LoginUserOutputDto = BaseUserOutputDto;
 
 //---create user dto
 export interface CreateUserInputDto {
@@ -55,7 +53,7 @@ export interface GetUserInputDto {
   userId: string;
 }
 
-export interface GetUserOutputDto extends BaseUserOutputDto {}
+export type GetUserOutputDto = BaseUserOutputDto;
 
 //---change password dto
 export interface ChangePasswordInputDto {
@@ -63,7 +61,7 @@ export interface ChangePasswordInputDto {
   newPassword: string;
 }
 
-export interface ChangePasswordOutputDto extends BaseUserOutputDto {}
+export type ChangePasswordOutputDto = BaseUserOutputDto 
 
 //---google login dto
 export interface GoogleLoginInputDto {
@@ -73,7 +71,7 @@ export interface GoogleLoginInputDto {
   googleVerification: boolean;
 }
 
-export interface GoogleLoginOutputDto extends BaseUserOutputDto {}
+export type GoogleLoginOutputDto = BaseUserOutputDto;
 
 //---logout dto
 export interface LogoutUserInputDto {
@@ -115,4 +113,4 @@ export interface EditProfileInputDto {
   imageUrl?: string;
 }
 
-export interface EditProfileOutputDto extends BaseUserOutputDto {}
+export type EditProfileOutputDto = BaseUserOutputDto;

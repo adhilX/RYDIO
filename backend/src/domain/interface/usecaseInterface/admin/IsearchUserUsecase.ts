@@ -1,6 +1,5 @@
-import { User } from "../../../entities/userEntities";
+import { SearchUserInputDto, SearchUserOutputDto } from "../../DTOs/adminDto/AdminDto";
 
 export interface IsearchUserUsecase {
-
-    searchUser(search: string, page: number, limit: number): Promise<{ users: Pick<User, 'name' | 'email' | 'phone' | '_id'>[]; total: number; } | null>
+    searchUser(input: SearchUserInputDto): Promise<SearchUserOutputDto | null>
 }

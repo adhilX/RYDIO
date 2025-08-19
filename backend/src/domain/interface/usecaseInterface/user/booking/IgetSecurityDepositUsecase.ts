@@ -1,3 +1,5 @@
+import { GetSecurityDepositOutputDto } from "../../../DTOs/bookingDto/BookingDto";
+
 export interface IgetSecurityDepositUsecase {
-    getSecurityDeposit(): Promise<number>
+    getSecurityDeposit(): Promise<GetSecurityDepositOutputDto>
 }

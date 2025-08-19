@@ -1,12 +1,18 @@
 import { IgetSecurityDepositUsecase } from "../../domain/interface/usecaseInterface/user/booking/IgetSecurityDepositUsecase";
-import { ISecurityDepositRepository } from "../../domain/interface/repositoryInterface/ISecurityDepositRepository";
+import { setings } from "../../shared/constent";
+import { GetSecurityDepositOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 
-export class GetSecurityDepositUsecase implements IgetSecurityDepositUsecase{
-    
-constructor(private _SecurityDepositRepository: ISecurityDepositRepository){}
+export class GetSecurityDepositUsecase implements IgetSecurityDepositUsecase {
+  constructor() {}
 
-async getSecurityDeposit(): Promise<number> {
-    const securityDeposit = await this._SecurityDepositRepository.getSecurityDeposit();
-    return securityDeposit;
-}
+  async getSecurityDeposit(): Promise<GetSecurityDepositOutputDto> {
+    try {
+      return {
+        security_deposit: setings.securityDeposit
+      };
+    } catch (error) {
+      console.error('Error getting security deposit:', error);
+      throw error;
+    }
+  }
 }

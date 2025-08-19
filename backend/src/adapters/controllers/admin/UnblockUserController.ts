@@ -10,7 +10,7 @@ export class UnblockUserController {
     async handleClientBlock(req: Request, res: Response): Promise<void> {
         try {
              const {userId}= req.params
-            await this._userUnblockUseCase.unblockUser(userId)
+            await this._userUnblockUseCase.unblockUser({userId} )
             res.status(HttpStatus.OK).json({ message: "Client Blocked" })
         } catch (error) {
             console.log('error while blocking user', error)

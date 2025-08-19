@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AdminLogin from "@/pages/Admin/Login";
-import { Dashboard } from "@/components/admin/Dashboard";
 import { UserManagement } from "@/components/admin/UserManagment";
 const AdminLayout = React.lazy(() => import("@/layout/admin/AdminLayout"));
 import VehicleList from "@/components/admin/vehicleList";
@@ -10,6 +9,7 @@ import IdproofRequest from "@/components/admin/IdproofRequest";
 import BookingList from "@/components/admin/BookingList";
 import WalletManagement from "@/components/admin/WalletManagement";
 import TokenProtected from "./ProtectedRoutes/tokenProtected";
+import AdminDashboard from "@/pages/Admin/AdminDashBoard";
 
 export const AdminRoutes = () => {
   return (
@@ -19,7 +19,7 @@ export const AdminRoutes = () => {
 
       {/* Protected Routes */}
       <Route element={<TokenProtected isAdmin={true} children={<AdminLayout/>} />}>
-          <Route index element={<Dashboard/>} />
+          <Route index element={<AdminDashboard/>} />
           <Route path="users" element={<UserManagement/>} />
           <Route path="vehicle" element={<><VehicleList/></>} />
           <Route path="vehicle_requests" element={<><RequestedVehiclesPage/></>} />

@@ -1,15 +1,13 @@
 import { BookingStatus, PaymentStatus, PaymentType } from "../../../entities/BookingEntities";
 import { Location } from "../../../entities/LocationEnties";
-import { User } from "../../../entities/userEntities";
 import { IVehicle } from "../../../entities/vehcleEnties";
-import { IVerificationRequest } from "../../../entities/VerificationRequest";
 
 // Base Booking DTO for shared booking properties
 export interface BaseBookingDto {
   _id?: string;
   booking_id: string;
   user_id: string;
-  vehicle_id:IVehicle;
+  vehicle_id: string;
   address: string;
   city: string;
   start_date: Date;
@@ -54,7 +52,7 @@ export interface CreateBookingOutputDto extends BaseBookingDto {
 }
 
 // My Booking DTOs
-export interface MyBookingInputDto extends BaseInputDto{}
+export type MyBookingInputDto = BaseInputDto;
 
 export interface MyBookingItemDto extends Omit<CreateBookingOutputDto, 'vehicle_id'> {
   vehicle: IVehicle;
@@ -100,4 +98,82 @@ export interface CancelBookingOutputDto {
 
 export interface GetSecurityDepositOutputDto {
   security_deposit: number;
+}
+
+//=================== Create Booking DTOs ===================
+
+export interface CreateBookingInputDto {
+  bookingData: {
+    vehicle_id: string;
+    address: string;
+    city: string;
+    start_date: string;
+    end_date: string;
+    total_amount: number;
+    user_id: string;
+  };
+  user_id: string;
+  stripeIntentId: string;
+}
+
+export interface CreateBookingOutputDto extends BaseBookingDto {
+  ride_start_time?: Date;
+  ride_end_time?: Date;
+  finance: {
+    security_deposit: number;
+    fine_amount: number;
+    admin_commission: number;
+    owner_earnings: number;
+    is_late_return: boolean;
+    user_withdraw: boolean;
+    owner_withdraw: boolean;
+  };
+  payment_intent_id?: string;
+  cancellation_reason?: string;
+}
+
+//=================== Get Booked Vehicle DTOs ===================
+
+export interface GetBookedVehicleInputDto {
+  vehicleId: string;
+}
+
+export interface GetBookedVehicleOutputDto {
+  bookedVehicles: string[];
+}
+
+//=================== Create Payment Intent DTOs ===================
+
+export interface CreatePaymentIntentInputDto {
+  bookingData: {
+    vehicle_id: string;
+    user_id: string;
+    start_date: string;
+    end_date: string;
+    total_amount: number;
+  };
+}
+
+export interface CreatePaymentIntentOutputDto {
+  paymentIntentId: string;
+}
+
+//=================== Ride Management DTOs ===================
+
+export interface RideStartInputDto {
+  bookingId: string;
+}
+
+export interface RideStartOutputDto {
+  success: boolean;
+  message: string;
+}
+
+export interface RideEndInputDto {
+  bookingId: string;
+}
+
+export interface RideEndOutputDto {
+  success: boolean;
+  message: string;
 }

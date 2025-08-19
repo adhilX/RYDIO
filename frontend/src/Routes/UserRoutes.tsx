@@ -20,6 +20,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import PaymentSuccess from "@/pages/User/PaymentSuccess"
 import MyBooking from "@/components/user/Dashboard/MyBooking"
 import IncomingBookings from "@/components/user/Dashboard/IncomingBookings"
+import Chat from "@/components/user/Dashboard/Chat"
 const CheckoutForm = React.lazy(() => import("@/pages/User/CheckoutForm"))
 const Wishlist = React.lazy(() => import("@/pages/User/Wishlist"))
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
@@ -109,6 +110,14 @@ export const UserRoutes = () => {
                     element={
                         <TokenProtected>
                             <IncomingBookings />
+                        </TokenProtected>
+                    }
+                />
+                    <Route
+                    path="chat"
+                    element={
+                        <TokenProtected>
+                            <Chat/>
                         </TokenProtected>
                     }
                 />

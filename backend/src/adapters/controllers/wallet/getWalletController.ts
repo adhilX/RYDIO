@@ -9,10 +9,9 @@ export class GetWalletController{
     async getWalletDetails(req: Request, res: Response): Promise<void> {
         try {
             const {userId} = req.params
-            const {page, limit} = req.query
-            const pageNumber = parseInt(page as string) || 1
-            const limitNumber = parseInt(limit as string) || 10
-            const wallet = await this.getWalletUsecase.getWalletByUserId(userId);
+            
+            const input = { userId };
+            const wallet = await this.getWalletUsecase.getWalletByUserId(input);
             if (!wallet) {
                 res.status(404).json({ message: 'Wallet not found' });
                 return;

@@ -1,114 +1,84 @@
 import { IAdminWalletRepository } from "../../../domain/interface/repositoryInterface/IAdminWalletRepository";
-import { IbookingRepostory } from "../../../domain/interface/repositoryInterface/IbookingRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
 import { ItrasationRepository } from "../../../domain/interface/repositoryInterface/ItrasationRepository";
-import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
-import {IWithdrawalUsecase } from "../../../domain/interface/usecaseInterface/user/wallet/IuserWithdrawalUsecase";
-import { BookingStatus } from "../../../domain/entities/BookingEntities";
+import { IWithdrawalUsecase } from "../../../domain/interface/usecaseInterface/user/wallet/IuserWithdrawalUsecase";
+import { WithdrawalInputDto, WithdrawalOutputDto } from "../../../domain/interface/DTOs/userDto/WalletDto";
+import { idGeneratorService } from "../../../framework/DI/serviceInject";
 
-export class WithdrawalUsecase implements IWithdrawalUsecase{
-    constructor(
-        private _bookingRepository: IbookingRepostory,
-        private _adminWalletRepository: IAdminWalletRepository,
-        private _walletRepository: IWalletRepository,
-        private _transactionRepository: ItrasationRepository,
-        private _vehicleRepository: IvehicleRepository
-    ) {}
-     async userWithdrawal(bookingId: string, userId: string): Promise<boolean> {
-        try {
-            const booking = await this._bookingRepository.findById(bookingId);
-            if (!booking) {
-                throw new Error("Booking not found");
-            }
-            if (booking.status !== BookingStatus.Completed) {
-                throw new Error("Booking must be completed before withdrawal");
-            }
+export class WithdrawalUsecase implements IWithdrawalUsecase {
+  constructor(
+    private _adminWalletRepository: IAdminWalletRepository,
+    private _walletRepository: IWalletRepository,
+    private _transactionRepository: ItrasationRepository
+  ) {}
 
-            const vehicleData = await this._vehicleRepository.getVehicleDetails(booking.vehicle_id.toString());
-            if (!vehicleData) {
-                throw new Error("Vehicle not found");
-            }
+  async userWithdrawal(input: WithdrawalInputDto): Promise<WithdrawalOutputDto> {
+    try {
+      const { userId, amount, accountDetails } = input;
 
-            const isBookingUser = booking.user_id.toString() === userId;
-            const isVehicleOwner = vehicleData.owner_id.toString() === userId;
+      // Get user wallet
+      const userWallet = await this._walletRepository.getWalletByUserId(userId);
+      if (!userWallet) {
+        throw new Error("User wallet not found");
+      }
 
-            if (!isBookingUser && !isVehicleOwner) {
-                throw new Error("Access denied. You are not authorized to withdraw from this booking");
-            }
+      // Check if user has sufficient balance
+      if (userWallet.balance < amount) {
+        throw new Error("Insufficient wallet balance");
+      }
 
-            let withdrawalAmount = 0;
-            let withdrawalType = '';
-            let updateField = '';
+      // Minimum withdrawal check
+      if (amount < 100) {
+        throw new Error("Minimum withdrawal amount is ₹100");
+      }
 
-            if (isBookingUser) {
-                if (booking.finance.user_withdraw) {
-                    throw new Error("User has already withdrawn from this booking");
-                }
-                
-                withdrawalAmount = booking.finance.security_deposit - booking.finance.fine_amount;
-                withdrawalType = 'User security deposit refund';
-                updateField = 'finance.user_withdraw';
-                
-                if (withdrawalAmount <= 0) {
-                    throw new Error("No amount available for user withdrawal (fines may exceed security deposit)");
-                }
-            } else if (isVehicleOwner) {
+      // Validate account details
+      if (!accountDetails.accountNumber || !accountDetails.ifscCode || !accountDetails.accountHolderName) {
+        throw new Error("Complete account details are required for withdrawal");
+      }
 
-                if (booking.finance.owner_withdraw) {
-                    throw new Error("Owner has already withdrawn from this booking");
-                }
-                withdrawalAmount = booking.finance.owner_earnings;
-                withdrawalType = 'Owner earnings';
-                updateField = 'finance.owner_withdraw';
+      // Generate transaction ID
+      const transactionId = await idGeneratorService.generateTransactionId();
 
-                if (withdrawalAmount <= 0) {
-                    throw new Error("No earnings available for owner withdrawal");
-                }
-            }
+      // Create withdrawal transaction
+      const withdrawalTransaction = await this._transactionRepository.create({
+        from: userId,
+        to: 'bank',
+        amount: amount,
+        purpose: 'withdrawal',
+        bookingId: transactionId,
+        transactionType: 'debit'
+      });
 
-            const userWallet = await this._walletRepository.getWalletByUserId(userId);
-            if (!userWallet) {
-                throw new Error("User wallet not found");
-            }
+      // Update user wallet (deduct amount)
+      await this._walletRepository.updateWallet(userId, -amount);
+      
+      if (withdrawalTransaction._id) {
+        await this._walletRepository.addTransaction(userId, withdrawalTransaction._id.toString());
+      }
 
-            // Create withdrawal transaction
-            const withdrawalTransaction = await this._transactionRepository.create(
-              {from: 'admin',
-               to: userId,
-               amount: withdrawalAmount,
-              purpose  :isBookingUser ? 'refund' : 'commission',
-             bookingId,
-             transactionType :'credit'}
-            );
+      // Reduce amount from admin wallet
+      await this._adminWalletRepository.updateWalletBalance(-amount);
+      if (withdrawalTransaction._id) {
+        await this._adminWalletRepository.addTransaction(withdrawalTransaction._id.toString());
+      }
 
-            // Update user wallet
-            await this._walletRepository.updateWallet(userId, withdrawalAmount);
-            if (withdrawalTransaction._id) {
-                await this._walletRepository.addTransaction(userId, withdrawalTransaction._id.toString());
-            }
+      const updatedWallet = await this._walletRepository.getWalletByUserId(userId);
+      const remainingBalance = updatedWallet?.balance || 0;
 
-            // Reduce amount from admin wallet
-            await this._adminWalletRepository.updateWalletBalance(-withdrawalAmount);
-            if (withdrawalTransaction._id) {
-                await this._adminWalletRepository.addTransaction(withdrawalTransaction._id.toString());
-            }
-
-            // Update booking withdrawal status
-            const updateData: any = {};
-            if (isBookingUser) {
-                updateData['finance.user_withdraw'] = true;
-            } else {
-                updateData['finance.owner_withdraw'] = true;
-            }
-
-            await this._bookingRepository.updateBookingFinance(bookingId, updateData);
-
-            console.log(`${withdrawalType} successful: ${withdrawalAmount} credited to user ${userId}`);
-            return true;
+      console.log(`Withdrawal successful: ₹${amount} withdrawn for user ${userId}`);
+      
+      return {
+        success: true,
+        message: "Withdrawal request processed successfully",
+        transactionId: transactionId,
+        withdrawalAmount: amount,
+        remainingBalance: remainingBalance
+      };
             
-        } catch (error) {
-            console.error('Withdrawal error:', error);
-            throw error;
-        }
+    } catch (error) {
+      console.error('Withdrawal error:', error);
+      throw error;
     }
+  }
 }

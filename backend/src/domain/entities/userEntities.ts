@@ -13,6 +13,7 @@ export interface User {
   vendor_access?: boolean;
   is_verified_user?:boolean 
   last_login?: Date;
-  created_at?: Date;
+  createdAt?: Date;
+  updatedAt?:Date
   googleVerification?:boolean
 }

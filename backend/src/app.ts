@@ -14,6 +14,7 @@ export class App {
     private app : Application                
     private port: number|string
     private database: ConnectMongoDB
+    // private socketIoServer: SocketIoController
     constructor() {
         this.app = express();
         this.app.use(cors({
@@ -50,6 +51,9 @@ export class App {
     }
        private async connectRedis() {
         await redisService.connect()
+    }
+    private setSocketIo() {
+        // this.socketIoServer = new SocketIoController()
     }
 }
 

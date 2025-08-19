@@ -9,7 +9,7 @@ export class ChangeVehicleStatusController {
     async changeVehicleStatus(req:Request,res:Response){
         try {
             const {vehicleId} = req.params;
-            const result = await this._changeVehicleStatusUsecase.execute({ vehicleId });
+            await this._changeVehicleStatusUsecase.execute({ vehicleId });
             res.status(200).json({message:'vehicle status changed successfully',success:true});
         } catch (error) {
             console.log('error while changing vehicle status',error)

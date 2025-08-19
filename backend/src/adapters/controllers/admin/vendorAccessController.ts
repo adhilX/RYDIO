@@ -12,7 +12,7 @@ export class VendorAccessController {
         try {
             const {userId} = req.params
             const {vendorAccess} = req.body
-            const response = await this._vendorAccessUsecase.vendorAccess(userId, vendorAccess)
+            const response = await this._vendorAccessUsecase.vendorAccess({userId,vendorAccess})
            res.status(HttpStatus.OK).json(response)
         } catch (error) {
             console.log('error while blocking user', error)

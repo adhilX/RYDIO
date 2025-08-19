@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { IChangePasswordUsecase } from "../../../../domain/interface/usecaseInterface/user/userProfile/IchangePasswordUsercase";
+import { ChangePasswordInputDto } from "../../../../domain/interface/DTOs/userDto/UserProfileDto";
 
 export class ChangePasswordUserController{
     private _changePasswordUsecase : IChangePasswordUsecase
@@ -10,8 +11,15 @@ export class ChangePasswordUserController{
 
     async handleEditProfle(req:Request,res:Response):Promise<void>{
         try {
-       const newUser =  await this._changePasswordUsecase.handleChangePassword(req.body.value)
-           res.status(HttpStatus.OK).json({message:'password changes',newUser})
+            const {_id,confirm,current,newPass}:ChangePasswordInputDto= req.body.values 
+            const input = {
+                _id,
+                confirm,
+                current,
+                newPass
+            };
+            const newUser = await this._changePasswordUsecase.handleChangePassword(input);
+            res.status(HttpStatus.OK).json({message:'password changed successfully', user: newUser});
         } catch (error) {
             console.error('Error while changing password:', error);
             res.status(HttpStatus.BAD_REQUEST).json({

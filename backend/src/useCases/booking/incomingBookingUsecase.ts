@@ -1,11 +1,6 @@
 import { IIncomingBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/IIncomingBookingUsecase"
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
-import { IncomingBookingInputDto, IncomingBookingOutputDto, IncomingBookingItemDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
-import { Ibooking } from "../../domain/entities/BookingEntities"
-import { IVehicle } from "../../domain/entities/vehcleEnties"
-
-// Type for aggregated booking result with populated vehicle
-type BookingWithVehicle = Ibooking & { vehicle: IVehicle }
+import { IncomingBookingInputDto, IncomingBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
 
 export class IncomingBookingUsecase implements IIncomingBookingUsecase{
     

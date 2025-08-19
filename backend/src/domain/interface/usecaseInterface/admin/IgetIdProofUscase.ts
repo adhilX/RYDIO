@@ -1,5 +1,5 @@
-import { User } from "../../../entities/userEntities";
+import { GetIdProofInputDto, GetIdProofOutputDto } from "../../DTOs/adminDto/AdminDto";
 
 export interface IgetIdProofUscase{
-    getIdProof(status:'pending' | 'approved' | 'rejected',currentPage:number,itemsPerPage:number): Promise<{idproofs:User[];total:number} | null>
+    getIdProof(input: GetIdProofInputDto): Promise<GetIdProofOutputDto | null>
 }

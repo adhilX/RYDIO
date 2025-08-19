@@ -157,13 +157,13 @@ export class BookingRepository extends BaseRepository<Ibooking> implements Ibook
           });
 
           console.log('Booked Vehicles:', bookings);
-          let unavailableDates: string[] = [];
+          const unavailableDates: string[] = [];
 
           bookings.forEach((booking) => {
                const start = new Date(booking.start_date);
                const end = new Date(booking.end_date);
 
-               let current = new Date(start);
+               const current = new Date(start);
                while (current <= end) {
                     const dateStr = current.toISOString().split("T")[0];
                     unavailableDates.push(dateStr);

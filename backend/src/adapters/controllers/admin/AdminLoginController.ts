@@ -22,7 +22,7 @@ export class AdminLoginController {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: "invalid password" })
                 return
             }
-            const admin = await this.adminLoginUseCase.handleLogin(email, password)
+            const admin = await this.adminLoginUseCase.handleLogin({email, password})
             if (!admin) {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: "invalid credentials" })
                 return

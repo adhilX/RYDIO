@@ -1,3 +1,5 @@
+import { WithdrawalInputDto, WithdrawalOutputDto } from "../../../DTOs/userDto/WalletDto";
+
 export interface IWithdrawalUsecase {
- userWithdrawal(bookingId: string, userId: string): Promise<boolean>
+ userWithdrawal(input: WithdrawalInputDto): Promise<WithdrawalOutputDto>
 }

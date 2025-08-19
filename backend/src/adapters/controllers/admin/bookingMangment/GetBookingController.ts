@@ -10,7 +10,7 @@ export class GetBookingController {
     async getBookingData(req: Request, res: Response) {
         try {
             const { search, limit, page } = req.body
-            const response = await this._getBookingUsecase.getBookingData(search, limit, page)
+            const response = await this._getBookingUsecase.getBookingData({search, limit, page})
             res.status(HttpStatus.OK).json(response)
 
         } catch (error) {

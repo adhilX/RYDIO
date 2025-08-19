@@ -1,4 +1,4 @@
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 import { ITransaction } from '../../../domain/entities/transactionEntities';
 
 

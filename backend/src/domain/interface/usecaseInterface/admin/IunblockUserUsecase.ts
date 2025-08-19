@@ -1,3 +1,5 @@
+import { UnblockUserInputDto, UnblockUserOutputDto } from "../../DTOs/adminDto/AdminDto";
+
 export interface IunblockUserUseCase{
-    unblockUser(userId:string):Promise<boolean>
+    unblockUser(input: UnblockUserInputDto): Promise<UnblockUserOutputDto>
 }

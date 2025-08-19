@@ -1,5 +1,5 @@
 
-import { Schema, model, Types } from "mongoose";
+import { Schema } from "mongoose";
 import { IVerificationRequestModel } from "../models/verificationRequestModel";
 
 export const verificationRequestSchema = new Schema<IVerificationRequestModel>(

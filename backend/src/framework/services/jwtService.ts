@@ -21,7 +21,7 @@ export class JwtService implements IjwtService {
     verifyRefreshToken(refreshToken: string, refreshSecretKey: string): { userId: string; } | null {
         try {
             return jwt.verify(refreshToken, refreshSecretKey) as { userId: string }
-        } catch (error) {
+        } catch {
             return null
         }
     }

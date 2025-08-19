@@ -31,9 +31,11 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
             if (existingUser.is_blocked) throw new Error('user is blocked')
             
             // Create wallet if doesn't exist
-            const existingWallet = await this._walletRepository.getWalletByUserId(existingUser._id?.toString()!);
-            if (!existingWallet) {
-                await this._walletRepository.create({user_id:existingUser._id?.toString()!,balance:0,is_frozen:false,transactions:[]})
+            if (existingUser._id) {
+                const existingWallet = await this._walletRepository.getWalletByUserId(existingUser._id.toString());
+                if (!existingWallet) {
+                    await this._walletRepository.create({user_id:existingUser._id.toString(),balance:0,is_frozen:false,transactions:[]})
+                }
             }
             
             return {
@@ -56,7 +58,9 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
             if (!createUser) throw new Error('error while creating new user using google login')
             
             // Create a wallet for the new user
-            await this._walletRepository.create({user_id:createUser._id?.toString()!,balance:0,is_frozen:false,transactions:[]})
+            if (createUser._id) {
+                await this._walletRepository.create({user_id:createUser._id.toString(),balance:0,is_frozen:false,transactions:[]})
+            }
             
             return {
                 _id: createUser._id?.toString(),

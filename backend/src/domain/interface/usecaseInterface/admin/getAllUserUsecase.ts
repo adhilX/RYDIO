@@ -1,6 +1,5 @@
-import { User } from "../../../entities/userEntities";
+import { GetAllUsersInputDto, GetAllUsersOutputDto } from "../../DTOs/adminDto/AdminDto";
 
 export interface IgetAllUserUsecase{
-
-    getAllUser():Promise<User[]|null>
+    getAllUser(input?: GetAllUsersInputDto): Promise<GetAllUsersOutputDto | null>
 }

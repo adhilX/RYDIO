@@ -14,7 +14,8 @@ export class RideEndController {
             if (!scanner_user_id) {
                 return res.status(401).json({ message: "User authentication required" });
             }
-            const result = await this._rideEndUsecase.execute(bookingId,scanner_user_id)
+            const input = { bookingId };
+            const result = await this._rideEndUsecase.execute(input, scanner_user_id)
             res.json({message:"Ride ended successfully",result})
         } catch (error) {
             console.log('error while ride end',error)

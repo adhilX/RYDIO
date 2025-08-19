@@ -28,6 +28,7 @@
     "stripe": "^18.3.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.33.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
@@ -37,8 +38,13 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.0.1",
     "@types/nodemailer": "^6.4.17",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.3.0",
+    "jiti": "^2.5.1",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.39.1"
   }
 }

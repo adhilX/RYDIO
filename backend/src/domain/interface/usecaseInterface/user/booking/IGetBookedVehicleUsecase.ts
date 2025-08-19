@@ -1,3 +1,5 @@
+import { GetBookedVehicleInputDto, GetBookedVehicleOutputDto } from "../../../DTOs/bookingDto/BookingDto";
+
 export interface IGetBookedVehicleUsecase {
-  execute(userId: string): Promise<string[]|null>;
+  execute(input: GetBookedVehicleInputDto): Promise<GetBookedVehicleOutputDto | null>;
 }

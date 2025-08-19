@@ -6,11 +6,16 @@ export class UserWithdrawalController {
     constructor(private _WithdrawalUsecase:IWithdrawalUsecase){}
 
     async withdrawal(req:Request, res:Response):Promise<void> {
-        const { userId, bookingId } = req.body;
+        const { userId, amount, accountDetails } = req.body;
         try {
-            await this._WithdrawalUsecase.userWithdrawal(bookingId, userId);
-
-            res.status(HttpStatus.OK).json({message:"Withdrawal request successfull"});
+            const input = {
+                userId,
+                amount,
+                accountDetails
+            };
+            
+            const result = await this._WithdrawalUsecase.userWithdrawal(input);
+            res.status(HttpStatus.OK).json(result);
         } catch (error) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "Withdrawal request failed", error });
         }

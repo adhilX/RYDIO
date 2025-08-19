@@ -1,5 +1,5 @@
-import { User } from "../../../../entities/userEntities";
+import { AdminLoginInputDto, AdminLoginOutputDto } from "../../../DTOs/adminDto/AdminDto";
 
 export interface IadminLoginUseCase {
-    handleLogin(email: string, password: string): Promise<Pick<User, '_id' | 'email' | 'name' | 'role'>>
+    handleLogin(input: AdminLoginInputDto): Promise<AdminLoginOutputDto>
 }

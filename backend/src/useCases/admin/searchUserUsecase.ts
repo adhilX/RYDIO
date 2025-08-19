@@ -1,23 +1,38 @@
     import { User } from "../../domain/entities/userEntities";
-    import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
-    import { IsearchUserUsecase } from "../../domain/interface/usecaseInterface/admin/IsearchUserUsecase";
+import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IsearchUserUsecase } from "../../domain/interface/usecaseInterface/admin/IsearchUserUsecase";
+import { SearchUserInputDto, SearchUserOutputDto, BaseUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
-    export class SearchUserusercase implements IsearchUserUsecase{
-        private _adminRepository: IadminRepository
+export class SearchUserusercase implements IsearchUserUsecase{
+    private _adminRepository: IadminRepository
 
-        constructor(adminRepository:IadminRepository){
-            this._adminRepository = adminRepository
-        }
+    constructor(adminRepository:IadminRepository){
+        this._adminRepository = adminRepository
+    }
 
-    async searchUser(search: string, page: number, limit: number): Promise<{ users: Pick<User,'name'|'email'|'phone'|'_id'>[]; total: number; } | null> {
-         const result= await this._adminRepository.SearchUser(search,page,limit)
+    async searchUser(input: SearchUserInputDto): Promise<SearchUserOutputDto | null> {
+         const result = await this._adminRepository.SearchUser(input.search, input.page, input.limit)
          if(!result) return null
-        const {users,total}= result
-         const fileredUser = users.map((user:User) => {
+        const {users, total} = result
+         const mappedUsers: BaseUserOutputDto[] = users.map((user: User) => {
               const plainUser = JSON.parse(JSON.stringify(user))
             const { password, ...rest } = plainUser
-            return rest;
+            return {
+                _id: rest._id,
+                email: rest.email,
+                name: rest.name,
+                phone: rest.phone,
+                role: rest.role,
+                is_blocked: rest.is_blocked,
+                is_verified_user: rest.is_verified_user,
+                last_login: rest.last_login,
+                vendor_access: rest.vendor_access,
+                googleVerification: rest.googleVerification,
+                profile_image: rest.profile_image,
+                createdAt: rest.createdAt,
+                updatedAt: rest.updatedAt
+            };
           });
-          return { users: fileredUser, total};
+          return { users: mappedUsers, total};
     }
-    }
+}

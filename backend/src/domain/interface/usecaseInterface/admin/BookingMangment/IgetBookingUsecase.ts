@@ -1,5 +1,5 @@
-import { Ibooking } from "../../../../entities/BookingEntities";
+import { GetBookingInputDto, GetBookingOutputDto } from "../../../DTOs/adminDto/AdminDto";
 
 export interface IgetBookingUsecase{
-     getBookingData(search:string,limit:number,page:number):Promise<{bookings:Ibooking[],total: number}|null>
+     getBookingData(input: GetBookingInputDto): Promise<GetBookingOutputDto | null>
 }
