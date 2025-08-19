@@ -1,6 +1,6 @@
-import { IdeleteVehicleUsecase } from "../../../domain/interface/usecaseInterface/user/vehicle/IdeleteVehicleUsecase";
-import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
-import { DeleteVehicleInputDto, DeleteVehicleOutputDto } from "../../../domain/interface/DTOs/userDto/VehicleDto";
+import { IdeleteVehicleUsecase } from "../../domain/interface/usecaseInterface/user/vehicle/IdeleteVehicleUsecase";
+import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
+import { DeleteVehicleInputDto, DeleteVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
 export class DeleteVehicleUsecase implements IdeleteVehicleUsecase{
     private _vehicleRepository : IvehicleRepository

@@ -1,6 +1,6 @@
-import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
-import { ImyVehicleUsecase } from "../../../domain/interface/usecaseInterface/user/vehicle/ImyVehicleUsecase";
-import { MyVehicleInputDto, MyVehicleOutputDto } from "../../../domain/interface/DTOs/userDto/VehicleDto";
+import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
+import { ImyVehicleUsecase } from "../../domain/interface/usecaseInterface/user/vehicle/ImyVehicleUsecase";
+import { MyVehicleInputDto, MyVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
 
 export class MyVehicleUsecase implements ImyVehicleUsecase {

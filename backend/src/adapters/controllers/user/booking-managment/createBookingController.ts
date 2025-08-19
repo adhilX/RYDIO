@@ -1,5 +1,5 @@
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
-import { CreateBookingUsecase } from "../../../../useCases/booking/createBookingUsecase"
+import { CreateBookingUsecase } from "../../../../useCases/bookings/createBookingUsecase";
 
 export class CreateBookingController {
     private _createBookingUsecase: CreateBookingUsecase

@@ -1,6 +1,6 @@
-import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
-import { IchangeVehicleStatusUsecase } from "../../../domain/interface/usecaseInterface/user/vehicle/IchangeVehicleStatusUsecase";
-import { ChangeVehicleStatusInputDto, ChangeVehicleStatusOutputDto } from "../../../domain/interface/DTOs/userDto/VehicleDto";
+import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
+import { IchangeVehicleStatusUsecase } from "../../domain/interface/usecaseInterface/user/vehicle/IchangeVehicleStatusUsecase";
+import { ChangeVehicleStatusInputDto, ChangeVehicleStatusOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
 export class ChangeVehicleStatusUsecase implements IchangeVehicleStatusUsecase{
     constructor(private _vehicleRepository:IvehicleRepository){
