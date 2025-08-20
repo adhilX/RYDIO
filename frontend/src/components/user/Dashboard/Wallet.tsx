@@ -1,5 +1,5 @@
 import Pagination from '@/components/Pagination';
-import { getWallet } from '@/services/wallet /walletService';
+import { getWallet } from '@/services/wallet/walletService';
 import type { RootState } from '@/store/store';
 import type { Transaction, WalletData } from '@/Types/User/walletData';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';

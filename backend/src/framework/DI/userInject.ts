@@ -6,7 +6,6 @@ import { EmailService } from "../services/emailService"
 import { OtpService } from "../services/otpService"
 import { JwtService } from "../services/jwtService"
 import { UserLoginController } from "../../adapters/controllers/user/authentication/userLoginController"
-import { GoogleLoginController } from "../../adapters/controllers/user/authentication/googleLoginController"
 import { ResendOtpController } from "../../adapters/controllers/user/authentication/resendOtpController"
 import { SendOtpForgotPasswordController } from "../../adapters/controllers/user/authentication/forgotPasswordController"
 import { VerifyForgotPassowordOtpController } from "../../adapters/controllers/user/authentication/verifyForgotPasswordOtpController"
@@ -94,12 +93,10 @@ export const  userRegisterController = new UserRegisterController(verifyOtpUseca
 
 const jwtService = new JwtService()
 const loginUserUsecase = new LoginUserUsecase(userRepository,hashPassword,walletRepository)
-export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService)
-
-//-------Google Login ---------
-
 const googleLoginUsecase = new GoogleLoginUsecase(userRepository,walletRepository)
-export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase,redisService)
+
+
+export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService,googleLoginUsecase)
 
 //-----resendOtp ------------
 const resendOtpUsecase = new ResendOtpUsecase(otpService,emailService)

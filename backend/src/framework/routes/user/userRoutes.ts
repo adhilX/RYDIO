@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, googleLoginController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController, getUserController, getWalletController, getSecurityDepositController, rideStartController, rideEndController, incomingBookingController, cancelBookingController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController, getUserController, getWalletController, getSecurityDepositController, rideStartController, rideEndController, incomingBookingController, cancelBookingController } from "../../DI/userInject";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -20,7 +20,7 @@ export class UserRoutes {
         userLoginController.handleLogin(req,res)
     })
     this.UserRoutes.post('/googlelogin',(req:Request, res:Response)=>{
-        googleLoginController.handleLogin(req,res)
+        userLoginController.handleGoogleLogin(req,res)
     })
     this.UserRoutes.post('/resendotp',(req:Request, res:Response)=>{
         resendOtpController.resendOpt(req,res)
