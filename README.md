@@ -1,6 +1,4 @@
-Here’s a **README.md** template (code) you can directly add to your GitHub repo. I kept it clean, professional, and developer-friendly. You can copy-paste this as `README.md` and customize where needed 👇
 
-```markdown
 # 🚗 RYDIO - Car Rental System
 
 RYDIO is a modern car rental platform built with **MERN Stack** (MongoDB, Express.js, React, Node.js).  
