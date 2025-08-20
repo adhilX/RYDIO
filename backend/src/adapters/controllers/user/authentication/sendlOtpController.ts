@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { IsendOptUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IsendOtpUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { IsendOptUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase";
 export class SendOtpController{
     private _userSendOtpUsecase:IsendOptUsecase
 

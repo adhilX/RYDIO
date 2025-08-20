@@ -1,7 +1,6 @@
-import { User } from "../../domain/entities/userEntities";
 import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
-import { IeditProfileUsecase } from "../../domain/interface/usecaseInterface/user/userProfile/IeditProfileUsecase";
 import { EditProfileInputDto, EditProfileOutputDto } from "../../domain/interface/DTOs/userDto/UserProfileDto";
+import { IeditProfileUsecase } from "../../domain/interface/usecaseInterface/users/IeditProfileUsecase";
 
 export class EditProfileUsecase implements IeditProfileUsecase{
     private _userRepository:IuserRepository

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IForgotPasswordUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IForgotPasswordUsecase";
+import { IForgotPasswordUsecase } from "../../../../domain/interface/usecaseInterface/auth/password/IForgotPasswordUsecase";
 
 export class SendOtpForgotPasswordController {
     private _forgotPasswordUsecase: IForgotPasswordUsecase;
@@ -16,7 +16,7 @@ export class SendOtpForgotPasswordController {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: "Email is required" });
                 return;
             }
-            await this._forgotPasswordUsecase.execute({email});
+            await this._forgotPasswordUsecase.execute(email);
             res.status(HttpStatus.OK).json({ message: "Otp sent to your email." });
         } catch (error) {
             console.error("Error in forgot password:", error);

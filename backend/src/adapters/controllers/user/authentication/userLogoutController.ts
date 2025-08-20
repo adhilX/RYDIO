@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IuserLogoutUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IuserLogoutUsecase";
+import { IuserLogoutUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IuserLogoutUsecase";
 
 export class UserLogoutController {
     private _logoutUserusecase: IuserLogoutUsecase

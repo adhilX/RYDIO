@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IgetWalletUsecase } from "../../../domain/interface/usecaseInterface/user/wallet/IgetWalletUsecase";
+import { IgetWalletUsecase } from "../../../domain/interface/usecaseInterface/wallets/IgetWalletUsecase";
 
 export class GetWalletController{
     constructor(private getWalletUsecase: IgetWalletUsecase) {

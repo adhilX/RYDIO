@@ -1,6 +1,6 @@
-import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IverfyOtpUsecase";
 import { Request, Response } from "express";
-import { IcreateUserUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/userUsecaseInterface";
+import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase";
+import { IcreateUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/userUsecaseInterface";
 
 export class UserRegisterController {
     private _verifyOtpUsecase : IverfyOtpUsecase

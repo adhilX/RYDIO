@@ -4,7 +4,7 @@ import { IAdminWalletRepository } from "../../domain/interface/repositoryInterfa
 import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ItrasationRepository"
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository"
 import { IredisService } from "../../domain/interface/serviceInterface/IredisService"
-import { IcreateBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/IcreateBookingUsecase"
+import { IcreateBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IcreateBookingUsecase"
 import { idGeneratorService } from "../../framework/DI/serviceInject"
 import { setings } from "../../shared/constent"
 import { CreateBookingInputDto, CreateBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"

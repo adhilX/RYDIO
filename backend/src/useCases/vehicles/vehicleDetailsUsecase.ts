@@ -1,5 +1,5 @@
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
-import { IvehicleDetailsUsecase } from "../../domain/interface/usecaseInterface/user/vehicle/IvehicleDetailsUsecase";
+import { IvehicleDetailsUsecase } from "../../domain/interface/usecaseInterface/vehicles/IvehicleDetailsUsecase";
 import { VehicleDetailsInputDto, VehicleDetailsOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
 export class VehicleDetailsUsecase implements IvehicleDetailsUsecase {

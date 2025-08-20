@@ -1,5 +1,5 @@
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
-import { ImyVehicleUsecase } from "../../domain/interface/usecaseInterface/user/vehicle/ImyVehicleUsecase";
+import { ImyVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/ImyVehicleUsecase";
 import { MyVehicleInputDto, MyVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
 

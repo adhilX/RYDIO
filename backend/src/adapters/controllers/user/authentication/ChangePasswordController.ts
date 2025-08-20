@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IchangePasswordUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IchangePasswordUsecase";
+import { IchangePasswordUsecase } from "../../../../domain/interface/usecaseInterface/auth/password/IchangePasswordUsecase";
 
 export class ChangePasswordController {
     private _changePasswordUsecase: IchangePasswordUsecase

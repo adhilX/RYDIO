@@ -1,5 +1,5 @@
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
-import { IGetBookedVehicleUsecase } from "../../domain/interface/usecaseInterface/user/booking/IGetBookedVehicleUsecase";
+import { IGetBookedVehicleUsecase } from "../../domain/interface/usecaseInterface/bookings/IGetBookedVehicleUsecase";
 import { GetBookedVehicleInputDto, GetBookedVehicleOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 
 export class GetBookedVehicleUsecase implements IGetBookedVehicleUsecase {

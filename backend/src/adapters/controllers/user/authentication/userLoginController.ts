@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { IjwtService } from "../../../../domain/interface/serviceInterface/IjwtService";
-import { IloginUserUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IloginUserUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { setCookie } from "../../../../framework/services/tokenCookieSet";
 import { IredisService } from "../../../../domain/interface/serviceInterface/IredisService";
+import { IloginUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IloginUserUsecase";
 
 export class UserLoginController {
     private _jwtService: IjwtService

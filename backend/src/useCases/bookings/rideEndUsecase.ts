@@ -1,4 +1,4 @@
-import { IRideEndUsecase } from "../../domain/interface/usecaseInterface/user/booking/IRideEndUsecase";
+import { IRideEndUsecase } from "../../domain/interface/usecaseInterface/bookings/IRideEndUsecase";
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
 import { setings } from "../../shared/constent";

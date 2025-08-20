@@ -1,5 +1,5 @@
 import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
-import { IidProofActionUsecase } from "../../domain/interface/usecaseInterface/admin/IidProofActionUsecase";
+import { IidProofActionUsecase } from "../../domain/interface/usecaseInterface/users/IidProofActionUsecase";
 import { IdProofActionInputDto, IdProofActionOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class IdProofActionUsecase implements IidProofActionUsecase{

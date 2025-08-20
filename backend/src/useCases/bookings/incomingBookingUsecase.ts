@@ -1,4 +1,4 @@
-import { IIncomingBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/IIncomingBookingUsecase"
+import { IIncomingBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IIncomingBookingUsecase"
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
 import { IncomingBookingInputDto, IncomingBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
 

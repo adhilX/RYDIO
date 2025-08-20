@@ -1,8 +1,7 @@
-import { BookingData } from "../../domain/entities/BookingEntities";
 import { IredisService } from "../../domain/interface/serviceInterface/IredisService";
 import { IStripeService } from "../../domain/interface/serviceInterface/IstripeService";
-import { IcreatePaymentIntentUsecase } from "../../domain/interface/usecaseInterface/user/booking/IcreatePaymentIntentUsecase";
 import { CreatePaymentIntentInputDto, CreatePaymentIntentOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
+import { IcreatePaymentIntentUsecase } from "../../domain/interface/usecaseInterface/payments/IcreatePaymentIntentUsecase";
 
 export class CreatePaymentIntentUsecase implements IcreatePaymentIntentUsecase{
     constructor(private _stripeService: IStripeService,private _redisService: IredisService) {

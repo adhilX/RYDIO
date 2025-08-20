@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IdeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/user/vehicle/IdeleteVehicleUsecase";
+import { IdeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IdeleteVehicleUsecase";
 
 export class DeleteVehicleController {
     constructor(private _deleteVehicleUseCase:IdeleteVehicleUsecase) {

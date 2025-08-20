@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService"
-import { IadminLoginUseCase } from "../../../domain/interface/usecaseInterface/admin/Auth/IadminLoginUsecase"
 import { HttpStatus } from "../../../domain/entities/httpStatus"
 import { setCookie } from "../../../framework/services/tokenCookieSet"
+import { IadminLoginUseCase } from "../../../domain/interface/usecaseInterface/admin/IadminLoginUsecase"
 
 export class AdminLoginController {
     private adminLoginUseCase: IadminLoginUseCase

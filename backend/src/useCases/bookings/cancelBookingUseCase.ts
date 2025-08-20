@@ -1,4 +1,4 @@
-import { IcancelBookingUseCase } from "../../domain/interface/usecaseInterface/user/booking/IcancelBookingUseCase";
+import { IcancelBookingUseCase } from "../../domain/interface/usecaseInterface/bookings/IcancelBookingUseCase";
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";

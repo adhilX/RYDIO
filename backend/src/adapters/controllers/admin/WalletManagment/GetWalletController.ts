@@ -1,5 +1,5 @@
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IgetAdminWalletUsecase } from "../../../../domain/interface/usecaseInterface/admin/walletManagment/IgetAdminWalletUsecase";
+import { IgetAdminWalletUsecase } from "../../../../domain/interface/usecaseInterface/wallets/IgetAdminWalletUsecase";
 import { Request, Response } from "express";
 
 export class GetAdminWalletController {

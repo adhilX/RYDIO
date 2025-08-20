@@ -1,5 +1,5 @@
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
-import { ImyBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/ImyBookingUsecase";
+import { ImyBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/ImyBookingUsecase";
 import { MyBookingInputDto, MyBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 
 export class MyBookingUsecase implements ImyBookingUsecase{

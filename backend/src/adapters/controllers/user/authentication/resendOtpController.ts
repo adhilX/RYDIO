@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
-import { IresendOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IresendOtpUsecase"
+import { IresendOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IresendOtpUsecase";
 
 export class ResendOtpController{
     private _ResendOtpUsecase:IresendOtpUsecase

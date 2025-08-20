@@ -1,4 +1,4 @@
-import { IgetBookingUsecase } from "../../domain/interface/usecaseInterface/admin/BookingMangment/IgetBookingUsecase";
+import { IgetBookingUsecase } from "../../domain/interface/usecaseInterface/admin/Bookings/IgetBookingUsecase";
 import { Ibooking } from "../../domain/entities/BookingEntities";
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { GetBookingInputDto, GetBookingOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";

@@ -1,5 +1,5 @@
-import { IotpService } from "../../../../domain/interface/serviceInterface/IotpService";
-import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IverfyOtpUsecase";
+import { IverfyOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase"
+import { IotpService } from "../../../domain/interface/serviceInterface/IotpService"
 
 export class VerifyOtpUsecase implements IverfyOtpUsecase{
 

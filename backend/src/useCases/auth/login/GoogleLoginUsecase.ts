@@ -2,7 +2,7 @@ import { GoogleLoginInputDto, GoogleLoginOutputDto } from "../../../domain/inter
 import { User } from "../../../domain/entities/userEntities";
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
-import { IgoogleloginUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IgoogleLoginUsecase";
+import { IgoogleloginUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IgoogleLoginUsecase";
 
 export class GoogleLoginUsecase implements IgoogleloginUsecase {
 

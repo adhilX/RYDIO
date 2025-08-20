@@ -1,7 +1,7 @@
 import { IVerificationRequest } from "../../entities/VerificationRequest";
 import { User } from "../../entities/userEntities";
 import { IVehicle } from "../../entities/vehcleEnties";
-import { IBaseRepository } from "../repositoryInterface/IbaseRepo";
+import { IBaseRepository } from "./IbaseRepo";
 
 export interface IadminRepository extends IBaseRepository<User> {
     getAllUsers():Promise<User[]|null>

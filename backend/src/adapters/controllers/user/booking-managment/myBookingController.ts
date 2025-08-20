@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { ImyBookingUsecase } from "../../../../domain/interface/usecaseInterface/user/booking/ImyBookingUsecase";
+import { ImyBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/ImyBookingUsecase";
 
 export class MyBookingController {
 

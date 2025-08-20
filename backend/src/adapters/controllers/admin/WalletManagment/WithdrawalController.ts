@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IWithdrawalUsecase } from "../../../../domain/interface/usecaseInterface/user/wallet/IuserWithdrawalUsecase";
+import { IWithdrawalUsecase } from "../../../../domain/interface/usecaseInterface/wallets/IuserWithdrawalUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class UserWithdrawalController {

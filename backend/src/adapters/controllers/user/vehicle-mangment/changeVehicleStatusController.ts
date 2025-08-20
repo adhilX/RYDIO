@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IchangeVehicleStatusUsecase } from "../../../../domain/interface/usecaseInterface/user/vehicle/IchangeVehicleStatusUsecase";
+import { IchangeVehicleStatusUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IchangeVehicleStatusUsecase";
 
 export class ChangeVehicleStatusController {
     private _changeVehicleStatusUsecase: IchangeVehicleStatusUsecase;

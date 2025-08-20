@@ -1,5 +1,5 @@
 import { VehicleRepository } from "../../../adapters/repository/user/vehicleRepository";
-import { IvehicleAproveUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicleManagment/IvehicleUpproveUsecase";
+import { IvehicleAproveUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicles/IvehicleUpproveUsecase";
 import { VehicleApprovalInputDto, VehicleApprovalOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class VehicleUpproveUsecase implements IvehicleAproveUsecase {

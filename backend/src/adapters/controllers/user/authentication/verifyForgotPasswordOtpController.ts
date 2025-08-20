@@ -1,5 +1,5 @@
-import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IverfyOtpUsecase";
 import { Request, Response } from "express";
+import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase";
 
 export class VerifyForgotPassowordOtpController {
     private _verifyOtpUsecase : IverfyOtpUsecase

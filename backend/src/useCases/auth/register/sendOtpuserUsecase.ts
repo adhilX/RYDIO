@@ -1,8 +1,9 @@
-import { SendForgotPasswordOtpInputDto, SendForgotPasswordOtpOutputDto } from "../../../../domain/interface/DTOs/userDto/AuthDto";
-import { IuserRepository } from "../../../../domain/interface/repositoryInterface/IuserRepository";
-import { IemailServise } from "../../../../domain/interface/serviceInterface/IemailService";
-import { IotpService } from "../../../../domain/interface/serviceInterface/IotpService";
-import { IsendOptUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IsendOtpUsecase";
+import { IsendOptUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase"
+import { IotpService } from "../../../domain/interface/serviceInterface/IotpService"
+import { IemailServise } from "../../../domain/interface/serviceInterface/IemailService"
+import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository"
+import { SendForgotPasswordOtpInputDto, SendForgotPasswordOtpOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto"
+
 
 export class SendOtpUserUsecase implements IsendOptUsecase{
      private _otpService : IotpService

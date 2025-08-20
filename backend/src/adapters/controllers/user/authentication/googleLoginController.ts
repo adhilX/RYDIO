@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { IjwtService } from "../../../../domain/interface/serviceInterface/IjwtService";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { setCookie } from "../../../../framework/services/tokenCookieSet";
-import { IgoogleloginUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IgoogleLoginUsecase";
 import { IredisService } from "../../../../domain/interface/serviceInterface/IredisService";
+import { IgoogleloginUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IgoogleLoginUsecase";
 
 export class GoogleLoginController {
     private _jwtService: IjwtService

@@ -1,6 +1,6 @@
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
-import { IsearchVehicleUsecase } from "../../domain/interface/usecaseInterface/user/vehicle/IsearchVehicleUsecase";
+import { IsearchVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/IsearchVehicleUsecase";
 import { SearchVehicleInputDto, SearchVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
 export class SearchVehicleUsecase implements IsearchVehicleUsecase {

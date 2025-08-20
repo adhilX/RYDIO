@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IidProofActionUsecase } from "../../../domain/interface/usecaseInterface/admin/IidProofActionUsecase";
+import { IidProofActionUsecase } from "../../../domain/interface/usecaseInterface/users/IidProofActionUsecase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class IdProofActionController {
