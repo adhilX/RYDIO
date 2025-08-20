@@ -133,13 +133,4 @@ Fork the repo, make changes, and submit a PR 🚀
 
 * **Adhil (Aadil)**
   Aspiring MERN Stack Developer 💻
-  [GitHub](https://github.com/your-username) | [LinkedIn](https://linkedin.com/in/your-profile)
-
-```
-
-👉 You just need to replace:
-- `your-username` with your GitHub username  
-- Add your LinkedIn or portfolio link  
-
-Do you want me to **add badges** (build status, license, stars, etc.) at the top for a more professional GitHub look?
-```
+  [LinkedIn](https://www.linkedin.com/in/adhil-p-a6a836311/)
