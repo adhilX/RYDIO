@@ -127,10 +127,3 @@ This project is licensed under the **MIT License**.
 Contributions are always welcome!
 Fork the repo, make changes, and submit a PR 🚀
 
----
-
-## 👨‍💻 Author
-
-* **Adhil (Aadil)**
-  Aspiring MERN Stack Developer 💻
-  [LinkedIn](https://www.linkedin.com/in/adhil-p-a6a836311/)
