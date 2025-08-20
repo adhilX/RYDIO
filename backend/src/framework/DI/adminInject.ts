@@ -26,11 +26,11 @@ import { ApprovedVehicleusercase } from "../../useCases/admin/vehicles/ApprovedV
 import { PendingVehicleusercase } from "../../useCases/admin/vehicles/PendingVehicleUsecase";
 import { VehicleUpproveUsecase } from "../../useCases/admin/vehicles/vehicleApproveUsecase";
 import { VendorAccessUsecase } from "../../useCases/admin/vendorAccessUsecase";
-import { HashPassword } from "../services/hashPassword";
-import { JwtService } from "../services/jwtService";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
 import { GetAdminWalletController } from "../../adapters/controllers/admin/WalletManagment/GetWalletController";
 import { GetAdminWalletUsecase } from "../../useCases/wallets/getAdminWalletUsecase";
+import { HashPassword } from "../services/hashPassword";
+import { JwtService } from "../services/jwtService";
 
 //-----------admin login------------
 const adminRepository = new AdminRepository()

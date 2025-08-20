@@ -1,16 +1,8 @@
-import { SendOtpController } from "../../adapters/controllers/user/authentication/sendlOtpController"
-import { UserRegisterController } from "../../adapters/controllers/user/authentication/userRegisterController"
 import { UserRepository } from "../../adapters/repository/user/userRepository"
 import { HashPassword } from "../services/hashPassword"
 import { EmailService } from "../services/emailService"
 import { OtpService } from "../services/otpService"
 import { JwtService } from "../services/jwtService"
-import { UserLoginController } from "../../adapters/controllers/user/authentication/userLoginController"
-import { GoogleLoginController } from "../../adapters/controllers/user/authentication/googleLoginController"
-import { ResendOtpController } from "../../adapters/controllers/user/authentication/resendOtpController"
-import { SendOtpForgotPasswordController } from "../../adapters/controllers/user/authentication/forgotPasswordController"
-import { VerifyForgotPassowordOtpController } from "../../adapters/controllers/user/authentication/verifyForgotPasswordOtpController"
-import { ChangePasswordController } from "../../adapters/controllers/user/authentication/ChangePasswordController"
 import { EditProfileController } from "../../adapters/controllers/user/profile-managment/editProfileController"
 import { EditProfileUsecase } from "../../useCases/user/editProfileUsecase"
 import { AddVehicleController } from "../../adapters/controllers/user/vehicle-mangment/addVehicleController"
@@ -22,7 +14,6 @@ import { ChangePassword } from "../../useCases/user/ChangePasswordUsecase"
 import { MyVehicleController } from "../../adapters/controllers/user/vehicle-mangment/MyVehicleController"
 import { MyVehicleUsecase } from "../../useCases/vehicles/MyvehicleUsecase"
 import { RedisService } from "../services/redisService"
-import { UserLogoutController } from "../../adapters/controllers/user/authentication/userLogoutController"
 import { UploadIdProofController } from "../../adapters/controllers/user/profile-managment/uploadIDProofController"
 import { UploadIdProofUsecase } from "../../useCases/user/UploadIdProofUsecase"
 import { UploadIdProofRepository } from "../../adapters/repository/user/UploadIdProofRepository"
@@ -73,9 +64,11 @@ import { RideStartUsecase } from "../../useCases/bookings/rideStartUsecase"
 import { RideEndUsecase } from "../../useCases/bookings/rideEndUsecase"
 import { IncomingBookingUsecase } from "../../useCases/bookings/incomingBookingUsecase"
 import { CancelBookingUseCase } from "../../useCases/bookings/cancelBookingUseCase"
-// regester user 
+import { AuthController } from "../../adapters/controllers/user/UserAuthController"
+
 const otpService = new OtpService()
 const emailService = new EmailService()
+const jwtService = new JwtService()
 const userRepository = new UserRepository()
 const bookingRepository = new BookingRepository()
 const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRepository)
@@ -86,39 +79,28 @@ const walletRepository = new WalletRepository()
 const adminWalletRepository = new AdminWalletRepository()
 const trasationRepository = new TrasationRepository()
 const createUserUsecase = new CreateUserUsecase(userRepository,hashPassword,walletRepository)
-export const sendendOtpController = new SendOtpController(sendOtpUserUsecase)
-export const  userRegisterController = new UserRegisterController(verifyOtpUsecase,createUserUsecase)
-
-
-//----------login User-----------
-
-const jwtService = new JwtService()
 const loginUserUsecase = new LoginUserUsecase(userRepository,hashPassword,walletRepository)
-export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService)
-
-//-------Google Login ---------
-
 const googleLoginUsecase = new GoogleLoginUsecase(userRepository,walletRepository)
-export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase,redisService)
-
-//-----resendOtp ------------
 const resendOtpUsecase = new ResendOtpUsecase(otpService,emailService)
-export const resendOtpController = new ResendOtpController(resendOtpUsecase)
-
-//------forgotpassword-------
 const forgotPasswordUsecase = new ForgotPasswordUsecase(otpService,emailService,userRepository)
-export const sendOtpForgotPasswordController = new SendOtpForgotPasswordController(forgotPasswordUsecase)
-
-//------verifyforgotPassword---------
-export const verifyForgotPassowordOtpController = new VerifyForgotPassowordOtpController(verifyOtpUsecase)
-
-//--------change-Passoword--------
-const changePasswordUsecase = new ChangePasswordUseCase(userRepository,hashPassword)
-export const changePasswordController = new ChangePasswordController(changePasswordUsecase)
-
-//-------logout ----------------
 const userLogoutUseCase = new UserLogoutUseCase(redisService,jwtService)
-export const userlogoutController = new UserLogoutController(userLogoutUseCase)
+const changePasswordUsecase = new ChangePasswordUseCase(userRepository,hashPassword)
+
+//===========auth controller=================
+
+const authController = new AuthController(loginUserUsecase,jwtService,redisService,verifyOtpUsecase,createUserUsecase,userLogoutUseCase,googleLoginUsecase,forgotPasswordUsecase,changePasswordUsecase,resendOtpUsecase,sendOtpUserUsecase)
+
+export const sendendOtpController = authController.sendOtp
+export const  userRegisterController = authController.register
+export const userLoginController = authController.handleLogin
+export const googleLoginController = authController.handleGoogleLogin
+export const resendOtpController = authController.resendOpt
+export const sendOtpForgotPasswordController = authController.handleSendOtpForgotPassword
+export const verifyForgotPassowordOtpController = authController.verify
+export const changePasswordController = authController.handleForgetPassword
+export const userlogoutController = authController.handleClientLogout
+
+
 
 //-------update profile------------
 const editProfileUseCase = new EditProfileUsecase(userRepository)
