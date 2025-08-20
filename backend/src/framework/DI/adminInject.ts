@@ -29,8 +29,8 @@ import { VendorAccessUsecase } from "../../useCases/admin/vendorAccessUsecase";
 import { HashPassword } from "../services/hashPassword";
 import { JwtService } from "../services/jwtService";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
-import { GetAdminWalletUsecase } from "../../useCases/admin/walletManagment/getAdminWalletUsecase";
 import { GetAdminWalletController } from "../../adapters/controllers/admin/WalletManagment/GetWalletController";
+import { GetAdminWalletUsecase } from "../../useCases/wallets/getAdminWalletUsecase";
 
 //-----------admin login------------
 const adminRepository = new AdminRepository()

@@ -1,6 +1,6 @@
-import { IemailServise } from "../../../../domain/interface/serviceInterface/IemailService"
-import { IotpService } from "../../../../domain/interface/serviceInterface/IotpService"
-import { IresendOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IresendOtpUsecase"
+import { IemailServise } from "../../../domain/interface/serviceInterface/IemailService"
+import { IotpService } from "../../../domain/interface/serviceInterface/IotpService"
+import { IresendOtpUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IresendOtpUsecase"
 
 export class ResendOtpUsecase implements IresendOtpUsecase{
 

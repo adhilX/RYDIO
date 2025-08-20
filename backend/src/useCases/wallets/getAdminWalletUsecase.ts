@@ -1,7 +1,6 @@
-import { AdminWalletRepository } from "../../../adapters/repository/wallet/adminWalletRepository"
-import { IAdminWallet } from "../../../domain/entities/adminWalletEntities"
-import { IgetAdminWalletUsecase } from "../../../domain/interface/usecaseInterface/admin/walletManagment/IgetAdminWalletUsecase"
-import { GetAdminWalletOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto"
+import { IgetAdminWalletUsecase } from "../../domain/interface/usecaseInterface/admin/walletManagment/IgetAdminWalletUsecase";
+import { GetAdminWalletOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
+import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
 
 export class GetAdminWalletUsecase implements IgetAdminWalletUsecase {
     constructor(private _adminWalletRepository: AdminWalletRepository){}

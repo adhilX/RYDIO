@@ -1,6 +1,6 @@
-import { IgetWalletUsecase } from "../../../domain/interface/usecaseInterface/user/wallet/IgetWalletUsecase";
-import { GetWalletInputDto, GetWalletOutputDto } from "../../../domain/interface/DTOs/userDto/WalletDto";
-import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
+import { IgetWalletUsecase } from "../../domain/interface/usecaseInterface/user/wallet/IgetWalletUsecase";
+import { GetWalletInputDto, GetWalletOutputDto } from "../../domain/interface/DTOs/userDto/WalletDto";
+import { IWalletRepository } from "../../domain/interface/repositoryInterface/IwalletRepository";
 
 export class GetWalletUsecase implements IgetWalletUsecase {
   constructor(private _walletRepository: IWalletRepository) {
