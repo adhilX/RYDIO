@@ -37,67 +37,72 @@ export class UserRoutes {
     this.UserRoutes.patch('/changepassword',(req:Request, res:Response)=>{
        changePasswordController.handleForgetPassword(req,res)
     })
-    this.UserRoutes.patch('/editProfile',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+
+ //==========MIDDLEWARE==========
+    this .UserRoutes.use(injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker)
+
+
+    this.UserRoutes.patch('/editProfile',(req:Request,res:Response)=>{
         editProfileController.handleEditProfle(req,res)
     })
-    this.UserRoutes.post('/add-vehicle',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/add-vehicle',(req:Request,res:Response)=>{
         addVehicleController.addVehicle(req,res)
     })
-    this.UserRoutes.patch('/change-password',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.patch('/change-password',(req:Request,res:Response)=>{
       changePasswordUserController.handleEditProfle(req,res)
     })
-    this.UserRoutes.get('/get-user/:id',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.get('/get-user/:id',(req:Request,res:Response)=>{
         getUserController.getUser(req,res)
     })
-    this.UserRoutes.post('/my-vehicle',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/my-vehicle',(req:Request,res:Response)=>{
       myVehicleController.getMyVehicle(req,res)
     })
-    this.UserRoutes.post('/upload-idproof',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/upload-idproof',(req:Request,res:Response)=>{
         uploadIdProofController.uploadIdProof(req,res)
     })
-    this.UserRoutes.post('/search-vehicle',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/search-vehicle',(req:Request,res:Response)=>{
         searchVehicleController.searchVehicle(req,res)
     })
-    this.UserRoutes.get('/vehicle-details/:id',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{ 
+    this.UserRoutes.get('/vehicle-details/:id',(req:Request,res:Response)=>{ 
          vehicleDetailsController.getVehicleDetails(req,res)
     })
-    this.UserRoutes.post('/create-booking',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/create-booking',(req:Request,res:Response)=>{
          createBookingController.createBooking(req,res)
     })
-    this.UserRoutes.post('/create-payment-intent',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/create-payment-intent',(req:Request,res:Response)=>{
         createPaymentIntentController.createPaymentIntent(req,res)
     })
-    this.UserRoutes.post('/my-booking',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/my-booking',(req:Request,res:Response)=>{
         myBookingController.myBooking(req,res)
     })
-    this.UserRoutes.delete('/vehicle/:vehicleId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.delete('/vehicle/:vehicleId',(req:Request,res:Response)=>{
         deleteVehicleController.deleteVehicle(req,res)
     })
-    this.UserRoutes.patch('/vehicle-status/:vehicleId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.patch('/vehicle-status/:vehicleId',(req:Request,res:Response)=>{
         changeVehicleStatusController.changeVehicleStatus(req,res)
     })
-    this.UserRoutes.get('/booked-date/:vehicleId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.get('/booked-date/:vehicleId',(req:Request,res:Response)=>{
         getBookedVehicleController.getBookedVehicleDetails(req,res)
     })
-    this.UserRoutes.get('/security-deposit',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.get('/security-deposit',(req:Request,res:Response)=>{
         getSecurityDepositController.handleGetSecurityDeposit(req,res)
     })
-    this.UserRoutes.post('/incoming-bookings/:userId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/incoming-bookings/:userId',(req:Request,res:Response)=>{
         incomingBookingController.getBookingDetails(req,res)
     })
-    this.UserRoutes.get('/get-wallet/:userId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.get('/get-wallet/:userId',(req:Request,res:Response)=>{
         getWalletController.getWalletDetails(req,res)
     })
-    this.UserRoutes.get('/ride-start/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.get('/ride-start/:bookingId',(req:Request,res:Response)=>{
         rideStartController.handleRideStart(req,res)
     })
-    this.UserRoutes.post('/cancel-booking/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.post('/cancel-booking/:bookingId',(req:Request,res:Response)=>{
         cancelBookingController.cancelBooking(req,res)
     })
-    this.UserRoutes.get('/ride-end/:bookingId',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(req:Request,res:Response)=>{
+    this.UserRoutes.get('/ride-end/:bookingId',(req:Request,res:Response)=>{
         rideEndController.handleRideEnd(req,res)
     })
-    this.UserRoutes.post('/withdrawal',injectedVerfyToken,tokenTimeExpiryValidationMiddleware,checkRoleBaseMiddleware('user'),injectedUserBlockChecker,(_req:Request,_res:Response)=>{
+    this.UserRoutes.post('/withdrawal',(_req:Request,_res:Response)=>{
         
     })
 }
