@@ -32,7 +32,7 @@ const VehicleDetailPage = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const user: Iuser = useSelector((state: RootState) => state.auth.user!);
-
+   console.log(user,'user')
   useEffect(() => {
     const fetchVehicle = async () => {
       setLoading(true);

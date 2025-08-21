@@ -16,7 +16,8 @@ export class CreatePaymentIntentUsecase implements IcreatePaymentIntentUsecase{
             const redisKey = `hold:vehicle:${bookingData.vehicle_id},startDate:${bookingData.start_date},endDate:${bookingData.end_date}`;
 
             const isHeld = await this._redisService.get(redisKey);
-            
+            console.log(isHeld,'isHeld')
+            console.log(bookingData.user_id,'bookingData.user_id')
             if (isHeld && isHeld !== bookingData.user_id) {
                 throw new Error('this vehicle is currently held by another user.');
             }

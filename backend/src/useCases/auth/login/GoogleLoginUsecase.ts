@@ -85,7 +85,7 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
             email: finalUser.email,
             name: finalUser.name,
             phone: finalUser.phone,
-            idproof_id: typeof finalUser.idproof_id === 'string' ? finalUser.idproof_id : finalUser.idproof_id?.toString(),
+            idproof_id: JSON.parse(JSON.stringify(finalUser.idproof_id)),
             profile_image: finalUser.profile_image,
             role: finalUser.role,
             is_blocked: finalUser.is_blocked,

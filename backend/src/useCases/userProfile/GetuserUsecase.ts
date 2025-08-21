@@ -20,7 +20,7 @@ export class GetUserUsecase implements IGetUserUsecase {
             email: user.email,
             name: user.name,
             phone: user.phone,
-            idproof_id: user.idproof_id,
+            idproof_id: JSON.parse(JSON.stringify(user.idproof_id)),
             profile_image: user.profile_image,
             role: user.role,
             is_blocked: user.is_blocked,
