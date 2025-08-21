@@ -38,8 +38,8 @@ const hashPassword = new HashPassword()
 const jwtService = new JwtService()
 // const walletRepository = new WalletRepository()
 const adminWalletRepository = new AdminWalletRepository()
-const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,adminWalletRepository)
-export const adminLoginController = new AdminLoginController(loginAdminUsecase,jwtService)
+const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,adminWalletRepository,jwtService)
+export const adminLoginController = new AdminLoginController(loginAdminUsecase)
 
 //------get All Usersss-------------
 const getAllUserUsecase = new GetAllUserUsecase(adminRepository)

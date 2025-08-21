@@ -1,19 +1,25 @@
-import { GoogleLoginInputDto, GoogleLoginOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
+import { GoogleLoginInputDto, LoginUserOutputDto, BaseUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { User } from "../../../domain/entities/userEntities";
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
 import { IgoogleloginUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IgoogleLoginUsecase";
+import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService";
+import { IredisService } from "../../../domain/interface/serviceInterface/IredisService";
 
 export class GoogleLoginUsecase implements IgoogleloginUsecase {
 
     private _userRepository: IuserRepository
     private _walletRepository: IWalletRepository
+    private _jwtService: IjwtService
+    private _redisService: IredisService
 
-    constructor(userRepository: IuserRepository,walletRepository: IWalletRepository) {
+    constructor(userRepository: IuserRepository, walletRepository: IWalletRepository, jwtService: IjwtService, redisService: IredisService) {
         this._userRepository = userRepository
         this._walletRepository = walletRepository
+        this._jwtService = jwtService
+        this._redisService = redisService
     }
-    async googleLogin(input: GoogleLoginInputDto): Promise<GoogleLoginOutputDto> {
+    async googleLogin(input: GoogleLoginInputDto): Promise<LoginUserOutputDto> {
         const { email, name, profile_image, googleVerification } = input;
         
         const user: Partial<User> = {
@@ -27,6 +33,9 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
         };
         
         const existingUser = await this._userRepository.findByEmail(email)
+        
+        let finalUser: User;
+        
         if (existingUser) {
             if (existingUser.is_blocked) throw new Error('user is blocked')
             
@@ -38,20 +47,7 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
                 }
             }
             
-            return {
-                _id: existingUser._id?.toString(),
-                email: existingUser.email,
-                name: existingUser.name,
-                phone: existingUser.phone,
-                idproof_id: typeof existingUser.idproof_id === 'string' ? existingUser.idproof_id : existingUser.idproof_id?.toString(),
-                profile_image: existingUser.profile_image,
-                role: existingUser.role,
-                is_blocked: existingUser.is_blocked,
-                is_verified_user: existingUser.is_verified_user,
-                last_login: existingUser.last_login,
-                vendor_access: existingUser.vendor_access,
-                googleVerification: existingUser.googleVerification
-            };
+            finalUser = existingUser;
         }
         else {
             const createUser = await this._userRepository.googleLogin(user as User)
@@ -62,20 +58,43 @@ export class GoogleLoginUsecase implements IgoogleloginUsecase {
                 await this._walletRepository.create({user_id:createUser._id.toString(),balance:0,is_frozen:false,transactions:[]})
             }
             
-            return {
-                _id: createUser._id?.toString(),
-                email: createUser.email,
-                name: createUser.name,
-                phone: createUser.phone,
-                idproof_id: typeof createUser.idproof_id === 'string' ? createUser.idproof_id : createUser.idproof_id?.toString(),
-                profile_image: createUser.profile_image,
-                role: createUser.role,
-                is_blocked: createUser.is_blocked,
-                is_verified_user: createUser.is_verified_user,
-                last_login: createUser.last_login,
-                vendor_access: createUser.vendor_access,
-                googleVerification: createUser.googleVerification
-            };
+            finalUser = createUser;
         }
+        
+        // Generate tokens after we have the final user
+        const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string;
+        const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string;
+
+        const accessToken = this._jwtService.createAccessToken(
+            ACCESS_TOKEN_KEY,
+            finalUser._id?.toString() || "",
+            finalUser.role
+        );
+        const refreshToken = this._jwtService.createRefreshToken(
+            REFRESH_TOKEN_KEY,
+            finalUser._id?.toString() || ""
+        );
+        await this._redisService.set(
+            `user:${finalUser.role}:${finalUser._id}`,
+            15 * 60,
+            JSON.stringify(finalUser.is_blocked)
+        );
+        
+        const createdUser: BaseUserOutputDto = {
+            _id: finalUser._id?.toString(),
+            email: finalUser.email,
+            name: finalUser.name,
+            phone: finalUser.phone,
+            idproof_id: typeof finalUser.idproof_id === 'string' ? finalUser.idproof_id : finalUser.idproof_id?.toString(),
+            profile_image: finalUser.profile_image,
+            role: finalUser.role,
+            is_blocked: finalUser.is_blocked,
+            is_verified_user: finalUser.is_verified_user,
+            last_login: finalUser.last_login,
+            vendor_access: finalUser.vendor_access,
+            googleVerification: finalUser.googleVerification
+        };
+        
+        return { createdUser, accessToken, refreshToken };
     }
 }

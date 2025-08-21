@@ -30,8 +30,8 @@ export class App {
         this.app.use(cookieParser())
         this.app.use(urlencoded({extended:true}));
         this.setAuthRoutes()
-        this.setUserRoutes();
         this.setAdminRoutes();
+        this.setUserRoutes();
         
     }
 

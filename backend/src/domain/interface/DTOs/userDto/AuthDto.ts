@@ -34,7 +34,11 @@ export interface LoginUserInputDto {
   password: string;
 }
 
-export type LoginUserOutputDto = BaseUserOutputDto;
+export interface LoginUserOutputDto {
+  createdUser: BaseUserOutputDto;
+  accessToken: string;
+  refreshToken: string;
+}
 
 //---create user dto
 export interface CreateUserInputDto {
@@ -70,8 +74,6 @@ export interface GoogleLoginInputDto {
   profile_image?: string;
   googleVerification: boolean;
 }
-
-export type GoogleLoginOutputDto = BaseUserOutputDto;
 
 //---logout dto
 export interface LogoutUserInputDto {

@@ -92,11 +92,11 @@ export const  userRegisterController = new UserRegisterController(verifyOtpUseca
 //----------login User-----------
 
 const jwtService = new JwtService()
-const loginUserUsecase = new LoginUserUsecase(userRepository,hashPassword,walletRepository)
-const googleLoginUsecase = new GoogleLoginUsecase(userRepository,walletRepository)
+const loginUserUsecase = new LoginUserUsecase(userRepository,hashPassword,walletRepository,jwtService,redisService)
+const googleLoginUsecase = new GoogleLoginUsecase(userRepository,walletRepository,jwtService,redisService)
 
 
-export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService,googleLoginUsecase)
+export const userLoginController = new UserLoginController(loginUserUsecase,googleLoginUsecase)
 
 //-----resendOtp ------------
 const resendOtpUsecase = new ResendOtpUsecase(otpService,emailService)

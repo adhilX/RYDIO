@@ -69,10 +69,12 @@ export interface AdminLoginInputDto {
 }
 
 export interface AdminLoginOutputDto {
-  _id: string;
+  adminData:{_id: string;
   email: string;
   name: string;
-  role: 'admin';
+  role: 'admin';},
+  accessToken: string,
+  refreshToken: string
 }
 
 //=================== Vehicle Management DTOs ===================
