@@ -8,24 +8,26 @@ export class GetBookedVehicleUsecase implements IGetBookedVehicleUsecase {
   }
 
   async execute(input: GetBookedVehicleInputDto): Promise<GetBookedVehicleOutputDto | null> {
-    try {
-      // Get all bookings for the user with active status
-      const userBookings = await this._bookingRepository.findByUserId(input.vehicleId, 1000, 1, "", "booked");
-      
-      if (!userBookings || userBookings.bookings.length === 0) {
-        return null;
-      }
-      
-      // Extract unique vehicle IDs from bookings
-      const vehicleIds = userBookings.bookings.map(booking => booking.vehicle_id.toString());
-      const uniqueVehicleIds = [...new Set(vehicleIds)];
-      
-      return {
-        bookedVehicles: uniqueVehicleIds
-      };
-    } catch (error) {
-      console.error('Error in GetBookedVehicleUsecase:', error);
-      throw error;
+    const bookings = await this._bookingRepository.getBookedBookingsByVehicleId(input.vehicleId);
+
+    if (!bookings || bookings.length === 0) {
+      return null;
     }
+
+    const unavailableDates: string[] = [];
+
+    bookings.forEach((booking) => {
+      const start = new Date(booking.start_date);
+      const end = new Date(booking.end_date);
+
+      const current = new Date(start);
+      while (current <= end) {
+        const dateStr = current.toISOString().split("T")[0];
+        unavailableDates.push(dateStr);
+        current.setDate(current.getDate() + 1);
+      }
+    });
+
+    return { bookedVehicles: unavailableDates };
   }
 }

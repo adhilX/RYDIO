@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import Pagination from '../Pagination';
 import { toast } from 'react-hot-toast';
 import type { IbookedData } from '@/Types/User/Booking/bookedData';
-import BookingDetailsModal from '../modal/BookingDetailsModal';
+import AdminBookingDetails from './modal/AdminBookingDetails';
 
 
 export default function BookingList() {
@@ -238,9 +238,9 @@ export default function BookingList() {
             </div>
           </div>
           {isModalOpen && (
-            <BookingDetailsModal
+            <AdminBookingDetails
               booking={selectedBooking}
-              isOpen={isModalOpen}
+              open={isModalOpen}
               onClose={() => {
                 setIsModalOpen(false);
                 setSelectedBooking(null);

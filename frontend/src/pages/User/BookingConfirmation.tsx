@@ -36,6 +36,7 @@ const BookingConfirmation = () => {
   if (!user)return 
  
   const bookingData: BookingData = location.state?.bookingData
+  console.log(bookingData,"bookingData")
 
   if (!bookingData) {
     return (

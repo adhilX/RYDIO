@@ -148,32 +148,16 @@ export class BookingRepository extends BaseRepository<Ibooking> implements Ibook
           const vehicleIds = bookings.map(b => b.vehicle_id.toString());
           return [...new Set(vehicleIds)];
      }
-     async getBookedVehiclesByVehicleId(vehicle_id: string): Promise<string[] | null> {
 
-          const bookings = await bookingModel.find({
-               vehicle_id: vehicle_id,
-               status: "booked",
-               payment_status: "paid",
+     async getBookedBookingsByVehicleId(vehicle_id: string): Promise<Ibooking[]|null> {
+          return await bookingModel.find({
+            vehicle_id,
+            status: "booked",
+            payment_status: "paid",
           });
+        }
 
-          console.log('Booked Vehicles:', bookings);
-          const unavailableDates: string[] = [];
-
-          bookings.forEach((booking) => {
-               const start = new Date(booking.start_date);
-               const end = new Date(booking.end_date);
-
-               const current = new Date(start);
-               while (current <= end) {
-                    const dateStr = current.toISOString().split("T")[0];
-                    unavailableDates.push(dateStr);
-                    current.setDate(current.getDate() + 1);
-               }
-          });
-
-          return unavailableDates;
-     }
-
+        
      async changeBookingStatus(booking_id: string, status: string): Promise<Ibooking | null> {
         return await bookingModel.findOneAndUpdate({ booking_id }, { status }, { new: true })
     }

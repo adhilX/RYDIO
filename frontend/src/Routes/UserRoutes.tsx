@@ -22,7 +22,6 @@ import MyBooking from "@/components/user/Dashboard/MyBooking"
 import IncomingBookings from "@/components/user/Dashboard/IncomingBookings"
 import Chat from "@/components/user/Dashboard/Chat"
 const CheckoutForm = React.lazy(() => import("@/pages/User/CheckoutForm"))
-const Wishlist = React.lazy(() => import("@/pages/User/Wishlist"))
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 
 export const UserRoutes = () => {
@@ -37,7 +36,7 @@ export const UserRoutes = () => {
             <Route path='/vehicle-details/:id' element={<TokenProtected><VehicleDetailPage /></TokenProtected>} />
             <Route path="/booking-confirmation" element={<TokenProtected><BookingConfirmation /></TokenProtected>} />
             <Route path="/payment-success" element={<TokenProtected><PaymentSuccess /></TokenProtected>} />
-            <Route path="/wishlist" element={<TokenProtected><Wishlist /></TokenProtected>} />
+            <Route path="/chat" element={<TokenProtected><Chat /></TokenProtected>} />
             <Route
                 path="/payment"
                 element={
@@ -113,14 +112,7 @@ export const UserRoutes = () => {
                         </TokenProtected>
                     }
                 />
-                    <Route
-                    path="chat"
-                    element={
-                        <TokenProtected>
-                            <Chat/>
-                        </TokenProtected>
-                    }
-                />
+                 
             </Route>
 
             <Route path='/test' element={<><h1>home</h1></>} />

@@ -2,7 +2,7 @@ import { userLogout } from "@/services/user/authService";
 import { removeUser } from "@/store/slice/user/UserSlice";
 import { removeToken } from "@/store/slice/user/UserTokenSlice";
 import type { RootState } from "@/store/store";
-import { LogOut, User, Car, Wallet, LockKeyhole, X, Menu, Calendar, MessageCircle } from "lucide-react";
+import { LogOut, User, Car, Wallet, LockKeyhole, X, Menu, Calendar } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +32,6 @@ export function Sidebar() {
     { to: 'userProfile/wallet', label: 'Wallet', icon: Wallet },
     { to: 'userProfile/my-bookings', label: 'My Bookings', icon: Calendar },
     { to: 'userProfile/incoming-bookings', label: 'Incoming Bookings', icon: Calendar },
-    { to: 'userProfile/chat', label: 'chat', icon: MessageCircle },
     ...(!user?.googleVerification ? [{ to: 'userProfile/change-password', label: 'Change Password', icon: LockKeyhole }] : [])
   ];
 

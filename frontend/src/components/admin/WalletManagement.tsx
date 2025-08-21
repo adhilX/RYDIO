@@ -22,8 +22,8 @@ function WalletManagement() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const walletData = await getwallet(currentPage, itemsPerPage);
-        setWalletDetails(walletData.walletDetails);
+        const {walletDetails}= await getwallet(currentPage, itemsPerPage);
+        setWalletDetails(walletDetails.wallet);
       } catch (error) {
         console.error('Error fetching wallet data:', error);
       } finally {

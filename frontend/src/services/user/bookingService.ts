@@ -68,7 +68,7 @@ export const getBookedDate = async (vehicleId: string) => {
 export const getSecurityDeposit = async () => {
     try {
         const response = await axiosInstance.get("/security-deposit");
-        return response?.data;
+        return response?.data.security_deposit
         
     } catch (error) {
         console.error('Error while fetching security deposit:', error);

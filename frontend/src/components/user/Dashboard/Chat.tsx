@@ -4,6 +4,7 @@ import { Send, Paperclip, Smile, MoreVertical, Phone, Video, Search, MessageCirc
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import Navbar from '../Navbar';
 
 interface Message {
   id: string;
@@ -273,7 +274,8 @@ function Chat() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white pt-20">
+      <Navbar />
       <div className="container mx-auto px-4 py-6 h-screen flex max-w-7xl">
         {/* Left Sidebar - Contacts List */}
         <div className="w-1/3 pr-4">

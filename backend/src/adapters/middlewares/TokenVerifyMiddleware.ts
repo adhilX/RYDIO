@@ -4,8 +4,10 @@ import { ItokenService } from "../../domain/interface/serviceInterface/ItokenSer
 
 export const verifyTokenAndCheckBlackList = (TokenService: ItokenService) => {
     return async (req: Request, res: Response, next: NextFunction) => {
+        console.log("enmtering token")
         const authHeader = req.headers.authorization
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            // console.log("working the token not found")
             res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Access denied. No token provided.' });
             return
         }

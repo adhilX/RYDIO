@@ -13,9 +13,9 @@ export class GetAdminWalletUsecase implements IgetAdminWalletUsecase {
             wallet: {
                 _id: walletDetails._id!,
                 balance: walletDetails.balance,
-                totalEarnings: walletDetails.commission_balance || 0,
-                totalWithdrawals: walletDetails.penalty_balance || 0,
-                pendingAmount: walletDetails.total_balance || 0
+                totalEarnings: walletDetails.commission_balance,
+                totalWithdrawals: walletDetails.penalty_balance,
+                pendingAmount: walletDetails.total_balance
             }
         };
     }

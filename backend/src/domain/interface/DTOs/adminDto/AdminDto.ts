@@ -1,4 +1,3 @@
-import { User } from "../../../entities/userEntities";
 
 //=================== Base Admin DTOs ===================
 
@@ -12,7 +11,6 @@ export interface BaseUserOutputDto {
   is_verified_user?: boolean;
   last_login?: Date;
   vendor_access?: boolean;
-  googleVerification?: boolean;
   profile_image?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -52,7 +50,6 @@ export interface BlockUserInputDto {
 export interface BlockUserOutputDto {
   success: boolean;
   message: string;
-  user: BaseUserOutputDto;
 }
 
 export interface UnblockUserInputDto {
@@ -62,7 +59,6 @@ export interface UnblockUserInputDto {
 export interface UnblockUserOutputDto {
   success: boolean;
   message: string;
-  user: BaseUserOutputDto;
 }
 
 //=================== Admin Login DTOs ===================

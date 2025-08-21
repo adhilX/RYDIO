@@ -27,11 +27,11 @@ export default [
     rules: {
       "@typescript-eslint/no-unused-vars": [
         "warn",
-        { argsIgnorePattern: "^_" }, // ✅ allow unused vars if prefixed with "_"
+        { argsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/no-explicit-any": "off", // ✅ disable strict "any" rule
-      "@typescript-eslint/no-unused-expressions": "off", // ✅ allow `condition && doSomething()`
-      "@typescript-eslint/no-non-null-asserted-optional-chain": "error", // ✅ prevent unsafe non-null assertions
+      "@typescript-eslint/no-explicit-any": "off", 
+      "@typescript-eslint/no-unused-expressions": "off", 
+      "@typescript-eslint/no-non-null-asserted-optional-chain": "error", 
     },
   },
 ];
