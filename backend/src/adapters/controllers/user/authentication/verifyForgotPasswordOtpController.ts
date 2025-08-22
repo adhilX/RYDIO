@@ -1,5 +1,6 @@
 import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IverfyOtpUsecase";
 import { Request, Response } from "express";
+import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class VerifyForgotPassowordOtpController {
     private _verifyOtpUsecase : IverfyOtpUsecase
@@ -14,12 +15,12 @@ export class VerifyForgotPassowordOtpController {
         try {
             const verify = await this._verifyOtpUsecase.verifyOtp(email, otp);
             if (verify) {
-                res.status(200).json({ message: 'OTP verified successfully', data: verify });
+                res.status(HttpStatus.OK).json({ message: 'OTP verified successfully', data: verify });
             } else {
-                res.status(400).json({ error: 'Invalid or expired OTP' });
+                res.status(HttpStatus.BAD_REQUEST).json({ error: 'Invalid or expired OTP' });
             }
         } catch (error) { 
-            res.status(400).json({
+            res.status(HttpStatus.BAD_REQUEST).json({
                 message: "Error while creating client",
                 error: error instanceof Error ? error.message : "Unknown error",
                 stack: error instanceof Error ? error.stack : undefined

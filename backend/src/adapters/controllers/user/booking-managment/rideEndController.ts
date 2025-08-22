@@ -12,11 +12,11 @@ export class RideEndController {
             const scanner_user_id = (req as any).user?.userId
 
             if (!scanner_user_id) {
-                return res.status(401).json({ message: "User authentication required" });
+                return res.status(HttpStatus.UNAUTHORIZED).json({ message: "User authentication required" });
             }
             const input = { bookingId };
             const result = await this._rideEndUsecase.execute(input, scanner_user_id)
-            res.json({message:"Ride ended successfully",result})
+            res.status(HttpStatus.OK).json({message:"Ride ended successfully",result})
         } catch (error) {
             console.log('error while ride end',error)
             res.status(HttpStatus.BAD_REQUEST).json({

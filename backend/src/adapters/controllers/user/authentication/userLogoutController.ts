@@ -12,7 +12,7 @@ export class UserLogoutController {
             const authHeader = req.headers.authorization;
 
             if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                res.status(401).json({ message: 'Unauthorized' });
+                res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Unauthorized' });
                 return
             }
             const token = authHeader.split(' ')[1];
