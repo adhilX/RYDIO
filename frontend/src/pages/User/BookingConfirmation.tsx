@@ -458,7 +458,7 @@ const BookingConfirmation = () => {
                         Processing...
                       </div>
                     ) : (
-                      `Pay ₹${total_amount}`
+                      `Pay ₹${total_amount+securityDeposit}`
                     )}
                   </Button>
                 </motion.div>

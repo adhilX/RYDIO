@@ -1,4 +1,3 @@
-import { BookingData } from "../../domain/entities/BookingEntities";
 import { IredisService } from "../../domain/interface/serviceInterface/IredisService";
 import { IStripeService } from "../../domain/interface/serviceInterface/IstripeService";
 import { IcreatePaymentIntentUsecase } from "../../domain/interface/usecaseInterface/user/booking/IcreatePaymentIntentUsecase";
@@ -18,8 +17,8 @@ export class CreatePaymentIntentUsecase implements IcreatePaymentIntentUsecase{
             const isHeld = await this._redisService.get(redisKey);
             console.log(isHeld,'isHeld')
             console.log(bookingData.user_id,'bookingData.user_id')
-            if (isHeld && isHeld !== bookingData.user_id) {
-                throw new Error('this vehicle is currently held by another user.');
+            if (isHeld ) {
+                throw new Error('this vehicle is currently booked by another user.');
             }
             
             await this._redisService.set(redisKey, 600, bookingData.user_id); 
