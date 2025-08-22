@@ -1,6 +1,6 @@
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { Request, Response } from "express";
-import { IgetSecurityDepositUsecase } from "../../../../domain/interface/usecaseInterface/user/booking/IgetSecurityDepositUsecase";
+import { IgetSecurityDepositUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IgetSecurityDepositUsecase";
 
 export class GetSecurityDepositController {
     constructor(private _getSecurityDepositUsecase: IgetSecurityDepositUsecase){}

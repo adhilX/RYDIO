@@ -1,6 +1,6 @@
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
-import { IGetBookedVehicleUsecase } from "../../domain/interface/usecaseInterface/user/booking/IGetBookedVehicleUsecase";
 import { GetBookedVehicleInputDto, GetBookedVehicleOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
+import { IGetBookedVehicleUsecase } from "../../domain/interface/usecaseInterface/bookings/IGetBookedVehicleUsecase";
 
 export class GetBookedVehicleUsecase implements IGetBookedVehicleUsecase {
   constructor(private _bookingRepository: IbookingRepostory) {

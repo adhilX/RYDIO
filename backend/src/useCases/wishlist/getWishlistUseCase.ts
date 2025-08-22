@@ -1,4 +1,4 @@
-import { IGetWishlistUseCase } from "../../domain/interface/usecaseInterface/user/wishlist/IGetWishlistUseCase";
+import { IGetWishlistUseCase } from "../../domain/interface/usecaseInterface/wishlist/IGetWishlistUseCase";
 import { IWishlist } from "../../domain/entities/whishlistEnties";
 import { IWishlistRepository } from "../../domain/interface/repositoryInterface/IwishlistRepository";
 

@@ -1,6 +1,6 @@
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
 import { IadminRepository } from "../../../domain/interface/repositoryInterface/IadminRepository";
-import { IpendingVehicleUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicleManagment/IpendingVehicleUsecase";
+import { IpendingVehicleUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicles/IpendingVehicleUsecase";
 import { PendingVehicleInputDto, PendingVehicleOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto";
 
     export class PendingVehicleusercase implements IpendingVehicleUsecase {

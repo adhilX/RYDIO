@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IvehicleAproveUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicleManagment/IvehicleUpproveUsecase";
+import { IvehicleAproveUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicles/IvehicleUpproveUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class VehicleUpproveController{

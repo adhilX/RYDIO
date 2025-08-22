@@ -1,6 +1,6 @@
 import { GetUserInputDto, GetUserOutputDto } from "../../domain/interface/DTOs/userDto/AuthDto";
 import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
-import { IGetUserUsecase } from "../../domain/interface/usecaseInterface/user/userProfile/IgetUserUsecase";
+import { IGetUserUsecase } from "../../domain/interface/usecaseInterface/userProfile/IgetUserUsecase";
 
 export class GetUserUsecase implements IGetUserUsecase {
     constructor(private _userRepository: IuserRepository) {}

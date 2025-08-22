@@ -1,6 +1,6 @@
 import { IredisService } from "../../domain/interface/serviceInterface/IredisService";
 import { IStripeService } from "../../domain/interface/serviceInterface/IstripeService";
-import { IcreatePaymentIntentUsecase } from "../../domain/interface/usecaseInterface/user/booking/IcreatePaymentIntentUsecase";
+import { IcreatePaymentIntentUsecase } from "../../domain/interface/usecaseInterface/payments/IcreatePaymentIntentUsecase";
 import { CreatePaymentIntentInputDto, CreatePaymentIntentOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 
 export class CreatePaymentIntentUsecase implements IcreatePaymentIntentUsecase{

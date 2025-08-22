@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IcreatePaymentIntentUsecase } from "../../../../domain/interface/usecaseInterface/user/booking/IcreatePaymentIntentUsecase";
+import { IcreatePaymentIntentUsecase } from "../../../../domain/interface/usecaseInterface/payments/IcreatePaymentIntentUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class CreatePaymentIntentController {

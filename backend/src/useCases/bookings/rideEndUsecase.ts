@@ -1,8 +1,8 @@
-import { IRideEndUsecase } from "../../domain/interface/usecaseInterface/user/booking/IRideEndUsecase";
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
 import { setings } from "../../shared/constent";
 import { RideEndInputDto, RideEndOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
+import { IRideEndUsecase } from "../../domain/interface/usecaseInterface/bookings/IRideEndUsecase";
 
 export class RideEndUsecase implements IRideEndUsecase{
     constructor(

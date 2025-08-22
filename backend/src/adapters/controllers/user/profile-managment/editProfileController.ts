@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IeditProfileUsecase } from "../../../../domain/interface/usecaseInterface/user/userProfile/IeditProfileUsecase";
+import { IeditProfileUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IeditProfileUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class EditProfileController{

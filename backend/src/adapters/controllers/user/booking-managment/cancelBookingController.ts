@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IcancelBookingUseCase } from "../../../../domain/interface/usecaseInterface/user/booking/IcancelBookingUseCase";
+import { IcancelBookingUseCase } from "../../../../domain/interface/usecaseInterface/bookings/IcancelBookingUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 export class CancelBookingController {
     constructor(private cancelBookingUseCase: IcancelBookingUseCase){}

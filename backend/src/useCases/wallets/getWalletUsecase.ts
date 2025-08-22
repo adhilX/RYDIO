@@ -1,4 +1,4 @@
-import { IgetWalletUsecase } from "../../domain/interface/usecaseInterface/user/wallet/IgetWalletUsecase";
+import { IgetWalletUsecase } from "../../domain/interface/usecaseInterface/wallets/IgetWalletUsecase";
 import { GetWalletInputDto, GetWalletOutputDto } from "../../domain/interface/DTOs/userDto/WalletDto";
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IwalletRepository";
 

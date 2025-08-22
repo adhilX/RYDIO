@@ -2,7 +2,7 @@ import { GoogleLoginInputDto, LoginUserOutputDto, BaseUserOutputDto } from "../.
 import { User } from "../../../domain/entities/userEntities";
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
-import { IgoogleloginUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IgoogleLoginUsecase";
+import { IgoogleloginUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IgoogleLoginUsecase";
 import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService";
 import { IredisService } from "../../../domain/interface/serviceInterface/IredisService";
 

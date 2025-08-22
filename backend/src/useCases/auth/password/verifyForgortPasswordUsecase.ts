@@ -1,6 +1,6 @@
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository"
 import { IotpService } from "../../../domain/interface/serviceInterface/IotpService"
-import { IverfyOtpUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IverfyOtpUsecase"
+import { IverfyOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase"
 
 export class VerifyForgotPasswordOtpUsecase implements IverfyOtpUsecase{
      private _otpService : IotpService

@@ -1,6 +1,6 @@
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
-import { ImyBookingUsecase } from "../../domain/interface/usecaseInterface/user/booking/ImyBookingUsecase";
 import { MyBookingInputDto, MyBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
+import { ImyBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/ImyBookingUsecase";
 
 export class MyBookingUsecase implements ImyBookingUsecase{
     constructor(private _bookingRepository:IbookingRepostory){
@@ -17,8 +17,8 @@ export class MyBookingUsecase implements ImyBookingUsecase{
                 booking_id: booking.booking_id,
                 user_id: booking.user_id.toString(),
                 vehicle: booking.vehicle,
-                location: booking.location, // Add location from aggregation
-                user: booking.user, // Add user data if available
+                location: booking.location,
+                user: booking.user,
                 name: booking.name,
                 phone: booking.phone,
                 address: booking.address,

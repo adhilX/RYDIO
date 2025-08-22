@@ -1,7 +1,7 @@
 import { LogoutUserInputDto, LogoutUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService";
 import { IredisService } from "../../../domain/interface/serviceInterface/IredisService";
-import { IuserLogoutUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IuserLogoutUsecase";
+import { IuserLogoutUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IuserLogoutUsecase";
 
 export class UserLogoutUseCase implements IuserLogoutUsecase {
     private _redisService: IredisService

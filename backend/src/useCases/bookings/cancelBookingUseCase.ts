@@ -1,4 +1,3 @@
-import { IcancelBookingUseCase } from "../../domain/interface/usecaseInterface/user/booking/IcancelBookingUseCase";
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
@@ -6,6 +5,7 @@ import { TrasationRepository } from "../../adapters/repository/transation/Trasat
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
 import { BookingStatus } from "../../domain/entities/BookingEntities";
 import { CancelBookingInputDto, CancelBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
+import { IcancelBookingUseCase } from "../../domain/interface/usecaseInterface/bookings/IcancelBookingUseCase";
 
 export class CancelBookingUseCase implements IcancelBookingUseCase  {
     constructor(

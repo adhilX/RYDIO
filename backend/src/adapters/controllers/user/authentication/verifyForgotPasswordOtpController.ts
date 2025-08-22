@@ -1,4 +1,4 @@
-import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IverfyOtpUsecase";
+import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase";
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IloginUserUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IloginUserUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { setCookie } from "../../../../framework/services/tokenCookieSet";
-import { IgoogleloginUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IgoogleLoginUsecase";
+import { IgoogleloginUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IgoogleLoginUsecase";
+import { IloginUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IloginUserUsecase";
 
 export class UserLoginController {
     private _loginUserUsecase: IloginUserUsecase

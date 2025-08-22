@@ -1,6 +1,6 @@
 import { ILocationRepository } from "../../domain/interface/repositoryInterface/IlocationRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
-import { IaddvehicleUsecase } from "../../domain/interface/usecaseInterface/user/vehicle/IaddvehicleUsecase";
+import { IaddvehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/IaddvehicleUsecase";
 import { AddVehicleInputDto, AddVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 export class AddVehicleUsecase implements IaddvehicleUsecase{
     private _vehicleRepository : IvehicleRepository

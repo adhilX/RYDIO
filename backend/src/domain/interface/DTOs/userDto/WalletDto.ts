@@ -14,39 +14,11 @@ export interface GetWalletOutputDto {
   updated_at?: Date;
 }
 
-//=================== Withdrawal DTOs ===================
+  //=================== Withdrawal DTOs ===================
 
 export interface WithdrawalInputDto {
   userId: string;
-  amount: number;
-  accountDetails: {
-    accountNumber: string;
-    ifscCode: string;
-    accountHolderName: string;
-  };
-}
-
-export interface WithdrawalOutputDto {
-  success: boolean;
-  message: string;
-  transactionId?: string;
-  withdrawalAmount: number;
-  remainingBalance: number;
-}
-
-//=================== Add Money DTOs ===================
-
-export interface AddMoneyInputDto {
-  userId: string;
-  amount: number;
-  paymentMethod: string;
-}
-
-export interface AddMoneyOutputDto {
-  success: boolean;
-  message: string;
-  newBalance: number;
-  transactionId?: string;
+   bookingId: string;
 }
 
 //=================== Wallet Transaction DTOs ===================
@@ -73,4 +45,11 @@ export interface WalletTransactionOutputDto {
   total: number;
   currentPage: number;
   totalPages: number;
+}
+
+//=================== Withdrawal DTOs ===================
+
+export interface WithdrawalInputDto {
+  bookingId: string;
+  userId: string;
 }

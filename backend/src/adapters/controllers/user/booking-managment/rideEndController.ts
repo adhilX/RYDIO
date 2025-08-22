@@ -1,5 +1,5 @@
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IRideEndUsecase } from "../../../../domain/interface/usecaseInterface/user/booking/IRideEndUsecase";
+import { IRideEndUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IRideEndUsecase";
 import { Request, Response } from "express";
 
 export class RideEndController {

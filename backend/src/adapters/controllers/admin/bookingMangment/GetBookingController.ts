@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { IgetBookingUsecase } from "../../../../domain/interface/usecaseInterface/admin/BookingMangment/IgetBookingUsecase"
+import { IgetBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IgetBookingUsecase"
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
 
 export class GetBookingController {

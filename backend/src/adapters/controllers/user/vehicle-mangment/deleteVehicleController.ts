@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IdeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/user/vehicle/IdeleteVehicleUsecase";
+import { IdeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IdeleteVehicleUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class DeleteVehicleController {

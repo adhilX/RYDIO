@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IapprovedVehicleUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicleManagment/IApprovedVehicleUsecase";
+import { IapprovedVehicleUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicles/IApprovedVehicleUsecase";
 
 export class GetApprovedVehicleController{
     private _approvedVehicleUsecase : IapprovedVehicleUsecase

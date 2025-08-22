@@ -1,6 +1,6 @@
 import { User } from "../../domain/entities/userEntities";
 import { IUploadIdProofRepository } from "../../domain/interface/repositoryInterface/IUploadIdProofRepository";
-import { IuploadIdProofUsecase } from "../../domain/interface/usecaseInterface/user/userProfile/IuploadIdProofUsecase";
+import { IuploadIdProofUsecase } from "../../domain/interface/usecaseInterface/userProfile/IuploadIdProofUsecase";
 import { UploadIdProofInputDto, UploadIdProofOutputDto } from "../../domain/interface/DTOs/userDto/UserProfileDto";
 
 export class UploadIdProofUsecase implements IuploadIdProofUsecase{

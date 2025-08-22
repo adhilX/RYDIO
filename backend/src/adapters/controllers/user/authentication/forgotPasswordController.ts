@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IForgotPasswordUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IForgotPasswordUsecase";
+import { IForgotPasswordUsecase } from "../../../../domain/interface/usecaseInterface/auth/password/IForgotPasswordUsecase";
 
 export class SendOtpForgotPasswordController {
     private _forgotPasswordUsecase: IForgotPasswordUsecase;

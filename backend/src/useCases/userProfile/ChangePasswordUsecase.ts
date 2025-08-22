@@ -1,7 +1,7 @@
 import { User } from "../../domain/entities/userEntities";
 import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
 import { IhashPassword } from "../../domain/interface/serviceInterface/IhashPassword";
-import { IChangePasswordUsecase } from "../../domain/interface/usecaseInterface/user/userProfile/IchangePasswordUsercase";
+import { IChangePasswordUsecase } from "../../domain/interface/usecaseInterface/userProfile/IchangePasswordUsercase";
 import { ChangePasswordInputDto, ChangePasswordOutputDto } from "../../domain/interface/DTOs/userDto/UserProfileDto";
 
 export class ChangePassword implements IChangePasswordUsecase{

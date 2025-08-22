@@ -1,7 +1,6 @@
-import { IgetBookingUsecase } from "../../domain/interface/usecaseInterface/admin/BookingMangment/IgetBookingUsecase";
-import { Ibooking } from "../../domain/entities/BookingEntities";
-import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { GetBookingInputDto, GetBookingOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
+import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IgetBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IgetBookingUsecase";
 
 export class GetBookingUsecase implements IgetBookingUsecase{
 

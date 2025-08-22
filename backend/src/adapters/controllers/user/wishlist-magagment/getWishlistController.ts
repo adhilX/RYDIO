@@ -1,5 +1,5 @@
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
-import { IGetWishlistUseCase } from "../../../../domain/interface/usecaseInterface/user/wishlist/IGetWishlistUseCase"
+import { IGetWishlistUseCase } from "../../../../domain/interface/usecaseInterface/wishlist/IGetWishlistUseCase"
 import { Request, Response } from "express"
 
 export class GetWishlistController {

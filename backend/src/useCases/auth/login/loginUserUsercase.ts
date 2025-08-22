@@ -3,7 +3,7 @@ import { LoginUserInputDto, LoginUserOutputDto, BaseUserOutputDto } from "../../
 import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
 import { IhashPassword } from "../../../domain/interface/serviceInterface/IhashPassword";
-import { IloginUserUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IloginUserUsecase";
+import { IloginUserUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IloginUserUsecase";
 import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService";
 import { IredisService } from "../../../domain/interface/serviceInterface/IredisService";
 

@@ -1,13 +1,12 @@
-import { User } from "../../domain/entities/userEntities";
 import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
 import { IhashPassword } from "../../domain/interface/serviceInterface/IhashPassword";
-import { IadminLoginUseCase } from "../../domain/interface/usecaseInterface/admin/Auth/IadminLoginUsecase";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
 import { IAdminWallet } from "../../domain/entities/adminWalletEntities";
 import { AdminLoginInputDto, AdminLoginOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService";
+import { IadminLoginUseCase } from "../../domain/interface/usecaseInterface/admin/IadminLoginUsecase";
 
-export class LoginAdminUsecase implements IadminLoginUseCase {
+export class LoginAdminUsecase implements IadminLoginUseCase{
 
     private _adminRepository: IadminRepository
     private _hashPassword: IhashPassword

@@ -1,4 +1,4 @@
-import { IgetAdminWalletUsecase } from "../../domain/interface/usecaseInterface/admin/walletManagment/IgetAdminWalletUsecase";
+import { IgetAdminWalletUsecase } from "../../domain/interface/usecaseInterface/wallets/IgetAdminWalletUsecase";
 import { GetAdminWalletOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
 

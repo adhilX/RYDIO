@@ -1,4 +1,4 @@
-import { IdeleteVehicleUsecase } from "../../domain/interface/usecaseInterface/user/vehicle/IdeleteVehicleUsecase";
+import { IdeleteVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/IdeleteVehicleUsecase";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
 import { DeleteVehicleInputDto, DeleteVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 

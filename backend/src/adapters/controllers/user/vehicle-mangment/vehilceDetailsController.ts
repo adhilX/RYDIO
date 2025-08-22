@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IvehicleDetailsUsecase } from "../../../../domain/interface/usecaseInterface/user/vehicle/IvehicleDetailsUsecase";
+import { IvehicleDetailsUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IvehicleDetailsUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class VehilceDetailsController {

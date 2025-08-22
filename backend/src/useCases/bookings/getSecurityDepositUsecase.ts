@@ -1,6 +1,6 @@
-import { IgetSecurityDepositUsecase } from "../../domain/interface/usecaseInterface/user/booking/IgetSecurityDepositUsecase";
 import { setings } from "../../shared/constent";
 import { GetSecurityDepositOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
+import { IgetSecurityDepositUsecase } from "../../domain/interface/usecaseInterface/bookings/IgetSecurityDepositUsecase";
 
 export class GetSecurityDepositUsecase implements IgetSecurityDepositUsecase {
   constructor() {}

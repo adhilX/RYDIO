@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IpendingVehicleUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicleManagment/IpendingVehicleUsecase";
+import { IpendingVehicleUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicles/IpendingVehicleUsecase";
 
 export class PendingVehicleController{
     private _pendingVehicleUsecase : IpendingVehicleUsecase
