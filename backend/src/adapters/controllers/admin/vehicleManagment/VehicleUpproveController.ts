@@ -3,18 +3,17 @@ import { IvehicleAproveUsecase } from "../../../../domain/interface/usecaseInter
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class VehicleUpproveController{
-    private vehicleUpproveUsecase: IvehicleAproveUsecase
+    private _vehicleUpproveUsecase: IvehicleAproveUsecase
 
     constructor(vehicleUpproveUsecase: IvehicleAproveUsecase) {
-        this.vehicleUpproveUsecase = vehicleUpproveUsecase
+        this._vehicleUpproveUsecase = vehicleUpproveUsecase
     }
     
     async approveVehicle(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params
-            const {action}= req.body
-            const response = await this.vehicleUpproveUsecase.approveVehicle(id,action)
-            console.log(req.body)
+            const {action,reason}= req.body
+            const response = await this._vehicleUpproveUsecase.approveVehicle(id,action,reason)
             res.status(HttpStatus.OK).json({ message: `Vehicle ${action} successfully` })
         } catch (error) {
             console.log('Error while approving vehicle:', error)

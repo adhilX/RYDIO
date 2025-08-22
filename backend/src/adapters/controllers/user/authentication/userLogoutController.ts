@@ -3,9 +3,9 @@ import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { IuserLogoutUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IuserLogoutUsecase";
 
 export class UserLogoutController {
-    private logoutUserusecase: IuserLogoutUsecase
+    private _logoutUserusecase: IuserLogoutUsecase
     constructor(logoutUserusecase: IuserLogoutUsecase) {
-        this.logoutUserusecase = logoutUserusecase
+        this._logoutUserusecase = logoutUserusecase
     }
     async handleClientLogout(req: Request, res: Response): Promise<void> {
         try {
@@ -17,7 +17,7 @@ export class UserLogoutController {
             }
             const token = authHeader.split(' ')[1];
 
-            await this.logoutUserusecase.clientLogout(token);
+            await this._logoutUserusecase.clientLogout(token);
             res.status(HttpStatus.OK).json({ message: "Logout successful" });
 
         } catch (error) {

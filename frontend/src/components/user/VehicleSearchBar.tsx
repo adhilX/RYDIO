@@ -116,7 +116,7 @@ function VehicleSearchBar() {
         returnDate
       };
 
-      navigate('/vehicle-list', { state: searchParams });
+      navigate('/vehicle-list', { state: searchParams ,replace:true});
     } catch (error) {
       console.error('Search error:', error);
       toast.error('Failed to perform search. Please try again.');

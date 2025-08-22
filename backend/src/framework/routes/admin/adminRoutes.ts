@@ -1,9 +1,7 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController } from "../../DI/adminInject";
+import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, getAdminWalletController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController } from "../../DI/adminInject";
 import { injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
-import { myBookingController } from "../../DI/userInject";
-
 export class AdminRoutes {
     public AdminRoute: Router
 
@@ -33,7 +31,7 @@ export class AdminRoutes {
         this.AdminRoute.get('/aproved-vehicle',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'), (req: Request, res: Response) => {
             ApprovedVehiceController.approveVehicle(req, res)
         })
-        this.AdminRoute.post('/vehicle-upprove/:id',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'), (req: Request, res: Response) => {
+        this.AdminRoute.post('/vehicle-action/:id',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'), (req: Request, res: Response) => {
             vehicleUpproveController.approveVehicle(req, res)
         })
         this.AdminRoute.post('/get-idproof',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
@@ -45,8 +43,11 @@ export class AdminRoutes {
         this.AdminRoute.patch('/vendor-access/:userId',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
            vendorAccessController.handleVendorAccess(req,res)
          })
-        this.AdminRoute.post    ('/bookings',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
+        this.AdminRoute.post('/bookings',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
            getBookingController.getBookingData(req,res)
+        })
+        this.AdminRoute.get('/get-wallet',injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('admin'),(req:Request,res:Response)=>{
+           getAdminWalletController.getWalletDetails(req,res)
         })
     }
 }

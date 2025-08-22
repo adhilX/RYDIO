@@ -51,11 +51,10 @@ export default function UserVehicleList() {
       user._id!,
       filters
     );
-    if (data && data.vehicles && data.total) {
+
       setCars(data.vehicles);
       setTotalPages(Math.ceil(data.total / CARS_PER_PAGE));
-    }
-  } catch (error) {
+    } catch (error) {
     console.error("Error fetching vehicles:", error);
     toast.error("Failed to load vehicles");
       } finally {

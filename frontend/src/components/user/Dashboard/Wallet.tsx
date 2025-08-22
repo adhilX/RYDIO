@@ -1,32 +1,48 @@
-import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
-import { useState } from 'react';
+import { getWallet } from '@/services/wallet /walletService';
+import type { RootState } from '@/store/store';
+// import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-const dummyBalance = 2450.75;
-const dummyTransactions = [
-  { id: 1, type: 'credit', amount: 1200, date: '2024-06-01', description: 'Refund from RYDIO' },
-  { id: 2, type: 'debit', amount: 350, date: '2024-05-28', description: 'Car Booking Payment' },
-  { id: 3, type: 'credit', amount: 800, date: '2024-05-20', description: 'Wallet Top-up' },
-  { id: 4, type: 'debit', amount: 200, date: '2024-05-15', description: 'Service Fee' },
-  { id: 5, type: 'debit', amount: 100, date: '2024-05-10', description: 'Car Booking Payment' },
-];
-
+// const dummyTransactions = [
+//   { id: 1, type: 'credit', amount: 1200, date: '2024-06-01', description: 'Refund from RYDIO' },
+//   { id: 2, type: 'debit', amount: 350, date: '2024-05-28', description: 'Car Booking Payment' },
+//   { id: 3, type: 'credit', amount: 800, date: '2024-05-20', description: 'Wallet Top-up' },
+//   { id: 4, type: 'debit', amount: 200, date: '2024-05-15', description: 'Service Fee' },
+//   { id: 5, type: 'debit', amount: 100, date: '2024-05-10', description: 'Car Booking Payment' },
+// ];
 export default function Wallet() {
-  const [page, setPage] = useState(1);
-  const perPage = 3;
-  const totalPages = Math.ceil(dummyTransactions.length / perPage);
-  const paginatedTx = dummyTransactions.slice((page - 1) * perPage, page * perPage);
+  const user = useSelector((state:RootState) => state.auth.user);
+  if (!user) {
+    throw new Error('User ID is not available');
+  }
+  // const [page, setPage] = useState(1);
+  const [balance, setBalance] = useState(454);
+  // const perPage = 3;
+  // const totalPages = Math.ceil(dummyTransactions.length / perPage);
+  // const paginatedTx = dummyTransactions.slice((page - 1) * perPage, page * perPage);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getWallet(user._id!);
+      setBalance(data.balance);
+    };
+    fetchData();
+  }, [user._id]);
 
   return (
     <div className="w-full p-4 md:p-8 font-sans">
       {/* Balance Card */}
       <div className="bg-gradient-to-r from-[#6DA5C0]/90 to-[#232b3a] rounded-2xl shadow-lg p-8 flex flex-col items-center mb-8">
         <span className="uppercase text-sm tracking-widest text-white/70 font-semibold mb-2">Wallet Balance</span>
-        <span className="text-4xl md:text-5xl font-extrabold text-white mb-2">₹{dummyBalance.toLocaleString()}</span>
+        <span className="text-4xl md:text-5xl font-extrabold text-white mb-2">₹{balance}</span>
         <span className="text-white/60 text-xs">Updated just now</span>
       </div>
 
       {/* Transaction History */}
-      <div className="bg-[#181f23] rounded-xl shadow p-6">
+      {/* <div className="bg-[#181f23] rounded-xl shadow p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg md:text-xl font-bold text-white tracking-tight font-dm-sans">Transaction History</h2>
         </div>
@@ -47,9 +63,9 @@ export default function Wallet() {
               <div className={`font-bold text-base ${tx.type === 'credit' ? 'text-[#6DA5C0]' : 'text-red-400'}`}>{tx.type === 'credit' ? '+' : '-'}₹{tx.amount}</div>
             </div>
           ))}
-        </div>
+        </div> */}
         {/* Pagination Controls */}
-        <div className="flex justify-end gap-2 mt-6">
+        {/* <div className="flex justify-end gap-2 mt-6">
           <button
             className="px-4 py-2 rounded-lg bg-[#232b3a] text-white/80 hover:bg-[#6DA5C0] hover:text-white font-semibold transition disabled:opacity-40"
             onClick={() => setPage(page - 1)}
@@ -66,7 +82,7 @@ export default function Wallet() {
             Next
           </button>
         </div>
-      </div>
-    </div>
+      </div> */}
+     </div>
   );
 }

@@ -5,31 +5,31 @@ import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService
 import { IrefreshTokenUseCase } from "../../domain/interface/usecaseInterface/auth/IrefreshTokenUseCase";
 
 export class RefreshTokenUseCase implements IrefreshTokenUseCase {
-    private jwtService: IjwtService
-    private userRepository: IuserRepository
-    private adminRepository: IadminRepository
+    private _jwtService: IjwtService
+    private _userRepository: IuserRepository
+    private _adminRepository: IadminRepository
     constructor(
         jwtService: IjwtService,
         userRepository: IuserRepository,
         adminRepository: IadminRepository
     ) {
-        this.adminRepository = adminRepository
-        this.userRepository = userRepository
-        this.jwtService = jwtService
+        this._adminRepository = adminRepository
+        this._userRepository = userRepository
+        this._jwtService = jwtService
     }
 
     async execute(token: string): Promise<string> {
-        const payload = this.jwtService.verifyRefreshToken(token, process.env.REFRESH_TOKEN_KEY as string)
+        const payload = this._jwtService.verifyRefreshToken(token, process.env.REFRESH_TOKEN_KEY as string)
         if (!payload) throw new Error('Invalid or Expired Refresh Token')
         console.log('refresh token here')
         const userId = payload.userId
-        const client = await this.userRepository.findById(userId)
-        const admin = await this.adminRepository.findById(userId)
+        const client = await this._userRepository.findById(userId)
+        const admin = await this._adminRepository.findById(userId)
         const user = client || admin
         const role = client ? 'user' : admin ? 'admin' : null;
         if (!user || !role) throw new Error('User Not Found')
 
-        const newAccessToken = this.jwtService.createAccessToken(process.env.ACCESS_TOKEN_KEY as string, userId, role)
+        const newAccessToken = this._jwtService.createAccessToken(process.env.ACCESS_TOKEN_KEY as string, userId, role)
         return newAccessToken
     }
 }

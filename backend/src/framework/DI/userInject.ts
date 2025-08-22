@@ -39,23 +39,41 @@ import { SearchVehicleUsecase } from "../../useCases/user/vehicle/searchVehicleU
 import { SearchVehicleController } from "../../adapters/controllers/user/vehicle-mangment/searchVehicleController"
 import { VehilceDetailsController } from "../../adapters/controllers/user/vehicle-mangment/vehilceDetailsController"
 import { VehicleDetailsUsecase } from "../../useCases/user/vehicle/vehicleDetailsUsecase"
-import { CreateBookingUsecase } from "../../useCases/user/booking/createBookingUsecase"
+import { CreateBookingUsecase } from "../../useCases/booking/createBookingUsecase"
 import { CreateBookingController } from "../../adapters/controllers/user/booking-managment/createBookingController"
 import { CreatePaymentIntentController } from "../../adapters/controllers/user/booking-managment/createPaymentIntentController"
-import { CreatePaymentIntentUsecase } from "../../useCases/user/booking/createPaymentIntentUsecase"
+import { CreatePaymentIntentUsecase } from "../../useCases/booking/createPaymentIntentUsecase"
 import { StripeService } from "../services/paymentSerivce"
 import { MyBookingController } from "../../adapters/controllers/user/booking-managment/myBookingController"
-import { MyBookingUsecase } from "../../useCases/user/booking/myBookingUsecase"
+import { MyBookingUsecase } from "../../useCases/booking/myBookingUsecase"
 import { BookingRepository } from "../../adapters/repository/booking/bookingRepository"
 import { DeleteVehicleUsecase } from "../../useCases/user/vehicle/deleteVehicleUsecase"
 import { DeleteVehicleController } from "../../adapters/controllers/user/vehicle-mangment/deleteVehicleController"
 import { ChangeVehicleStatusUsecase } from "../../useCases/user/vehicle/changeVehicleStatusUsecase"
 import { ChangeVehicleStatusController } from "../../adapters/controllers/user/vehicle-mangment/changeVehicleStatusController"
 import { GetBookedVehicleController } from "../../adapters/controllers/user/booking-managment/getBookedVehicleController"
-import { GetBookedVehicleUsecase } from "../../useCases/user/booking/GetBookedVehicleUsecase"
+import { GetBookedVehicleUsecase } from "../../useCases/booking/GetBookedVehicleUsecase"
 import { GetUserController } from "../../adapters/controllers/user/profile-managment/getUserController"
 import { GetUserUsecase} from "../../useCases/user/auth/GetuserUsecase"
-
+import { GetWishlistController } from "../../adapters/controllers/user/wishlist-magagment/getWishlistController"
+import { GetWishlistUseCase } from "../../useCases/user/wishlist/getWishlistUseCase"
+import { WishlistRepository } from "../../adapters/repository/user/wishlistRepository"
+import { WalletRepository } from "../../adapters/repository/wallet/walletRepository"
+import { GetWalletUsecase } from "../../useCases/user/wallet/getWalletUsecase"
+import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController"
+import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository"
+import { SecurityDepositRepository } from "../../adapters/repository/booking/SecurityDepositRepository"
+import { GetSecurityDepositUsecase } from "../../useCases/booking/getSecurityDepositUsecase"
+import { GetSecurityDepositController } from "../../adapters/controllers/user/booking-managment/getSecurityDepositController"
+import { TrasationRepository } from "../../adapters/repository/transation/TrasationRepository"
+import { RideStartUsecase } from "../../useCases/booking/rideStartUsecase"
+import { RideStartController } from "../../adapters/controllers/admin/bookingMangment/rideStartController"
+import { RideEndUsecase } from "../../useCases/booking/rideEndUsecase"
+import { RideEndController } from "../../adapters/controllers/admin/bookingMangment/rideEndController"
+import { IncomingBookingUsecase } from "../../useCases/booking/incomingBookingUsecase"
+import { IncomingBookingController } from "../../adapters/controllers/user/booking-managment/incomingBookingController"
+import { CancelBookingUseCase } from "../../useCases/booking/cancelBookingUseCase"
+import { CancelBookingController } from "../../adapters/controllers/user/booking-managment/cancelBookingController"
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
@@ -65,7 +83,10 @@ const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRe
 const verifyOtpUsecase = new VerifyOtpUsecase(otpService)
 const hashPassword = new HashPassword()
 const redisService = new RedisService()
-const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword)
+const walletRepository = new WalletRepository()
+const adminWalletRepository = new AdminWalletRepository()
+const trasationRepository = new TrasationRepository()
+const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword,walletRepository)
 export const sendendOtpController = new SendOtpController(sendOtpUserUsecase)
 export const  userRegisterController = new UserRegisterController(verifyOtpUsecase,createUserUsecase)
 
@@ -73,12 +94,12 @@ export const  userRegisterController = new UserRegisterController(verifyOtpUseca
 //----------login User-----------
 
 const jwtService = new JwtService()
-const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword)
+const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword,walletRepository)
 export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService)
 
 //-------Google Login ---------
 
-const googleLoginUsecase = new GoogleLoginUsecase(userRepostory)
+const googleLoginUsecase = new GoogleLoginUsecase(userRepostory,walletRepository)
 export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase,redisService)
 
 //-----resendOtp ------------
@@ -144,7 +165,7 @@ export const uploadIdProofController = new UploadIdProofController(uploadIdProof
 
 //----------create Booking------------
 
-const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService)
+const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository,trasationRepository)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 
 //--------create payment intent------------
@@ -169,3 +190,34 @@ export const changeVehicleStatusController = new ChangeVehicleStatusController(c
 
 const getBookedVehicleUsecase = new GetBookedVehicleUsecase(bookingRepository)
 export const getBookedVehicleController = new GetBookedVehicleController(getBookedVehicleUsecase)
+
+//------get wallet details---------
+const getWalletUsecase = new GetWalletUsecase(walletRepository)
+export const getWalletController = new GetWalletController(getWalletUsecase)
+    
+//------get wishlist details---------
+const wishlistRepository = new WishlistRepository() 
+const getWishlistUseCase = new GetWishlistUseCase(wishlistRepository)
+export const getWishlistController = new GetWishlistController(getWishlistUseCase)
+
+//------get security deposit details---------
+const securityDepositRepository = new SecurityDepositRepository()
+const getSecurityDepositUsecase = new GetSecurityDepositUsecase(securityDepositRepository)
+export const getSecurityDepositController = new GetSecurityDepositController(getSecurityDepositUsecase)
+
+//------ride start---------
+const rideStartUsecase = new RideStartUsecase(bookingRepository,vehicleRepository)
+export const rideStartController = new RideStartController(rideStartUsecase)
+
+//------ride end---------
+const rideEndUsecase = new RideEndUsecase(bookingRepository,vehicleRepository)
+export const rideEndController = new RideEndController(rideEndUsecase)
+
+
+//------incoming booking---------
+const incomingBookingUsecase = new IncomingBookingUsecase(bookingRepository)
+export const incomingBookingController = new IncomingBookingController(incomingBookingUsecase)
+
+//------cancel booking---------
+const cancelBookingUsecase = new CancelBookingUseCase(bookingRepository,walletRepository,adminWalletRepository,trasationRepository,vehicleRepository)
+export const cancelBookingController = new CancelBookingController(cancelBookingUsecase)

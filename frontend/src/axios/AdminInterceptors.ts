@@ -5,7 +5,7 @@ import { addToken, removeToken } from '@/store/slice/admin/AdminTokenSlice';
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASEURL,
   withCredentials: true,
-});
+}); 
 
 axiosInstance.interceptors.request.use((config) => {
   const token = store.getState().adminToken.adminToken;

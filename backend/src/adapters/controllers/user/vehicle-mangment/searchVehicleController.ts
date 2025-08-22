@@ -4,8 +4,8 @@ import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class SearchVehicleController {
 
-    constructor(private searchVehicleUsecase:IsearchVehicleUsecase){
-        this.searchVehicleUsecase=searchVehicleUsecase
+    constructor(private _searchVehicleUsecase:IsearchVehicleUsecase){
+        this._searchVehicleUsecase=_searchVehicleUsecase
     }
   
 async searchVehicle(req: Request, res: Response): Promise<void> {
@@ -13,7 +13,7 @@ async searchVehicle(req: Request, res: Response): Promise<void> {
     const { latitude, longitude,pickupDate,returnDate, currentPage, limit,user_id, filters } = req.body;
     const { search, fuel_types, seats, car_types, transmission ,distance_range} = filters || {};
 
-    const vehicles = await this.searchVehicleUsecase.searchVehicle(latitude,longitude,search,pickupDate,returnDate,currentPage,limit,user_id,
+    const vehicles = await this._searchVehicleUsecase.searchVehicle(latitude,longitude,search,pickupDate,returnDate,currentPage,limit,user_id,
       {
         fuel_types,
         seats,

@@ -22,7 +22,7 @@ function Navbar() {
   }, [location]);
 
   return (
-    <header className="absolute top-0  w-screen z-50 p-6 ">
+    <header className="absolute top-0  w-full z-50 p-6">
       <nav className="flex items-center justify-between max-w-7xl mx-auto">
         <div onClick={() => navigate('/')} className="flex items-center cursor-pointer mr-15 space-x-2 ">
           <Car className="text-white animate-bounce" size={32} />

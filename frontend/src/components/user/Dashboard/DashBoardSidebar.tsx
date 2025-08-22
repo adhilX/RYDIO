@@ -30,7 +30,8 @@ export function Sidebar() {
     { to: 'userProfile', label: 'User Profile', icon: User },
     { to: 'userProfile/vehicles', label: 'My Vehicles', icon: Car },
     { to: 'userProfile/wallet', label: 'Wallet', icon: Wallet },
-    { to: 'userProfile/my-bookings', label: 'My Bookings', icon: Calendar },  
+    { to: 'userProfile/my-bookings', label: 'My Bookings', icon: Calendar},  
+    {to: 'userProfile/incoming-bookings', label: 'Incoming Bookings', icon: Calendar},
   ...(!user?.googleVerification ? [{ to: 'userProfile/change-password', label: 'Change Password', icon: LockKeyhole }] : [])
   ];
 

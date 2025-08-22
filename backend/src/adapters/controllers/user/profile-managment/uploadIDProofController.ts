@@ -4,10 +4,10 @@ import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class UploadIdProofController {
 
-    private uploadIdProofUsecase : IuploadIdProofUsecase
+    private _uploadIdProofUsecase : IuploadIdProofUsecase
 
     constructor(uploadIdProofUsecase:IuploadIdProofUsecase){
-        this.uploadIdProofUsecase= uploadIdProofUsecase
+        this._uploadIdProofUsecase= uploadIdProofUsecase
     }
 
    async uploadIdProof(req: Request, res: Response): Promise<void> {
@@ -19,7 +19,7 @@ export class UploadIdProofController {
                });
             return 
            }
-          const newUser =  await this.uploadIdProofUsecase.uploadProof(idProofUrl, userId);
+          const newUser =  await this._uploadIdProofUsecase.uploadProof(idProofUrl, userId);
            res.status(HttpStatus.OK).json({ message: 'Id proof submitted successfully', newUser});
        } catch (error) {
            console.error('Error while uploading ID proof:', error);

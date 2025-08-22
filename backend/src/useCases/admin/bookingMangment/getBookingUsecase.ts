@@ -4,13 +4,13 @@ import { IbookingRepostory } from "../../../domain/interface/repositoryInterface
 
 export class GetBookingUsecase implements IgetBookingUsecase{
 
-    constructor(private bookingRepository: IbookingRepostory){
-        this.bookingRepository = bookingRepository
+    constructor(private _bookingRepository: IbookingRepostory){
+        this._bookingRepository = _bookingRepository
     }
      async      getBookingData(search:string,limit:number,page:number):Promise<{bookings:Ibooking[],total: number}|null>
      {
 
-   return await this.bookingRepository.getBookingData(search,limit,page)
+   return await this._bookingRepository.getBookingData(search,limit,page)
 
 
      }

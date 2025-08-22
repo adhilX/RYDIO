@@ -2,17 +2,17 @@ import { Request, Response } from "express";
 import { IsendOptUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IsendOtpUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 export class SendOtpController{
-    private userSendOtpUsecase:IsendOptUsecase
+    private _userSendOtpUsecase:IsendOptUsecase
 
     constructor(userSendOtpUsecase:IsendOptUsecase){
-        this.userSendOtpUsecase = userSendOtpUsecase
+        this._userSendOtpUsecase = userSendOtpUsecase
     }
 
     async sendOtp(req: Request, res:Response):Promise<void>{
         try {
             const {user} = req.body
             console.log(user,'ggg')
-            await this.userSendOtpUsecase.execute(user?.email)
+            await this._userSendOtpUsecase.execute(user?.email)
             res.status(HttpStatus.OK).json({message:'OTP sended successfully'})
             return
         } catch (error) {

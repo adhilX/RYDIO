@@ -5,7 +5,7 @@ import { IGetUserUsecase } from "../../../../domain/interface/usecaseInterface/u
 export class GetUserController {
 
     constructor(
-        private getUserUsecase: IGetUserUsecase,
+        private _getUserUsecase: IGetUserUsecase,
     ) {}
 
 
@@ -13,7 +13,7 @@ export class GetUserController {
 
         const userId = req.params.id;
         try {
-            const user = await this.getUserUsecase.getUser(userId);
+            const user = await this._getUserUsecase.getUser(userId);
             if (!user) {
                 res.status(HttpStatus.NOT_FOUND).json({ message: 'User not found' });
                 return;

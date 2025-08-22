@@ -3,22 +3,22 @@ import { Request, Response } from "express";
 import { IcreateUserUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/userUsecaseInterface";
 
 export class UserRegisterController {
-    private verifyOtpUsecase : IverfyOtpUsecase
-    private createuserUsecase : IcreateUserUsecase
+    private _verifyOtpUsecase : IverfyOtpUsecase
+    private _createuserUsecase : IcreateUserUsecase
 
     constructor(verifyOtpUsecase:IverfyOtpUsecase,createuserUsecase:IcreateUserUsecase){
-        this.verifyOtpUsecase = verifyOtpUsecase
-        this.createuserUsecase = createuserUsecase
+        this._verifyOtpUsecase = verifyOtpUsecase
+        this._createuserUsecase = createuserUsecase
     }
      async register(req: Request, res: Response): Promise<void> {
         console.log(req.body,'ggg')
         const { user, otp } = req.body as { user: any; otp: string };
         try {
             console.log(user,otp)
-            const verify = await this.verifyOtpUsecase.verifyOtp(user?.email, otp);
+            const verify = await this._verifyOtpUsecase.verifyOtp(user?.email, otp);
             console.log(verify)
             if (verify) {
-                const newUser = await this.createuserUsecase.createUser(user);
+                const newUser = await this._createuserUsecase.createUser(user);
                 res.status(201).json({ message: 'user created', newUser });
             } else {
                 res.status(400).json({ error: 'Invalid OTP' });

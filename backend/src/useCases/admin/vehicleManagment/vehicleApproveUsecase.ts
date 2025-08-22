@@ -2,14 +2,14 @@ import { VehicleRepository } from "../../../adapters/repository/user/vehicleRepo
 import { IvehicleAproveUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicleManagment/IvehicleUpproveUsecase";
 
 export class VehicleUpproveUsecase implements IvehicleAproveUsecase {
-    private vehicleRepository: VehicleRepository
+    private _vehicleRepository: VehicleRepository
     constructor(vehicleRepository: VehicleRepository) {
-        this.vehicleRepository = vehicleRepository
+        this._vehicleRepository = vehicleRepository
     }
-    approveVehicle(id: string,action:'accepted'|'rejected'): Promise<boolean> {
+    approveVehicle(id: string,action:'accepted'|'rejected',reason?:string): Promise<boolean> {
         if(action=='accepted'){
-          return this.vehicleRepository.approveVehicle(id,action)
+          return this._vehicleRepository.approveVehicle(id,action)
         }
-        return this.vehicleRepository.rejectVehicle(id,action)
+        return this._vehicleRepository.rejectVehicle(id,action,reason)
     }
 }

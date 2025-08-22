@@ -5,15 +5,15 @@ import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class GetAllUserController {
 
-    private getAllUserUsecase: IgetAllUserUsecase
+    private _getAllUserUsecase: IgetAllUserUsecase
 
     constructor(getAllUserUsecase: IgetAllUserUsecase) {
-        this.getAllUserUsecase = getAllUserUsecase
+        this._getAllUserUsecase = getAllUserUsecase
     }
 
     async getAllUsers(req: Request, res: Response): Promise<void> {
         try {
-            const user = await this.getAllUserUsecase.getAllUser()
+            const user = await this._getAllUserUsecase.getAllUser()
             res.status(HttpStatus.OK).json({ user, message: 'success' })
 
         } catch (error) {

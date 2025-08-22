@@ -1,23 +1,66 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Filter, X, RotateCcw, Search } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Filter, X, RotateCcw, Search, ArrowUpDown } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import type { FilterState } from "@/Types/User/carType";
 
+export type SortOption = 'price_low_high' | 'price_high_low' | 'distance' | 'rating' | 'newest' | 'oldest';
+
 interface FilterSidebarProps {
-  filters: FilterState & { search?: string };
-  onFiltersChange: (filters: FilterState & { search?: string }) => void;
+  filters: FilterState & { search?: string; sortBy?: SortOption };
+  onFiltersChange: (filters: FilterState & { search?: string; sortBy?: SortOption }) => void;
 }
+
+// Define sort options outside component to prevent recreation
+const SORT_OPTIONS = [
+  { value: 'price_low_high' as SortOption, label: 'Price: Low to High' },
+  { value: 'price_high_low' as SortOption, label: 'Price: High to Low' },
+  { value: 'distance' as SortOption, label: 'Distance: Nearest First' },
+  { value: 'rating' as SortOption, label: 'Rating: Highest First' },
+  { value: 'newest' as SortOption, label: 'Newest First' },
+  { value: 'oldest' as SortOption, label: 'Oldest First' },
+];
+
+// Define filter option arrays outside component
+const FUEL_TYPE_OPTIONS = [
+  { value: "petrol", label: "Petrol" },
+  { value: "diesel", label: "Diesel" },
+  { value: "electric", label: "Electric" },
+];
+
+const SEAT_OPTIONS = [2, 4, 5, 7].map((seat) => ({ value: seat, label: `${seat} seats` }));
+
+const CAR_TYPE_OPTIONS = [
+  { value: "sedan", label: "Sedan" },
+  { value: "hatchback", label: "Hatchback" },
+  { value: "xuv", label: "XUV" },
+  { value: "suv", label: "SUV" },
+  { value: "sports", label: "Sports" },
+];
+
+const TRANSMISSION_OPTIONS = [
+  { value: "true", label: "Automatic" },
+  { value: "false", label: "Manual" },
+];
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState(filters.search || "");
   const searchValueRef = useRef(searchValue);
   const isInitialMount = useRef(true);
+  const filtersRef = useRef(filters);
+  const onFiltersChangeRef = useRef(onFiltersChange);
+
+  // Update refs to latest values
+  useEffect(() => {
+    filtersRef.current = filters;
+    onFiltersChangeRef.current = onFiltersChange;
+  });
 
   useEffect(() => {
     if (filters.search !== searchValueRef.current) {
@@ -26,7 +69,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     }
   }, [filters.search]);
 
-  // Debounce search input
+  // Debounce search input - using refs to prevent infinite re-renders
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -34,26 +77,27 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     }
     
     const handler = setTimeout(() => {
-      if (searchValue !== filters.search) {
-        onFiltersChange({ ...filters, search: searchValue });
+      if (searchValue !== filtersRef.current.search) {
+        onFiltersChangeRef.current({ ...filtersRef.current, search: searchValue });
       }
     }, 500);
     
     return () => clearTimeout(handler);
-  }, [searchValue, filters, onFiltersChange]);
+  }, [searchValue]);
 
-  const updateFilters = (key: keyof (FilterState & { search?: string }), value: string | number | (string | number)[]) => {
+  // Memoize update functions to prevent recreation
+  const updateFilters = useCallback((key: keyof (FilterState & { search?: string; sortBy?: SortOption }), value: string | number | (string | number)[] | SortOption) => {
     onFiltersChange({ ...filters, [key]: value });
-  };
+  }, [filters, onFiltersChange]);
 
-  const toggleArrayFilter = (key: keyof FilterState, value: string | number, checked: boolean) => {
+  const toggleArrayFilter = useCallback((key: keyof FilterState, value: string | number, checked: boolean) => {
     const currentArray = filters[key] as (string | number)[];
     const newArray = checked ? [...currentArray, value] : currentArray.filter((item) => item !== value);
     updateFilters(key, newArray);
-  };
+  }, [filters, updateFilters]);
 
-  // Clear all filters
-  const clearFilters = () => {
+  // Memoize clear filters function
+  const clearFilters = useCallback(() => {
     setSearchValue("");
     onFiltersChange({
       search: "",
@@ -64,11 +108,12 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
       price_range: [0, 10000],
       distance_range: 100,
       available_only: false,
+      sortBy: undefined,
     });
-  };
+  }, [onFiltersChange]);
 
-  // Calculate active filter count
-  const getActiveFiltersCount = () => {
+  // Memoize active filter count calculation
+  const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (filters.search?.trim()) count++;
     if (filters.fuel_types.length) count++;
@@ -78,9 +123,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     if (filters.price_range[0] > 0 || filters.price_range[1] < 10000) count++;
     if (filters.available_only) count++;
     return count;
-  };
+  }, [filters]);
 
-  const CheckboxGroup = ({
+  // Memoize CheckboxGroup component to prevent recreation
+  const CheckboxGroup = useCallback(({
     label,
     items,
     filterKey,
@@ -109,17 +155,18 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
         </div>
       </div>
     </div>
-  );
+  ), [filters, toggleArrayFilter]);
 
-  const FilterContent = () => (
+  // Memoize FilterContent component to prevent recreation
+  const FilterContent = useCallback(() => (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-semibold text-white">Filters</h2>
-          {getActiveFiltersCount() > 0 && (
+          {activeFiltersCount > 0 && (
             <span className="bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full">
-              {getActiveFiltersCount()}
+              {activeFiltersCount}
             </span>
           )}
         </div>
@@ -128,7 +175,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
           size="sm"
           onClick={clearFilters}
           className="text-gray-300 hover:text-white hover:bg-white/10 h-8 px-2 text-sm"
-          disabled={getActiveFiltersCount() === 0}
+          disabled={activeFiltersCount === 0}
         >
           <RotateCcw className="w-3 h-3 mr-1" />
           Clear
@@ -157,42 +204,58 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
         </div>
       </div>
 
+      {/* Sort Options */}
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-gray-300">Sort By</Label>
+        <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+          <Select
+            value={filters.sortBy || ''}
+            onValueChange={(value) => updateFilters('sortBy', value as SortOption)}
+          >
+            <SelectTrigger className="bg-transparent border-white/20 text-white focus:border-blue-500">
+              <div className="flex items-center gap-2">
+                <ArrowUpDown className="w-4 h-4 text-gray-400" />
+                <SelectValue placeholder="Select sorting option" />
+              </div>
+            </SelectTrigger>
+            <SelectContent className="bg-gray-900 border-white/20">
+              {SORT_OPTIONS.map((option) => (
+                <SelectItem 
+                  key={option.value} 
+                  value={option.value}
+                  className="text-white hover:bg-white/10 focus:bg-white/10"
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       {/* Filter Groups */}
       <CheckboxGroup
         label="Fuel Type"
         filterKey="fuel_types"
-        items={[
-          { value: "petrol", label: "Petrol" },
-          { value: "diesel", label: "Diesel" },
-          { value: "electric", label: "Electric" },
-        ]}
+        items={FUEL_TYPE_OPTIONS}
       />
       <CheckboxGroup
         label="Number of Seats"
         filterKey="seats"
-        items={[2, 4, 5, 7].map((seat) => ({ value: seat, label: `${seat} seats` }))}
+        items={SEAT_OPTIONS}
       />
       <CheckboxGroup
         label="Vehicle Type"
         filterKey="car_types"
-        items={[
-          { value: "sedan", label: "Sedan" },
-          { value: "hatchback", label: "Hatchback" },
-          { value: "xuv", label: "XUV" },
-          { value: "suv", label: "SUV" },
-          { value: "sports", label: "Sports" },
-        ]}
+        items={CAR_TYPE_OPTIONS}
       />
       <CheckboxGroup
         label="Transmission"
         filterKey="transmission"
-        items={[
-          { value: "true", label: "Automatic" },
-          { value: "false", label: "Manual" },
-        ]}
+        items={TRANSMISSION_OPTIONS}
       />
     </div>
-  );
+  ), [activeFiltersCount, clearFilters, searchValue, filters, onFiltersChange, CheckboxGroup, updateFilters]);
 
   return (
     <>
@@ -213,9 +276,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
             >
               <Filter className="w-5 h-5 mr-2" />
               Filters
-              {getActiveFiltersCount() > 0 && (
+              {activeFiltersCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
-                  {getActiveFiltersCount()}
+                  {activeFiltersCount}
                 </span>
               )}
             </Button>

@@ -1,4 +1,4 @@
-import { IVerificationRequest } from "../../entities/IVerificationRequest";
+import { IVerificationRequest } from "../../entities/VerificationRequest";
 import { User } from "../../entities/userEntities";
 import { IVehicle } from "../../entities/vehcleEnties";
 

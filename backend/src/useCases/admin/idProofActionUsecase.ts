@@ -3,16 +3,16 @@ import { IidProofActionUsecase } from "../../domain/interface/usecaseInterface/a
 
 export class IdProofActionUsecase implements IidProofActionUsecase{
 
-    constructor(private adminRepository :IadminRepository){
-        this.adminRepository = adminRepository
+    constructor(private _adminRepository :IadminRepository){
+        this._adminRepository = _adminRepository
     }
 
     async setAction(idProof_id: string,owner_id:string, action: "rejected" | "approved",reason:string): Promise<boolean> {
         
         if(action == 'approved'){
-            await this.adminRepository.setVeifedUser(owner_id)
-          return  await this.adminRepository.idProofUprove(idProof_id,owner_id)
+            await this._adminRepository.setVeifedUser(owner_id)
+          return  await this._adminRepository.idProofUprove(idProof_id,owner_id)
         }
-        return await this.adminRepository.idProofReject(idProof_id,reason)
+        return await this._adminRepository.idProofReject(idProof_id,reason)
     }
 } 

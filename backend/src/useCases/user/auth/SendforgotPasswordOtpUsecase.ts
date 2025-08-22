@@ -4,21 +4,21 @@ import { IotpService } from "../../../domain/interface/serviceInterface/IotpServ
 import { IsendOptUsecase } from "../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IsendOtpUsecase"
 
 export class ForgotPasswordUsecase implements IsendOptUsecase{
-     private otpService : IotpService
-     private emailService : IemailServise
-     private userRepository : IuserRepository
+     private _otpService : IotpService
+     private _emailService : IemailServise
+     private _userRepository : IuserRepository
      constructor(otpService:IotpService,emailSevice:IemailServise,userRepository:IuserRepository){
-        this.otpService = otpService
-        this.emailService = emailSevice
-        this.userRepository = userRepository
+        this._otpService = otpService
+        this._emailService = emailSevice
+        this._userRepository = userRepository
      }
 
      async execute(email: string): Promise<void> {
-        const existingUser = await this.userRepository.findByEmail(email)
+        const existingUser = await this._userRepository.findByEmail(email)
         if(!existingUser)throw new Error('user not found with this email')
-        const otp = this.otpService.genarateOtp()
+        const otp = this._otpService.genarateOtp()
          console.log(otp)
-        await this.otpService.storeOtp(email,otp)
-        await this.emailService.sendOtp(email,otp)
+        await this._otpService.storeOtp(email,otp)
+        await this._emailService.sendOtp(email,otp)
      }
 }

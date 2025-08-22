@@ -4,13 +4,13 @@ import { IuploadIdProofUsecase } from "../../domain/interface/usecaseInterface/u
 
 export class UploadIdProofUsecase implements IuploadIdProofUsecase{
 
-    private uploadIdProofRepository :IUploadIdProofRepository
+    private _uploadIdProofRepository :IUploadIdProofRepository
 
     constructor(uploadIdProofRepository:IUploadIdProofRepository){
-        this.uploadIdProofRepository= uploadIdProofRepository
+        this._uploadIdProofRepository= uploadIdProofRepository
     }
    async uploadProof(idProofUrl: string,userId:string): Promise<User|null> {
-      return await  this.uploadIdProofRepository.uploadImg(idProofUrl,userId)
+      return await  this._uploadIdProofRepository.uploadImg(idProofUrl,userId)
     }
 
 }

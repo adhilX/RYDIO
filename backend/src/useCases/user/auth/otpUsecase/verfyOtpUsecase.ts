@@ -3,13 +3,13 @@ import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/
 
 export class VerifyOtpUsecase implements IverfyOtpUsecase{
 
-    private otpService: IotpService
+    private _otpService: IotpService
 
     constructor(otpSevice:IotpService){
-        this.otpService = otpSevice
+        this._otpService = otpSevice
     }
 
     async verifyOtp(email: string, enteredOtp: string): Promise<boolean> {
-        return this.otpService.verifyOtp(email,enteredOtp)
+        return this._otpService.verifyOtp(email,enteredOtp)
     }
 }

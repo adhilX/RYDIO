@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import BookingDetailsModal from '../../modal/BookingDetailsModal';
 import { getMyBooking } from '@/services/user/bookingService';
 import type { BookingStatus, PaymentStatus, IbookedData } from '@/Types/User/Booking/bookedData';
+import Pagination from '@/components/Pagination';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
@@ -18,10 +19,11 @@ const MyBooking = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const [bookings, setBookings] = useState<IbookedData[]>([]);
-  const [, setTotalPages] = useState(1); 
+  const [totalPages, setTotalPages] = useState(1); 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<BookingStatus | 'all'>('all');
   const [limit] = useState(6); 
+  
   const [bookingState, setBookingState] = useState({
     selected: null as IbookedData | null,
     isModalOpen: false,
@@ -29,6 +31,8 @@ const MyBooking = () => {
     isLoading: false,
     debouncedSearch: ''
   })
+  const { currentPage } = bookingState;
+
     
   if (!user) {
     return <div className="p-4 text-center">Please log in to view your bookings.</div>;
@@ -250,6 +254,16 @@ const MyBooking = () => {
                 </Card>
               ))}
             </div>
+<Pagination
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={(page) =>
+    setBookingState(prev => ({
+      ...prev,
+      currentPage: page
+    }))
+  }
+/>
           </div>
         ) : (
         <div className="text-center py-12">

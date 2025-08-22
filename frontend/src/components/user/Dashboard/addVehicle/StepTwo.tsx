@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Input } from '@/components/ui/input';
@@ -11,8 +11,7 @@ interface StepTwoProps {
   onSubmit: (data: StepTwoFormData) => void;
   defaultValues?: StepTwoFormData;
 }
-
-export default function StepTwo({ onSubmit, defaultValues }: StepTwoProps) {
+const StepTwo = ({ onSubmit, defaultValues }: StepTwoProps) => {
   const [previews, setPreviews] = useState<string[]>([]);
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [cropImageSrc, setCropImageSrc] = useState('');
@@ -126,3 +125,5 @@ export default function StepTwo({ onSubmit, defaultValues }: StepTwoProps) {
     </form>
   );
 }
+
+export default React.memo(StepTwo);

@@ -5,11 +5,11 @@ import { IvehicleDetailsUsecase } from "../../../domain/interface/usecaseInterfa
 export class VehicleDetailsUsecase implements IvehicleDetailsUsecase {
 
 
-constructor(private vehicleRepository:IvehicleRepository){
-    this.vehicleRepository = vehicleRepository
+constructor(private _vehicleRepository:IvehicleRepository){
+    this._vehicleRepository = _vehicleRepository
 }
 
 async getVehicleDetails(id: string): Promise<IVehicle | null> {
- return this.vehicleRepository.getVehicleDetails(id)
+ return this._vehicleRepository.getVehicleDetails(id)
 }
 }

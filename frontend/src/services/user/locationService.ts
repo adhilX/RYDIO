@@ -1,9 +1,9 @@
 import axios from "axios";
-
+const MAP_URL = import.meta.env.VITE_MAPS_API_URL
 export const findLocation = async (lat: number | null, lng: number | null) => {
     try {
         const res = await axios(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+            `${MAP_URL}reverse?format=json&lat=${lat}&lon=${lng}`
         );
         return res.data
     } catch (error) {
@@ -21,7 +21,7 @@ interface Suggestion {
 export async function fetchLocationSuggestions(query: string): Promise<Suggestion[]> {
     try {
         const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`
+            `${MAP_URL}search?format=json&q=${encodeURIComponent(query)}`
         );
         if (!response.ok) {
             throw new Error(`Error fetching location suggestions: ${response.statusText}`);

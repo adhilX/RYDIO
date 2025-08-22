@@ -2,14 +2,14 @@ import { Request, Response } from "express";
 import { IchangeVehicleStatusUsecase } from "../../../../domain/interface/usecaseInterface/user/vehicle/IchangeVehicleStatusUsecase";
 
 export class ChangeVehicleStatusController {
-    private changeVehicleStatusUsecase: IchangeVehicleStatusUsecase;
+    private _changeVehicleStatusUsecase: IchangeVehicleStatusUsecase;
     constructor(changeVehicleStatusUsecase: IchangeVehicleStatusUsecase) {
-      this.changeVehicleStatusUsecase = changeVehicleStatusUsecase
+      this._changeVehicleStatusUsecase = changeVehicleStatusUsecase
     }
     async changeVehicleStatus(req:Request,res:Response){
         try {
             const {vehicleId} = req.params;
-            const result = await this.changeVehicleStatusUsecase.execute(vehicleId);
+            const result = await this._changeVehicleStatusUsecase.execute(vehicleId);
             res.status(200).json({message:'vehicle status changed successfully',success:true});
         } catch (error) {
             console.log('error while changing vehicle status',error)

@@ -15,6 +15,7 @@ export interface IVehicle {
     description: string;
     image_urls: string[];
     admin_approve : 'pending'| 'accepted'| 'rejected'
+    reject_reason?:string
     is_available?: boolean;
     created_at?: Date;
 }

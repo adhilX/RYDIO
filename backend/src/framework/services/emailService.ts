@@ -3,10 +3,10 @@ import nodemailer from 'nodemailer'
 import { otpTemplate } from "../../shared/templates/otpTemplates";
 
 export class EmailService implements IemailServise {
-  private transporter: nodemailer.Transporter;
+  private _transporter: nodemailer.Transporter;
 
    constructor(){
-    this.transporter = nodemailer.createTransport({
+    this._transporter = nodemailer.createTransport({
         service : 'gmail',
         auth:{
             user : process.env.EMAIL_ID,
@@ -15,7 +15,7 @@ export class EmailService implements IemailServise {
     })
    }
     async sendOtp(email: string, otp: string): Promise<void> {
-        // console.log(email,'ehhhhhhhhhhhhhhhhhhhhh')
+
         const mailOption= {
             from: process.env.EMAIL,
             to: email,
@@ -23,7 +23,7 @@ export class EmailService implements IemailServise {
             html: otpTemplate(otp)
         }
         try {
-            await this.transporter.sendMail(mailOption)
+            await this._transporter.sendMail(mailOption)
             console.log(`otp sended to ${email}`)
         } catch (error) {
             console.log('error while sending otp',error)

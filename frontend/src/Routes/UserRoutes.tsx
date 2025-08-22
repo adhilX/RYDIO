@@ -5,7 +5,7 @@ import ForgotPassword from "@/pages/User/auth/ForgotPassword"
 import Login from "@/forms/Login"
 import LandingPage from "@/pages/User/Landing"
 import { Route, Routes } from "react-router"
-import UserProtectedRoute from "./ProtectedRoutes/userProtectedRoute"
+import TokenProtected from "./ProtectedRoutes/tokenProtected"
 const Layout = lazy(() => import("@/layout/user/layout"));
 import ProtectedRoute from "./ProtectedRoutes/ProtectedRoutes"
 import ChangePassword from "@/components/user/Dashboard/ChagePassword"
@@ -19,7 +19,9 @@ import { Elements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
 import PaymentSuccess from "@/pages/User/PaymentSuccess"
 import MyBooking from "@/components/user/Dashboard/MyBooking"
+import IncomingBookings from "@/components/user/Dashboard/IncomingBookings"
 const CheckoutForm = React.lazy(() => import("@/pages/User/CheckoutForm"))
+const Wishlist = React.lazy(() => import("@/pages/User/Wishlist"))
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 
 export const UserRoutes = () => {
@@ -30,75 +32,84 @@ export const UserRoutes = () => {
             <Route path='/signup' element={<ProtectedRoute><SignupPage /></ProtectedRoute>} />
             <Route path='/forgetpassword' element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
             <Route path='/' element={<LandingPage />} />
-            <Route path='/vehicle-list' element={<UserProtectedRoute><UserVehicleList /></UserProtectedRoute>} />
-            <Route path='/vehicle-details/:id' element={<UserProtectedRoute><VehicleDetailPage /></UserProtectedRoute>} />
-            <Route path="/booking-confirmation" element={<UserProtectedRoute><BookingConfirmation /></UserProtectedRoute>} />
-            <Route path="/payment-success" element={<UserProtectedRoute><PaymentSuccess /></UserProtectedRoute>} />
+            <Route path='/vehicle-list' element={<TokenProtected><UserVehicleList /></TokenProtected>} />
+            <Route path='/vehicle-details/:id' element={<TokenProtected><VehicleDetailPage /></TokenProtected>} />
+            <Route path="/booking-confirmation" element={<TokenProtected><BookingConfirmation /></TokenProtected>} />
+            <Route path="/payment-success" element={<TokenProtected><PaymentSuccess /></TokenProtected>} />
+            <Route path="/wishlist" element={<TokenProtected><Wishlist /></TokenProtected>} />
             <Route
                 path="/payment"
                 element={
                     <Elements stripe={stripePromise}>
-                        <UserProtectedRoute>
+                        <TokenProtected>
                             <Suspense fallback={<div>Loading...</div>}>
                                 <CheckoutForm />
                             </Suspense>
-                        </UserProtectedRoute>
+                        </TokenProtected>
                     </Elements>
                 }
             />
             <Route
                 path="/userprofile"
                 element={
-                    <UserProtectedRoute >
+                    <   TokenProtected>
                         <Suspense fallback={<div>Loading...</div>}>
                             <Layout />
                         </Suspense>
-                    </UserProtectedRoute>
+                    </TokenProtected>
                 }
             >
                 <Route index element={
-                    <UserProtectedRoute>
+                    <TokenProtected>
                         <UserProfile />
-                    </UserProtectedRoute>
+                    </TokenProtected>
                 } />
                 <Route
                     path="vehicles"
                     element={
-                        <UserProtectedRoute>
+                        <TokenProtected>
                             <ListVehilce />
-                        </UserProtectedRoute>
+                        </TokenProtected>
                     }
                 />
                 <Route
                     path="add-vehicle"
                     element={
-                        <UserProtectedRoute>
+                        <TokenProtected>
                             <AddVehicleForm />
-                        </UserProtectedRoute>
+                        </TokenProtected>
                     }
                 />
                 <Route
                     path="change-password"
                     element={
-                        <UserProtectedRoute>
+                        <TokenProtected>
                             <ChangePassword />
-                        </UserProtectedRoute>
+                        </TokenProtected>
                     }
                 />
                 <Route
                     path="wallet"
                     element={
-                        <UserProtectedRoute>
+                        <TokenProtected>
                             <Wallet />
-                        </UserProtectedRoute>
+                        </TokenProtected>
                     }
                 />
                 <Route
                     path="my-bookings"
                     element={
-                        <UserProtectedRoute>
+                        <TokenProtected>
                             <MyBooking />
-                        </UserProtectedRoute>
+                        </TokenProtected>
+                    }
+                />
+                    <Route
+                    path="incoming-bookings"
+                    element={
+                        <TokenProtected>
+                            <IncomingBookings />
+                        </TokenProtected>
                     }
                 />
             </Route>

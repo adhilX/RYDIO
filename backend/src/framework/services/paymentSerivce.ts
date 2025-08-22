@@ -2,14 +2,14 @@ import Stripe from "stripe";
 import { IstripeService } from "../../domain/interface/serviceInterface/IpaymentService";
 
 export class StripeService implements IstripeService {
-    private stripe: Stripe
+    private _stripe: Stripe
     constructor() {
-        this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
+        this._stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
     }
 
     async createPaymentIntent(amount: number): Promise<any> {
         try {
-            const paymentIntent = await this.stripe.paymentIntents.create({
+            const paymentIntent = await this._stripe.paymentIntents.create({
                 amount: Math.round(amount * 100),
                 currency: 'inr',
                 metadata: {
@@ -30,7 +30,7 @@ export class StripeService implements IstripeService {
     }
     async confirmPaymentIntent(paymentIntentId: string): Promise<any> {
         try {
-            const paymentIntent = await this.stripe.paymentIntents.confirm(paymentIntentId);
+            const paymentIntent = await this._stripe.paymentIntents.confirm(paymentIntentId);
             return paymentIntent;
         } catch (error: any) {
             console.error("Stripe confirmPaymentIntent Error:", error.message);

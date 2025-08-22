@@ -13,6 +13,7 @@ import { VendorAccessController } from "../../adapters/controllers/admin/vendorA
 import { AdminRepository } from "../../adapters/repository/admin/adminRepository";
 import { BookingRepository } from "../../adapters/repository/booking/bookingRepository";
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository";
+import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
 import { LoginAdminUsecase } from "../../useCases/admin/AdminLoginUsecase";
 import { BlockUserUseCase } from "../../useCases/admin/BlockUserUsecase";
 import { GetBookingUsecase } from "../../useCases/admin/bookingMangment/getBookingUsecase";
@@ -27,12 +28,19 @@ import { VehicleUpproveUsecase } from "../../useCases/admin/vehicleManagment/veh
 import { VendorAccessUsecase } from "../../useCases/admin/vendorAccessUsecase";
 import { HashPassword } from "../services/hashPassword";
 import { JwtService } from "../services/jwtService";
+import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
+import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController";
+import { GetWalletUsecase } from "../../useCases/user/wallet/getWalletUsecase";
+import { GetAdminWalletUsecase } from "../../useCases/admin/walletManagment/getAdminWalletUsecase";
+import { GetAdminWalletController } from "../../adapters/controllers/admin/WalletManagment/GetWalletController";
 
 //-----------admin login------------
 const adminRepository = new AdminRepository()
 const hashPassword = new HashPassword()
 const jwtService = new JwtService()
-const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword)
+const walletRepository = new WalletRepository()
+const adminWalletRepository = new AdminWalletRepository()
+const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,adminWalletRepository)
 export const adminLoginController = new AdminLoginController(loginAdminUsecase,jwtService)
 
 //------get All Usersss-------------
@@ -86,3 +94,8 @@ export const vendorAccessController = new VendorAccessController(vendorAccessUse
 const bookingRepository = new BookingRepository()
 const getBookingUsecase = new GetBookingUsecase(bookingRepository)
 export const getBookingController = new GetBookingController(getBookingUsecase)
+
+
+//------get wallet details---------
+const getAdminWalletUsecase = new GetAdminWalletUsecase(adminWalletRepository)
+export const getAdminWalletController = new GetAdminWalletController(getAdminWalletUsecase)

@@ -1,11 +1,12 @@
 import { motion } from "framer-motion"
 import { CheckCircle, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import QRGenerator from "@/components/user/QRGenerator"
 
 const PaymentSuccess = () => {
   const navigate = useNavigate()
-
+  const {booking_id} = useLocation().state as { booking_id: string } 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#232b3a] via-[#1a1f2a] to-[#232b3a] text-white flex items-center justify-center">
       <div className="max-w-md mx-auto px-4">
@@ -35,6 +36,7 @@ const PaymentSuccess = () => {
             Booking Successful!
           </motion.h1>
 
+          <QRGenerator booking_id={booking_id}/>
           {/* Success Message */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -53,7 +55,7 @@ const PaymentSuccess = () => {
             className="space-y-4"
           >
             <Button
-              onClick={() => navigate('/userProfile',{replace:true})}
+              onClick={() => navigate('/userProfile/my-bookings',{replace:true})}
               className="w-full bg-gradient-to-r from-[#6DA5C0] to-[#4a90a8] hover:from-[#5a8ba0] hover:to-[#3a7a8c] text-white font-semibold py-3 rounded-xl shadow-lg"
             >
               Go to Dashboard
