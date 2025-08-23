@@ -13,3 +13,15 @@ export const getWallet = async (userId: string, page: number, limit: number) => 
     throw new Error('Error while fetching wallet');
   }
 }
+
+
+
+export const withdrawMoney = async (bookingId:string,userId:string)=>{
+  try{
+      const response = await axiosInstance.post(`/withdrawal/${bookingId}`,userId)
+      return response.data
+  }catch(error){
+
+  }
+
+}

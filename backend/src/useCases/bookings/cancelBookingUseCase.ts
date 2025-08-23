@@ -6,6 +6,7 @@ import { IvehicleRepository } from "../../domain/interface/repositoryInterface/I
 import { BookingStatus } from "../../domain/entities/BookingEntities";
 import { CancelBookingInputDto, CancelBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { IcancelBookingUseCase } from "../../domain/interface/usecaseInterface/bookings/IcancelBookingUseCase";
+import { TransactionPurpose } from "../../domain/entities/transactionEntities";
 
 export class CancelBookingUseCase implements IcancelBookingUseCase  {
     constructor(
@@ -52,7 +53,7 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
                from: 'admin',   
                to: userId,    
                amount: userRefund,
-               purpose: 'refund',
+               purpose: TransactionPurpose.refund,
                bookingId: booking_id,
                transactionType:'credit'
         });            
@@ -67,7 +68,7 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
                from: 'admin',   
                to: ownerId,    
                amount: ownerCompensation,
-               purpose: 'refund',
+               purpose: TransactionPurpose.refund,
                bookingId: booking_id,
                transactionType:'credit'
             });            

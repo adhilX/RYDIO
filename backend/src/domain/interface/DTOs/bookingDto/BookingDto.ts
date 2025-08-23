@@ -4,7 +4,6 @@ import { IVehicle } from "../../../entities/vehcleEnties";
 
 // Base Booking DTO for shared booking properties
 export interface BaseBookingDto {
-  _id?: string;
   booking_id: string;
   user_id: string;
   vehicle_id: string;

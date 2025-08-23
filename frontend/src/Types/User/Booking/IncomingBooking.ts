@@ -7,6 +7,8 @@ export interface Finance {
   admin_commission: number;
   owner_earnings: number;
   is_late_return: boolean;
+  user_withdraw: boolean;
+  owner_withdraw: boolean;
 }
 
 export interface IncomingBooking {
@@ -19,7 +21,7 @@ export interface IncomingBooking {
   start_date: string;
   end_date: string;
   total_amount: number;
-  finance?: Finance;
+  finance: Finance;
   status: 'pending' | 'booked' | 'ongoing' | 'completed' | 'cancelled';
   payment_type: string;
   cancellation_reason: string;

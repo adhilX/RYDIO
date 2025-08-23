@@ -10,3 +10,5 @@ export const getwallet = async (page:number,limit:number) => {
         throw error;
     }
     }
+
+

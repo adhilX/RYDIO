@@ -5,7 +5,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Car, Clock, MapPin, User, X } from 'lucide-react'
-import type { IbookedData } from '@/Types/User/Booking/bookedData'
 import QRGenerator from '../user/QRGenerator'
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -14,9 +13,12 @@ import CancelConfirmationModal from './CancelConfirmationModal'
 import { cancelBooking } from '@/services/user/bookingService'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router'
+import type { IbookedData } from '@/Types/User/Booking/bookedData'
+import { withdrawMoney } from '@/services/wallet/walletService'
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/store/store'
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
-
 interface BookingDetailsModalProps {
   booking: IbookedData | null
   isOpen: boolean
@@ -24,6 +26,7 @@ interface BookingDetailsModalProps {
 }
 
 const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOpen, onClose }) => {
+  const user = useSelector((state:RootState)=>state.auth.user)
   const [showReasonModal, setShowReasonModal] = useState(false)
   const [cancelReason, setCancelReason] = useState('')
   const [showConfirmation, setShowConfirmation] = useState(false)
@@ -36,6 +39,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   }
 
+  if(!user)return
   const handleCancelBooking = () => {
     setShowReasonModal(true)
   }
@@ -46,6 +50,15 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
       setShowConfirmation(true)
     }
   }
+
+
+  const handleWithdraw = async()=>{
+
+await withdrawMoney(booking?.booking_id!,user?._id!) 
+
+toast.success('withdraw success')
+
+}
 
   const handleConfirmCancel = async () => {
     if (!booking?.booking_id) {
@@ -167,6 +180,19 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
               </section>
             )}
 
+      {booking.status === 'completed' && !booking.finance.user_withdraw &&(
+    <section>
+      <Button
+        onClick={handleWithdraw}
+        variant="default"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+      >
+        <X className="w-4 h-4 mr-2" />
+       {`${booking.finance.security_deposit-booking.finance.fine_amount} withdraw`}
+      </Button>
+    </section>
+
+      )}
         {/* QR Code Section */}
         <section>
           {booking.status === 'booked' && (

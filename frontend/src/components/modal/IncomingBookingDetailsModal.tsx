@@ -17,11 +17,16 @@ import {
   IndianRupee,
   FileText,
   CheckCircle,
-  XCircle
+  XCircle,
+  X
 } from 'lucide-react'
 import { format } from 'date-fns'
 import React from 'react'
 import type { IncomingBooking } from '@/Types/User/Booking/IncomingBooking';
+import { withdrawMoney } from '@/services/wallet/walletService'
+import toast from 'react-hot-toast'
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/store/store'
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
@@ -41,12 +46,21 @@ const IncomingBookingDetailsModal = ({
   onReject 
 }: IncomingBookingDetailsModalProps) => {
   if (!booking) return null
-
+const user = useSelector((state:RootState)=>state.auth.user)
+if(!user)return 
   const calculateDays = (startDate: string, endDate: string) => {
     const start = new Date(startDate)
     const end = new Date(endDate)
     const diffTime = end.getTime() - start.getTime()
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  }
+
+    const handleWithdraw = async()=>{
+  
+  await withdrawMoney(booking?.booking_id!,user?._id!) 
+  
+  toast.success('withdraw success')
+  
   }
 
   const getStatusColor = (status: string) => {
@@ -106,8 +120,21 @@ const IncomingBookingDetailsModal = ({
           <section className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-400">Booking ID</p>
-              <p className="text-lg font-mono text-blue-400">{booking.booking_id}</p>
+              <p className="text-lg font-mono text-white">{booking.booking_id}</p>
             </div>
+
+               <section>
+   {booking.status==='completed' && !booking.finance.owner_withdraw &&(
+                 <Button
+                   onClick={handleWithdraw}
+                   variant="default"
+                   className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                 >
+                   <X className="w-4 h-4 mr-2" />
+                  {`${booking?.finance.security_deposit -booking.finance.fine_amount} withdraw`}
+                 </Button>
+   )}
+            </section>
             {isPending && (
               <div className="flex gap-3">
                 <Button

@@ -8,15 +8,11 @@ import { idGeneratorService } from "../../framework/DI/serviceInject"
 import { setings } from "../../shared/constent"
 import { CreateBookingInputDto, CreateBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
 import { IcreateBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IcreateBookingUsecase"
+import { IWalletRepository } from "../../domain/interface/repositoryInterface/IwalletRepository"
+import { TransactionPurpose } from "../../domain/entities/transactionEntities"
 
 export class CreateBookingUsecase implements IcreateBookingUsecase {
-  constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository, private _trasationRepository: ItrasationRepository) {
-    this._bookingRepository = _bookingRepository
-    this._redisService = _redisService
-    this._vehicleRepository = _vehicleRepository
-    this._adminWalletRepository = _adminWalletRepository
-    this._trasationRepository = _trasationRepository
-  }
+  constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository,private _walletRepository: IWalletRepository, private _trasationRepository: ItrasationRepository) {}
 
   async createBooking(input: CreateBookingInputDto): Promise<CreateBookingOutputDto> {
     const { bookingData, user_id, stripeIntentId } = input;
@@ -29,7 +25,6 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
     const existingBooking = await this._bookingRepository.findByPaymentIntentId(stripeIntentId);
     if (existingBooking) {
       return {
-        _id: existingBooking._id,
         booking_id: existingBooking.booking_id,
         user_id: existingBooking.user_id.toString(),
         vehicle_id: existingBooking.vehicle_id.toString(),
@@ -48,10 +43,8 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
         cancellation_reason: existingBooking.cancellation_reason
       };
     }
-
-    await this._adminWalletRepository.updateWalletBalance(bookingData.total_amount);
     const booking_id = await idGeneratorService.generateBookingId();
-
+    
     const newBooking: Ibooking = {
       booking_id,
       user_id,  
@@ -76,12 +69,14 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
         user_withdraw:false
       }
     }
-
-    await this._trasationRepository.create({from:user_id,to:'admin',amount:bookingData.total_amount,purpose:'booking',bookingId:booking_id,transactionType:'debit'})
+    
+        await this._adminWalletRepository.updateWalletBalance(bookingData.total_amount);
+        const transaction  =await this._trasationRepository.create({from:user_id,to:'admin',amount:bookingData.total_amount,purpose:TransactionPurpose.booking,bookingId:booking_id,transactionType:'debit'})
+        await this._walletRepository.addTransaction(user_id,transaction._id!)
+         await this._adminWalletRepository.addTransaction(transaction._id!)
     const savedBooking = await this._bookingRepository.create(newBooking);
     
     return {
-      _id: savedBooking._id,
       booking_id: savedBooking.booking_id,
       user_id: savedBooking.user_id.toString(),
       vehicle_id: savedBooking.vehicle_id.toString(),
@@ -97,7 +92,6 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
       status: savedBooking.status,
       payment_status: savedBooking.payment_status,
       payment_intent_id: savedBooking.payment_intent_id,
-      cancellation_reason: savedBooking.cancellation_reason
     };
     }
 }

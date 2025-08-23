@@ -72,6 +72,9 @@ import { RideStartUsecase } from "../../useCases/bookings/rideStartUsecase"
 import { RideEndUsecase } from "../../useCases/bookings/rideEndUsecase"
 import { IncomingBookingUsecase } from "../../useCases/bookings/incomingBookingUsecase"
 import { CancelBookingUseCase } from "../../useCases/bookings/cancelBookingUseCase"
+import { WithdrawController } from "../../adapters/controllers/admin/WalletManagment/withdrawController"
+import { WithdrawUsecase } from "../../useCases/wallets/withdrawUsecase"
+import { transactionModel } from "../database/models/transactionModel"
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
@@ -161,7 +164,7 @@ export const uploadIdProofController = new UploadIdProofController(uploadIdProof
 
 //----------create Booking------------
 
-const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository,trasationRepository)
+const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository,walletRepository,trasationRepository)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 
 //--------create payment intent------------
@@ -216,3 +219,8 @@ export const incomingBookingController = new IncomingBookingController(incomingB
 //------cancel booking---------
 const cancelBookingUsecase = new CancelBookingUseCase(bookingRepository,walletRepository,adminWalletRepository,trasationRepository,vehicleRepository)
 export const cancelBookingController = new CancelBookingController(cancelBookingUsecase)
+
+//------withdraw-money----------
+
+const withdrawUsecase = new WithdrawUsecase(bookingRepository,vehicleRepository,walletRepository,adminWalletRepository,trasationRepository,)
+export const withdrawController = new WithdrawController(withdrawUsecase)

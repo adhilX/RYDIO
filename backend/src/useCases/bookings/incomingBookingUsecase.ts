@@ -12,7 +12,6 @@ export class IncomingBookingUsecase implements IIncomingBookingUsecase{
         
         return {
             bookings: (result.bookings).map((booking: any) => ({
-                _id: booking._id,
                 booking_id: booking.booking_id,
                 user_id: booking.user_id.toString(),    
                 vehicle: booking.vehicle,
@@ -29,7 +28,6 @@ export class IncomingBookingUsecase implements IIncomingBookingUsecase{
                 status: booking.status,
                 payment_status: booking.payment_status,
                 payment_intent_id: booking.payment_intent_id,
-                cancellation_reason: booking.cancellation_reason,
                 createdAt: booking.createdAt,
                 updatedAt: booking.updatedAt
             })),
