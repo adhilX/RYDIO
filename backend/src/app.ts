@@ -11,24 +11,24 @@ import { AuthRoute } from './framework/routes/auth/RefreshRoutes';
 import cookieParser from 'cookie-parser'
 
 export class App {
-    private app : Application                
+    private _app : Application                
     private port: number|string
     private database: ConnectMongoDB
     // private socketIoServer: SocketIoController
     constructor() {
-        this.app = express();
-        this.app.use(cors({
+        this._app = express();
+        this._app.use(cors({
             origin: process.env.ORIGIN,
             credentials: true
         }))
         this.port = process.env.PORT || 3000;
         this.database = new ConnectMongoDB()
         this.connectRedis()
-        this.app.use(morgan('dev'))
+        this._app.use(morgan('dev'))
         this.database.connectDB()
-        this.app.use(express.json());
-        this.app.use(cookieParser())
-        this.app.use(urlencoded({extended:true}));
+        this._app.use(express.json());
+        this._app.use(cookieParser())
+        this._app.use(urlencoded({extended:true}));
         this.setAuthRoutes()
         this.setAdminRoutes();
         this.setUserRoutes();
@@ -36,18 +36,18 @@ export class App {
     }
 
     public listen(): void {
-        this.app.listen(this.port, () => {
+        this._app.listen(this.port, () => {
             console.log(`Server is running on port ${this.port}`);
         });
     }   
     private setUserRoutes(){
-        this.app.use('/',new UserRoutes().UserRoutes);
+        this._app.use('/',new UserRoutes().UserRoutes);
     }
     private setAdminRoutes(){
-        this.app.use('/admin',new AdminRoutes().AdminRoute)
+        this._app.use('/admin',new AdminRoutes().AdminRoute)
     }
     private setAuthRoutes(){
-        this.app.use('/refresh-token',new AuthRoute().AuthRouter)
+        this._app.use('/refresh-token',new AuthRoute().AuthRouter)
     }
        private async connectRedis() {
         await redisService.connect()
