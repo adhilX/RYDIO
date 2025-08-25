@@ -27,7 +27,7 @@ export class SearchVehicleUsecase implements IsearchVehicleUsecase {
         const vehicleId = v._id?.toString();
         const isBooked = bookedVehicleIds.includes(vehicleId!);
         return !isBooked;
-      });
+      }); 
       
       const totalAvailable = allAvailableVehicles.length;
       
