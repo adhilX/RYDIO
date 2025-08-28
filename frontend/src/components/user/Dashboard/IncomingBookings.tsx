@@ -384,7 +384,7 @@ function IncomingBookings() {
       <IncomingBookingDetailsModal
         booking={selectedBooking}
         isOpen={isDetailsModalOpen}
-        onClose={handleCloseDetailsModal}
+        onClose={()=>handleCloseDetailsModal()}
       />
     </div>
   );

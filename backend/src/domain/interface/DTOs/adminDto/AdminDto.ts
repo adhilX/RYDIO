@@ -172,7 +172,20 @@ export interface GetAdminWalletOutputDto {
     totalEarnings: number;
     totalWithdrawals: number;
     pendingAmount: number;
+    transactions: WalletTransactionDto[];
   };
+}
+export interface WalletTransactionDto {
+  _id?: string;
+  transaction_id: string;
+  amount: number;
+  transactionType: 'credit' | 'debit';
+  purpose: string;
+  createdAt: Date;
+  status: 'pending' | 'completed' | 'failed';
+  from: string;
+  to: string;
+  
 }
 
 //=================== Admin Statistics DTOs ===================

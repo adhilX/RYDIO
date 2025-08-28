@@ -15,4 +15,5 @@ export interface ITransaction {
   purpose: TransactionPurpose; 
   bookingId: string; 
   transactionType: 'debit' | 'credit'; 
+  createdAt?: Date;
 }

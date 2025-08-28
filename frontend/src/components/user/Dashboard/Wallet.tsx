@@ -29,7 +29,7 @@ export default function Wallet() {
         const response = await getWallet(user._id!, 1, 10);
         const walletData: WalletData = response;
         setBalance(walletData.balance);
-        setTransactions(walletData.transactions || []);
+        setTransactions(walletData.transactions.reverse() || []);
       } catch (error) {
         console.error('Error fetching wallet data:', error);
       } finally {
@@ -82,9 +82,9 @@ export default function Wallet() {
                     <div className="text-xs text-white/50">
                       {new Date(tx.createdAt).toLocaleDateString()} at {new Date(tx.createdAt).toLocaleTimeString()}
                     </div>
-                    <div className="text-xs text-white/40">
+                    {/* <div className="text-xs text-white/40">
                       From: {tx.from} → To: {tx.to}
-                    </div>
+                    </div> */}
                   </div>
                   <div className={`font-bold text-base ${tx.transactionType === 'credit' ? 'text-[#6DA5C0]' : 'text-red-400'}`}>
                     {tx.transactionType === 'credit' ? '+' : '-'}₹{tx.amount}

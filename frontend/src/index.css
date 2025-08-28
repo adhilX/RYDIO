@@ -191,3 +191,57 @@
     color: var(--color-foreground);
   }
 }
+
+/* Custom scrollbar styles for chat interface */
+.chat-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #2f2f2f transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: #2f2f2f;
+  border-radius: 3px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3f3f3f;
+}
+
+.chat-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Specific styles for contacts list */
+.contacts-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #2f2f2f transparent;
+}
+
+.contacts-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contacts-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contacts-scrollbar::-webkit-scrollbar-thumb {
+  background: #2f2f2f;
+  border-radius: 3px;
+}
+
+.contacts-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3f3f3f;
+}
+
+.contacts-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}

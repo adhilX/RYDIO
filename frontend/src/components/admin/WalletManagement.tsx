@@ -216,7 +216,7 @@ function WalletManagement() {
                     <SelectItem value="debit" className="text-white hover:bg-black/60">Debits</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select value={filterCategory} onValueChange={(value: TransactionCategory) => handleFilterChange(undefined, value)}>
+                {/* <Select value={filterCategory} onValueChange={(value: TransactionCategory) => handleFilterChange(undefined, value)}>
                   <SelectTrigger className="w-36 bg-black/80 border-black/60 text-white backdrop-blur-xl focus:ring-2 focus:ring-[#e63946]">
                     <SelectValue />
                   </SelectTrigger>
@@ -227,7 +227,7 @@ function WalletManagement() {
                     <SelectItem value="subscription" className="text-white hover:bg-black/60">Subscription</SelectItem>
                     <SelectItem value="refund" className="text-white hover:bg-black/60">Refunds</SelectItem>
                   </SelectContent>
-                </Select>
+                </Select> */}
               </div>
             </div>
           </CardHeader>

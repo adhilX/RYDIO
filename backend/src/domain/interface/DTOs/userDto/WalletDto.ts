@@ -10,8 +10,9 @@ export interface GetWalletOutputDto {
   _id?: string;
   user_id: string;
   balance: number;
-  created_at?: Date;
-  updated_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+  transactions?: WalletTransactionDto[];
 }
 
   //=================== Withdrawal DTOs ===================
@@ -34,10 +35,13 @@ export interface WalletTransactionDto {
   transaction_id: string;
   user_id: string;
   amount: number;
-  type: 'credit' | 'debit';
+  transactionType: 'credit' | 'debit';
   purpose: string;
-  created_at: Date;
+  createdAt: Date;
   status: 'pending' | 'completed' | 'failed';
+  from: string;
+  to: string;
+  
 }
 
 export interface WalletTransactionOutputDto {

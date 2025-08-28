@@ -102,7 +102,7 @@ export class UserRoutes {
     this.UserRoutes.get('/ride-end/:bookingId',(req:Request,res:Response)=>{
         rideEndController.handleRideEnd(req,res)
     })
-    this.UserRoutes.post('/withdrawal',(req:Request,res:Response)=>{
+    this.UserRoutes.post('/withdrawal/:bookingId',(req:Request,res:Response)=>{
         withdrawController.withdraw(req,res)
     })
 }

@@ -18,10 +18,13 @@ export const getWallet = async (userId: string, page: number, limit: number) => 
 
 export const withdrawMoney = async (bookingId:string,userId:string)=>{
   try{
-      const response = await axiosInstance.post(`/withdrawal/${bookingId}`,userId)
+      const response = await axiosInstance.post(`/withdrawal/${bookingId}`,{userId})
       return response.data
   }catch(error){
-
+    console.log('error while withdrawal', error);
+    if (isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || 'Error while withdrawal');
+    }
+    throw new Error('Error while withdrawal');
   }
-
-}
+  }

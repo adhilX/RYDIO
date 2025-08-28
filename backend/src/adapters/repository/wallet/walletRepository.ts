@@ -13,7 +13,9 @@ export class WalletRepository extends BaseRepository<IWallet> implements IWallet
   }
 
   async getWalletByUserId(userId: string): Promise<IWallet | null> {
-    return await WalletModel.findOne({ user_id: userId }).populate('transactions')
+  const wallet = await WalletModel.findOne({ user_id: userId }).populate('transactions')
+    console.log(wallet)
+    return wallet
   }
 
   async updateWalletBalance(userId: string, amount: number): Promise<IWallet | null> {

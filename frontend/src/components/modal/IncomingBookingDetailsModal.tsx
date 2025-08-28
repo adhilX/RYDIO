@@ -18,7 +18,6 @@ import {
   FileText,
   CheckCircle,
   XCircle,
-  X
 } from 'lucide-react'
 import { format } from 'date-fns'
 import React from 'react'
@@ -56,10 +55,16 @@ if(!user)return
   }
 
     const handleWithdraw = async()=>{
+  try {
+    await withdrawMoney(booking?.booking_id!,user?._id!) 
+    onClose()
+    toast.success('withdraw success')
+    
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    toast.error(errorMessage)
+}
   
-  await withdrawMoney(booking?.booking_id!,user?._id!) 
-  
-  toast.success('withdraw success')
   
   }
 
@@ -130,8 +135,8 @@ if(!user)return
                    variant="default"
                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                  >
-                   <X className="w-4 h-4 mr-2" />
-                  {`${booking?.finance.security_deposit -booking.finance.fine_amount} withdraw`}
+                  
+                  {`${booking?.finance.owner_earnings} withdraw`}
                  </Button>
    )}
             </section>

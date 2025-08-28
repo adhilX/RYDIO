@@ -1,6 +1,8 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import express, { Application, Request, Response, NextFunction, urlencoded } from 'express';
+import { createServer, Server } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 import { UserRoutes } from './framework/routes/user/userRoutes';
 import { ConnectMongoDB } from './framework/database/databaseConnection/dbConnection';
 import cors from 'cors';
@@ -13,6 +15,8 @@ import client, { Counter, Histogram } from 'prom-client';
 import responseTime from 'response-time';
 import { createLogger } from "winston";
 import LokiTransport from "winston-loki";
+import { SocketIoController } from './adapters/controllers/chat/socketIoService';
+import { createMessageUsecse, createChatUsecase } from './framework/DI/chatInject';
 
 const options = {
   transports: [
@@ -27,14 +31,24 @@ const options = {
 
 const logger = createLogger(options);
 logger.info("This is a test log");
+
 export class App {
     private _app : Application                
     private port: number|string
     private database: ConnectMongoDB
-    // private socketIoServer: SocketIoController
+    private socketIo?: SocketIoController
+    private httpServer:Server
+    private io: SocketIOServer
 
     constructor() {
         this._app = express();
+        this.httpServer = createServer(this._app);
+        this.io = new SocketIOServer(this.httpServer, {
+            cors: {
+                origin: process.env.ORIGIN,
+                credentials: true
+            }
+        });
         this._app.use(cors({
             origin: process.env.ORIGIN,
             credentials: true
@@ -49,6 +63,7 @@ export class App {
         this._app.use(urlencoded({extended:true}));
         this.setResponseTime()
         this.prometheus()
+        this.setSocketIo()
         this.setMetricsRoute()
         this.setAuthRoutes()
         this.setAdminRoutes();
@@ -57,25 +72,25 @@ export class App {
     }
 
     private setErrorHandler(){
-        this._app.use((err:Error, req:Request, res:Response, next:NextFunction) => {
+        this._app.use((err:Error, req:Request, res:Response, _next:NextFunction) => {
         logger.error("Unhandled error");
         res.status(500).send("Internal Server Error");
     })
     }
   
     public listen(): void {
-        this._app.listen(this.port, () => {
+        this.httpServer.listen(this.port, () => { 
             console.log(`Server is running on port ${this.port}`);
         });
     }   
     private setUserRoutes(){
-        this._app.use('/',new UserRoutes().UserRoutes);
+        this._app.use('/api/v1',new UserRoutes().UserRoutes);
     }
     private setAdminRoutes(){
-        this._app.use('/admin',new AdminRoutes().AdminRoute)
+        this._app.use('/api/v1/admin',new AdminRoutes().AdminRoute)
     }
     private setAuthRoutes(){
-        this._app.use('/refresh-token',new AuthRoute().AuthRouter)
+        this._app.use('/api/v1/refresh-token',new AuthRoute().AuthRouter)
     }
 
     private setMetricsRoute(){
@@ -88,9 +103,7 @@ export class App {
        private async connectRedis() {
         await redisService.connect()
     }
-    private setSocketIo() {
-        // this.socketIoServer = new SocketIoController()
-    }
+
     private prometheus(){
         const collectDefaultMetrics = client.collectDefaultMetrics
         collectDefaultMetrics({register:client.register})
@@ -116,6 +129,9 @@ export class App {
                 status_code:res.statusCode
             }).observe(time)
         }))
+    }
+    private setSocketIo(){
+     this.socketIo = new SocketIoController(this.io ,createChatUsecase,createMessageUsecse)
     }
 }
 

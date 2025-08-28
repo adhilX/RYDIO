@@ -44,14 +44,13 @@ export class WithdrawUsecase implements IwithdrawUsecase{
         if (isUser && booking.finance.user_withdraw) {
             throw new Error('Security deposit already withdrawn');
         }
-        
+
+     console.log(booking.finance.security_deposit)    
+     console.log(booking.finance.fine_amount)    
         let withdrawalAmount = 0;        
         if (isOwner) {
-            // Owner can withdraw earnings after booking completion
             withdrawalAmount = booking.finance.owner_earnings;
         } else if (isUser) {
-            // User can withdraw security deposit after booking completion
-            // Subtract any fines from the security deposit
             withdrawalAmount = booking.finance.security_deposit - booking.finance.fine_amount;
             
             if (withdrawalAmount < 0) {
