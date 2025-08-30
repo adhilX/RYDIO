@@ -1,7 +1,6 @@
-import { User } from "../../domain/entities/userEntities";
 import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
 import { IunblockUserUseCase } from "../../domain/interface/usecaseInterface/admin/IunblockUserUsecase";
-import { UnblockUserInputDto, UnblockUserOutputDto, BaseUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
+import { UnblockUserInputDto, UnblockUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class UnblockUserUseCase implements IunblockUserUseCase {
     private _adminRepository: IadminRepository

@@ -1,7 +1,7 @@
 import { User } from "../../domain/entities/userEntities";
 import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
 import { IgetAllUserUsecase } from "../../domain/interface/usecaseInterface/admin/getAllUserUsecase";
-import { GetAllUsersInputDto, GetAllUsersOutputDto, BaseUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
+import { GetAllUsersOutputDto, BaseUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class GetAllUserUsecase implements IgetAllUserUsecase{
     private _adminRepository: IadminRepository
@@ -10,13 +10,13 @@ export class GetAllUserUsecase implements IgetAllUserUsecase{
         this._adminRepository = adminRepository
     }
 
-  async getAllUser(input?: GetAllUsersInputDto): Promise<GetAllUsersOutputDto | null> {
+  async getAllUser(): Promise<GetAllUsersOutputDto | null> {
     const result = await this._adminRepository.getAllUsers()
     if (!result) return null
     
     const mappedUsers: BaseUserOutputDto[] = result.map((user: User) => {
       const plainUser = JSON.parse(JSON.stringify(user))
-      const { password, ...rest } = plainUser
+      const rest = plainUser
       return {
         _id: rest._id,
         email: rest.email,

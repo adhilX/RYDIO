@@ -1,4 +1,4 @@
-import { BookingStatus, Ibooking, PaymentStatus, PaymentType, BookingData } from "../../domain/entities/BookingEntities"
+import { BookingStatus, Ibooking, PaymentStatus, PaymentType } from "../../domain/entities/BookingEntities"
 import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository"
 import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ItrasationRepository"

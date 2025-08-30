@@ -1,4 +1,3 @@
-import { IVehicle } from "../../../domain/entities/vehcleEnties";
 import { IadminRepository } from "../../../domain/interface/repositoryInterface/IadminRepository";
 import { IapprovedVehicleUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicles/IApprovedVehicleUsecase";
 import { ApprovedVehicleInputDto, ApprovedVehicleOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto";

@@ -1,4 +1,3 @@
-import { User } from "../../domain/entities/userEntities";
 import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
 import { IeditProfileUsecase } from "../../domain/interface/usecaseInterface/userProfile/IeditProfileUsecase";
 import { EditProfileInputDto, EditProfileOutputDto } from "../../domain/interface/DTOs/userDto/UserProfileDto";
@@ -11,7 +10,7 @@ export class EditProfileUsecase implements IeditProfileUsecase{
         
     async handleEditProfile(input: EditProfileInputDto): Promise<EditProfileOutputDto | null> {
         try {
-            const { userId, profileData } = input;
+            const { profileData } = input;
             const { name, email, phone, address, city, state, pincode } = profileData;
             
             const updatedUser = await this._userRepository.updateProfile(

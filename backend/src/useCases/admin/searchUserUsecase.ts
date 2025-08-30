@@ -16,7 +16,7 @@ export class SearchUserusercase implements IsearchUserUsecase{
         const {users, total} = result
          const mappedUsers: BaseUserOutputDto[] = users.map((user: User) => {
               const plainUser = JSON.parse(JSON.stringify(user))
-            const { password, ...rest } = plainUser
+            const rest = plainUser
             return {
                 _id: rest._id,
                 email: rest.email,

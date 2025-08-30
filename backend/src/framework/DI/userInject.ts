@@ -74,7 +74,7 @@ import { IncomingBookingUsecase } from "../../useCases/bookings/incomingBookingU
 import { CancelBookingUseCase } from "../../useCases/bookings/cancelBookingUseCase"
 import { WithdrawController } from "../../adapters/controllers/admin/WalletManagment/withdrawController"
 import { WithdrawUsecase } from "../../useCases/wallets/withdrawUsecase"
-import { transactionModel } from "../database/models/transactionModel"
+
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()

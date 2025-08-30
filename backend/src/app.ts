@@ -17,6 +17,8 @@ import { createLogger } from "winston";
 import LokiTransport from "winston-loki";
 import { SocketIoController } from './adapters/controllers/chat/socketIoService';
 import { createMessageUsecse, createChatUsecase } from './framework/DI/chatInject';
+import path from 'path';
+import { createWriteStream } from 'fs';
 
 const options = {
   transports: [
@@ -56,6 +58,7 @@ export class App {
         this.port = process.env.PORT || 3003;
         this.database = new ConnectMongoDB()
         this.connectRedis() 
+        this._setLoggingMiddleware()
         this._app.use(morgan('dev'))
         this.database.connectDB()
         this._app.use(express.json());
@@ -129,6 +132,20 @@ export class App {
                 status_code:res.statusCode
             }).observe(time)
         }))
+    }
+
+    private _setLoggingMiddleware() {
+        if (process.env.NODE_ENV === 'development') {
+            this._app.use(morgan('combined'))
+        } else if (process.env.NODE_ENV === 'production') {
+            // accesslogs middleware
+            const accessLogs = createWriteStream(path.join(__dirname, 'logs', 'access.log'), { flags: 'a' });
+            const errorLogs = createWriteStream(path.join(__dirname, 'logs', 'error.log'), { flags: 'a' });
+            this._app.use(morgan('combined', { stream: accessLogs, skip: (req)=> req.url === '/metrics' }))
+
+            // error logs (skips if statuscode is less than 400)
+            this._app.use(morgan('combined', { stream: errorLogs, skip: (req, res) => res.statusCode < 400 }))
+        }
     }
     private setSocketIo(){
      this.socketIo = new SocketIoController(this.io ,createChatUsecase,createMessageUsecse)
