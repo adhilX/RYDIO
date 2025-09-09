@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import Pagination from '../Pagination';
 import { toast } from 'react-hot-toast';
 import type { IbookedData } from '@/Types/User/Booking/bookedData';
-import BookingDetailsModal from '../modal/BookingDetailsModal';
+import AdminBookingDetails from './modal/AdminBookingDetails';
 
 
 export default function BookingList() {
@@ -21,9 +21,10 @@ export default function BookingList() {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<IbookedData | null>(null);
-  const limit = 6;
+  const limit = 5;
   const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
+  console.log(totalBookings)
   // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -238,16 +239,15 @@ export default function BookingList() {
             </div>
           </div>
           {isModalOpen && (
-            <BookingDetailsModal
+            <AdminBookingDetails
               booking={selectedBooking}
-              isOpen={isModalOpen}
+              open={isModalOpen}
               onClose={() => {
                 setIsModalOpen(false);
                 setSelectedBooking(null);
               }}
             />
           )}
-          {totalBookings > limit && (
             <div className="flex justify-center mt-4">
               <Pagination
                 currentPage={currentPage}
@@ -255,7 +255,7 @@ export default function BookingList() {
                 onPageChange={setCurrentPage}
               />
             </div>
-          )}
+        
 
         </>
       )}

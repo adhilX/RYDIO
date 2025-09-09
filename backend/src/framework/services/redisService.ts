@@ -1,7 +1,7 @@
 import { createClient, RedisClientType } from "redis";
-import { IredisService } from "../../domain/interface/serviceInterface/IredisService";
+import { IRedisService } from "../../domain/interface/serviceInterface/IRedisService";
 
-export class RedisService implements IredisService {
+export class RedisService implements IRedisService {
     private _client: RedisClientType;
 
     constructor() {

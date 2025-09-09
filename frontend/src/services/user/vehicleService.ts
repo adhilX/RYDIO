@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/UserInterceptors";
+import { userAxios as axiosInstance } from "@/axios/interceptors";
 import type { StepThreeFormData } from "@/components/user/Dashboard/addVehicle/StepThree";
 import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle";
 import type { FilterState } from "@/Types/User/carType";

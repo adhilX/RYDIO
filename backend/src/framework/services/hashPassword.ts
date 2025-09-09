@@ -1,6 +1,6 @@
-import { IhashPassword } from "../../domain/interface/serviceInterface/IhashPassword";
+import { IHashPassword } from "../../domain/interface/serviceInterface/IHashPassword";
 import bcrypt from 'bcrypt'
-export class HashPassword implements IhashPassword {
+export class HashPassword implements IHashPassword {
  async   hashPassword(password: string): Promise<string> {
         return await bcrypt.hash(password,10)
     }

@@ -1,15 +1,12 @@
 import { Request, Response } from "express"
-import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService"
-import { IadminLoginUseCase } from "../../../domain/interface/usecaseInterface/admin/Auth/IadminLoginUsecase"
 import { HttpStatus } from "../../../domain/entities/httpStatus"
 import { setCookie } from "../../../framework/services/tokenCookieSet"
+import { IAdminLoginUseCase } from "../../../domain/interface/usecaseInterface/admin/IAdminLoginUsecase"
 
 export class AdminLoginController {
-    private adminLoginUseCase: IadminLoginUseCase
-    private jwtService: IjwtService
-    constructor(adminLoginUseCase: IadminLoginUseCase, jwtService: IjwtService) {
+    private adminLoginUseCase: IAdminLoginUseCase
+    constructor(adminLoginUseCase: IAdminLoginUseCase) {
         this.adminLoginUseCase = adminLoginUseCase
-        this.jwtService = jwtService
     }
 
     async handleAdminLogin(req: Request, res: Response): Promise<void> {
@@ -22,21 +19,10 @@ export class AdminLoginController {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: "invalid password" })
                 return
             }
-            const admin = await this.adminLoginUseCase.handleLogin(email, password)
-            if (!admin) {
-                res.status(HttpStatus.BAD_REQUEST).json({ message: "invalid credentials" })
-                return
-            }
-            if (admin.role != 'admin') {
-                res.status(HttpStatus.BAD_REQUEST).json({ message: "this is not admin" })
-                return
-            }
-            const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string
-            const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string
-            const accessToken = this.jwtService.createAccessToken(ACCESS_TOKEN_KEY, admin._id?.toString() || "", admin.role)
-            const refreshToken = this.jwtService.createRefreshToken(REFRESH_TOKEN_KEY, admin._id?.toString() || "")
+            const {adminData,accessToken,refreshToken} = await this.adminLoginUseCase.handleLogin({email, password})
+    
             setCookie(res, refreshToken)
-            res.status(HttpStatus.OK).json({ message: 'login success', admin, accessToken })
+            res.status(HttpStatus.OK).json({ message: 'login success', adminData, accessToken })
         } catch (error) {
             console.log('error while admin login', error)
             res.status(HttpStatus.BAD_REQUEST).json({

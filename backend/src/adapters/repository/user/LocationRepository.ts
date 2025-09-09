@@ -6,27 +6,30 @@ export class LocationRepository implements ILocationRepository {
   async findOrCreate(location: Location): Promise<Location> {
     const latitude = parseFloat(location.latitude as string);
     const longitude = parseFloat(location.longitude as string);
-
-    const existing = await locationModel.findOne({
-      name: location.name,
-      city: location.city,
-      pincode: location.pincode,
-      'location.coordinates': [longitude, latitude],
-    });
-
-    if (existing) return existing.toObject();
-
-    const newLocation = new locationModel({
-      ...location,
-      latitude,
-      longitude,
-      location: {
-        type: 'Point',
-        coordinates: [longitude, latitude],
+    const updatedLocation = await locationModel.findOneAndUpdate(
+      {
+        name: location.name,
+        city: location.city,
+        pincode: location.pincode,
+        'location.coordinates': [longitude, latitude],
       },
-    });
+      {
+        $setOnInsert: {
+          ...location,
+          latitude,
+          longitude,
+          location: {
+            type: 'Point',
+            coordinates: [longitude, latitude],
+          },
+        },
+      },
+      {
+        new: true,  
+        upsert: true,
+      }
+    );
 
-    await newLocation.save();
-    return newLocation.toObject();
+    return updatedLocation
   }
 }

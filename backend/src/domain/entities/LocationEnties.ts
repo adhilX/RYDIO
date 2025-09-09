@@ -1,7 +1,6 @@
-import { ObjectId } from "mongoose";
 
 export interface Location {
-  _id?: ObjectId;
+  _id?: string ;
   name: string;
   address: string;
   city: string;

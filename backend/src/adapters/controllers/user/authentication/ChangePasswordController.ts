@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IchangePasswordUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IchangePasswordUsecase";
+import { IChangePasswordUsecase } from "../../../../domain/interface/usecaseInterface/auth/password/IChangePasswordUsecase";
 
 export class ChangePasswordController {
-    private _changePasswordUsecase: IchangePasswordUsecase
-    constructor(changePasswordUsecase: IchangePasswordUsecase) {
+    private _changePasswordUsecase: IChangePasswordUsecase
+    constructor(changePasswordUsecase: IChangePasswordUsecase) {
         this._changePasswordUsecase = changePasswordUsecase
     }
     async handleForgetPassword(req: Request, res: Response): Promise<void> {
         try {
             const { email, newPassword } = req.body
-            const forgettingPassWord = await this._changePasswordUsecase.ChangePassword(email, newPassword)
+            const forgettingPassWord = await this._changePasswordUsecase.ChangePassword({ email, newPassword })
             if (!forgettingPassWord) {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: 'error while forget password user' })
                 return

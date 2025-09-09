@@ -1,15 +1,12 @@
-import mongoose, { Types } from "mongoose";
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
-import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
+import { IVehicleRepository } from "../../../domain/interface/repositoryInterface/IVehicleRepository";
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
 import { locationModel } from "../../../framework/database/models/locationModel";
+import { BaseRepository } from "../base/BaseRepo";
 
-export class VehicleRepository implements IvehicleRepository {
-  async addVehicle(vehicle: IVehicle): Promise<IVehicle> {
-    if (typeof vehicle.owner_id === 'string') {
-      vehicle.owner_id = new mongoose.Types.ObjectId(vehicle.owner_id) as unknown as typeof vehicle.owner_id;
-    }
-    return await VehicleModel.create({ ...vehicle })
+export class VehicleRepository extends BaseRepository<IVehicle> implements IVehicleRepository {
+  constructor() {
+    super(VehicleModel);
   }
 
   async approveVehicle(id: string, action: string): Promise<boolean> {
@@ -98,14 +95,14 @@ async findVehicle(lat: number, lon: number, search: string, page: number, limit:
   return { vehicles, total };
 }
   async getVehicleDetails(Id: string): Promise<IVehicle | null> {
-    return await VehicleModel.findById(Id).populate('owner_id').populate('location_id')
+    return await VehicleModel.findById(Id).populate('owner_id').populate('location_id');
   }
  async isExistingVehicle(regiseration_number: string): Promise<boolean> {
   const result = await VehicleModel.findOne({ registration_number : regiseration_number });
   return result !== null;
  }
  async deleteVehicle(vehicleId:string):Promise<boolean>{
-    const result = await VehicleModel.findByIdAndDelete(vehicleId);
+    const result = await this.delete(vehicleId);
     return result !== null;
  }
  async changeVehicleStatus(vehicleId: string): Promise<boolean> {
@@ -118,6 +115,6 @@ async findVehicle(lat: number, lon: number, search: string, page: number, limit:
   return true;
 }
 async getVehicle(vehicleId:string):Promise<IVehicle | null>{
-    return await VehicleModel.findById(vehicleId)
+    return await this.findById(vehicleId);
 }
 }

@@ -30,7 +30,7 @@ export default function AdminVehicleList() {
       try {
         const response = await getAprovedVehicle(debouncedSearch, currentPage, perPage);
         setVehicles(response.vehicle);
-        setTotalPage(response?.total/perPage)
+        setTotalPage(Math.ceil(response?.total/perPage))
 
       } catch (error) {
         console.error('Failed to fetch vehicles:', error);

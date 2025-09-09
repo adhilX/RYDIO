@@ -1,10 +1,10 @@
 import { Request, Response } from "express"
 import { HttpStatus } from "../../../domain/entities/httpStatus"
-import { IvendorAccessUsecase } from "../../../domain/interface/usecaseInterface/admin/IvendorAccessUsecase"
+import { IVendorAccessUsecase } from "../../../domain/interface/usecaseInterface/admin/IVendorAccessUsecase"
 
 export class VendorAccessController {
-    private _vendorAccessUsecase: IvendorAccessUsecase
-    constructor(vendorAccessUsecase: IvendorAccessUsecase) {
+    private _vendorAccessUsecase: IVendorAccessUsecase
+    constructor(vendorAccessUsecase: IVendorAccessUsecase) {
         this._vendorAccessUsecase = vendorAccessUsecase
     }
 
@@ -12,7 +12,7 @@ export class VendorAccessController {
         try {
             const {userId} = req.params
             const {vendorAccess} = req.body
-            const response = await this._vendorAccessUsecase.vendorAccess(userId, vendorAccess)
+            const response = await this._vendorAccessUsecase.vendorAccess({userId,vendorAccess})
            res.status(HttpStatus.OK).json(response)
         } catch (error) {
             console.log('error while blocking user', error)

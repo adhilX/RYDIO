@@ -6,14 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Pagination from '@/components/Pagination';
 import { getwallet } from '@/services/admin/walletServece';
+import type { TransactionType, TransactionCategory, WalletDetails } from '@/Types/admin/walletData';
 
-// Dummy transaction data
-const dummyTransactions = [
- 
-];
-
-type TransactionType = 'all' | 'credit' | 'debit';
-type TransactionCategory = 'all' | 'commission' | 'fee' | 'subscription' | 'refund';
 
 function WalletManagement() {
   const [filterType, setFilterType] = useState<TransactionType>('all');
@@ -21,24 +15,30 @@ function WalletManagement() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
-  const [totalBalance, setTotalBalance] = useState(0);
+  const [walletDetails, setWalletDetails] = useState<WalletDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
- const fetchData = async () => {
-    const walletData = await getwallet()
-    setTotalBalance(walletData.walletDetails.balance || 0);
-
- }
-fetchData()
-setCurrentPage(1);
-  }, [filterType, filterCategory]);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const {walletDetails}= await getwallet(currentPage, itemsPerPage);
+        setWalletDetails(walletDetails.wallet);
+      } catch (error) {
+        console.error('Error fetching wallet data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [currentPage, itemsPerPage]);
 
   // Filter transactions
-  const filteredTransactions = dummyTransactions.filter(transaction => {
-    const typeMatch = filterType === 'all' || transaction.type === filterType;
-    const categoryMatch = filterCategory === 'all' || transaction.category === filterCategory;
+  const filteredTransactions = walletDetails?.transactions?.filter(transaction => {
+    const typeMatch = filterType === 'all' || transaction.transactionType === filterType;
+    const categoryMatch = filterCategory === 'all' || transaction.purpose === filterCategory;
     return typeMatch && categoryMatch;
-  });
+  }) || [];
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
@@ -55,9 +55,14 @@ setCurrentPage(1);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsRefreshing(false);
+    try {
+      const walletData = await getwallet(currentPage, itemsPerPage);
+      setWalletDetails(walletData.walletDetails);
+    } catch (error) {
+      console.error('Error refreshing wallet data:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
 
@@ -138,7 +143,7 @@ setCurrentPage(1);
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">
-              {totalBalance }
+                {isLoading ? '••••••••' : `₹${walletDetails?.balance || 0}`}
               </div>
               <p className="text-xs opacity-80 mt-1">
                 <TrendingUp className="w-3 h-3 inline mr-1" />
@@ -157,10 +162,10 @@ setCurrentPage(1);
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                  ••••••••
+                {isLoading ? '••••••••' : `₹${walletDetails?.commission_balance || 0}`}
               </div>
               <p className="text-xs text-green-400 mt-1">
-                +8 transactions this month
+                Commission Balance
               </p>
             </CardContent>
           </Card>
@@ -175,10 +180,10 @@ setCurrentPage(1);
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                ••••••••
+                {isLoading ? '••••••••' : `₹${walletDetails?.penalty_balance || 0}`}
               </div>
               <p className="text-xs text-red-400 mt-1">
-                3 transactions this month
+                Penalty Balance
               </p>
             </CardContent>
           </Card>
@@ -211,7 +216,7 @@ setCurrentPage(1);
                     <SelectItem value="debit" className="text-white hover:bg-black/60">Debits</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select value={filterCategory} onValueChange={(value: TransactionCategory) => handleFilterChange(undefined, value)}>
+                {/* <Select value={filterCategory} onValueChange={(value: TransactionCategory) => handleFilterChange(undefined, value)}>
                   <SelectTrigger className="w-36 bg-black/80 border-black/60 text-white backdrop-blur-xl focus:ring-2 focus:ring-[#e63946]">
                     <SelectValue />
                   </SelectTrigger>
@@ -222,61 +227,82 @@ setCurrentPage(1);
                     <SelectItem value="subscription" className="text-white hover:bg-black/60">Subscription</SelectItem>
                     <SelectItem value="refund" className="text-white hover:bg-black/60">Refunds</SelectItem>
                   </SelectContent>
-                </Select>
+                </Select> */}
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {paginatedTransactions.map((transaction, index) => (
-                <motion.div
-                  key={transaction.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-black/40 hover:bg-black/60 transition-colors duration-200 backdrop-blur-sm"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`p-2 rounded-full ${
-                      transaction.type === 'credit' 
-                        ? 'bg-green-500/20 text-green-400' 
-                        : 'bg-red-500/20 text-red-400'
-                    }`}>
-                      {transaction.type === 'credit' ? (
-                        <ArrowUpRight className="w-4 h-4" />
-                      ) : (
-                        <ArrowDownLeft className="w-4 h-4" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-white font-medium">{transaction.description}</p>
-                      <div className="flex items-center gap-4 mt-1">
-                        <p className="text-xs text-gray-400 flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {formatDate(transaction.date)}
-                        </p>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          transaction.category === 'commission' ? 'bg-blue-500/20 text-blue-400' :
-                          transaction.category === 'fee' ? 'bg-yellow-500/20 text-yellow-400' :
-                          transaction.category === 'subscription' ? 'bg-purple-500/20 text-purple-400' :
-                          'bg-gray-500/20 text-gray-400'
-                        }`}>
-                          {transaction.category.charAt(0).toUpperCase() + transaction.category.slice(1)}
-                        </span>
+              {isLoading ? (
+                // Loading skeleton
+                Array.from({ length: itemsPerPage }).map((_, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-black/40 animate-pulse">
+                    <div className="flex items-center gap-4">
+                      <div className="w-8 h-8 bg-gray-600 rounded-full"></div>
+                      <div>
+                        <div className="w-32 h-4 bg-gray-600 rounded mb-2"></div>
+                        <div className="w-24 h-3 bg-gray-600 rounded"></div>
                       </div>
                     </div>
+                    <div className="text-right">
+                      <div className="w-16 h-4 bg-gray-600 rounded mb-2"></div>
+                      <div className="w-12 h-3 bg-gray-600 rounded"></div>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className={`text-lg font-bold ${
-                      transaction.type === 'credit' ? 'text-green-400' : 'text-red-400'
-                    }`}>
-                      {transaction.type === 'credit' ? '+' : '-'}
-                      '••••••'
-                    </p>
-                    <p className="text-xs text-gray-400 uppercase">{transaction.status}</p>
-                  </div>
-                </motion.div>
-              ))}
+                ))
+              ) : (
+                paginatedTransactions.map((transaction, index) => (
+                  <motion.div
+                    key={transaction._id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-black/40 hover:bg-black/60 transition-colors duration-200 backdrop-blur-sm"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`p-2 rounded-full ${
+                        transaction.transactionType === 'credit' 
+                          ? 'bg-green-500/20 text-green-400' 
+                          : 'bg-red-500/20 text-red-400'
+                      }`}>
+                        {transaction.transactionType === 'credit' ? (
+                          <ArrowUpRight className="w-4 h-4" />
+                        ) : (
+                          <ArrowDownLeft className="w-4 h-4" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-white font-medium">
+                          {transaction.purpose.charAt(0).toUpperCase() + transaction.purpose.slice(1)} - {transaction.bookingId}
+                        </p>
+                        <div className="flex items-center gap-4 mt-1">
+                          <p className="text-xs text-gray-400 flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            {formatDate(transaction.createdAt)}
+                          </p>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            transaction.purpose === 'commission' ? 'bg-blue-500/20 text-blue-400' :
+                            transaction.purpose === 'penalty' ? 'bg-yellow-500/20 text-yellow-400' :
+                            transaction.purpose === 'refund' ? 'bg-purple-500/20 text-purple-400' :
+                            'bg-gray-500/20 text-gray-400'
+                          }`}>
+                            {transaction.purpose.charAt(0).toUpperCase() + transaction.purpose.slice(1)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className={`text-lg font-bold ${
+                        transaction.transactionType === 'credit' ? 'text-green-400' : 'text-red-400'
+                      }`}>
+                        {transaction.transactionType === 'credit' ? '+' : '-'}
+                        ₹{transaction.amount}
+                      </p>
+                      <p className="text-xs text-gray-400 uppercase">From: {transaction.from}</p>
+                    </div>
+                  </motion.div>
+                ))
+              )}
             </div>
             
             {filteredTransactions.length === 0 && (

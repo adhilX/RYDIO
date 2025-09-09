@@ -67,7 +67,7 @@ export default function UserProfile() {
     };
 
     fetchUser();
-  }, [user?._id, reset,open]);
+  }, [user?._id, user?.is_verified_user, user?.idproof_id, reset, open]);
 
   if (!user) return null
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

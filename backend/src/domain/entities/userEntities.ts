@@ -1,8 +1,8 @@
-import {ObjectId} from 'mongoose'
+import { IVerificationRequest } from './VerificationRequest';
 
 export interface User {
-  _id?: ObjectId; 
-  idproof_id?:ObjectId;
+  _id?: string; 
+  idproof_id?:string|IVerificationRequest;
   name: string;
   email: string;
   password: string;
@@ -13,6 +13,7 @@ export interface User {
   vendor_access?: boolean;
   is_verified_user?:boolean 
   last_login?: Date;
-  created_at?: Date;
+  createdAt?: Date;
+  updatedAt?:Date
   googleVerification?:boolean
 }

@@ -1,15 +1,20 @@
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
-import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
-import { IblockUserUseCase } from "../../domain/interface/usecaseInterface/admin/IBlockUserUseCase";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
+import { IBlockUserUseCase } from "../../domain/interface/usecaseInterface/admin/IBlockUserUseCase";
+import { BlockUserInputDto, BlockUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
-export class BlockUserUseCase implements IblockUserUseCase {
-    private _adminRepository: IadminRepository
-    constructor(adminRepository: IadminRepository) {
+export class BlockUserUseCase implements IBlockUserUseCase {
+    private _adminRepository: IAdminRepository
+    constructor(adminRepository: IAdminRepository) {
         this._adminRepository = adminRepository
     }
-    async blockUser(clientId: string): Promise<boolean> {
-        const blockedClient = await this._adminRepository.blockUser(clientId)
-        if (!blockedClient) throw new Error('No client found in this email')
-        return true
+    async blockUser(input: BlockUserInputDto): Promise<BlockUserOutputDto> {
+        const blockedClient = await this._adminRepository.blockUser(input.userId)
+        if (!blockedClient) throw new Error('No user found with this ID')
+        
+     
+        return {
+            success: true,
+            message: 'User blocked successfully',
+        };
     }
 }

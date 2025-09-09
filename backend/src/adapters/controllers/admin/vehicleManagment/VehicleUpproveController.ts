@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { IvehicleAproveUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicleManagment/IvehicleUpproveUsecase";
+import { IVehicleApproveUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicles/IvehicleUpproveUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class VehicleUpproveController{
-    private _vehicleUpproveUsecase: IvehicleAproveUsecase
+    private _vehicleUpproveUsecase: IVehicleApproveUsecase
 
-    constructor(vehicleUpproveUsecase: IvehicleAproveUsecase) {
+    constructor(vehicleUpproveUsecase: IVehicleApproveUsecase) {
         this._vehicleUpproveUsecase = vehicleUpproveUsecase
     }
     
@@ -13,7 +13,7 @@ export class VehicleUpproveController{
         try {
             const { id } = req.params
             const {action,reason}= req.body
-            const response = await this._vehicleUpproveUsecase.approveVehicle(id,action,reason)
+            await this._vehicleUpproveUsecase.approveVehicle({id,action,reason})
             res.status(HttpStatus.OK).json({ message: `Vehicle ${action} successfully` })
         } catch (error) {
             console.log('Error while approving vehicle:', error)

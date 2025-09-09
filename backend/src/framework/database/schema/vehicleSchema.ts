@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { IVehicle } from '../../../domain/entities/vehcleEnties';
 
 export const VehicleSchema = new Schema<IVehicle>({

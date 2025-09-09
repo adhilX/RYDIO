@@ -13,35 +13,32 @@ import { VendorAccessController } from "../../adapters/controllers/admin/vendorA
 import { AdminRepository } from "../../adapters/repository/admin/adminRepository";
 import { BookingRepository } from "../../adapters/repository/booking/bookingRepository";
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository";
-import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
 import { LoginAdminUsecase } from "../../useCases/admin/AdminLoginUsecase";
 import { BlockUserUseCase } from "../../useCases/admin/BlockUserUsecase";
-import { GetBookingUsecase } from "../../useCases/admin/bookingMangment/getBookingUsecase";
+import { GetBookingUsecase } from "../../useCases/bookings/getBookingUsecase";
 import { GetAllUserUsecase } from "../../useCases/admin/getAllUserUsecase";
 import { GetIdProofUscase } from "../../useCases/admin/getIdProofUscase";
 import { IdProofActionUsecase } from "../../useCases/admin/idProofActionUsecase";
 import { SearchUserusercase } from "../../useCases/admin/searchUserUsecase";
 import { UnblockUserUseCase } from "../../useCases/admin/UnblockUserUsecase";
-import { ApprovedVehicleusercase } from "../../useCases/admin/vehicleManagment/ApprovedVehiceUsecase";
-import { PendingVehicleusercase } from "../../useCases/admin/vehicleManagment/PendingVehicleUsecase";
-import { VehicleUpproveUsecase } from "../../useCases/admin/vehicleManagment/vehicleApproveUsecase";
+import { ApprovedVehicleusercase } from "../../useCases/admin/vehicles/ApprovedVehiceUsecase";
+import { PendingVehicleusercase } from "../../useCases/admin/vehicles/PendingVehicleUsecase";
+import { VehicleUpproveUsecase } from "../../useCases/admin/vehicles/vehicleApproveUsecase";
 import { VendorAccessUsecase } from "../../useCases/admin/vendorAccessUsecase";
 import { HashPassword } from "../services/hashPassword";
 import { JwtService } from "../services/jwtService";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
-import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController";
-import { GetWalletUsecase } from "../../useCases/user/wallet/getWalletUsecase";
-import { GetAdminWalletUsecase } from "../../useCases/admin/walletManagment/getAdminWalletUsecase";
 import { GetAdminWalletController } from "../../adapters/controllers/admin/WalletManagment/GetWalletController";
+import { GetAdminWalletUsecase } from "../../useCases/wallets/getAdminWalletUsecase";
 
 //-----------admin login------------
 const adminRepository = new AdminRepository()
 const hashPassword = new HashPassword()
 const jwtService = new JwtService()
-const walletRepository = new WalletRepository()
+// const walletRepository = new WalletRepository()
 const adminWalletRepository = new AdminWalletRepository()
-const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,adminWalletRepository)
-export const adminLoginController = new AdminLoginController(loginAdminUsecase,jwtService)
+const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,adminWalletRepository,jwtService)
+export const adminLoginController = new AdminLoginController(loginAdminUsecase)
 
 //------get All Usersss-------------
 const getAllUserUsecase = new GetAllUserUsecase(adminRepository)

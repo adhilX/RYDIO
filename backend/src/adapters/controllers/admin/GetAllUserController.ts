@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
-import { User } from "../../../domain/entities/userEntities";
-import { IgetAllUserUsecase } from "../../../domain/interface/usecaseInterface/admin/getAllUserUsecase";
+import { IGetAllUserUsecase } from "../../../domain/interface/usecaseInterface/admin/IGetAllUserUsecase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class GetAllUserController {
 
-    private _getAllUserUsecase: IgetAllUserUsecase
+    private _getAllUserUsecase: IGetAllUserUsecase
 
-    constructor(getAllUserUsecase: IgetAllUserUsecase) {
+    constructor(getAllUserUsecase: IGetAllUserUsecase) {
         this._getAllUserUsecase = getAllUserUsecase
     }
 

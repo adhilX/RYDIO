@@ -1,7 +1,7 @@
 import { Schema, Types } from "mongoose";
-import { Ibooking, BookingStatus, PaymentStatus, PaymentType } from "../../../domain/entities/BookingEntities";
+import { IBooking, BookingStatus, PaymentStatus, PaymentType } from "../../../domain/entities/BookingEntities";
 
-export const BookingSchema = new Schema<Ibooking>({
+export const BookingSchema = new Schema<IBooking>({
   booking_id: { type: String, unique: true, required: true },
   user_id: { type: Types.ObjectId, ref: 'user', required: true },
   vehicle_id: { type: Types.ObjectId, ref: 'vehicle', required: true },
@@ -20,7 +20,9 @@ export const BookingSchema = new Schema<Ibooking>({
     fine_amount: { type: Number, default: 0 },
     admin_commission: { type: Number, default: 0 },
     owner_earnings: { type: Number, default: 0 },
-    is_late_return: { type: Boolean, default: false }
+    is_late_return: { type: Boolean, default: false },
+    user_withdraw:{type :Boolean,default :false},
+    owner_withdraw:{type:Boolean,default:false}
   },
 
   status: {

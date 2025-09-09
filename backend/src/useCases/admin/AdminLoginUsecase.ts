@@ -1,36 +1,51 @@
-import { User } from "../../domain/entities/userEntities";
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
-import { IhashPassword } from "../../domain/interface/serviceInterface/IhashPassword";
-import { IadminLoginUseCase } from "../../domain/interface/usecaseInterface/admin/Auth/IadminLoginUsecase";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
+import { IHashPassword } from "../../domain/interface/serviceInterface/IHashPassword";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
 import { IAdminWallet } from "../../domain/entities/adminWalletEntities";
+import { AdminLoginInputDto, AdminLoginOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
+import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
+import { IAdminLoginUseCase } from "../../domain/interface/usecaseInterface/admin/IAdminLoginUsecase";
 
-export class LoginAdminUsecase implements IadminLoginUseCase {
+export class LoginAdminUsecase implements IAdminLoginUseCase{
 
-    private _adminRepository: IadminRepository
-    private _hashPassword: IhashPassword
+    private _adminRepository: IAdminRepository
+    private _hashPassword: IHashPassword
     private _adminWalletRepository: IAdminWalletRepository
-    constructor(adminRepository: IadminRepository, hashPassword: IhashPassword,adminWalletRepository: IAdminWalletRepository) {
+    private _jwtService: IJwtService
+    constructor(adminRepository: IAdminRepository, hashPassword: IHashPassword,adminWalletRepository: IAdminWalletRepository,jwtService: IJwtService) {
         this._adminRepository = adminRepository
         this._hashPassword = hashPassword
         this._adminWalletRepository = adminWalletRepository
+        this._jwtService = jwtService
     }
 
-async handleLogin(email: string, password: string): Promise<Pick<User, '_id' | 'email' | 'name' | 'role'>> {
-        const admin = await this._adminRepository.findByEmail(email)
+async handleLogin(input: AdminLoginInputDto): Promise<AdminLoginOutputDto> {
+        const admin = await this._adminRepository.findByEmail(input.email)
         if (!admin) throw new Error('admin not exist with this Email')
         if (admin.role !== 'admin') throw new Error('this is not admin')
         const existingWallet: IAdminWallet | null = await this._adminWalletRepository.getwalletDetails();
         if (!existingWallet) {
             await this._adminWalletRepository.createWallet()
         }
-        const matchPass = await this._hashPassword.comparePassword(password, admin.password)
+        const matchPass = await this._hashPassword.comparePassword(input.password, admin.password)
         if (!matchPass) throw new Error('password not match')
+
+           
+            const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string
+            const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string
+            const accessToken = this._jwtService.createAccessToken(ACCESS_TOKEN_KEY, admin._id?.toString() || "", admin.role)
+            const refreshToken = this._jwtService.createRefreshToken(REFRESH_TOKEN_KEY, admin._id?.toString() || "")
+
+            const adminData = {
+                _id: admin._id!,
+                email: admin.email,
+                name: admin.name,
+                role: admin.role as 'admin'
+            }
         return {
-            _id: admin._id,
-            email: admin.email,
-            name: admin.name,
-            role: admin.role
+           adminData,
+           accessToken,
+           refreshToken
         };
     }
 

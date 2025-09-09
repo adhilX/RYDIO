@@ -1,16 +1,16 @@
 import { Request, Response } from "express"
-import { IgetBookingUsecase } from "../../../../domain/interface/usecaseInterface/admin/BookingMangment/IgetBookingUsecase"
+import { IGetBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IGetBookingUsecase"
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
 
 export class GetBookingController {
-    constructor(private _getBookingUsecase: IgetBookingUsecase) {
+    constructor(private _getBookingUsecase: IGetBookingUsecase) {
         this._getBookingUsecase = _getBookingUsecase
     }
 
     async getBookingData(req: Request, res: Response) {
         try {
             const { search, limit, page } = req.body
-            const response = await this._getBookingUsecase.getBookingData(search, limit, page)
+            const response = await this._getBookingUsecase.getBookingData({search, limit, page})
             res.status(HttpStatus.OK).json(response)
 
         } catch (error) {

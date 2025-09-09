@@ -1,92 +1,93 @@
 import { SendOtpController } from "../../adapters/controllers/user/authentication/sendlOtpController"
 import { UserRegisterController } from "../../adapters/controllers/user/authentication/userRegisterController"
-import { UserRepostory } from "../../adapters/repository/user/userRepository"
-import { CreateUserUsecase } from "../../useCases/user/auth/createUserUsecase"
-import { SendOtpUserUsecase } from "../../useCases/user/auth/otpUsecase/sendOtpuserUsecase"
-import { VerifyOtpUsecase } from "../../useCases/user/auth/otpUsecase/verfyOtpUsecase"
+import { UserRepository } from "../../adapters/repository/user/userRepository"
 import { HashPassword } from "../services/hashPassword"
 import { EmailService } from "../services/emailService"
 import { OtpService } from "../services/otpService"
-import { LoginUserUsecase } from "../../useCases/user/auth/loginUserUsercase"
 import { JwtService } from "../services/jwtService"
 import { UserLoginController } from "../../adapters/controllers/user/authentication/userLoginController"
-import { GoogleLoginUsecase } from "../../useCases/user/auth/GoogleLoginUsecase"
-import { GoogleLoginController } from "../../adapters/controllers/user/authentication/googleLoginController"
 import { ResendOtpController } from "../../adapters/controllers/user/authentication/resendOtpController"
-import { ResendOtpUsecase } from "../../useCases/user/auth/otpUsecase/resendOtpUsecase"
-import { SendOtpForgotPasswordController } from "../../adapters/controllers/user/authentication/sendOtpforgotPasswordController"
-import { ForgotPasswordUsecase } from "../../useCases/user/auth/SendforgotPasswordOtpUsecase"
+import { SendOtpForgotPasswordController } from "../../adapters/controllers/user/authentication/forgotPasswordController"
 import { VerifyForgotPassowordOtpController } from "../../adapters/controllers/user/authentication/verifyForgotPasswordOtpController"
 import { ChangePasswordController } from "../../adapters/controllers/user/authentication/ChangePasswordController"
-import { ChangePasswordUseCase } from "../../useCases/user/auth/ChangePasswordUsecase"
 import { EditProfileController } from "../../adapters/controllers/user/profile-managment/editProfileController"
-import { EditProfileUsecase } from "../../useCases/user/editProfileUsecase"
+import { EditProfileUsecase } from "../../useCases/userProfile/editProfileUsecase"
 import { AddVehicleController } from "../../adapters/controllers/user/vehicle-mangment/addVehicleController"
-import { AddVehicleUsecase } from "../../useCases/user/vehicle/addVehicleUseCase"
+import { AddVehicleUsecase } from "../../useCases/vehicles/addVehicleUseCase"
 import { VehicleRepository } from "../../adapters/repository/user/vehicleRepository"
 import { LocationRepository } from "../../adapters/repository/user/LocationRepository"
 import { ChangePasswordUserController } from "../../adapters/controllers/user/profile-managment/changePasswordController"
-import { ChangePassword } from "../../useCases/user/ChangePasswordUsecase"
+import { ChangePassword } from "../../useCases/userProfile/ChangePasswordUsecase"
 import { MyVehicleController } from "../../adapters/controllers/user/vehicle-mangment/MyVehicleController"
-import { MyVehicleUsecase } from "../../useCases/user/vehicle/MyvehicleUsecase"
+import { MyVehicleUsecase } from "../../useCases/vehicles/MyvehicleUsecase"
 import { RedisService } from "../services/redisService"
 import { UserLogoutController } from "../../adapters/controllers/user/authentication/userLogoutController"
-import { UserLogoutUseCase } from "../../useCases/user/auth/LogoutUserUsecase"
 import { UploadIdProofController } from "../../adapters/controllers/user/profile-managment/uploadIDProofController"
-import { UploadIdProofUsecase } from "../../useCases/user/UploadIdProofUsecase"
+import { UploadIdProofUsecase } from "../../useCases/userProfile/UploadIdProofUsecase"
 import { UploadIdProofRepository } from "../../adapters/repository/user/UploadIdProofRepository"
-import { SearchVehicleUsecase } from "../../useCases/user/vehicle/searchVehicleUsecase"
+import { SearchVehicleUsecase } from "../../useCases/vehicles/searchVehicleUsecase"
 import { SearchVehicleController } from "../../adapters/controllers/user/vehicle-mangment/searchVehicleController"
 import { VehilceDetailsController } from "../../adapters/controllers/user/vehicle-mangment/vehilceDetailsController"
-import { VehicleDetailsUsecase } from "../../useCases/user/vehicle/vehicleDetailsUsecase"
-import { CreateBookingUsecase } from "../../useCases/booking/createBookingUsecase"
+import { VehicleDetailsUsecase } from "../../useCases/vehicles/vehicleDetailsUsecase"
 import { CreateBookingController } from "../../adapters/controllers/user/booking-managment/createBookingController"
 import { CreatePaymentIntentController } from "../../adapters/controllers/user/booking-managment/createPaymentIntentController"
-import { CreatePaymentIntentUsecase } from "../../useCases/booking/createPaymentIntentUsecase"
 import { StripeService } from "../services/paymentSerivce"
 import { MyBookingController } from "../../adapters/controllers/user/booking-managment/myBookingController"
-import { MyBookingUsecase } from "../../useCases/booking/myBookingUsecase"
 import { BookingRepository } from "../../adapters/repository/booking/bookingRepository"
-import { DeleteVehicleUsecase } from "../../useCases/user/vehicle/deleteVehicleUsecase"
+import { DeleteVehicleUsecase } from "../../useCases/vehicles/deleteVehicleUsecase"
 import { DeleteVehicleController } from "../../adapters/controllers/user/vehicle-mangment/deleteVehicleController"
-import { ChangeVehicleStatusUsecase } from "../../useCases/user/vehicle/changeVehicleStatusUsecase"
+import { ChangeVehicleStatusUsecase } from "../../useCases/vehicles/changeVehicleStatusUsecase"
 import { ChangeVehicleStatusController } from "../../adapters/controllers/user/vehicle-mangment/changeVehicleStatusController"
 import { GetBookedVehicleController } from "../../adapters/controllers/user/booking-managment/getBookedVehicleController"
-import { GetBookedVehicleUsecase } from "../../useCases/booking/GetBookedVehicleUsecase"
 import { GetUserController } from "../../adapters/controllers/user/profile-managment/getUserController"
-import { GetUserUsecase} from "../../useCases/user/auth/GetuserUsecase"
+import { GetUserUsecase} from "../../useCases/userProfile/GetuserUsecase"
 import { GetWishlistController } from "../../adapters/controllers/user/wishlist-magagment/getWishlistController"
-import { GetWishlistUseCase } from "../../useCases/user/wishlist/getWishlistUseCase"
+import { GetWishlistUseCase } from "../../useCases/wishlist/getWishlistUseCase"
 import { WishlistRepository } from "../../adapters/repository/user/wishlistRepository"
 import { WalletRepository } from "../../adapters/repository/wallet/walletRepository"
-import { GetWalletUsecase } from "../../useCases/user/wallet/getWalletUsecase"
 import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController"
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository"
-import { SecurityDepositRepository } from "../../adapters/repository/booking/SecurityDepositRepository"
-import { GetSecurityDepositUsecase } from "../../useCases/booking/getSecurityDepositUsecase"
 import { GetSecurityDepositController } from "../../adapters/controllers/user/booking-managment/getSecurityDepositController"
 import { TrasationRepository } from "../../adapters/repository/transation/TrasationRepository"
-import { RideStartUsecase } from "../../useCases/booking/rideStartUsecase"
-import { RideStartController } from "../../adapters/controllers/admin/bookingMangment/rideStartController"
-import { RideEndUsecase } from "../../useCases/booking/rideEndUsecase"
-import { RideEndController } from "../../adapters/controllers/admin/bookingMangment/rideEndController"
-import { IncomingBookingUsecase } from "../../useCases/booking/incomingBookingUsecase"
+import { RideStartController } from "../../adapters/controllers/user/booking-managment/rideStartController"
+import { RideEndController } from "../../adapters/controllers/user/booking-managment/rideEndController"
 import { IncomingBookingController } from "../../adapters/controllers/user/booking-managment/incomingBookingController"
-import { CancelBookingUseCase } from "../../useCases/booking/cancelBookingUseCase"
 import { CancelBookingController } from "../../adapters/controllers/user/booking-managment/cancelBookingController"
+import { SendOtpUserUsecase } from "../../useCases/auth/register/sendOtpuserUsecase"
+import { VerifyOtpUsecase } from "../../useCases/auth/register/verfyOtpUsecase"
+import { CreateUserUsecase } from "../../useCases/auth/register/createUserUsecase"
+import { LoginUserUsecase } from "../../useCases/auth/login/loginUserUsercase"
+import { GoogleLoginUsecase } from "../../useCases/auth/login/GoogleLoginUsecase"
+import { ResendOtpUsecase } from "../../useCases/auth/register/resendOtpUsecase"
+import { ForgotPasswordUsecase } from "../../useCases/auth/password/forgotPasswordOtpUsecase"
+import { UserLogoutUseCase } from "../../useCases/auth/login/LogoutUserUsecase"
+import { ChangePasswordUseCase } from "../../useCases/auth/password/ChangePasswordUsecase"
+import { CreateBookingUsecase } from "../../useCases/bookings/createBookingUsecase"
+import { CreatePaymentIntentUsecase } from "../../useCases/payments/createPaymentIntentUsecase"
+import { MyBookingUsecase } from "../../useCases/bookings/myBookingUsecase"
+import { GetBookedVehicleUsecase } from "../../useCases/bookings/GetBookedVehicleUsecase"
+import { GetWalletUsecase } from "../../useCases/wallets/getWalletUsecase"
+import { GetSecurityDepositUsecase } from "../../useCases/bookings/getSecurityDepositUsecase"
+import { RideStartUsecase } from "../../useCases/bookings/rideStartUsecase"
+import { RideEndUsecase } from "../../useCases/bookings/rideEndUsecase"
+import { IncomingBookingUsecase } from "../../useCases/bookings/incomingBookingUsecase"
+import { CancelBookingUseCase } from "../../useCases/bookings/cancelBookingUseCase"
+import { WithdrawController } from "../../adapters/controllers/admin/WalletManagment/withdrawController"
+import { WithdrawUsecase } from "../../useCases/wallets/withdrawUsecase"
+
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
-const userRepostory = new UserRepostory()
+const userRepository = new UserRepository()
 const bookingRepository = new BookingRepository()
-const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRepostory)
+const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRepository)
 const verifyOtpUsecase = new VerifyOtpUsecase(otpService)
 const hashPassword = new HashPassword()
 const redisService = new RedisService()
 const walletRepository = new WalletRepository()
 const adminWalletRepository = new AdminWalletRepository()
 const trasationRepository = new TrasationRepository()
-const createUserUsecase = new CreateUserUsecase(userRepostory,hashPassword,walletRepository)
+const createUserUsecase = new CreateUserUsecase(userRepository,hashPassword,walletRepository)
 export const sendendOtpController = new SendOtpController(sendOtpUserUsecase)
 export const  userRegisterController = new UserRegisterController(verifyOtpUsecase,createUserUsecase)
 
@@ -94,27 +95,25 @@ export const  userRegisterController = new UserRegisterController(verifyOtpUseca
 //----------login User-----------
 
 const jwtService = new JwtService()
-const loginUserUsecase = new LoginUserUsecase(userRepostory,hashPassword,walletRepository)
-export const userLoginController = new UserLoginController(jwtService,loginUserUsecase,redisService)
+const loginUserUsecase = new LoginUserUsecase(userRepository,hashPassword,walletRepository,jwtService,redisService)
+const googleLoginUsecase = new GoogleLoginUsecase(userRepository,walletRepository,jwtService,redisService)
 
-//-------Google Login ---------
 
-const googleLoginUsecase = new GoogleLoginUsecase(userRepostory,walletRepository)
-export const googleLoginController = new GoogleLoginController(jwtService,googleLoginUsecase,redisService)
+export const userLoginController = new UserLoginController(loginUserUsecase,googleLoginUsecase)
 
 //-----resendOtp ------------
 const resendOtpUsecase = new ResendOtpUsecase(otpService,emailService)
 export const resendOtpController = new ResendOtpController(resendOtpUsecase)
 
 //------forgotpassword-------
-const forgotPasswordUsecase = new ForgotPasswordUsecase(otpService,emailService,userRepostory)
+const forgotPasswordUsecase = new ForgotPasswordUsecase(otpService,emailService,userRepository)
 export const sendOtpForgotPasswordController = new SendOtpForgotPasswordController(forgotPasswordUsecase)
 
 //------verifyforgotPassword---------
 export const verifyForgotPassowordOtpController = new VerifyForgotPassowordOtpController(verifyOtpUsecase)
 
 //--------change-Passoword--------
-const changePasswordUsecase = new ChangePasswordUseCase(userRepostory,hashPassword)
+const changePasswordUsecase = new ChangePasswordUseCase(userRepository,hashPassword)
 export const changePasswordController = new ChangePasswordController(changePasswordUsecase)
 
 //-------logout ----------------
@@ -122,13 +121,13 @@ const userLogoutUseCase = new UserLogoutUseCase(redisService,jwtService)
 export const userlogoutController = new UserLogoutController(userLogoutUseCase)
 
 //-------update profile------------
-const editProfileUseCase = new EditProfileUsecase(userRepostory)
+const editProfileUseCase = new EditProfileUsecase(userRepository)
 export const editProfileController = new EditProfileController(editProfileUseCase)
 
 
 //---------get user details-------------
 
-const getUserUsecase = new GetUserUsecase(userRepostory)
+const getUserUsecase = new GetUserUsecase(userRepository)
 export const getUserController = new GetUserController(getUserUsecase)
 //------ add vehicle--------------
 
@@ -139,7 +138,7 @@ export const addVehicleController = new AddVehicleController(addVehicleUsecase)
 
 //-----change password---------
 
-const changePasswordUserUsecase = new ChangePassword(userRepostory,hashPassword)
+const changePasswordUserUsecase = new ChangePassword(userRepository,hashPassword)
 export const changePasswordUserController = new ChangePasswordUserController(changePasswordUserUsecase)
 
 //---get my vehicle---
@@ -164,8 +163,7 @@ const uploadIdProofUsecase = new UploadIdProofUsecase(uploadIdProofRepository)
 export const uploadIdProofController = new UploadIdProofController(uploadIdProofUsecase)
 
 //----------create Booking------------
-
-const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository,trasationRepository)
+const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository,walletRepository,trasationRepository)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 
 //--------create payment intent------------
@@ -201,8 +199,7 @@ const getWishlistUseCase = new GetWishlistUseCase(wishlistRepository)
 export const getWishlistController = new GetWishlistController(getWishlistUseCase)
 
 //------get security deposit details---------
-const securityDepositRepository = new SecurityDepositRepository()
-const getSecurityDepositUsecase = new GetSecurityDepositUsecase(securityDepositRepository)
+const getSecurityDepositUsecase = new GetSecurityDepositUsecase()
 export const getSecurityDepositController = new GetSecurityDepositController(getSecurityDepositUsecase)
 
 //------ride start---------
@@ -221,3 +218,8 @@ export const incomingBookingController = new IncomingBookingController(incomingB
 //------cancel booking---------
 const cancelBookingUsecase = new CancelBookingUseCase(bookingRepository,walletRepository,adminWalletRepository,trasationRepository,vehicleRepository)
 export const cancelBookingController = new CancelBookingController(cancelBookingUsecase)
+
+//------withdraw-money----------
+
+const withdrawUsecase = new WithdrawUsecase(bookingRepository,vehicleRepository,walletRepository,adminWalletRepository,trasationRepository,)
+export const withdrawController = new WithdrawController(withdrawUsecase)

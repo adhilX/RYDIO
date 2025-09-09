@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
-import { IsearchUserUsecase } from "../../../domain/interface/usecaseInterface/admin/IsearchUserUsecase";
+import { ISearchUserUsecase } from "../../../domain/interface/usecaseInterface/admin/ISearchUserUsecase";
 
 export class SearchUserController {
-    private _searchUserUsecase: IsearchUserUsecase
+    private _searchUserUsecase: ISearchUserUsecase
 
-    constructor(searchUserUsecase: IsearchUserUsecase) {
+    constructor(searchUserUsecase: ISearchUserUsecase) {
         this._searchUserUsecase = searchUserUsecase
     }
     async searchUser(req: Request, res: Response): Promise<void> {
@@ -15,7 +15,7 @@ export class SearchUserController {
             const pageNum: number = Number(String(page))
             const limitNum:number = Number(String(limit))
 
-            const users = await this._searchUserUsecase.searchUser(searchStr, pageNum, limitNum);
+            const users = await this._searchUserUsecase.searchUser({search: searchStr, page: pageNum, limit: limitNum});
             // console.log('gggggggggggggggggggggggg',users)
             res.status(HttpStatus.OK).json(users)
 

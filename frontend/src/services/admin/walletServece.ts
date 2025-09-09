@@ -1,8 +1,8 @@
-import axiosInstance from "@/axios/UserInterceptors";
+import { adminAxios as axiosInstance } from "@/axios/interceptors";
 
-export const getwallet = async () => {
+export const getwallet = async (page:number,limit:number) => {
     try {
-   const response = await axiosInstance.get('/admin/get-wallet');
+   const response = await axiosInstance.get(`/admin/get-wallet?page=${page}&limit=${limit}`);
    
         return response.data;
     } catch (error) {
@@ -10,3 +10,5 @@ export const getwallet = async () => {
         throw error;
     }
     }
+
+

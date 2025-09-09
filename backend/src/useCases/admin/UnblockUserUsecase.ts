@@ -1,15 +1,19 @@
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
-import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
-import { IunblockUserUseCase } from "../../domain/interface/usecaseInterface/admin/IunblockUserUsecase";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
+import { IUnblockUserUsecase } from "../../domain/interface/usecaseInterface/admin/IUnblockUserUsecase";
+import { UnblockUserInputDto, UnblockUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
-export class UnblockUserUseCase implements IunblockUserUseCase {
-    private _adminRepository: IadminRepository
-    constructor(adminRepository: IadminRepository) {
+export class UnblockUserUseCase implements IUnblockUserUsecase {
+    private _adminRepository: IAdminRepository
+    constructor(adminRepository: IAdminRepository) {
         this._adminRepository = adminRepository
     }
-    async unblockUser(clientId: string): Promise<boolean> {
-        const blockedClient = await this._adminRepository.unblockUser(clientId)
-        if (!blockedClient) throw new Error('No client found in this email')
-        return true
+    async unblockUser(input: UnblockUserInputDto): Promise<UnblockUserOutputDto> {
+        const isUnblocked = await this._adminRepository.unblockUser(input.userId)
+        if (!isUnblocked) throw new Error('Failed to unblock user or user not found')
+        
+        return {
+            success: true,
+            message: 'User unblocked successfully',
+        };
     }
 }

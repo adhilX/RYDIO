@@ -1,5 +1,5 @@
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
-import { CreateBookingUsecase } from "../../../../useCases/booking/createBookingUsecase"
+import { CreateBookingUsecase } from "../../../../useCases/bookings/createBookingUsecase";
 
 export class CreateBookingController {
     private _createBookingUsecase: CreateBookingUsecase
@@ -9,9 +9,15 @@ export class CreateBookingController {
 
     async createBooking(req: any, res: any) {
       try {
-        const {stripeIntentId,user_id,bookingData}  =req.body
+        const {stripeIntentId, user_id, bookingData} = req.body
 
-        const response = await this._createBookingUsecase.createBooking({bookingData,stripeIntentId,user_id})
+        const input = {
+          bookingData,
+          user_id,
+          stripeIntentId
+        };
+
+        const response = await this._createBookingUsecase.createBooking(input)
         res.status(HttpStatus.OK).json(response)
       } catch (error) {
           console.log('error while creating booking ', error)

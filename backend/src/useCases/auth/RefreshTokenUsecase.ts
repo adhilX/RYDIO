@@ -1,17 +1,17 @@
 
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
-import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
-import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService";
-import { IrefreshTokenUseCase } from "../../domain/interface/usecaseInterface/auth/IrefreshTokenUseCase";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
+import { IUserRepository } from "../../domain/interface/repositoryInterface/IUserRepository";
+import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
+import { IRefreshTokenUseCase } from "../../domain/interface/usecaseInterface/auth/IRefreshTokenUseCase";
 
-export class RefreshTokenUseCase implements IrefreshTokenUseCase {
-    private _jwtService: IjwtService
-    private _userRepository: IuserRepository
-    private _adminRepository: IadminRepository
+export class RefreshTokenUseCase implements IRefreshTokenUseCase {
+    private _jwtService: IJwtService
+    private _userRepository: IUserRepository
+    private _adminRepository: IAdminRepository
     constructor(
-        jwtService: IjwtService,
-        userRepository: IuserRepository,
-        adminRepository: IadminRepository
+        jwtService: IJwtService,
+        userRepository: IUserRepository,
+        adminRepository: IAdminRepository
     ) {
         this._adminRepository = adminRepository
         this._userRepository = userRepository

@@ -1,8 +1,8 @@
 import { DecodedTokenEntity } from "../../domain/entities/decoderTokenEntities";
-import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService";
+import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
 import jwt from 'jsonwebtoken'
 
-export class JwtService implements IjwtService {
+export class JwtService implements IJwtService {
     createAccessToken(accessSecretKey: string, userId: string, role: string): string {
         return jwt.sign({ userId, role }, accessSecretKey, { expiresIn: '15m' })
     }
@@ -21,7 +21,7 @@ export class JwtService implements IjwtService {
     verifyRefreshToken(refreshToken: string, refreshSecretKey: string): { userId: string; } | null {
         try {
             return jwt.verify(refreshToken, refreshSecretKey) as { userId: string }
-        } catch (error) {
+        } catch {
             return null
         }
     }

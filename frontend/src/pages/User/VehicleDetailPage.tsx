@@ -32,14 +32,14 @@ const VehicleDetailPage = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const user: Iuser = useSelector((state: RootState) => state.auth.user!);
-
+   console.log(user,'user')
   useEffect(() => {
     const fetchVehicle = async () => {
       setLoading(true);
       try {
         const id = pathname.split("/")[2];
         const booking = await getBookedDate(id);
-        setUnavailableDates(booking);
+        setUnavailableDates(booking?.bookedVehicles || []);
         const response = await getVehicleDetails(id);
         setVehicle(response);
       } catch (error) {
@@ -183,7 +183,7 @@ const calculateTotalPrice = () => {
                     placeholderText="Select start date"
                     className="w-full p-2 rounded-md border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     dateFormat="yyyy-MM-dd"
-                    excludeDates={unavailableDates.map(date => parseISO(date))}
+                    excludeDates={unavailableDates?.map(date => parseISO(date))}
                     selectsStart
                     startDate={startDate}
                     endDate={endDate}
@@ -201,7 +201,7 @@ const calculateTotalPrice = () => {
                     placeholderText="Select end date"
                     className="w-full p-2 rounded-md border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     dateFormat="yyyy-MM-dd"
-                    excludeDates={unavailableDates.map(date => parseISO(date))}
+                    excludeDates={unavailableDates?.map(date => parseISO(date))}
                     selectsEnd
                     startDate={startDate}
                     endDate={endDate}

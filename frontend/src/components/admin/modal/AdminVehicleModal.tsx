@@ -52,7 +52,7 @@ export const AdminVehicleModal: React.FC<AdminVehicleModalProps> = ({ open, onCl
   }
   return (
     <>
-    <Dialog open={open} onOpenChange={showReasonModal ? () => {} : onClose}>
+    <Dialog open={open && !showReasonModal} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl p-0 overflow-hidden bg-neutral-900">
         <motion.div
           className="w-full"

@@ -26,15 +26,17 @@ const BookingConfirmation = () => {
   useEffect(() => {
     const fetchdepostdata = async () => {
      const deposit = await getSecurityDeposit()
-     setSecurityDeposit(deposit)
+     setSecurityDeposit(deposit*days)
     }
     fetchdepostdata()
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   const user = useSelector((state: RootState) => state.auth.user)
   if (!user)return 
  
   const bookingData: BookingData = location.state?.bookingData
+  console.log(bookingData,"bookingData")
 
   if (!bookingData) {
     return (
@@ -456,7 +458,7 @@ const BookingConfirmation = () => {
                         Processing...
                       </div>
                     ) : (
-                      `Pay ₹${total_amount}`
+                      `Pay ₹${total_amount+securityDeposit}`
                     )}
                   </Button>
                 </motion.div>

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
-import { IrefreshTokenUseCase } from "../../../domain/interface/usecaseInterface/auth/IrefreshTokenUseCase";
+import { IRefreshTokenUseCase } from "../../../domain/interface/usecaseInterface/auth/IRefreshTokenUseCase";
 
 export class RefreshTokenController {
-    private _refreshTokenUseCase: IrefreshTokenUseCase
-    constructor(refreshTokenUseCase: IrefreshTokenUseCase) {
+    private _refreshTokenUseCase: IRefreshTokenUseCase
+    constructor(refreshTokenUseCase: IRefreshTokenUseCase) {
         this._refreshTokenUseCase = refreshTokenUseCase
     }
     async handleRefreshToken(req: Request, res: Response): Promise<void> {

@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/AdminInterceptors"
+import { adminAxios as axiosInstance } from "@/axios/interceptors";
 
 export const getIdProof=async(status:string,currentPage=1,itemsPerPage=6)=>{
     try {

@@ -46,7 +46,13 @@ export class AdminWalletRepository implements IAdminWalletRepository{
         })
     }
     async getwalletDetails(): Promise<IAdminWallet | null> {
-        return await adminWalletModel.findOne()
+        const wallets = await adminWalletModel.find().populate('transactions');
+        
+        if (wallets.length === 0) {
+            return null;
+        }
+        
+        return wallets[0]
     }
     async checkWalletExist(): Promise<boolean> {
         return await adminWalletModel.countDocuments() > 0

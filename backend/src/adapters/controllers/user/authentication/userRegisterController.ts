@@ -1,12 +1,13 @@
-import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IverfyOtpUsecase";
 import { Request, Response } from "express";
-import { IcreateUserUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/userUsecaseInterface";
+import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { ICreateUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/userUsecaseInterface";
+import { IVerifyOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IVerifyOtpUsecase";
 
 export class UserRegisterController {
-    private _verifyOtpUsecase : IverfyOtpUsecase
-    private _createuserUsecase : IcreateUserUsecase
+    private _verifyOtpUsecase : IVerifyOtpUsecase
+    private _createuserUsecase : ICreateUserUsecase
 
-    constructor(verifyOtpUsecase:IverfyOtpUsecase,createuserUsecase:IcreateUserUsecase){
+    constructor(verifyOtpUsecase:IVerifyOtpUsecase,createuserUsecase:ICreateUserUsecase){
         this._verifyOtpUsecase = verifyOtpUsecase
         this._createuserUsecase = createuserUsecase
     }
@@ -19,12 +20,12 @@ export class UserRegisterController {
             console.log(verify)
             if (verify) {
                 const newUser = await this._createuserUsecase.createUser(user);
-                res.status(201).json({ message: 'user created', newUser });
+                res.status(HttpStatus.CREATED).json({ message: 'user created', newUser });
             } else {
-                res.status(400).json({ error: 'Invalid OTP' });
+                res.status(HttpStatus.BAD_REQUEST).json({ error: 'Invalid OTP' });
             }
         } catch (error) { 
-            res.status(400).json({
+            res.status(HttpStatus.BAD_REQUEST).json({
                 message: "Error while creating client",
                 error: error instanceof Error ? error.message : "Unknown error",
                 stack: error instanceof Error ? error.stack : undefined

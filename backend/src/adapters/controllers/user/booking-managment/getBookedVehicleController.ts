@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IGetBookedVehicleUsecase } from "../../../../domain/interface/usecaseInterface/user/booking/IGetBookedVehicleUsecase";
+import { IGetBookedVehicleUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IGetBookedVehicleUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class GetBookedVehicleController {
@@ -11,7 +11,7 @@ export class GetBookedVehicleController {
     async getBookedVehicleDetails(req: Request, res: Response): Promise<void> {
         try {
             const { vehicleId } = req.params;
-            const bookedVehicles = await this._getBookedVehicleUsecase.execute(vehicleId);
+            const bookedVehicles = await this._getBookedVehicleUsecase.execute({vehicleId});
             res.status(HttpStatus.OK).json(bookedVehicles);
         } catch (error) {
             console.error('Error while fetching booked vehicles', error);

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IuserLogoutUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IuserLogoutUsecase";
+import { IUserLogoutUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IUserLogoutUsecase";
 
 export class UserLogoutController {
-    private _logoutUserusecase: IuserLogoutUsecase
-    constructor(logoutUserusecase: IuserLogoutUsecase) {
+    private _logoutUserusecase: IUserLogoutUsecase
+    constructor(logoutUserusecase: IUserLogoutUsecase) {
         this._logoutUserusecase = logoutUserusecase
     }
     async handleClientLogout(req: Request, res: Response): Promise<void> {
@@ -12,12 +12,12 @@ export class UserLogoutController {
             const authHeader = req.headers.authorization;
 
             if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                res.status(401).json({ message: 'Unauthorized' });
+                res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Unauthorized' });
                 return
             }
             const token = authHeader.split(' ')[1];
 
-            await this._logoutUserusecase.clientLogout(token);
+            await this._logoutUserusecase.clientLogout({token});
             res.status(HttpStatus.OK).json({ message: "Logout successful" });
 
         } catch (error) {

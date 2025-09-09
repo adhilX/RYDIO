@@ -17,68 +17,17 @@ import {
   IndianRupee,
   FileText,
   CheckCircle,
-  XCircle
+  XCircle,
 } from 'lucide-react'
 import { format } from 'date-fns'
 import React from 'react'
+import type { IncomingBooking } from '@/Types/User/Booking/IncomingBooking';
+import { withdrawMoney } from '@/services/wallet/walletService'
+import toast from 'react-hot-toast'
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/store/store'
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
-
-// Define types based on the API response
-interface Vehicle {
-  _id: string
-  name: string
-  brand: string
-  registration_number: string
-  fuel_type: string
-  seats: number
-  car_type: string
-  automatic: boolean
-  price_per_day: number
-  description: string
-  image_urls: string[]
-  is_available: boolean
-}
-
-interface Location {
-  _id: string
-  name: string
-  address: string
-  city: string
-  state: string
-  country: string
-  pincode: string
-}
-
-interface Finance {
-  security_deposit: number
-  fine_amount: number
-  admin_commission: number
-  owner_earnings: number
-  is_late_return: boolean
-}
-
-interface IncomingBooking {
-  _id: string
-  booking_id: string
-  user_id: string
-  vehicle_id: string
-  address: string
-  city: string
-  start_date: string
-  end_date: string
-  total_amount: number
-  finance?: Finance
-  status: 'pending' | 'booked' | 'ongoing' | 'completed' | 'cancelled'
-  payment_type: string
-  cancellation_reason: string
-  payment_intent_id: string
-  payment_status: 'pending' | 'paid' | 'failed' | 'succeeded'
-  createdAt: string
-  updatedAt: string
-  vehicle: Vehicle
-  location: Location
-}
 
 interface IncomingBookingDetailsModalProps {
   booking: IncomingBooking | null
@@ -96,12 +45,27 @@ const IncomingBookingDetailsModal = ({
   onReject 
 }: IncomingBookingDetailsModalProps) => {
   if (!booking) return null
-
+const user = useSelector((state:RootState)=>state.auth.user)
+if(!user)return 
   const calculateDays = (startDate: string, endDate: string) => {
     const start = new Date(startDate)
     const end = new Date(endDate)
     const diffTime = end.getTime() - start.getTime()
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  }
+
+    const handleWithdraw = async()=>{
+  try {
+    await withdrawMoney(booking?.booking_id!,user?._id!) 
+    onClose()
+    toast.success('withdraw success')
+    
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    toast.error(errorMessage)
+}
+  
+  
   }
 
   const getStatusColor = (status: string) => {
@@ -161,8 +125,21 @@ const IncomingBookingDetailsModal = ({
           <section className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-400">Booking ID</p>
-              <p className="text-lg font-mono text-blue-400">{booking.booking_id}</p>
+              <p className="text-lg font-mono text-white">{booking.booking_id}</p>
             </div>
+
+               <section>
+   {booking.status==='completed' && !booking.finance.owner_withdraw &&(
+                 <Button
+                   onClick={handleWithdraw}
+                   variant="default"
+                   className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                 >
+                  
+                  {`${booking?.finance.owner_earnings} withdraw`}
+                 </Button>
+   )}
+            </section>
             {isPending && (
               <div className="flex gap-3">
                 <Button

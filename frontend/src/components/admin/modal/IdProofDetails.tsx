@@ -209,7 +209,9 @@ function IdProofDetails({
                 title="Reason for Rejection"
                 description="Please provide a reason for rejecting this ID proof. This will be shared with the user."
                 submitButtonText={isRejecting ? 'Rejecting...' : 'Reject'}
+                cancelButtonText='cancel'
                 placeholder="Enter the reason for rejection (e.g., Blurry image, Expired document, Information mismatch, etc.)"
+
             />
         </motion.div>
     );

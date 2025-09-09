@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Calendar, Car, MapPin, Search, Clock, DollarSign, User, CreditCard, Eye } from 'lucide-react';
+import { Calendar, Car, MapPin, Search, Clock, DollarSign, User, CreditCard, Eye, QrCode } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,64 +11,11 @@ import toast from 'react-hot-toast';
 import { getIncomingBooking } from '@/services/user/incommingBookingSevice';
 import Pagination from '@/components/Pagination';
 import IncomingBookingDetailsModal from '@/components/modal/IncomingBookingDetailsModal';
+import type { IncomingBooking } from '@/Types/User/Booking/IncomingBooking';
+import QrScanner from '../QrReader';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
-// Define types based on the API response
-interface Vehicle {
-  _id: string;
-  name: string;
-  brand: string;
-  registration_number: string;
-  fuel_type: string;
-  seats: number;
-  car_type: string;
-  automatic: boolean;
-  price_per_day: number;
-  description: string;
-  image_urls: string[];
-  is_available: boolean;
-}
-
-interface Location {
-  _id: string;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  pincode: string;
-}
-
-interface Finance {
-  security_deposit: number;
-  fine_amount: number;
-  admin_commission: number;
-  owner_earnings: number;
-  is_late_return: boolean;
-}
-
-interface IncomingBooking {
-  _id: string;
-  booking_id: string;
-  user_id: string;
-  vehicle_id: string;
-  address: string;
-  city: string;
-  start_date: string;
-  end_date: string;
-  total_amount: number;
-  finance?: Finance;
-  status: 'pending' | 'booked' | 'ongoing' | 'completed' | 'cancelled';
-  payment_type: string;
-  cancellation_reason: string;
-  payment_intent_id: string;
-  payment_status: 'pending' | 'paid' | 'failed' | 'succeeded';
-  createdAt: string;
-  updatedAt: string;
-  vehicle: Vehicle;
-  location: Location;
-}
 
 interface ApiResponse {
   bookings: IncomingBooking[];
@@ -81,7 +28,7 @@ function IncomingBookings() {
   const [bookings, setBookings] = useState<IncomingBooking[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'booked' | 'ongoing' | 'completed' | 'cancelled'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all'| 'booked' | 'ongoing' | 'completed' | 'cancelled'>('all');
   const [limit] = useState(6);
   
   const [bookingState, setBookingState] = useState({
@@ -92,6 +39,7 @@ function IncomingBookings() {
   
   const [selectedBooking, setSelectedBooking] = useState<IncomingBooking | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [showQrScanner, setShowQrScanner] = useState(false);
 
   const { currentPage } = bookingState;
 
@@ -221,7 +169,17 @@ function IncomingBookings() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Incoming Bookings</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">Bookings received for your vehicles</p>
         </div>
-        <div className="relative w-full md:w-64">
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={() => setShowQrScanner(!showQrScanner)}
+            variant={showQrScanner ? "default" : "outline"}
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <QrCode className="h-4 w-4" />
+            {showQrScanner ? 'Close Scanner' : 'Scan QR Code'}
+          </Button>
+          <div className="relative w-full md:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             type="text"
@@ -230,12 +188,32 @@ function IncomingBookings() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          </div>
         </div>
       </div>
 
+      {/* QR Scanner Section */}
+      {showQrScanner && (
+        <div className="mb-6 p-4 border rounded-lg bg-white dark:bg-gray-800">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">QR Code Scanner</h3>
+            <Button
+              onClick={() => setShowQrScanner(false)}
+              variant="ghost"
+              size="sm"
+            >
+              ✕
+            </Button>
+          </div>
+          <div className="flex justify-center">
+            <QrScanner />
+          </div>
+        </div>
+      )}
+
       <div className="mb-6">
         <div className="flex items-center space-x-2 overflow-x-auto pb-2">
-          {(['all', 'pending', 'booked', 'ongoing', 'completed', 'cancelled'] as const).map((status) => (
+          {(['all', 'booked', 'ongoing', 'completed', 'cancelled'] as const).map((status) => (
             <Button
               key={status}
               variant={statusFilter === status ? 'default' : 'outline'}
@@ -406,7 +384,7 @@ function IncomingBookings() {
       <IncomingBookingDetailsModal
         booking={selectedBooking}
         isOpen={isDetailsModalOpen}
-        onClose={handleCloseDetailsModal}
+        onClose={()=>handleCloseDetailsModal()}
       />
     </div>
   );

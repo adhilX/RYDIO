@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
-import { IvehicleAproveUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicleManagment/IvehicleUpproveUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IpendingVehicleUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicleManagment/IpendingVehicleUsecase";
+import { IPendingVehicleUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicles/IPendingVehicleUsecase";
 
 export class PendingVehicleController{
-    private _pendingVehicleUsecase : IpendingVehicleUsecase
-    constructor(pendingVehicleUsecase: IpendingVehicleUsecase) {
+    private _pendingVehicleUsecase : IPendingVehicleUsecase
+    constructor(pendingVehicleUsecase: IPendingVehicleUsecase) {
         this._pendingVehicleUsecase = pendingVehicleUsecase
     }
     
@@ -13,7 +12,7 @@ export class PendingVehicleController{
         try {
             const page = req.query.page ? parseInt(req.query.page as string) : 1;
             const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-            const response = await this._pendingVehicleUsecase.getPendingVehicle(page, limit)
+            const response = await this._pendingVehicleUsecase.getPendingVehicle({page, limit})
             res.status(HttpStatus.OK).json(response )
         } catch (error) {
             console.error('Error while fetching pending vehicles:', error)

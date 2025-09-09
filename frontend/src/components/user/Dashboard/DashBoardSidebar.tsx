@@ -5,14 +5,14 @@ import type { RootState } from "@/store/store";
 import { LogOut, User, Car, Wallet, LockKeyhole, X, Menu, Calendar } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, NavLink } from "react-router-dom";
 
 export function Sidebar() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const user = useSelector((state:RootState)=>state.auth.user)
+  const user = useSelector((state: RootState) => state.auth.user)
   const logout = async () => {
     try {
       await userLogout()
@@ -30,9 +30,9 @@ export function Sidebar() {
     { to: 'userProfile', label: 'User Profile', icon: User },
     { to: 'userProfile/vehicles', label: 'My Vehicles', icon: Car },
     { to: 'userProfile/wallet', label: 'Wallet', icon: Wallet },
-    { to: 'userProfile/my-bookings', label: 'My Bookings', icon: Calendar},  
-    {to: 'userProfile/incoming-bookings', label: 'Incoming Bookings', icon: Calendar},
-  ...(!user?.googleVerification ? [{ to: 'userProfile/change-password', label: 'Change Password', icon: LockKeyhole }] : [])
+    { to: 'userProfile/my-bookings', label: 'My Bookings', icon: Calendar },
+    { to: 'userProfile/incoming-bookings', label: 'Incoming Bookings', icon: Calendar },
+    ...(!user?.googleVerification ? [{ to: 'userProfile/change-password', label: 'Change Password', icon: LockKeyhole }] : [])
   ];
 
   const isActive = (path: string) => {
@@ -42,7 +42,7 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile Toggle Button */}
-      <button 
+      <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
         className="md:hidden fixed bottom-4 right-4 z-40 bg-white/20 backdrop-blur-md p-3 rounded-full border border-white/30 shadow-lg"
       >
@@ -58,7 +58,7 @@ export function Sidebar() {
         rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out pt-14
         ring-1 ring-[#6DA5C0]/10
       `}>
-       
+
         <nav className="flex-1 flex flex-col  gap-4 px-4 py-6">
           {links.map(({ to, label, icon: Icon }) => {
             const active = isActive(to);
@@ -83,7 +83,7 @@ export function Sidebar() {
           })}
         </nav>
         <div className="mx-4 my-2 border-t border-white/10" />
-        <button 
+        <button
           onClick={logout}
           className="flex items-center gap-4 px-4 py-3 rounded-full text-red-400 hover:bg-[#232b3a] hover:text-red-300 transition-all duration-200 font-semibold mb-6 mx-4 dashboard-sidebar-btn"
         >

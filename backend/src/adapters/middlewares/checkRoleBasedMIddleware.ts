@@ -4,8 +4,9 @@ import { HttpStatus } from "../../domain/entities/httpStatus"
 export const checkRoleBaseMiddleware = (allowedRoles: string) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const user = (req as any).user
-        console.log('user',user)
+        // console.log('userrrrrrrrrrrrrrrrrr',user)
         if (!user || allowedRoles!==user.role) {
+            console.log("raole based called ")
             res.status(HttpStatus.FORBIDDEN).json({ error: "Access Denied:UnAuthorized role" })
             return
         }

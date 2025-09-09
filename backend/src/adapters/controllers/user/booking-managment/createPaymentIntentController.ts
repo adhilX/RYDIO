@@ -1,17 +1,22 @@
 import { Request, Response } from "express";
-import { IcreatePaymentIntentUsecase } from "../../../../domain/interface/usecaseInterface/user/booking/IcreatePaymentIntentUsecase";
+import { ICreatePaymentIntentUsecase } from "../../../../domain/interface/usecaseInterface/payments/ICreatePaymentIntentUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class CreatePaymentIntentController {
-    constructor(private _createPaymentIntentUsecase: IcreatePaymentIntentUsecase) {
+    constructor(private _createPaymentIntentUsecase: ICreatePaymentIntentUsecase) {
         this._createPaymentIntentUsecase = _createPaymentIntentUsecase
     }
     async createPaymentIntent(req: Request, res: Response) {
         try {
-           const bookingData= req.body.bookingDataBody 
+           const bookingData = req.body.bookingDataBody 
             console.log(bookingData,'log from create payment intent controller')
-            const paymentIntent = await this._createPaymentIntentUsecase.createPaymentIntent(bookingData)
-            res.status(HttpStatus.OK).json({ sessionId: paymentIntent })
+            
+            const input = {
+                bookingData
+            };
+            
+            const response = await this._createPaymentIntentUsecase.createPaymentIntent(input)
+            res.status(HttpStatus.OK).json({ sessionId: response.paymentIntentId })
 
         } catch (error) {
             console.log('error while creating payment intent ', error)

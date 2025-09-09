@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/UserInterceptors";
+import { userAxios as axiosInstance } from "@/axios/interceptors";
 import type { Client } from "@/Types/User/auth/TGoogle";
 import type { TloginForm } from "@/Types/User/auth/Tloginform";
 import type { SignupSchema } from "@/Types/User/auth/Tsignupform";

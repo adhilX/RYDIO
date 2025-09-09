@@ -1,47 +1,39 @@
 import { Request, Response } from "express";
-import { IjwtService } from "../../../../domain/interface/serviceInterface/IjwtService";
-import { IloginUserUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IloginUserUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { setCookie } from "../../../../framework/services/tokenCookieSet";
-import { IredisService } from "../../../../domain/interface/serviceInterface/IredisService";
+import { IGoogleLoginUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IGoogleLoginUsecase";
+import { ILoginUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/ILoginUserUsecase";
 
 export class UserLoginController {
-    private _jwtService: IjwtService
-    private _loginUserUsecase: IloginUserUsecase
-    private _redisService: IredisService
-    constructor(jwtService: IjwtService, loginUserUsecase: IloginUserUsecase, redisService: IredisService) {
-        this._jwtService = jwtService
+    private _loginUserUsecase: ILoginUserUsecase
+    private _GoogleLoginUsecase: IGoogleLoginUsecase
+    constructor(loginUserUsecase: ILoginUserUsecase, GoogleLoginUsecase: IGoogleLoginUsecase) {
         this._loginUserUsecase = loginUserUsecase
-        this._redisService = redisService
+        this._GoogleLoginUsecase = GoogleLoginUsecase
     }
     async handleLogin(req: Request, res: Response) {
         try {
             const { email, password } = req.body
-            const user = await this._loginUserUsecase.loginUser(email, password)
-            if (!user) {
+            const {createdUser,accessToken,refreshToken} = await this._loginUserUsecase.loginUser({ email, password })
+            if (!createdUser) {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: 'user not found' })
                 return
             }
-            const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string
-            const REFRESH_TOKEN_KEY = process.env.REFRESH_TOKEN_KEY as string
-
-            const accessToken = this._jwtService.createAccessToken(ACCESS_TOKEN_KEY, user._id?.toString() || "", user.role)
-            const refreshToken = this._jwtService.createRefreshToken(REFRESH_TOKEN_KEY, user._id?.toString() || "")
-            await this._redisService.set(`user:${user.role}:${user._id}`, 15 * 60, JSON.stringify(user.is_blocked))
-            setCookie(res, refreshToken)
+             setCookie(res, refreshToken);
+             
             const selectedFields = {
-                email: user.email,
-                name: user.name,
-                phone: user.phone,
-                idproof_id: user.idproof_id,
-                profile_image: user.profile_image,
-                _id: user._id,
-                role: user.role,
-                status: user.is_blocked,
-                is_verified_user: user.is_verified_user,
-                last_login: user.last_login,
-                vendor_access: user.vendor_access,
-                googleVerification: user.googleVerification
+                email: createdUser.email,
+                name: createdUser.name,
+                phone: createdUser.phone,
+                idproof_id: createdUser.idproof_id,
+                profile_image: createdUser.profile_image,
+                _id: createdUser._id,
+                role: createdUser.role,
+                status: createdUser.is_blocked,
+                is_verified_user: createdUser.is_verified_user,
+                last_login: createdUser.last_login,
+                vendor_access: createdUser.vendor_access,
+                googleVerification: createdUser.googleVerification
             }
             res.status(HttpStatus.OK).json({ message: 'login success', user: selectedFields, accessToken })
 
@@ -53,4 +45,34 @@ export class UserLoginController {
             })
         }
     }
+
+    async handleGoogleLogin(req: Request, res: Response) {
+            try {
+                const { user } = req.body;
+                const {createdUser,accessToken,refreshToken} = await this._GoogleLoginUsecase.googleLogin(user);
+                setCookie(res, refreshToken);
+          
+                const selectedFields = {
+                    email: createdUser.email,
+                    name: createdUser.name,
+                    idproof_id:createdUser.idproof_id,
+                    phone: createdUser.phone,
+                    profile_image: createdUser.profile_image,
+                    _id: createdUser._id,
+                    role: createdUser.role,
+                    status: createdUser.is_blocked,
+                    is_verified_user: createdUser.is_verified_user,
+                    last_login: createdUser.last_login,
+                    vendor_access: createdUser.vendor_access,
+                    googleVerification: createdUser.googleVerification
+                };
+                res.status(HttpStatus.OK).json({ message: 'login success', createUser: selectedFields, accessToken });
+            } catch (error) {
+                console.log('error while login client', error);
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    message: "error while login client",
+                    error: error instanceof Error ? error.message : 'unknown error from login client controller',
+                });
+            }
+        }
 }

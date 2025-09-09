@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { IsendOptUsecase } from "../../../../domain/interface/usecaseInterface/user/authentication/IotpUsecase/IsendOtpUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { ISendOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase";
 export class SendOtpController{
-    private _userSendOtpUsecase:IsendOptUsecase
+    private _userSendOtpUsecase:ISendOtpUsecase
 
-    constructor(userSendOtpUsecase:IsendOptUsecase){
+    constructor(userSendOtpUsecase:ISendOtpUsecase){
         this._userSendOtpUsecase = userSendOtpUsecase
     }
 
@@ -12,7 +12,7 @@ export class SendOtpController{
         try {
             const {user} = req.body
             console.log(user,'ggg')
-            await this._userSendOtpUsecase.execute(user?.email)
+            await this._userSendOtpUsecase.execute({email:user?.email})
             res.status(HttpStatus.OK).json({message:'OTP sended successfully'})
             return
         } catch (error) {

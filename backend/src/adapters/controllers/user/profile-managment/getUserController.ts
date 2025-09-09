@@ -1,6 +1,6 @@
 import { Request,Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IGetUserUsecase } from "../../../../domain/interface/usecaseInterface/user/userProfile/IgetUserUsecase";
+import { IGetUserUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IgetUserUsecase";
 
 export class GetUserController {
 
@@ -13,7 +13,7 @@ export class GetUserController {
 
         const userId = req.params.id;
         try {
-            const user = await this._getUserUsecase.getUser(userId);
+            const user = await this._getUserUsecase.getUser({userId});
             if (!user) {
                 res.status(HttpStatus.NOT_FOUND).json({ message: 'User not found' });
                 return;

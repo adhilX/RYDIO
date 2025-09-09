@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
-import { IgetIdProofUscase } from "../../../domain/interface/usecaseInterface/admin/IgetIdProofUscase";
+import { IGetIdProofUsecase } from "../../../domain/interface/usecaseInterface/admin/IGetIdProofUsecase";
 
 export class GetIdProofController {
-    constructor(private _getIdProofUscase: IgetIdProofUscase) {
+    constructor(private _getIdProofUscase: IGetIdProofUsecase) {
         this._getIdProofUscase = _getIdProofUscase;
     }
 

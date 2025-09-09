@@ -20,7 +20,7 @@ export enum PaymentType {
   Wallet = 'wallet',
 }
 
-export interface Ibooking {
+export interface IBooking {
   booking_id: string;
   _id?: string;
   user_id: string|ObjectId;
@@ -40,13 +40,16 @@ export interface Ibooking {
     admin_commission: number;
     owner_earnings: number;
     is_late_return: boolean;
+    user_withdraw: boolean;
+    owner_withdraw: boolean;
   };
-
+  
   payment_type: PaymentType;
   status: BookingStatus;
   cancellation_reason?: string;
   payment_intent_id?: string;
   payment_status: PaymentStatus;
+  createdAt? :Date
 }
 
 export interface BookingData {

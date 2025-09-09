@@ -7,11 +7,22 @@ import type { Ilocation } from "../location"
 export type BookingStatus = 'pending' | 'booked' | 'ongoing' | 'cancelled' | 'completed'
 export type PaymentStatus = 'pending' | 'succeeded' | 'failed' | 'paid'
 export type PaymentType = 'card' | 'wallet'
+
+export interface IFinance {
+    security_deposit: number;
+    fine_amount: number;
+    admin_commission: number;
+    owner_earnings: number;
+    is_late_return: boolean;
+    user_withdraw: boolean;
+    owner_withdraw: boolean;
+}
 export interface IbookedData {
     _id?: string
     booking_id: string
+    user_id: string
     vehicle: Vehicle
-    location:Ilocation
+    location: Ilocation
     user: Iuser
     name: string
     phone: number
@@ -19,10 +30,14 @@ export interface IbookedData {
     city: string
     start_date: Date
     end_date: Date
+    ride_start_time: string
+    ride_end_time: string
     total_amount: number
-    payment_intent_id: string
-    status: BookingStatus      
+    finance: IFinance
+    payment_type: PaymentType
+    status: BookingStatus
     payment_status: PaymentStatus
-    payment_type: PaymentType;
+    payment_intent_id: string
+    cancellation_reason?: string
     createdAt: Date
 }

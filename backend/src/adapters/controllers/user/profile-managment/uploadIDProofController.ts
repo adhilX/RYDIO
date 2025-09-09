@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { IuploadIdProofUsecase } from "../../../../domain/interface/usecaseInterface/user/userProfile/IuploadIdProofUsecase";
+import { IUploadIdProofUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IUploadIdProofUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class UploadIdProofController {
 
-    private _uploadIdProofUsecase : IuploadIdProofUsecase
+    private _uploadIdProofUsecase : IUploadIdProofUsecase
 
-    constructor(uploadIdProofUsecase:IuploadIdProofUsecase){
+    constructor(uploadIdProofUsecase:IUploadIdProofUsecase){
         this._uploadIdProofUsecase= uploadIdProofUsecase
     }
 
@@ -19,8 +19,14 @@ export class UploadIdProofController {
                });
             return 
            }
-          const newUser =  await this._uploadIdProofUsecase.uploadProof(idProofUrl, userId);
-           res.status(HttpStatus.OK).json({ message: 'Id proof submitted successfully', newUser});
+           
+           const input = {
+               userId: userId,
+               imageUrl: idProofUrl
+           };
+           
+           const updatedUser = await this._uploadIdProofUsecase.uploadProof(input);
+           res.status(HttpStatus.OK).json({ message: 'ID proof uploaded successfully', user: updatedUser});
        } catch (error) {
            console.error('Error while uploading ID proof:', error);
            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
