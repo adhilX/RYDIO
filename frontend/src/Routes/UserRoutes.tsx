@@ -21,6 +21,8 @@ import PaymentSuccess from "@/pages/User/PaymentSuccess"
 import MyBooking from "@/components/user/Dashboard/MyBooking"
 import IncomingBookings from "@/components/user/Dashboard/IncomingBookings"
 import ChatLayout from "@/layout/user/ChatLayout"
+import MessageTemplate from "@/components/chat/MessageTemplate"
+import MessageContainer from "@/components/chat/MessageContainer"
 const CheckoutForm = React.lazy(() => import("@/pages/User/CheckoutForm"))
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 
@@ -36,8 +38,6 @@ export const UserRoutes = () => {
             <Route path='/vehicle-details/:id' element={<TokenProtected><VehicleDetailPage /></TokenProtected>} />
             <Route path="/booking-confirmation" element={<TokenProtected><BookingConfirmation /></TokenProtected>} />
             <Route path="/payment-success" element={<TokenProtected><PaymentSuccess /></TokenProtected>} />
-            <Route path="/chat" element={<TokenProtected><ChatLayout /></TokenProtected>} />
-            <Route path="/chat/:userId" element={<TokenProtected><ChatLayout /></TokenProtected>} />
             <Route
                 path="/payment"
                 element={
@@ -53,7 +53,7 @@ export const UserRoutes = () => {
             <Route
                 path="/userprofile"
                 element={
-                    <   TokenProtected>
+                    <TokenProtected>
                         <Suspense fallback={<div>Loading...</div>}>
                             <Layout />
                         </Suspense>
@@ -115,7 +115,10 @@ export const UserRoutes = () => {
                 />
                  
             </Route>
-
+          <Route path='/chat' element={<TokenProtected><ChatLayout /></TokenProtected>}>
+            <Route index element={<MessageTemplate/>}/>
+            <Route path=':chatId' element={<TokenProtected><MessageContainer /></TokenProtected>} />
+          </Route>
             <Route path='/test' element={<><h1>home</h1></>} />
         </Routes>
     )

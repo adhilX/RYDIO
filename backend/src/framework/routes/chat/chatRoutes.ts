@@ -1,30 +1,25 @@
-import { Router } from "express";
-import { GetChatController } from "../../../adapters/controllers/chat/getChatController";
-import { GetMessageController } from "../../../adapters/controllers/message/getMessageController";
-import { MarkMessageAsSeenController } from "../../../adapters/controllers/message/markMessageAsSeenController";
+import { Request, Response, Router } from "express";
+import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
+import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
+import { createChatController, getChatController } from "../../DI/chatInject";
 
-const router = Router();
+export class ChatRoutes {
+    public ChatRoutes: Router
+    constructor() {
+        this.ChatRoutes = Router();
+        this.setRoutes();
+    }
 
-// Initialize controllers (these would be injected via dependency injection in a real app)
-// For now, we'll export the router structure
-export const createChatRoutes = (
-    getChatController: GetChatController,
-    getMessageController: GetMessageController,
-    markMessageAsSeenController: MarkMessageAsSeenController
-) => {
-    // Get user's chats
-    router.get('/chats/user/:userId', getChatController.getChatsOfUser.bind(getChatController));
-    
-    // Get messages for a specific chat
-    router.get('/chats/:chatId/messages', getMessageController.getMessagesByChatId.bind(getMessageController));
-    
-    // Mark single message as seen
-    router.patch('/messages/:messageId/seen', markMessageAsSeenController.markMessageAsSeen.bind(markMessageAsSeenController));
-    
-    // Mark all messages in chat as seen
-    router.patch('/chats/:chatId/messages/seen', markMessageAsSeenController.markAllMessagesAsSeenInChat.bind(markMessageAsSeenController));
-    
-    return router;
-};
+    private setRoutes() {
 
-export default router;
+        this.ChatRoutes.use(injectedVerfyToken, tokenTimeExpiryValidationMiddleware, checkRoleBaseMiddleware('user'), injectedUserBlockChecker)
+
+        // Chat routes
+        this.ChatRoutes.post('/find-or-create', (req:Request, res:Response)=>{
+            createChatController.findOrCreateChat(req,res)})
+        
+        this.ChatRoutes.get('/chats/:userId', (req:Request, res:Response)=>{
+            getChatController.getChatsOfUser(req,res)}
+        )
+    }
+}

@@ -75,7 +75,7 @@ export class CreateBookingUsecase implements IcreateBookingUsecase {
         await this._walletRepository.addTransaction(user_id,transaction._id!)
          await this._adminWalletRepository.addTransaction(transaction._id!)
     const savedBooking = await this._bookingRepository.create(newBooking);
-    
+        
     return {
       booking_id: savedBooking.booking_id,
       user_id: savedBooking.user_id.toString(),

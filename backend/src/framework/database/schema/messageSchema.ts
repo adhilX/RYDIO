@@ -22,16 +22,12 @@ export const messageSchema = new Schema<Imessage>({
     senderId: {
         type: String,
         refPath: 'senderModel'
+
     },
     senderModel: {
         type: String,
         enum: ['user', 'owner'],
         required: true
-    },
-    messageType: {
-        type: String,
-        enum: ['text', 'image', 'file'],
-        default: 'text'
     }
 
 }, {

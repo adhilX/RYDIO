@@ -6,15 +6,15 @@ export const chatSchema = new Schema<Ichat>({
         type: String
     },
     lastMessageAt: {
-        type: String
+        type: Date
     },
     receiverId: {
         type: String,
-        refPath: 'receiverModel'
+        ref: 'user'
     },
     senderId: {
         type: String,
-        refPath: 'senderModel'
+        ref: 'user'
     },
     receiverModel: {
         type: String,

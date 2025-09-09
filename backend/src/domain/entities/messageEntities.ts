@@ -7,5 +7,4 @@ export interface Imessage {
     sendedTime: Date
     senderId: string
     senderModel: 'user' | 'owner'
-    messageType?: 'text' | 'image' | 'file'
 }

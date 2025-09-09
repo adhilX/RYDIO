@@ -7,7 +7,7 @@ export class LoadPreviousChatUseCase implements IloadPreviousChatUseCase{
     constructor(messageDatabase: ImessageRepository) {
         this.messageDatabase = messageDatabase
     }
-    async loadPreviousChat(chatId: string, pageNo: number): Promise<{ messages:Imessage[]; hasMore: boolean; }> {
-        return await this.messageDatabase.getMessagesOfAChat(chatId, pageNo)
+    async loadPreviousChat(chatId: string): Promise<{ messages:Imessage[] }> {
+        return await this.messageDatabase.getMessagesOfAChat(chatId)
     }
 }

@@ -12,7 +12,7 @@ import CancelReasonModal from './CancelReasonModal'
 import CancelConfirmationModal from './CancelConfirmationModal'
 import { cancelBooking } from '@/services/user/bookingService'
 import { toast } from 'react-hot-toast'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import type { IbookedData } from '@/Types/User/Booking/bookedData'
 import { withdrawMoney } from '@/services/wallet/walletService'
 import { useSelector } from 'react-redux'
@@ -39,7 +39,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   }
 
-  if(!user)return
+  if(!user) return null
   const handleCancelBooking = () => {
     setShowReasonModal(true)
   }
@@ -52,6 +52,9 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
   }
 
 
+  const  startChatWithOwner = () => {
+    navigate(`/chat/${user._id}_${booking!.vehicle.owner_id}`)
+  }
   const handleWithdraw = async()=>{
 try {
   await withdrawMoney(booking!.booking_id!,user._id!) 
@@ -201,11 +204,11 @@ try {
       {(booking.status === 'booked' || booking.status === 'ongoing') &&(
         <section>
           <Button
-            onClick={()=>navigate(`/chat/${booking.vehicle.owner_id}`)}
+            onClick={startChatWithOwner}
             variant="outline"
-            className="w-34 bg-blue-600 hover:bg-blue-700 text-white"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
-         chat with owner            
+         Chat with Owner            
           </Button>
         </section>
           )}

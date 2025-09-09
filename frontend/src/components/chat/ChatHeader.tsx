@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Phone, MoreVertical, ArrowLeft } from 'lucide-react';
-
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 interface ChatHeaderProps {
   user: {
-    id: string;
+    _id: string;
     name: string;
     avatar: string;
     isOnline: boolean;
@@ -44,7 +44,7 @@ const ChatHeader = ({ user, onBackClick, showBackButton = false }: ChatHeaderPro
           className="relative"
         >
           <img
-            src={user.avatar}
+            src={IMG_URL+user.avatar}
             alt={user.name}
             className="w-10 h-10 rounded-full object-cover"
           />

@@ -163,7 +163,6 @@ const uploadIdProofUsecase = new UploadIdProofUsecase(uploadIdProofRepository)
 export const uploadIdProofController = new UploadIdProofController(uploadIdProofUsecase)
 
 //----------create Booking------------
-
 const createBookingUsecase = new CreateBookingUsecase(bookingRepository,redisService,vehicleRepository,adminWalletRepository,walletRepository,trasationRepository)
 export const createBookingController = new CreateBookingController(createBookingUsecase)
 

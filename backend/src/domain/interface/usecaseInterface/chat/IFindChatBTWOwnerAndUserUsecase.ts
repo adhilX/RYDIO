@@ -1,5 +1,5 @@
-import { Ichat } from "../../../entities/chatEntites";
+import { IchatPopulated } from "../../../entities/chatEntites";
 
 export interface IFindChatBTWOwnerAndUserUsecase {
-    findChatBetweenClientAndVendor(senderId: string, receiverId: string): Promise<Ichat | null>
+    findChatBetweenClientAndVendor(senderId: string, receiverId: string): Promise<IchatPopulated | null>
 }

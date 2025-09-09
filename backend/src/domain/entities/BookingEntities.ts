@@ -49,6 +49,7 @@ export interface Ibooking {
   cancellation_reason?: string;
   payment_intent_id?: string;
   payment_status: PaymentStatus;
+  createdAt? :Date
 }
 
 export interface BookingData {

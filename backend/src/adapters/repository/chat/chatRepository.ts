@@ -1,63 +1,53 @@
-import { Ichat } from "../../../domain/entities/chatEntites"
-import { Imessage } from "../../../domain/entities/messageEntities"
-import { IchatRepository } from "../../../domain/interface/repositoryInterface/IchatRepository"
-import { chatModel } from "../../../framework/database/models/chatModel"
+import { chatModel } from "../../../framework/database/models/chatModel";
+import { Ichat, IchatPopulated } from "../../../domain/entities/chatEntites";
+import { IchatRepository } from "../../../domain/interface/repositoryInterface/IchatRepository";
+import { Imessage } from "../../../domain/entities/messageEntities";
 
 export class ChatRepository implements IchatRepository {
-    async createChat(chat: Ichat): Promise<Ichat> {
-        return chatModel.create(chat)
-    }
-    // async getchatsOfUser(userId: string | ObjectId): Promise<ChatEntity[] | []> {
-    //     return await chatModel.find({
-    //         $or: [
-    //             { senderId: userId },
-    //             { receiverId: userId }
-    //         ]
-    //     })
-    // }
-    async getchatsOfUser(userId: string ,pageNo: number): Promise<{ chats: Ichat[], hasMore: boolean }> {
-        const limit = 10
-        const page = Math.max(pageNo, 1)
-        const skip = (page - 1) * limit
-        const chats = await chatModel.find({
-            $or: [
-                { senderId: userId },
-                { receiverId: userId }
-            ]
-        }).sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit)
-            .populate('senderId', 'name profileImage') // populate senderId with only name and profileImage fields
-            .populate('receiverId', 'name profileImage') // populate receiverId similarly
+  async createChat(chat: Ichat): Promise<IchatPopulated> {
+    const createdChat = await chatModel.create(chat);
+    return await chatModel.findById(createdChat._id)
+      .populate('senderId', 'name profile_image')
+      .populate('receiverId', 'name profile_image') as any as IchatPopulated;
+  }
 
-        const totalChats = await chatModel.countDocuments({
-            $or: [
-                { senderId: userId },
-                { receiverId: userId }
-            ]
-        });
+  async getchatOfUser(userId: string,ownerId:string): Promise<IchatPopulated|null> {
+    const chat = await chatModel.findOne({
+      $or: [
+        { senderId: userId,receiverId:ownerId },
+        { receiverId: userId,senderId:ownerId }
+      ]
+    })
+    .sort({ lastMessageAt: -1 })
+    .populate('senderId', 'name profile_image')
+    .populate('receiverId', 'name profile_image');
+    
+    return chat as any as IchatPopulated
+  }
 
-        const hasMore = (skip + chats.length) < totalChats;
-        return { chats, hasMore };
+  async findChatsOfUser(userId:string): Promise<{chats:IchatPopulated[]|null}> {
+    const result = await chatModel.find({
+      $or: [
+        { senderId:userId, },
+        {receiverId: userId }
+      ]
+    })
+    .sort({ lastMessageAt: -1 })
+    .populate('senderId', 'name profile_image')
+    .populate('receiverId', 'name profile_image');
+    
+    const chats = result as any as IchatPopulated[];
+    return { chats }
+  }
 
-    }
-    async getChatsOfParticularUsers(senderId: string, receiverId: string): Promise<Ichat | null> {
-        return await chatModel.findOne({
-            $or: [
-                { senderId: senderId, receiverId: receiverId },
-                { senderId: receiverId, receiverId: senderId }
-            ]
-        });
-    }
-    async updateLastMessage(message: Imessage): Promise<Ichat | null> {
-        return await chatModel.findByIdAndUpdate(message.chatId, { lastMessage: message.messageContent, lastMessageAt: message.sendedTime }, { new: true })
-    }
-    async getChatId(senderId: string, receiverId: string): Promise<Ichat | null> {
-        return await chatModel.findOne({
-            $or: [
-                { senderId: senderId, receiverId: receiverId },
-                { senderId: receiverId, receiverId: senderId }
-            ]
-        }).select('_id chatId')
-    }
+  async updateLastMessage(message: Imessage): Promise<Ichat | null> {
+    return await chatModel.findByIdAndUpdate(
+      message.chatId,
+      {
+        lastMessage: message.messageContent,
+        lastMessageAt: message.sendedTime
+      },
+      { new: true }
+    );
+  }
 }

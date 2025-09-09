@@ -7,7 +7,6 @@ interface MessageInputProps {
   message: string;
   setMessage: (message: string) => void;
   onSendMessage: () => void;
-  onKeyPress: (e: React.KeyboardEvent) => void;
   inputRef: RefObject<HTMLInputElement | null>;
   disabled?: boolean;
 }
@@ -16,7 +15,6 @@ const MessageInput = ({
   message, 
   setMessage, 
   onSendMessage, 
-  onKeyPress, 
   inputRef,
   disabled = false 
 }: MessageInputProps) => {
@@ -45,7 +43,6 @@ const MessageInput = ({
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={onKeyPress}
             placeholder="Type a message..."
             disabled={disabled}
             className="w-full bg-[#2f2f2f] text-white placeholder-[#8E8E93] rounded-full px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#007AFF] focus:bg-[#3a3a3a] transition-all duration-200"

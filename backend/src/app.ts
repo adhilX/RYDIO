@@ -2,7 +2,6 @@ import dotenv from 'dotenv'
 dotenv.config()
 import express, { Application, Request, Response, NextFunction, urlencoded } from 'express';
 import { createServer, Server } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
 import { UserRoutes } from './framework/routes/user/userRoutes';
 import { ConnectMongoDB } from './framework/database/databaseConnection/dbConnection';
 import cors from 'cors';
@@ -16,9 +15,11 @@ import responseTime from 'response-time';
 import { createLogger } from "winston";
 import LokiTransport from "winston-loki";
 import { SocketIoController } from './adapters/controllers/chat/socketIoService';
-import { createMessageUsecse, createChatUsecase } from './framework/DI/chatInject';
+import { ChatRoutes } from './framework/routes/chat/chatRoutes';
 import path from 'path';
 import { createWriteStream } from 'fs';
+import { createMessageUseCase } from './framework/DI/chatInject';
+
 
 const options = {
   transports: [
@@ -40,17 +41,10 @@ export class App {
     private database: ConnectMongoDB
     private socketIo?: SocketIoController
     private httpServer:Server
-    private io: SocketIOServer
 
     constructor() {
         this._app = express();
         this.httpServer = createServer(this._app);
-        this.io = new SocketIOServer(this.httpServer, {
-            cors: {
-                origin: process.env.ORIGIN,
-                credentials: true
-            }
-        });
         this._app.use(cors({
             origin: process.env.ORIGIN,
             credentials: true
@@ -71,6 +65,7 @@ export class App {
         this.setAuthRoutes()
         this.setAdminRoutes();
         this.setUserRoutes();
+        this.setChatRoutes();
         this.setErrorHandler()
     }
 
@@ -94,6 +89,10 @@ export class App {
     }
     private setAuthRoutes(){
         this._app.use('/api/v1/refresh-token',new AuthRoute().AuthRouter)
+    }
+    
+    private setChatRoutes(){
+        this._app.use('/api/v1/chat', new ChatRoutes().ChatRoutes);
     }
 
     private setMetricsRoute(){
@@ -148,7 +147,7 @@ export class App {
         }
     }
     private setSocketIo(){
-     this.socketIo = new SocketIoController(this.io ,createChatUsecase,createMessageUsecse)
+        this.socketIo = new SocketIoController(this.httpServer, createMessageUseCase)
     }
 }
 

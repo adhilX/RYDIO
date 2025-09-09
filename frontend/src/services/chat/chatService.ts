@@ -1,19 +1,48 @@
 import { userAxios as axiosInstance } from "@/axios/interceptors";
 
+export const findOrCreateChat = async (userId: string,ownerId:string) => {
+  try {
+      const response = await axiosInstance.post('/chat/find-or-create', { 
+       userId,
+       ownerId 
+    });
+    return response.data
+  } catch (error) {
+    console.log('Error while creating chat:', error);
+    throw error;
+  }
+};
 
-export const createChat = async (senderId: string, receiverId: string) => {
-    return axiosInstance.post('/create-chat', { senderId, receiverId });
-  };
-  
-  export const getChat = async (senderId: string, receiverId: string) => {
-    return axiosInstance.get(`/get-chat/${senderId}/${receiverId}`);
-  };
-  
-  export const getMessages = async (chatId: string) => {
-    return axiosInstance.get(`/get-messages/${chatId}`);
-  };
-  
-  export const sendMessage = async (chatId: string, senderId: string, text: string) => {
-    return axiosInstance.post(`/send-message/${chatId}`, { senderId, text });
-  };
+export const getChatsOfUser = async (userId: string) => {
+  try {
+    const response = await axiosInstance.get(`/chat/chats/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.log('Error while getting chat:', error);
+    throw error;
+  }
+};
+
+// Message APIs
+export const getMessages = async (chatId: string, page: number = 1) => {
+  return axiosInstance.get(`/chat/chats/${chatId}/messages?page=${page}`);
+};
+
+export const sendMessage = async (chatId: string, senderId: string, senderModel: 'user' | 'owner', messageContent: string) => {
+  return axiosInstance.post('/chat/messages', { 
+    chatId, 
+    senderId, 
+    senderModel, 
+    messageContent 
+  });
+};
+
+// Mark messages as seen
+export const markMessageAsSeen = async (messageId: string) => {
+  return axiosInstance.patch(`/chat/messages/${messageId}/seen`);
+};
+
+export const markAllMessagesAsSeenInChat = async (chatId: string) => {
+  return axiosInstance.patch(`/chat/chats/${chatId}/messages/seen`);
+};
   
