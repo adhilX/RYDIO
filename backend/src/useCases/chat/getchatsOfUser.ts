@@ -1,6 +1,6 @@
 import { IGetChatUsecase } from "../../domain/interface/usecaseInterface/chat/IGetChatUsecase";
 import { IChatRepository } from "../../domain/interface/repositoryInterface/IChatRepository";
-import { IbaseChatOut } from "../../domain/interface/DTOs/chatDto/chatDto";
+import { IBaseChatOut } from "../../domain/interface/DTOs/chatDto/chatDto";
 
 export class GetChatUsecase implements IGetChatUsecase {
     private chatRepository: IChatRepository
@@ -8,7 +8,7 @@ export class GetChatUsecase implements IGetChatUsecase {
         this.chatRepository = chatRepository
     }
     
-    async getchatsOfUser(userId: string): Promise<{chats:IbaseChatOut[]|null}> {
+    async getchatsOfUser(userId: string): Promise<{chats:IBaseChatOut[]|null}> {
         const result = await this.chatRepository.findChatsOfUser(userId);
         
         if (!result.chats || result.chats.length === 0) {

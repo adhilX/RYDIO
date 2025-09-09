@@ -1,4 +1,4 @@
-import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { RideStartInputDto, RideStartOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { IRideStartUsecase } from "../../domain/interface/usecaseInterface/bookings/IRideStartUsecase";

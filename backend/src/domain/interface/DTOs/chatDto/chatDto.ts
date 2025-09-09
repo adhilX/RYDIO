@@ -1,6 +1,6 @@
 //base 
 
-export interface IbaseChatOut{
+export interface IBaseChatOut{
     _id?:string,
     lastMessage: string;
     lastMessageAt: Date;
@@ -15,7 +15,7 @@ export  interface IbaseMessageOut{
     messageContent: string;
     sendedTime: string;
 }
-export interface IcreateChatInputDto {
+export interface ICreateChatInputDto {
     userId: string;
     ownerId: string;
 }

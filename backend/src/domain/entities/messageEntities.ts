@@ -1,5 +1,5 @@
 
-export interface Imessage {
+export interface IMessage {
     _id?: string,
     chatId: string,
     seen: boolean,

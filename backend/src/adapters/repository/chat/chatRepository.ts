@@ -1,17 +1,17 @@
 import { chatModel } from "../../../framework/database/models/chatModel";
-import { Ichat, IchatPopulated } from "../../../domain/entities/chatEntites";
+import { IChat, IChatPopulated } from "../../../domain/entities/chatEntites";
 import { IChatRepository } from "../../../domain/interface/repositoryInterface/IChatRepository";
-import { Imessage } from "../../../domain/entities/messageEntities";
+import { IMessage } from "../../../domain/entities/messageEntities";
 
 export class ChatRepository implements IChatRepository {
-  async createChat(chat: Ichat): Promise<IchatPopulated> {
+  async createChat(chat: IChat): Promise<IChatPopulated> {
     const createdChat = await chatModel.create(chat);
     return await chatModel.findById(createdChat._id)
       .populate('senderId', 'name profile_image')
-      .populate('receiverId', 'name profile_image') as any as IchatPopulated;
+      .populate('receiverId', 'name profile_image') as any as IChatPopulated;
   }
 
-  async getchatOfUser(userId: string,ownerId:string): Promise<IchatPopulated|null> {
+  async getchatOfUser(userId: string,ownerId:string): Promise<IChatPopulated|null> {
     const chat = await chatModel.findOne({
       $or: [
         { senderId: userId,receiverId:ownerId },
@@ -22,10 +22,10 @@ export class ChatRepository implements IChatRepository {
     .populate('senderId', 'name profile_image')
     .populate('receiverId', 'name profile_image');
     
-    return chat as any as IchatPopulated
+    return chat as any as IChatPopulated
   }
 
-  async findChatsOfUser(userId:string): Promise<{chats:IchatPopulated[]|null}> {
+  async findChatsOfUser(userId:string): Promise<{chats:IChatPopulated[]|null}> {
     const result = await chatModel.find({
       $or: [
         { senderId:userId, },
@@ -36,11 +36,11 @@ export class ChatRepository implements IChatRepository {
     .populate('senderId', 'name profile_image')
     .populate('receiverId', 'name profile_image');
     
-    const chats = result as any as IchatPopulated[];
+    const chats = result as any as IChatPopulated[];
     return { chats }
   }
 
-  async updateLastMessage(message: Imessage): Promise<Ichat | null> {
+  async updateLastMessage(message: IMessage): Promise<IChat | null> {
     return await chatModel.findByIdAndUpdate(
       message.chatId,
       {

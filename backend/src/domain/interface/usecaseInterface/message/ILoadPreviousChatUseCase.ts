@@ -1,5 +1,5 @@
-import { Imessage } from "../../../entities/messageEntities";
+import { IMessage } from "../../../entities/messageEntities";
 
 export interface ILoadPreviousChatUseCase {
-    loadPreviousChat(chatId: string): Promise<{ messages: Imessage[] }>
+    loadPreviousChat(chatId: string): Promise<{ messages: IMessage[] }>
 }

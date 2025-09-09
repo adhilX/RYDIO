@@ -1,5 +1,5 @@
 
-export interface Ichat {
+export interface IChat {
     _id?: string,
     lastMessage: string,
     lastMessageAt: Date,
@@ -9,7 +9,7 @@ export interface Ichat {
     receiverModel: 'user' | 'owner'
 }
 
-export interface IchatPopulated {
+export interface IChatPopulated {
     _id?: string,
     lastMessage: string,
     lastMessageAt: Date,

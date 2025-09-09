@@ -1,4 +1,4 @@
-import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { ISearchVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/ISearchVehicleUsecase";
 import { SearchVehicleInputDto, SearchVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";

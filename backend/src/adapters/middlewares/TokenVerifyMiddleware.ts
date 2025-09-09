@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatus } from "../../domain/entities/httpStatus";
-import { ItokenService } from "../../domain/interface/serviceInterface/ItokenService";
+import { ITokenService } from "../../domain/interface/serviceInterface/ITokenService";
 
-export const verifyTokenAndCheckBlackList = (TokenService: ItokenService) => {
+export const verifyTokenAndCheckBlackList = (TokenService: ITokenService) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers.authorization
         if (!authHeader || !authHeader.startsWith('Bearer ')) {

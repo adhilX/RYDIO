@@ -1,5 +1,5 @@
 import { GetBookingInputDto, GetBookingOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
-import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IGetBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IGetBookingUsecase";
 
 export class GetBookingUsecase implements IGetBookingUsecase{

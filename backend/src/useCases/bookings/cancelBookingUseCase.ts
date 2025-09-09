@@ -1,4 +1,4 @@
-import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
 import { TrasationRepository } from "../../adapters/repository/transation/TrasationRepository";

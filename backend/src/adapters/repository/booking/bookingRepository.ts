@@ -1,17 +1,16 @@
 import mongoose, { isValidObjectId, Types } from "mongoose";
-import { Ibooking } from "../../../domain/entities/BookingEntities";
-import { IBookingRepository } from "../../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBooking } from "../../../domain/entities/BookingEntities";
+import { IBookingRepository } from "../../../domain/interface/repositoryInterface/IBookingRepository";
 import { bookingModel } from "../../../framework/database/models/bookingModel";
 import { BaseRepository } from "../base/BaseRepo";
 
-export class BookingRepository extends BaseRepository<Ibooking> implements IBookingRepository {
+export class BookingRepository extends BaseRepository<IBooking> implements IBookingRepository {
      constructor() {
           super(bookingModel);
      }
 
-     /**
-      * Creates base aggregation pipeline with user and vehicle lookups
-      */
+     //   Creates base aggregation pipeline with user and vehicle lookups
+ 
      private createBaseAggregationPipeline(): any[] {
           return [
                {
@@ -69,7 +68,7 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
           limit: number,
           page: number,
           additionalPipelineStages: any[] = []
-     ): Promise<{ bookings: Ibooking[], total: number }> {
+     ): Promise<{ bookings: IBooking[], total: number }> {
           const skip = (page - 1) * limit;
           const basePipeline = this.createBaseAggregationPipeline();
 
@@ -107,7 +106,7 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
           matchStage: any,
           limit: number,
           page: number
-     ): Promise<{ bookings: Ibooking[], total: number }> {
+     ): Promise<{ bookings: IBooking[], total: number }> {
           const skip = (page - 1) * limit;
           const basePipeline = this.createVehicleAggregationPipeline();
 
@@ -136,11 +135,11 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
           return { bookings, total };
      }
 
-     async findByPaymentIntentId(payment_intent_id: string): Promise<Ibooking | null> {
+     async findByPaymentIntentId(payment_intent_id: string): Promise<IBooking | null> {
           return await bookingModel.findOne({ payment_intent_id })
      }
 
-     async findByUserId(user_id: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: Ibooking[], total: number } | null> {
+     async findByUserId(user_id: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: IBooking[], total: number } | null> {
           // Create the match condition
           const match: any = {
                user_id: new mongoose.Types.ObjectId(user_id),
@@ -153,7 +152,7 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
 
           return await this.executeVehicleAggregationWithCount(match, limit, page);
      }
-     async getBookingData(search: string, limit: number, page: number): Promise<{ bookings: Ibooking[], total: number } | null> {
+     async getBookingData(search: string, limit: number, page: number): Promise<{ bookings: IBooking[], total: number } | null> {
           const matchConditions: any[] = [
                { "user.name": { $regex: search, $options: "i" } },
                { "vehicle.name": { $regex: search, $options: "i" } },
@@ -186,7 +185,7 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
           return [...new Set(vehicleIds)];
      }
 
-     async getBookedBookingsByVehicleId(vehicle_id: string): Promise<Ibooking[]|null> {
+     async getBookedBookingsByVehicleId(vehicle_id: string): Promise<IBooking[]|null> {
           return await bookingModel.find({
             vehicle_id,
             status: "booked",
@@ -195,11 +194,11 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
         }
 
         
-     async changeBookingStatus(booking_id: string, status: string): Promise<Ibooking | null> {
+     async changeBookingStatus(booking_id: string, status: string): Promise<IBooking | null> {
         return await bookingModel.findOneAndUpdate({ booking_id }, { status }, { new: true })
     }
 
-     async getOwnerBookings(userId: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: Ibooking[], total: number } | null> {
+     async getOwnerBookings(userId: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: IBooking[], total: number } | null> {
           const match: any = {
                "vehicle.owner_id": new mongoose.Types.ObjectId(userId)
           };
@@ -219,7 +218,7 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
           return true;
      }
 
-     async endRide(booking: Ibooking): Promise<Ibooking | null> {
+     async endRide(booking: IBooking): Promise<IBooking | null> {
           return await bookingModel.findOneAndUpdate(
                { booking_id: booking.booking_id }, 
                { 
@@ -231,7 +230,7 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
           );
      }
 
-     async updateBookingFinance(booking_id: string, updateData: any): Promise<Ibooking | null> {
+     async updateBookingFinance(booking_id: string, updateData: any): Promise<IBooking | null> {
           return await bookingModel.findOneAndUpdate(
                { booking_id },
                { $set: updateData },
@@ -239,7 +238,7 @@ export class BookingRepository extends BaseRepository<Ibooking> implements IBook
           );
      }
 
-     async findByBookingId(booking_id:string): Promise<Ibooking | null> {
+     async findByBookingId(booking_id:string): Promise<IBooking | null> {
           return await bookingModel.findOne({booking_id})
      }
 }

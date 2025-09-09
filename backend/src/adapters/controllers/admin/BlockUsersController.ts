@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { IblockUserUseCase } from "../../../domain/interface/usecaseInterface/admin/IBlockUserUseCase";
+import { IBlockUserUseCase } from "../../../domain/interface/usecaseInterface/admin/IBlockUserUseCase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class BlockUserController {
-    private _userBlockUseCase: IblockUserUseCase
-    constructor(userBlockUseCase:IblockUserUseCase ) {
+    private _userBlockUseCase: IBlockUserUseCase
+    constructor(userBlockUseCase:IBlockUserUseCase ) {
         this._userBlockUseCase = userBlockUseCase
     }
     async handleClientBlock(req: Request, res: Response): Promise<void> {

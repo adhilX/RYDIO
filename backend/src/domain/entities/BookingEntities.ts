@@ -20,7 +20,7 @@ export enum PaymentType {
   Wallet = 'wallet',
 }
 
-export interface Ibooking {
+export interface IBooking {
   booking_id: string;
   _id?: string;
   user_id: string|ObjectId;

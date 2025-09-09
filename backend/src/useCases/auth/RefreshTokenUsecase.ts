@@ -2,9 +2,9 @@
 import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IUserRepository } from "../../domain/interface/repositoryInterface/IUserRepository";
 import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
-import { IrefreshTokenUseCase } from "../../domain/interface/usecaseInterface/auth/IrefreshTokenUseCase";
+import { IRefreshTokenUseCase } from "../../domain/interface/usecaseInterface/auth/IRefreshTokenUseCase";
 
-export class RefreshTokenUseCase implements IrefreshTokenUseCase {
+export class RefreshTokenUseCase implements IRefreshTokenUseCase {
     private _jwtService: IJwtService
     private _userRepository: IUserRepository
     private _adminRepository: IAdminRepository

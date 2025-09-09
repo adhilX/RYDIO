@@ -1,8 +1,8 @@
 import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
-import { IblockUserUseCase } from "../../domain/interface/usecaseInterface/admin/IBlockUserUseCase";
+import { IBlockUserUseCase } from "../../domain/interface/usecaseInterface/admin/IBlockUserUseCase";
 import { BlockUserInputDto, BlockUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
-export class BlockUserUseCase implements IblockUserUseCase {
+export class BlockUserUseCase implements IBlockUserUseCase {
     private _adminRepository: IAdminRepository
     constructor(adminRepository: IAdminRepository) {
         this._adminRepository = adminRepository

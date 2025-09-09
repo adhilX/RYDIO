@@ -1,5 +1,5 @@
-import { BookingStatus, Ibooking, PaymentStatus, PaymentType } from "../../domain/entities/BookingEntities"
-import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository"
+import { BookingStatus, IBooking, PaymentStatus, PaymentType } from "../../domain/entities/BookingEntities"
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository"
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository"
 import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ITrasationRepository"
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository"
@@ -45,7 +45,7 @@ export class CreateBookingUsecase implements ICreateBookingUsecase {
     }
     const booking_id = await idGeneratorService.generateBookingId();
     
-    const newBooking: Ibooking = {
+    const newBooking: IBooking = {
       booking_id,
       user_id,  
       vehicle_id: bookingData.vehicle_id,

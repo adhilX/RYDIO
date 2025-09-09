@@ -1,4 +1,4 @@
-import { Imessage } from "../domain/entities/messageEntities";
+import { IMessage } from "../domain/entities/messageEntities";
 
 // Frontend Message interface
 export interface FrontendMessage {
@@ -13,7 +13,7 @@ export interface FrontendMessage {
 export class MessageTransformer {
     
     // Transform backend message to frontend format
-    static toFrontend(backendMessage: Imessage, currentUserId: string): FrontendMessage {
+    static toFrontend(backendMessage: IMessage, currentUserId: string): FrontendMessage {
         return {
             id: backendMessage._id || '',
             text: backendMessage.messageContent,
@@ -25,7 +25,7 @@ export class MessageTransformer {
     }
 
     // Transform frontend message to backend format
-    static toBackend(frontendMessage: Partial<FrontendMessage>, chatId: string, senderId: string, senderModel: 'user' | 'owner'): Omit<Imessage, '_id'> {
+    static toBackend(frontendMessage: Partial<FrontendMessage>, chatId: string, senderId: string, senderModel: 'user' | 'owner'): Omit<IMessage, '_id'> {
         return {
             chatId,
             messageContent: frontendMessage.text || '',
@@ -38,7 +38,7 @@ export class MessageTransformer {
     }
 
     // Transform array of backend messages to frontend format
-    static arrayToFrontend(backendMessages: Imessage[], currentUserId: string): FrontendMessage[] {
+    static arrayToFrontend(backendMessages: IMessage[], currentUserId: string): FrontendMessage[] {
         return backendMessages.map(msg => this.toFrontend(msg, currentUserId));
     }
 }

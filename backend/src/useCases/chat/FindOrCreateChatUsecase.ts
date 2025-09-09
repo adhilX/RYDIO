@@ -1,6 +1,6 @@
-import { IbaseChatOut, IcreateChatInputDto } from "../../domain/interface/DTOs/chatDto/chatDto"
+import { IBaseChatOut, ICreateChatInputDto } from "../../domain/interface/DTOs/chatDto/chatDto"
 import { IChatRepository } from "../../domain/interface/repositoryInterface/IChatRepository"
-import { Ichat } from "../../domain/entities/chatEntites"
+import { IChat } from "../../domain/entities/chatEntites"
 import { IFindOrCreateChatUsecase } from "../../domain/interface/usecaseInterface/chat/IFindOrCreateChatUsecase"
 
 export class FindOrCreateChatUsecase implements IFindOrCreateChatUsecase {
@@ -8,7 +8,7 @@ export class FindOrCreateChatUsecase implements IFindOrCreateChatUsecase {
     constructor(chatRepository: IChatRepository) {
         this.chatRepository = chatRepository
     }
-    async createChat(input:IcreateChatInputDto): Promise<IbaseChatOut> {
+    async createChat(input:ICreateChatInputDto): Promise<IBaseChatOut> {
         const {userId,ownerId} = input
     const existingChat = await this.chatRepository.getchatOfUser(userId,ownerId)
         if (existingChat) {
@@ -24,7 +24,7 @@ export class FindOrCreateChatUsecase implements IFindOrCreateChatUsecase {
             }
         }
         
-        const newChat: Ichat = {
+        const newChat: IChat = {
             senderId:userId,
             receiverId:ownerId,
             senderModel:'user',

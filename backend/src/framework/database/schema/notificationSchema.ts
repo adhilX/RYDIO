@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
-import { Inotification } from "../../../domain/entities/notificationEntities";
+import { INotification } from "../../../domain/entities/notificationEntities";
 
-export const notificationSchema = new Schema<Inotification>({
+export const notificationSchema = new Schema<INotification>({
     userId: {
         type: String,
         refPath: 'userModel',
@@ -10,7 +10,7 @@ export const notificationSchema = new Schema<Inotification>({
     userModel: {
         type: String,
         required: true,
-        enum: ['user', 'owner']
+        enum: ['user', 'owner'] 
     },
     title: {
         type: String,

@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
-import { Ichat } from "../../../domain/entities/chatEntites";
+import { IChat } from "../../../domain/entities/chatEntites";
 
-export const chatSchema = new Schema<Ichat>({
+export const chatSchema = new Schema<IChat>({
     lastMessage: {
         type: String
     },

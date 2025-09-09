@@ -1,4 +1,4 @@
-export interface Inotification {
+export interface INotification {
     _id?: string
     userId: string
     userModel: 'user' | 'owner'

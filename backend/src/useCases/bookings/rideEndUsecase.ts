@@ -1,4 +1,4 @@
-import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { setings } from "../../domain/constants/settings";
 import { RideEndInputDto, RideEndOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";

@@ -1,8 +1,8 @@
 import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
 import { IRedisService } from "../../domain/interface/serviceInterface/IRedisService";
-import { ItokenService } from "../../domain/interface/serviceInterface/ItokenService";
+import { ITokenService } from "../../domain/interface/serviceInterface/ITokenService";
 
-export class TokenService implements ItokenService{
+export class TokenService implements ITokenService{
     private _redisService: IRedisService
     private _jwtService: IJwtService
     private _accessSecretKey: string

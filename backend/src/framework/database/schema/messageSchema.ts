@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
-import { Imessage } from "../../../domain/entities/messageEntities";
+import { IMessage } from "../../../domain/entities/messageEntities";
 
-export const messageSchema = new Schema<Imessage>({
+export const messageSchema = new Schema<IMessage>({
     chatId: {
         type: String,
         ref: 'chat',
