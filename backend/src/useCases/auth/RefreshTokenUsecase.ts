@@ -1,5 +1,5 @@
 
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
 import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService";
 import { IrefreshTokenUseCase } from "../../domain/interface/usecaseInterface/auth/IrefreshTokenUseCase";
@@ -7,11 +7,11 @@ import { IrefreshTokenUseCase } from "../../domain/interface/usecaseInterface/au
 export class RefreshTokenUseCase implements IrefreshTokenUseCase {
     private _jwtService: IjwtService
     private _userRepository: IuserRepository
-    private _adminRepository: IadminRepository
+    private _adminRepository: IAdminRepository
     constructor(
         jwtService: IjwtService,
         userRepository: IuserRepository,
-        adminRepository: IadminRepository
+        adminRepository: IAdminRepository
     ) {
         this._adminRepository = adminRepository
         this._userRepository = userRepository

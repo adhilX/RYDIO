@@ -1,6 +1,6 @@
 import { IwithdrawUsecase } from "../../domain/interface/usecaseInterface/wallets/IwithdrawUsecase";
 import { WithdrawalInputDto } from "../../domain/interface/DTOs/userDto/WalletDto";
-import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IwalletRepository";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
@@ -10,7 +10,7 @@ import { BookingStatus } from "../../domain/entities/BookingEntities";
 
 export class WithdrawUsecase implements IwithdrawUsecase{
     constructor(
-        private bookingRepository: IbookingRepostory,
+        private bookingRepository: IBookingRepository,
         private vehicleRepository: IvehicleRepository,
         private walletRepository: IWalletRepository,
         private adminWalletRepository: IAdminWalletRepository,

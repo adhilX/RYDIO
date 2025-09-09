@@ -3,7 +3,7 @@ import { User } from "../../entities/userEntities";
 import { IVehicle } from "../../entities/vehcleEnties";
 import { IBaseRepository } from "../repositoryInterface/IbaseRepo";
 
-export interface IadminRepository extends IBaseRepository<User> {
+export interface IAdminRepository extends IBaseRepository<User> {
     getAllUsers():Promise<User[]|null>
     blockUser(userId:string):Promise<boolean|null>
     unblockUser(userId:string):Promise<boolean|null>

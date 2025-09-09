@@ -1,11 +1,11 @@
 import { IbaseChatOut, IcreateChatInputDto } from "../../domain/interface/DTOs/chatDto/chatDto"
-import { IchatRepository } from "../../domain/interface/repositoryInterface/IchatRepository"
+import { IChatRepository } from "../../domain/interface/repositoryInterface/IChatRepository"
 import { Ichat } from "../../domain/entities/chatEntites"
 import { IfindOrCreateChatUsecase } from "../../domain/interface/usecaseInterface/chat/IfindOrCreateChatUsercase"
 
 export class FindOrCreateChatUsecase implements IfindOrCreateChatUsecase {
-    private chatRepository: IchatRepository
-    constructor(chatRepository: IchatRepository) {
+    private chatRepository: IChatRepository
+    constructor(chatRepository: IChatRepository) {
         this.chatRepository = chatRepository
     }
     async createChat(input:IcreateChatInputDto): Promise<IbaseChatOut> {

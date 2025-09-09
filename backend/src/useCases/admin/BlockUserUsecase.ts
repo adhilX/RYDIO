@@ -1,10 +1,10 @@
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IblockUserUseCase } from "../../domain/interface/usecaseInterface/admin/IBlockUserUseCase";
 import { BlockUserInputDto, BlockUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class BlockUserUseCase implements IblockUserUseCase {
-    private _adminRepository: IadminRepository
-    constructor(adminRepository: IadminRepository) {
+    private _adminRepository: IAdminRepository
+    constructor(adminRepository: IAdminRepository) {
         this._adminRepository = adminRepository
     }
     async blockUser(input: BlockUserInputDto): Promise<BlockUserOutputDto> {

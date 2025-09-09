@@ -1,11 +1,11 @@
-import { IadminRepository } from "../../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../../domain/interface/repositoryInterface/IAdminRepository";
 import { IpendingVehicleUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicles/IpendingVehicleUsecase";
 import { PendingVehicleInputDto, PendingVehicleOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto";
 
     export class PendingVehicleusercase implements IpendingVehicleUsecase {
-        private _adminRepository : IadminRepository
+        private _adminRepository : IAdminRepository
 
-        constructor(adminRepository:IadminRepository){
+        constructor(adminRepository:IAdminRepository){
             this._adminRepository = adminRepository
         }
 

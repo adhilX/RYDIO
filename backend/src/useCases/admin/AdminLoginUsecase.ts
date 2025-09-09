@@ -1,4 +1,4 @@
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IhashPassword } from "../../domain/interface/serviceInterface/IhashPassword";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
 import { IAdminWallet } from "../../domain/entities/adminWalletEntities";
@@ -8,11 +8,11 @@ import { IadminLoginUseCase } from "../../domain/interface/usecaseInterface/admi
 
 export class LoginAdminUsecase implements IadminLoginUseCase{
 
-    private _adminRepository: IadminRepository
+    private _adminRepository: IAdminRepository
     private _hashPassword: IhashPassword
     private _adminWalletRepository: IAdminWalletRepository
     private _jwtService: IjwtService
-    constructor(adminRepository: IadminRepository, hashPassword: IhashPassword,adminWalletRepository: IAdminWalletRepository,jwtService: IjwtService) {
+    constructor(adminRepository: IAdminRepository, hashPassword: IhashPassword,adminWalletRepository: IAdminWalletRepository,jwtService: IjwtService) {
         this._adminRepository = adminRepository
         this._hashPassword = hashPassword
         this._adminWalletRepository = adminWalletRepository

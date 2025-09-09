@@ -1,6 +1,6 @@
 import { Imessage } from "../../entities/messageEntities"
 
-export interface ImessageRepository {
+export interface IMessageRepository {
     createMessage(message: Imessage): Promise<Imessage>
     getMessages(senderId: string): Promise<Imessage[] | []>
     getMessagesOfAChat(chatId: string): Promise<{ messages: Imessage[] }>

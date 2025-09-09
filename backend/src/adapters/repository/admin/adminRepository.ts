@@ -1,13 +1,13 @@
 import { IVerificationRequest } from "../../../domain/entities/VerificationRequest";
 import { User } from "../../../domain/entities/userEntities";
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
-import { IadminRepository } from "../../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../../domain/interface/repositoryInterface/IAdminRepository";
 import { userModel } from "../../../framework/database/models/userModel";
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
 import { verificationRequestModel } from "../../../framework/database/models/verificationRequestModel";
 import { BaseRepository } from "../base/BaseRepo";
 
-export class AdminRepository extends BaseRepository<User> implements IadminRepository {
+export class AdminRepository extends BaseRepository<User> implements IAdminRepository {
   constructor() {
     super(userModel);
   }

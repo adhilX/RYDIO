@@ -1,9 +1,9 @@
 import { chatModel } from "../../../framework/database/models/chatModel";
 import { Ichat, IchatPopulated } from "../../../domain/entities/chatEntites";
-import { IchatRepository } from "../../../domain/interface/repositoryInterface/IchatRepository";
+import { IChatRepository } from "../../../domain/interface/repositoryInterface/IChatRepository";
 import { Imessage } from "../../../domain/entities/messageEntities";
 
-export class ChatRepository implements IchatRepository {
+export class ChatRepository implements IChatRepository {
   async createChat(chat: Ichat): Promise<IchatPopulated> {
     const createdChat = await chatModel.create(chat);
     return await chatModel.findById(createdChat._id)

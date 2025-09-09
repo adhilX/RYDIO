@@ -1,10 +1,10 @@
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IidProofActionUsecase } from "../../domain/interface/usecaseInterface/admin/IidProofActionUsecase";
 import { IdProofActionInputDto, IdProofActionOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class IdProofActionUsecase implements IidProofActionUsecase{
 
-    constructor(private _adminRepository :IadminRepository){
+    constructor(private _adminRepository :IAdminRepository){
         this._adminRepository = _adminRepository
     }
 

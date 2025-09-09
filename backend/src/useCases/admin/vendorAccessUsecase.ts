@@ -1,10 +1,10 @@
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IvendorAccessUsecase } from "../../domain/interface/usecaseInterface/admin/IvendorAccessUsecase";
 import { VendorAccessInputDto, VendorAccessOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class VendorAccessUsecase implements IvendorAccessUsecase{
-    private _adminRepository:IadminRepository
-    constructor(adminRepository:IadminRepository) {
+    private _adminRepository:IAdminRepository
+    constructor(adminRepository:IAdminRepository) {
         this._adminRepository = adminRepository
     }
 

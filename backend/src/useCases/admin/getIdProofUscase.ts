@@ -1,10 +1,10 @@
 import { User } from "../../domain/entities/userEntities";
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IgetIdProofUscase } from "../../domain/interface/usecaseInterface/admin/IgetIdProofUscase";
 // import { GetIdProofInputDto, GetIdProofOutputDto, BaseUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class GetIdProofUscase implements IgetIdProofUscase{
-    constructor(private _adminRepository :IadminRepository){
+    constructor(private _adminRepository :IAdminRepository){
         this._adminRepository = _adminRepository
     }
     async getIdProof(status:'pending' | 'approved' | 'rejected',currentPage:number,itemsPerPage:number): Promise<{idproofs:User[];total:number} | null> {

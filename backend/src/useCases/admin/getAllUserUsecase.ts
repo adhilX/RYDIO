@@ -1,12 +1,12 @@
 import { User } from "../../domain/entities/userEntities";
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IgetAllUserUsecase } from "../../domain/interface/usecaseInterface/admin/getAllUserUsecase";
 import { GetAllUsersOutputDto, BaseUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class GetAllUserUsecase implements IgetAllUserUsecase{
-    private _adminRepository: IadminRepository
+    private _adminRepository: IAdminRepository
 
-    constructor(adminRepository:IadminRepository){
+    constructor(adminRepository:IAdminRepository){
         this._adminRepository = adminRepository
     }
 

@@ -1,10 +1,10 @@
-import { IadminRepository } from "../../domain/interface/repositoryInterface/IadminRepository";
+import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
 import { IunblockUserUseCase } from "../../domain/interface/usecaseInterface/admin/IunblockUserUsecase";
 import { UnblockUserInputDto, UnblockUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
 export class UnblockUserUseCase implements IunblockUserUseCase {
-    private _adminRepository: IadminRepository
-    constructor(adminRepository: IadminRepository) {
+    private _adminRepository: IAdminRepository
+    constructor(adminRepository: IAdminRepository) {
         this._adminRepository = adminRepository
     }
     async unblockUser(input: UnblockUserInputDto): Promise<UnblockUserOutputDto> {
