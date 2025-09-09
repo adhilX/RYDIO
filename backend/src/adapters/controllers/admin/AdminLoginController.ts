@@ -1,11 +1,11 @@
 import { Request, Response } from "express"
 import { HttpStatus } from "../../../domain/entities/httpStatus"
 import { setCookie } from "../../../framework/services/tokenCookieSet"
-import { IadminLoginUseCase } from "../../../domain/interface/usecaseInterface/admin/IadminLoginUsecase"
+import { IAdminLoginUseCase } from "../../../domain/interface/usecaseInterface/admin/IAdminLoginUsecase"
 
 export class AdminLoginController {
-    private adminLoginUseCase: IadminLoginUseCase
-    constructor(adminLoginUseCase: IadminLoginUseCase) {
+    private adminLoginUseCase: IAdminLoginUseCase
+    constructor(adminLoginUseCase: IAdminLoginUseCase) {
         this.adminLoginUseCase = adminLoginUseCase
     }
 

@@ -1,20 +1,20 @@
 import { IWallet } from "../../../domain/entities/walletEnties";
 import { LoginUserInputDto, LoginUserOutputDto, BaseUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
-import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
-import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
-import { IhashPassword } from "../../../domain/interface/serviceInterface/IhashPassword";
-import { IloginUserUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IloginUserUsecase";
-import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService";
-import { IredisService } from "../../../domain/interface/serviceInterface/IredisService";
+import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository";
+import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IWalletRepository";
+import { IHashPassword } from "../../../domain/interface/serviceInterface/IHashPassword";
+import { ILoginUserUsecase } from "../../../domain/interface/usecaseInterface/auth/login/ILoginUserUsecase";
+import { IJwtService } from "../../../domain/interface/serviceInterface/IJwtService";
+import { IRedisService } from "../../../domain/interface/serviceInterface/IRedisService";
 
-export class LoginUserUsecase implements IloginUserUsecase {
+export class LoginUserUsecase implements ILoginUserUsecase {
 
-    private _userRepository: IuserRepository
-    private _hashPassword: IhashPassword
+    private _userRepository: IUserRepository
+    private _hashPassword: IHashPassword
     private _walletRepository: IWalletRepository
-    private _jwtService: IjwtService
-    private _redisService: IredisService
-    constructor(userRepository: IuserRepository, hashPassword: IhashPassword, walletRepository: IWalletRepository, jwtService: IjwtService, redisService: IredisService) {
+    private _jwtService: IJwtService
+    private _redisService: IRedisService
+    constructor(userRepository: IUserRepository, hashPassword: IHashPassword, walletRepository: IWalletRepository, jwtService: IJwtService, redisService: IRedisService) {
         this._hashPassword = hashPassword
         this._userRepository = userRepository
         this._walletRepository = walletRepository

@@ -1,6 +1,6 @@
 import { IGetWishlistUseCase } from "../../domain/interface/usecaseInterface/wishlist/IGetWishlistUseCase";
 import { IWishlist } from "../../domain/entities/whishlistEnties";
-import { IWishlistRepository } from "../../domain/interface/repositoryInterface/IwishlistRepository";
+import { IWishlistRepository } from "../../domain/interface/repositoryInterface/IWishlistRepository";
 
 export class GetWishlistUseCase implements IGetWishlistUseCase{
     constructor(private _wishlistRepository: IWishlistRepository){}

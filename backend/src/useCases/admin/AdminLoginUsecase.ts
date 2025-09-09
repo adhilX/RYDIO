@@ -1,18 +1,18 @@
 import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
-import { IhashPassword } from "../../domain/interface/serviceInterface/IhashPassword";
+import { IHashPassword } from "../../domain/interface/serviceInterface/IHashPassword";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
 import { IAdminWallet } from "../../domain/entities/adminWalletEntities";
 import { AdminLoginInputDto, AdminLoginOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
-import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService";
-import { IadminLoginUseCase } from "../../domain/interface/usecaseInterface/admin/IadminLoginUsecase";
+import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
+import { IAdminLoginUseCase } from "../../domain/interface/usecaseInterface/admin/IAdminLoginUsecase";
 
-export class LoginAdminUsecase implements IadminLoginUseCase{
+export class LoginAdminUsecase implements IAdminLoginUseCase{
 
     private _adminRepository: IAdminRepository
-    private _hashPassword: IhashPassword
+    private _hashPassword: IHashPassword
     private _adminWalletRepository: IAdminWalletRepository
-    private _jwtService: IjwtService
-    constructor(adminRepository: IAdminRepository, hashPassword: IhashPassword,adminWalletRepository: IAdminWalletRepository,jwtService: IjwtService) {
+    private _jwtService: IJwtService
+    constructor(adminRepository: IAdminRepository, hashPassword: IHashPassword,adminWalletRepository: IAdminWalletRepository,jwtService: IJwtService) {
         this._adminRepository = adminRepository
         this._hashPassword = hashPassword
         this._adminWalletRepository = adminWalletRepository

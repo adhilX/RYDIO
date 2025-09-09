@@ -1,8 +1,8 @@
 import { GetBookingInputDto, GetBookingOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
-import { IgetBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IgetBookingUsecase";
+import { IGetBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IGetBookingUsecase";
 
-export class GetBookingUsecase implements IgetBookingUsecase{
+export class GetBookingUsecase implements IGetBookingUsecase{
 
     constructor(private _bookingRepository: IBookingRepository){
         this._bookingRepository = _bookingRepository

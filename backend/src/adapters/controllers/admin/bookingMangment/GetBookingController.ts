@@ -1,9 +1,9 @@
 import { Request, Response } from "express"
-import { IgetBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IgetBookingUsecase"
+import { IGetBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IGetBookingUsecase"
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
 
 export class GetBookingController {
-    constructor(private _getBookingUsecase: IgetBookingUsecase) {
+    constructor(private _getBookingUsecase: IGetBookingUsecase) {
         this._getBookingUsecase = _getBookingUsecase
     }
 

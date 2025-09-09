@@ -2,7 +2,7 @@ import { IBookingRepository } from "../../domain/interface/repositoryInterface/I
 import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
 import { TrasationRepository } from "../../adapters/repository/transation/TrasationRepository";
-import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
+import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { BookingStatus } from "../../domain/entities/BookingEntities";
 import { CancelBookingInputDto, CancelBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { IcancelBookingUseCase } from "../../domain/interface/usecaseInterface/bookings/IcancelBookingUseCase";
@@ -14,7 +14,7 @@ export class CancelBookingUseCase implements IcancelBookingUseCase  {
         private _walletRepository: WalletRepository,
         private _adminWalletRepository: AdminWalletRepository,
         private _trasationRepository: TrasationRepository,
-        private _vehicleRepository: IvehicleRepository
+        private _vehicleRepository: IVehicleRepository
     ){}
 
     async execute({ booking_id, cancellation_reason }: CancelBookingInputDto): Promise<CancelBookingOutputDto> {

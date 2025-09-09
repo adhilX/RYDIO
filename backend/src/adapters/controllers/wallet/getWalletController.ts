@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
-import { IgetWalletUsecase } from "../../../domain/interface/usecaseInterface/wallets/IgetWalletUsecase";
+import { IGetWalletUsecase } from "../../../domain/interface/usecaseInterface/wallets/IGetWalletUsecase";
 
 export class GetWalletController{
-    constructor(private getWalletUsecase: IgetWalletUsecase) {
+    constructor(private getWalletUsecase: IGetWalletUsecase) {
         this.getWalletUsecase = getWalletUsecase;
     }
 

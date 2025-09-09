@@ -1,10 +1,10 @@
 import { IVehicle } from "../../../domain/entities/vehcleEnties";
-import { IvehicleRepository } from "../../../domain/interface/repositoryInterface/IvehicleRepository";
+import { IVehicleRepository } from "../../../domain/interface/repositoryInterface/IVehicleRepository";
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
 import { locationModel } from "../../../framework/database/models/locationModel";
 import { BaseRepository } from "../base/BaseRepo";
 
-export class VehicleRepository extends BaseRepository<IVehicle> implements IvehicleRepository {
+export class VehicleRepository extends BaseRepository<IVehicle> implements IVehicleRepository {
   constructor() {
     super(VehicleModel);
   }

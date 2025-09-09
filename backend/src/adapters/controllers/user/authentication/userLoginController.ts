@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 import { setCookie } from "../../../../framework/services/tokenCookieSet";
-import { IgoogleloginUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IgoogleLoginUsecase";
-import { IloginUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IloginUserUsecase";
+import { IGoogleLoginUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IGoogleLoginUsecase";
+import { ILoginUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/ILoginUserUsecase";
 
 export class UserLoginController {
-    private _loginUserUsecase: IloginUserUsecase
-    private _GoogleLoginUsecase: IgoogleloginUsecase
-    constructor(loginUserUsecase: IloginUserUsecase, GoogleLoginUsecase: IgoogleloginUsecase) {
+    private _loginUserUsecase: ILoginUserUsecase
+    private _GoogleLoginUsecase: IGoogleLoginUsecase
+    constructor(loginUserUsecase: ILoginUserUsecase, GoogleLoginUsecase: IGoogleLoginUsecase) {
         this._loginUserUsecase = loginUserUsecase
         this._GoogleLoginUsecase = GoogleLoginUsecase
     }

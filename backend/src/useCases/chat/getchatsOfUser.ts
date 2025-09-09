@@ -1,8 +1,8 @@
-import { IgetChatUsecase } from "../../domain/interface/usecaseInterface/chat/IgetChatUsecase";
+import { IGetChatUsecase } from "../../domain/interface/usecaseInterface/chat/IGetChatUsecase";
 import { IChatRepository } from "../../domain/interface/repositoryInterface/IChatRepository";
 import { IbaseChatOut } from "../../domain/interface/DTOs/chatDto/chatDto";
 
-export class GetChatUsecase implements IgetChatUsecase {
+export class GetChatUsecase implements IGetChatUsecase {
     private chatRepository: IChatRepository
     constructor(chatRepository: IChatRepository) {
         this.chatRepository = chatRepository

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService";
+import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
 import { HttpStatus } from "../../domain/entities/httpStatus";
 
-export const TokenTimeExpiryValidationMiddleware = (jwtService: IjwtService) => {
+export const TokenTimeExpiryValidationMiddleware = (jwtService: IJwtService) => {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         const authHeader = req.headers.authorization
         if (!authHeader || !authHeader.startsWith('Bearer ')) {

@@ -1,8 +1,8 @@
-import { ImessageRepository } from "../../../domain/interface/repositoryInterface/ImessageRepository"
+import { IMessageRepository } from "../../../domain/interface/repositoryInterface/IMessageRepository"
 import { messageModel } from "../../../framework/database/models/messageModal"
 import { Imessage } from "../../../domain/entities/messageEntities"
 
-export class MessageRepository implements ImessageRepository {
+export class MessageRepository implements IMessageRepository {
     async createMessage(message: Imessage): Promise<Imessage> {
         return await messageModel.create(message)
     }

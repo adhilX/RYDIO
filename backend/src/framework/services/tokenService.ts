@@ -1,12 +1,12 @@
-import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService";
-import { IredisService } from "../../domain/interface/serviceInterface/IredisService";
+import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
+import { IRedisService } from "../../domain/interface/serviceInterface/IRedisService";
 import { ItokenService } from "../../domain/interface/serviceInterface/ItokenService";
 
 export class TokenService implements ItokenService{
-    private _redisService: IredisService
-    private _jwtService: IjwtService
+    private _redisService: IRedisService
+    private _jwtService: IJwtService
     private _accessSecretKey: string
-    constructor(redisService: IredisService, jwtService: IjwtService, accessSecretKey: string) {
+    constructor(redisService: IRedisService, jwtService: IJwtService, accessSecretKey: string) {
         this._redisService = redisService
         this._jwtService = jwtService
         this._accessSecretKey = accessSecretKey

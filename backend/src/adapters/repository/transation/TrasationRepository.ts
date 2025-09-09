@@ -1,5 +1,5 @@
 import { ITransaction } from "../../../domain/entities/transactionEntities";
-import { ItrasationRepository } from "../../../domain/interface/repositoryInterface/ItrasationRepository";
+import { ItrasationRepository } from "../../../domain/interface/repositoryInterface/ITrasationRepository";
 import { transactionModel } from "../../../framework/database/models/transactionModel";
 import { BaseRepository } from "../base/BaseRepo";
 

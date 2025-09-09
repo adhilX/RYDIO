@@ -1,4 +1,4 @@
 import { IbaseChatOut } from "../../DTOs/chatDto/chatDto";
 
-export interface IgetChatUsecase {
+export interface IGetChatUsecase {
 getchatsOfUser(userId: string): Promise<{chats:IbaseChatOut[]|null}>}

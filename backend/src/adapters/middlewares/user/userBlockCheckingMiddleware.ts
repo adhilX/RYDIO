@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
-import { IredisService } from "../../../domain/interface/serviceInterface/IredisService";
+import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository";
+import { IRedisService } from "../../../domain/interface/serviceInterface/IRedisService";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
-export const UserBlockCheckingMiddleware = (redisService: IredisService,userRepository: IuserRepository) => {
+export const UserBlockCheckingMiddleware = (redisService: IRedisService,userRepository: IUserRepository) => {
   return async (req: Request, res: Response, next: NextFunction) => {
       const user = (req as any).user;
       // console.log(user)

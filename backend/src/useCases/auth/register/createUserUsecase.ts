@@ -1,14 +1,14 @@
 import { CreateUserInputDto, CreateUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
-import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
-import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
-import { IhashPassword } from "../../../domain/interface/serviceInterface/IhashPassword";
+import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository";
+import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IWalletRepository";
+import { IHashPassword } from "../../../domain/interface/serviceInterface/IHashPassword";
 import { IcreateUserUsecase } from "../../../domain/interface/usecaseInterface/auth/register/userUsecaseInterface";
 
 export class CreateUserUsecase implements IcreateUserUsecase{
-    private userRepository :IuserRepository
-    private hashPassword: IhashPassword
+    private userRepository :IUserRepository
+    private hashPassword: IHashPassword
     private walletRepository: IWalletRepository
-    constructor(_userRepository:IuserRepository, _hashPassword:IhashPassword, _walletRepository:IWalletRepository){
+    constructor(_userRepository:IUserRepository, _hashPassword:IHashPassword, _walletRepository:IWalletRepository){
         this.hashPassword = _hashPassword
         this.userRepository = _userRepository
         this.walletRepository = _walletRepository

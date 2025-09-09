@@ -1,16 +1,16 @@
 
 import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
-import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
-import { IjwtService } from "../../domain/interface/serviceInterface/IjwtService";
+import { IUserRepository } from "../../domain/interface/repositoryInterface/IUserRepository";
+import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
 import { IrefreshTokenUseCase } from "../../domain/interface/usecaseInterface/auth/IrefreshTokenUseCase";
 
 export class RefreshTokenUseCase implements IrefreshTokenUseCase {
-    private _jwtService: IjwtService
-    private _userRepository: IuserRepository
+    private _jwtService: IJwtService
+    private _userRepository: IUserRepository
     private _adminRepository: IAdminRepository
     constructor(
-        jwtService: IjwtService,
-        userRepository: IuserRepository,
+        jwtService: IJwtService,
+        userRepository: IUserRepository,
         adminRepository: IAdminRepository
     ) {
         this._adminRepository = adminRepository

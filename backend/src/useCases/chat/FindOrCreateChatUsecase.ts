@@ -1,9 +1,9 @@
 import { IbaseChatOut, IcreateChatInputDto } from "../../domain/interface/DTOs/chatDto/chatDto"
 import { IChatRepository } from "../../domain/interface/repositoryInterface/IChatRepository"
 import { Ichat } from "../../domain/entities/chatEntites"
-import { IfindOrCreateChatUsecase } from "../../domain/interface/usecaseInterface/chat/IfindOrCreateChatUsercase"
+import { IFindOrCreateChatUsecase } from "../../domain/interface/usecaseInterface/chat/IFindOrCreateChatUsecase"
 
-export class FindOrCreateChatUsecase implements IfindOrCreateChatUsecase {
+export class FindOrCreateChatUsecase implements IFindOrCreateChatUsecase {
     private chatRepository: IChatRepository
     constructor(chatRepository: IChatRepository) {
         this.chatRepository = chatRepository

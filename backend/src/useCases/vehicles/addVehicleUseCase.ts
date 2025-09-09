@@ -1,11 +1,11 @@
 import { ILocationRepository } from "../../domain/interface/repositoryInterface/IlocationRepository";
-import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
-import { IaddvehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/IaddvehicleUsecase";
+import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
+import { IAddVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/IAddVehicleUsecase";
 import { AddVehicleInputDto, AddVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
-export class AddVehicleUsecase implements IaddvehicleUsecase{
-    private _vehicleRepository : IvehicleRepository
+export class AddVehicleUsecase implements IAddVehicleUsecase{
+    private _vehicleRepository : IVehicleRepository
     private _locationRepository : ILocationRepository
-    constructor(vehicleRepository:IvehicleRepository,locationRepository:ILocationRepository){
+    constructor(vehicleRepository:IVehicleRepository,locationRepository:ILocationRepository){
         this._vehicleRepository = vehicleRepository
         this._locationRepository = locationRepository
     }

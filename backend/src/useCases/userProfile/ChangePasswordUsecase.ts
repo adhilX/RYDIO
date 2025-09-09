@@ -1,12 +1,12 @@
-import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
-import { IhashPassword } from "../../domain/interface/serviceInterface/IhashPassword";
+import { IUserRepository } from "../../domain/interface/repositoryInterface/IUserRepository";
+import { IHashPassword } from "../../domain/interface/serviceInterface/IHashPassword";
 import { IChangePasswordUsecase } from "../../domain/interface/usecaseInterface/userProfile/IchangePasswordUsercase";
 import { ChangePasswordInputDto, ChangePasswordOutputDto } from "../../domain/interface/DTOs/userDto/UserProfileDto";
 
 export class ChangePassword implements IChangePasswordUsecase{
-    private _userRepository:IuserRepository
-    private _hashPassword :IhashPassword
-    constructor(userRepository:IuserRepository,hashPassword:IhashPassword){
+    private _userRepository:IUserRepository
+    private _hashPassword :IHashPassword
+    constructor(userRepository:IUserRepository,hashPassword:IHashPassword){
         this._userRepository =userRepository
         this._hashPassword = hashPassword
     }

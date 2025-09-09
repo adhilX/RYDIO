@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { ImyVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/ImyVehicleUsecase";
+import { IMyVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IMyVehicleUsecase";
 
 export class MyVehicleController {
-    private _myvehicleUsecase : ImyVehicleUsecase
-    constructor(myvehicleUsecase:ImyVehicleUsecase){
+    private _myvehicleUsecase : IMyVehicleUsecase
+    constructor(myvehicleUsecase:IMyVehicleUsecase){
         this._myvehicleUsecase = myvehicleUsecase
     }
 

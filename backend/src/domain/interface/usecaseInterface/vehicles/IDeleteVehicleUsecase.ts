@@ -1,5 +1,5 @@
 import { DeleteVehicleInputDto, DeleteVehicleOutputDto } from "../../DTOs/userDto/VehicleDto";
 
-export interface IdeleteVehicleUsecase {
+export interface IDeleteVehicleUsecase {
     execute({ vehicleId }: DeleteVehicleInputDto): Promise<DeleteVehicleOutputDto>
 }

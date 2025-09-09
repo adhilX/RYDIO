@@ -1,10 +1,10 @@
 import { Imessage } from "../../domain/entities/messageEntities";
-import { ImessageRepository } from "../../domain/interface/repositoryInterface/ImessageRepository";
+import { IMessageRepository } from "../../domain/interface/repositoryInterface/IMessageRepository";
 import { IloadPreviousChatUseCase } from "../../domain/interface/usecaseInterface/message/IloadPreviousChatUseCase";
 
 export class LoadPreviousChatUseCase implements IloadPreviousChatUseCase{
-    private messageDatabase: ImessageRepository
-    constructor(messageDatabase: ImessageRepository) {
+    private messageDatabase: IMessageRepository
+    constructor(messageDatabase: IMessageRepository) {
         this.messageDatabase = messageDatabase
     }
     async loadPreviousChat(chatId: string): Promise<{ messages:Imessage[] }> {

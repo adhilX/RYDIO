@@ -1,12 +1,12 @@
 import { LogoutUserInputDto, LogoutUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
-import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService";
-import { IredisService } from "../../../domain/interface/serviceInterface/IredisService";
+import { IJwtService } from "../../../domain/interface/serviceInterface/IJwtService";
+import { IRedisService } from "../../../domain/interface/serviceInterface/IRedisService";
 import { IuserLogoutUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IuserLogoutUsecase";
 
 export class UserLogoutUseCase implements IuserLogoutUsecase {
-    private _redisService: IredisService
-    private _jwtService: IjwtService
-    constructor(redisService: IredisService, jwtService: IjwtService) {
+    private _redisService: IRedisService
+    private _jwtService: IJwtService
+    constructor(redisService: IRedisService, jwtService: IJwtService) {
         this._redisService = redisService
         this._jwtService = jwtService
     }

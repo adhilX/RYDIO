@@ -1,19 +1,19 @@
 import { GoogleLoginInputDto, LoginUserOutputDto, BaseUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { User } from "../../../domain/entities/userEntities";
-import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
-import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
-import { IgoogleloginUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IgoogleLoginUsecase";
-import { IjwtService } from "../../../domain/interface/serviceInterface/IjwtService";
-import { IredisService } from "../../../domain/interface/serviceInterface/IredisService";
+import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository";
+import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IWalletRepository";
+import { IGoogleLoginUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IGoogleLoginUsecase";
+import { IJwtService } from "../../../domain/interface/serviceInterface/IJwtService";
+import { IRedisService } from "../../../domain/interface/serviceInterface/IRedisService";
 
-export class GoogleLoginUsecase implements IgoogleloginUsecase {
+export class GoogleLoginUsecase implements IGoogleLoginUsecase {
 
-    private _userRepository: IuserRepository
+    private _userRepository: IUserRepository
     private _walletRepository: IWalletRepository
-    private _jwtService: IjwtService
-    private _redisService: IredisService
+    private _jwtService: IJwtService
+    private _redisService: IRedisService
 
-    constructor(userRepository: IuserRepository, walletRepository: IWalletRepository, jwtService: IjwtService, redisService: IredisService) {
+    constructor(userRepository: IUserRepository, walletRepository: IWalletRepository, jwtService: IJwtService, redisService: IRedisService) {
         this._userRepository = userRepository
         this._walletRepository = walletRepository
         this._jwtService = jwtService

@@ -1,9 +1,9 @@
 import { GetUserInputDto, GetUserOutputDto } from "../../domain/interface/DTOs/userDto/AuthDto";
-import { IuserRepository } from "../../domain/interface/repositoryInterface/IuserRepository";
+import { IUserRepository } from "../../domain/interface/repositoryInterface/IUserRepository";
 import { IGetUserUsecase } from "../../domain/interface/usecaseInterface/userProfile/IgetUserUsecase";
 
 export class GetUserUsecase implements IGetUserUsecase {
-    constructor(private _userRepository: IuserRepository) {}
+    constructor(private _userRepository: IUserRepository) {}
 
     async getUser(input: GetUserInputDto): Promise<GetUserOutputDto> {
         const { userId } = input;

@@ -1,5 +1,5 @@
 
-export interface IredisService{
+export interface IRedisService{
     connect():Promise<void>
     disconnect():Promise<void>
     get(key:string):Promise<string | null>

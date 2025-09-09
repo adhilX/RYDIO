@@ -1,17 +1,17 @@
-import { IwithdrawUsecase } from "../../domain/interface/usecaseInterface/wallets/IwithdrawUsecase";
+import { IWithdrawUsecase } from "../../domain/interface/usecaseInterface/wallets/IWithdrawUsecase";
 import { WithdrawalInputDto } from "../../domain/interface/DTOs/userDto/WalletDto";
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
-import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
-import { IWalletRepository } from "../../domain/interface/repositoryInterface/IwalletRepository";
+import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
+import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
-import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ItrasationRepository";
+import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ITrasationRepository";
 import { TransactionPurpose } from "../../domain/entities/transactionEntities";
 import { BookingStatus } from "../../domain/entities/BookingEntities";
 
-export class WithdrawUsecase implements IwithdrawUsecase{
+export class WithdrawUsecase implements IWithdrawUsecase{
     constructor(
         private bookingRepository: IBookingRepository,
-        private vehicleRepository: IvehicleRepository,
+        private vehicleRepository: IVehicleRepository,
         private walletRepository: IWalletRepository,
         private adminWalletRepository: IAdminWalletRepository,
         private trasationRepository: ItrasationRepository

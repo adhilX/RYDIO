@@ -1,5 +1,5 @@
 import { Imessage } from "../../../entities/messageEntities";
 
-export interface IgetMessagesUsecase {
+export interface IGetMessagesUsecase {
     getMessages(chatId: string): Promise<{ messages: Imessage[] }>;
 }

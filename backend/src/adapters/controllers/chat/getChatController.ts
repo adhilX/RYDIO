@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
-import { IgetChatUsecase } from "../../../domain/interface/usecaseInterface/chat/IgetChatUsecase";
+import { IGetChatUsecase } from "../../../domain/interface/usecaseInterface/chat/IGetChatUsecase";
 
 export class GetChatController {
-    constructor(private _getChatUsecase: IgetChatUsecase) {
+    constructor(private _getChatUsecase: IGetChatUsecase) {
     }
 
     async getChatsOfUser(req: Request, res: Response): Promise<void> {

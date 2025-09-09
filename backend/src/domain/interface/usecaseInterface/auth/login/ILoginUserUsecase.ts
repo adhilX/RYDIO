@@ -1,5 +1,5 @@
 import { LoginUserInputDto, LoginUserOutputDto } from "../../../DTOs/userDto/AuthDto";
 
-export interface IloginUserUsecase {
+export interface ILoginUserUsecase {
     loginUser(input:LoginUserInputDto): Promise<LoginUserOutputDto>
 }

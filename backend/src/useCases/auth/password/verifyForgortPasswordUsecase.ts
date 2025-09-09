@@ -1,11 +1,11 @@
-import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository"
+import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository"
 import { IotpService } from "../../../domain/interface/serviceInterface/IotpService"
 import { IverfyOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase"
 
 export class VerifyForgotPasswordOtpUsecase implements IverfyOtpUsecase{
      private _otpService : IotpService
-     private _userRepository : IuserRepository
-     constructor(otpService:IotpService,userRepository:IuserRepository){
+     private _userRepository : IUserRepository
+     constructor(otpService:IotpService,userRepository:IUserRepository){
         this._otpService = otpService
         this._userRepository = userRepository
      }

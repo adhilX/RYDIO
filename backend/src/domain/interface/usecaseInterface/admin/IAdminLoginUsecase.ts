@@ -1,5 +1,5 @@
 import { AdminLoginInputDto, AdminLoginOutputDto } from "../../DTOs/adminDto/AdminDto";
 
-export interface IadminLoginUseCase {
+export interface IAdminLoginUseCase {
     handleLogin(input: AdminLoginInputDto): Promise<AdminLoginOutputDto>
 }

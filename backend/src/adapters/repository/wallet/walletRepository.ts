@@ -1,5 +1,5 @@
 import { IWallet } from "../../../domain/entities/walletEnties";
-import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IwalletRepository";
+import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IWalletRepository";
 import { WalletModel } from "../../../framework/database/models/walletModel";
 import { BaseRepository } from "../base/BaseRepo";
 

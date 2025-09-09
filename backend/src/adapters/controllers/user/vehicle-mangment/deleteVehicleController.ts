@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { IdeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IdeleteVehicleUsecase";
+import { IDeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IDeleteVehicleUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class DeleteVehicleController {
-    constructor(private _deleteVehicleUseCase:IdeleteVehicleUsecase) {
+    constructor(private _deleteVehicleUseCase:IDeleteVehicleUsecase) {
     }
     async deleteVehicle(req:Request,res:Response){
         try {

@@ -1,9 +1,9 @@
 import { Request, Response } from "express"
-import { IrideStartUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IrideStartUsecase"
+import { IRideStartUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IRideStartUsecase"
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
 
 export class RideStartController {
-    constructor(private _rideStartUsecase: IrideStartUsecase) { }
+    constructor(private _rideStartUsecase: IRideStartUsecase) { }
     async handleRideStart(req: Request, res: Response) {
         try {
             const { bookingId } = req.params

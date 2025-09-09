@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { IgetMessagesUsecase } from "../../../domain/interface/usecaseInterface/message/IgetMessagesUsecase";
+import { IGetMessagesUsecase } from "../../../domain/interface/usecaseInterface/message/IGetMessagesUsecase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class GetMessageController {
-    private getMessagesUsecase: IgetMessagesUsecase;
+    private getMessagesUsecase: IGetMessagesUsecase;
 
-    constructor(getMessagesUsecase: IgetMessagesUsecase) {
+    constructor(getMessagesUsecase: IGetMessagesUsecase) {
         this.getMessagesUsecase = getMessagesUsecase;
     }
 

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { ImessageRepository } from "../../../domain/interface/repositoryInterface/ImessageRepository";
+import { IMessageRepository } from "../../../domain/interface/repositoryInterface/IMessageRepository";
 
 export class MarkMessageAsSeenController {
-    private messageRepository: ImessageRepository;
+    private messageRepository: IMessageRepository;
 
-    constructor(messageRepository: ImessageRepository) {
+    constructor(messageRepository: IMessageRepository) {
         this.messageRepository = messageRepository;
     }
 

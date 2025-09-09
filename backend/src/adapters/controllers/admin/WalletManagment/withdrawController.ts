@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IwithdrawUsecase } from "../../../../domain/interface/usecaseInterface/wallets/IwithdrawUsecase";
+import { IWithdrawUsecase } from "../../../../domain/interface/usecaseInterface/wallets/IWithdrawUsecase";
 
 export class WithdrawController {
     
-    constructor(private _withdrawUsecase: IwithdrawUsecase) {}
+    constructor(private _withdrawUsecase: IWithdrawUsecase) {}
 
     async withdraw(req: Request, res: Response): Promise<void> {
         try {

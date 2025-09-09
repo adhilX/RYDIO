@@ -1,11 +1,11 @@
 import { Imessage } from "../../domain/entities/messageEntities";
-import { ImessageRepository } from "../../domain/interface/repositoryInterface/ImessageRepository";
-import { IgetMessagesUsecase } from "../../domain/interface/usecaseInterface/message/IgetMessagesUsecase";
+import { IMessageRepository } from "../../domain/interface/repositoryInterface/IMessageRepository";
+import { IGetMessagesUsecase } from "../../domain/interface/usecaseInterface/message/IGetMessagesUsecase";
 
-export class GetMessagesUsecase implements IgetMessagesUsecase {
-    private messageRepository: ImessageRepository;
+export class GetMessagesUsecase implements IGetMessagesUsecase {
+    private messageRepository: IMessageRepository;
     
-    constructor(messageRepository: ImessageRepository) {
+    constructor(messageRepository: IMessageRepository) {
         this.messageRepository = messageRepository;
     }
     

@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { IfindOrCreateChatUsecase } from "../../../domain/interface/usecaseInterface/chat/IfindOrCreateChatUsercase.js";
+import { IFindOrCreateChatUsecase } from "../../../domain/interface/usecaseInterface/chat/IFindOrCreateChatUsecase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class FindOrCreateChatController {
-    private createChatUseCase: IfindOrCreateChatUsecase;
+    private createChatUseCase: IFindOrCreateChatUsecase;
 
-    constructor(createChatUseCase: IfindOrCreateChatUsecase) {
+    constructor(createChatUseCase: IFindOrCreateChatUsecase) {
         this.createChatUseCase = createChatUseCase;
     }
 

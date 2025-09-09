@@ -1,4 +1,4 @@
-import { IWishlistRepository } from "../../../domain/interface/repositoryInterface/IwishlistRepository";
+import { IWishlistRepository } from "../../../domain/interface/repositoryInterface/IWishlistRepository";
 import { IWishlist } from "../../../domain/entities/whishlistEnties";
 import { wishlishModel } from "../../../framework/database/models/wishlishModel";
 import { BaseRepository } from "../base/BaseRepo";

@@ -1,10 +1,10 @@
-import { IdeleteVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/IdeleteVehicleUsecase";
-import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
+import { IDeleteVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/IDeleteVehicleUsecase";
+import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { DeleteVehicleInputDto, DeleteVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
-export class DeleteVehicleUsecase implements IdeleteVehicleUsecase{
-    private _vehicleRepository : IvehicleRepository
-    constructor(vehicleRepository:IvehicleRepository){
+export class DeleteVehicleUsecase implements IDeleteVehicleUsecase{
+    private _vehicleRepository : IVehicleRepository
+    constructor(vehicleRepository:IVehicleRepository){
         this._vehicleRepository = vehicleRepository
     }
     async execute({ vehicleId }: DeleteVehicleInputDto): Promise<DeleteVehicleOutputDto> {

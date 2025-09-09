@@ -1,14 +1,14 @@
 import { IsendOptUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase"
 import { IemailServise } from "../../../domain/interface/serviceInterface/IemailService"
 import { IotpService } from "../../../domain/interface/serviceInterface/IotpService"
-import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository"
+import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository"
 import { SendForgotPasswordOtpInputDto, SendForgotPasswordOtpOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto"
 
 export class SendOtpUserUsecase implements IsendOptUsecase{
      private _otpService : IotpService
      private _emailService : IemailServise
-     private _userRepository : IuserRepository
-     constructor(otpService:IotpService,emailSevice:IemailServise,userRepository:IuserRepository){
+     private _userRepository : IUserRepository
+     constructor(otpService:IotpService,emailSevice:IemailServise,userRepository:IUserRepository){
         this._otpService = otpService
         this._emailService = emailSevice
         this._userRepository = userRepository

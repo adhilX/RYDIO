@@ -1,7 +1,7 @@
 import { IVehicle } from "../../entities/vehcleEnties"
 import { IBaseRepository } from "./IbaseRepo"
 
-export interface IvehicleRepository extends IBaseRepository<IVehicle> {
+export interface IVehicleRepository extends IBaseRepository<IVehicle> {
     approveVehicle(id: string, action: string): Promise<boolean>
     rejectVehicle(id: string, action: string): Promise<boolean>
     myVehicle(owner_id: string, search: string, page: string, limit: string): Promise<{ vehicle: IVehicle[], total: number } | null>

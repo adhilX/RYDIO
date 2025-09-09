@@ -1,9 +1,9 @@
 import { User } from "../../../domain/entities/userEntities";
-import { IuserRepository } from "../../../domain/interface/repositoryInterface/IuserRepository";
+import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository";
 import { userModel } from "../../../framework/database/models/userModel";
 import { BaseRepository } from "../base/BaseRepo";
 
-export class UserRepository extends BaseRepository<User> implements IuserRepository{
+export class UserRepository extends BaseRepository<User> implements IUserRepository{
     constructor() {
         super(userModel);
     }
