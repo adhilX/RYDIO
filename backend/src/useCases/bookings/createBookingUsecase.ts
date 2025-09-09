@@ -1,18 +1,18 @@
 import { BookingStatus, Ibooking, PaymentStatus, PaymentType } from "../../domain/entities/BookingEntities"
-import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository"
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository"
 import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ItrasationRepository"
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository"
 import { IredisService } from "../../domain/interface/serviceInterface/IredisService"
 import { idGeneratorService } from "../../framework/DI/serviceInject"
-import { setings } from "../../shared/constent"
+import { setings } from "../../domain/constants/settings"
 import { CreateBookingInputDto, CreateBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
 import { IcreateBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IcreateBookingUsecase"
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IwalletRepository"
 import { TransactionPurpose } from "../../domain/entities/transactionEntities"
 
 export class CreateBookingUsecase implements IcreateBookingUsecase {
-  constructor(private _bookingRepository: IbookingRepostory, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository,private _walletRepository: IWalletRepository, private _trasationRepository: ItrasationRepository) {}
+  constructor(private _bookingRepository: IBookingRepository, private _redisService: IredisService,private _vehicleRepository: IvehicleRepository,private _adminWalletRepository: IAdminWalletRepository,private _walletRepository: IWalletRepository, private _trasationRepository: ItrasationRepository) {}
 
   async createBooking(input: CreateBookingInputDto): Promise<CreateBookingOutputDto> {
     const { bookingData, user_id, stripeIntentId } = input;

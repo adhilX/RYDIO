@@ -1,11 +1,11 @@
-import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
 import { RideStartInputDto, RideStartOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { IrideStartUsecase } from "../../domain/interface/usecaseInterface/bookings/IrideStartUsecase";
 
 export class RideStartUsecase implements IrideStartUsecase {    
   constructor(
-    private _bookingRepository: IbookingRepostory,
+    private _bookingRepository: IBookingRepository,
     private _vehicleRepository: IvehicleRepository
   ) {}
 

@@ -1,12 +1,12 @@
-import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IvehicleRepository } from "../../domain/interface/repositoryInterface/IvehicleRepository";
-import { setings } from "../../shared/constent";
+import { setings } from "../../domain/constants/settings";
 import { RideEndInputDto, RideEndOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { IRideEndUsecase } from "../../domain/interface/usecaseInterface/bookings/IRideEndUsecase";
 
 export class RideEndUsecase implements IRideEndUsecase{
     constructor(
-        private _bookingRepository: IbookingRepostory, 
+        private _bookingRepository: IBookingRepository, 
         private _vehicleRepository: IvehicleRepository,
     ) {}
     async execute(input: RideEndInputDto, scanner_user_id: string): Promise<RideEndOutputDto> {

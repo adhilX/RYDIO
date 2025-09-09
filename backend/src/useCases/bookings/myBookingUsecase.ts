@@ -1,9 +1,9 @@
-import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository";
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { MyBookingInputDto, MyBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { ImyBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/ImyBookingUsecase";
 
 export class MyBookingUsecase implements ImyBookingUsecase{
-    constructor(private _bookingRepository:IbookingRepostory){
+    constructor(private _bookingRepository:IBookingRepository){
         this._bookingRepository = _bookingRepository
     }
 

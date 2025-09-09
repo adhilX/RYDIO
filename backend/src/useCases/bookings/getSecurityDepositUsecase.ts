@@ -1,4 +1,4 @@
-import { setings } from "../../shared/constent";
+import { setings } from "../../domain/constants/settings";
 import { GetSecurityDepositOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { IgetSecurityDepositUsecase } from "../../domain/interface/usecaseInterface/bookings/IgetSecurityDepositUsecase";
 

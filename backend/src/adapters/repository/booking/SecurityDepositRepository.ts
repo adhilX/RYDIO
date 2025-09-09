@@ -1,5 +1,5 @@
 import { ISecurityDepositRepository } from "../../../domain/interface/repositoryInterface/ISecurityDepositRepository";
-import { setings } from "../../../shared/constent";
+import { setings } from "../../../domain/constants/settings";
 
 export class SecurityDepositRepository implements ISecurityDepositRepository{
     

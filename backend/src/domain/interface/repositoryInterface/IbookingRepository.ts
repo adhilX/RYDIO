@@ -1,7 +1,7 @@
 import { BaseRepository } from "../../../adapters/repository/base/BaseRepo";
 import { Ibooking } from "../../entities/BookingEntities";
 
-export interface IbookingRepostory extends BaseRepository<Ibooking>{
+export interface IBookingRepository extends BaseRepository<Ibooking>{
     findByPaymentIntentId(payment_intent_id: string): Promise<Ibooking | null>
     findByUserId(user_id: string, limit: number, page: number, search: string,status:string): Promise<{ bookings: Ibooking[], total: number } | null>
     getBookingData(search: string, limit: number, page: number): Promise<{ bookings: Ibooking[], total: number } | null>

@@ -21,9 +21,10 @@ export default function BookingList() {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<IbookedData | null>(null);
-  const limit = 6;
+  const limit = 5;
   const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
+  console.log(totalBookings)
   // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -247,7 +248,6 @@ export default function BookingList() {
               }}
             />
           )}
-          {totalBookings > limit && (
             <div className="flex justify-center mt-4">
               <Pagination
                 currentPage={currentPage}
@@ -255,7 +255,7 @@ export default function BookingList() {
                 onPageChange={setCurrentPage}
               />
             </div>
-          )}
+        
 
         </>
       )}

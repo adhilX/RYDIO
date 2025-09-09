@@ -1,10 +1,10 @@
-import { IbookingRepostory } from "../../domain/interface/repositoryInterface/IbookingRepository"
+import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository"
 import { IncomingBookingInputDto, IncomingBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
 import { IIncomingBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IIncomingBookingUsecase"
 
 export class IncomingBookingUsecase implements IIncomingBookingUsecase{
     
-    constructor(private _bookingRepository: IbookingRepostory){}
+    constructor(private _bookingRepository: IBookingRepository){}
 
     async execute({ owner_id, page,limit,search,status }: IncomingBookingInputDto): Promise<IncomingBookingOutputDto | null> {
         const result = await this._bookingRepository.getOwnerBookings(owner_id, limit,page, search, status);
