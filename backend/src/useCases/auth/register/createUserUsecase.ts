@@ -2,9 +2,9 @@ import { CreateUserInputDto, CreateUserOutputDto } from "../../../domain/interfa
 import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository";
 import { IWalletRepository } from "../../../domain/interface/repositoryInterface/IWalletRepository";
 import { IHashPassword } from "../../../domain/interface/serviceInterface/IHashPassword";
-import { IcreateUserUsecase } from "../../../domain/interface/usecaseInterface/auth/register/userUsecaseInterface";
+import { ICreateUserUsecase } from "../../../domain/interface/usecaseInterface/auth/register/userUsecaseInterface";
 
-export class CreateUserUsecase implements IcreateUserUsecase{
+export class CreateUserUsecase implements ICreateUserUsecase{
     private userRepository :IUserRepository
     private hashPassword: IHashPassword
     private walletRepository: IWalletRepository

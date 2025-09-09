@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { IuploadIdProofUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IuploadIdProofUsecase";
+import { IUploadIdProofUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IUploadIdProofUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class UploadIdProofController {
 
-    private _uploadIdProofUsecase : IuploadIdProofUsecase
+    private _uploadIdProofUsecase : IUploadIdProofUsecase
 
-    constructor(uploadIdProofUsecase:IuploadIdProofUsecase){
+    constructor(uploadIdProofUsecase:IUploadIdProofUsecase){
         this._uploadIdProofUsecase= uploadIdProofUsecase
     }
 

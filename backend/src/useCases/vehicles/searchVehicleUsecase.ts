@@ -1,9 +1,9 @@
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IbookingRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
-import { IsearchVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/IsearchVehicleUsecase";
+import { ISearchVehicleUsecase } from "../../domain/interface/usecaseInterface/vehicles/ISearchVehicleUsecase";
 import { SearchVehicleInputDto, SearchVehicleOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
-export class SearchVehicleUsecase implements IsearchVehicleUsecase {
+export class SearchVehicleUsecase implements ISearchVehicleUsecase {
 
   constructor(private _vehicleRepsitory: IVehicleRepository,private bookigRepository: IBookingRepository) {
     this._vehicleRepsitory = _vehicleRepsitory;

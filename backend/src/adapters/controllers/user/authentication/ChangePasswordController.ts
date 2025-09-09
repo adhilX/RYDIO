@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IchangePasswordUsecase } from "../../../../domain/interface/usecaseInterface/auth/password/IchangePasswordUsecase";
+import { IChangePasswordUsecase } from "../../../../domain/interface/usecaseInterface/auth/password/IChangePasswordUsecase";
 
 export class ChangePasswordController {
-    private _changePasswordUsecase: IchangePasswordUsecase
-    constructor(changePasswordUsecase: IchangePasswordUsecase) {
+    private _changePasswordUsecase: IChangePasswordUsecase
+    constructor(changePasswordUsecase: IChangePasswordUsecase) {
         this._changePasswordUsecase = changePasswordUsecase
     }
     async handleForgetPassword(req: Request, res: Response): Promise<void> {

@@ -1,10 +1,10 @@
 import { Request, Response } from "express"
 import { HttpStatus } from "../../../domain/entities/httpStatus"
-import { IvendorAccessUsecase } from "../../../domain/interface/usecaseInterface/admin/IvendorAccessUsecase"
+import { IVendorAccessUsecase } from "../../../domain/interface/usecaseInterface/admin/IVendorAccessUsecase"
 
 export class VendorAccessController {
-    private _vendorAccessUsecase: IvendorAccessUsecase
-    constructor(vendorAccessUsecase: IvendorAccessUsecase) {
+    private _vendorAccessUsecase: IVendorAccessUsecase
+    constructor(vendorAccessUsecase: IVendorAccessUsecase) {
         this._vendorAccessUsecase = vendorAccessUsecase
     }
 

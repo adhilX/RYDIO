@@ -1,7 +1,7 @@
 import NodeCache from "node-cache";
-import { IotpService } from "../../domain/interface/serviceInterface/IotpService";
+import { IOtpService } from "../../domain/interface/serviceInterface/IOtpService";
 
-export class OtpService implements IotpService {
+export class OtpService implements IOtpService {
 private _cache : NodeCache
     constructor(){
 this._cache = new NodeCache({ stdTTL: 300 });

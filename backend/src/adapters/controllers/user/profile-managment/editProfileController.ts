@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { IeditProfileUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IeditProfileUsecase";
+import { IEditProfileUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IEditProfileUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class EditProfileController{
-    private _EditProfileUseCase : IeditProfileUsecase
-    constructor(EditProfileUseCase:IeditProfileUsecase){
+    private _EditProfileUseCase : IEditProfileUsecase
+    constructor(EditProfileUseCase:IEditProfileUsecase){
         this._EditProfileUseCase=EditProfileUseCase
     }
 

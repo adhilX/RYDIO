@@ -1,8 +1,8 @@
 import { IUploadIdProofRepository } from "../../domain/interface/repositoryInterface/IUploadIdProofRepository";
-import { IuploadIdProofUsecase } from "../../domain/interface/usecaseInterface/userProfile/IuploadIdProofUsecase";
+import { IUploadIdProofUsecase } from "../../domain/interface/usecaseInterface/userProfile/IUploadIdProofUsecase";
 import { UploadIdProofInputDto, UploadIdProofOutputDto } from "../../domain/interface/DTOs/userDto/UserProfileDto";
 
-export class UploadIdProofUsecase implements IuploadIdProofUsecase{
+export class UploadIdProofUsecase implements IUploadIdProofUsecase{
 
     private _uploadIdProofRepository :IUploadIdProofRepository
 

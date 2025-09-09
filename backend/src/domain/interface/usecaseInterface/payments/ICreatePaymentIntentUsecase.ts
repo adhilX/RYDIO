@@ -1,5 +1,5 @@
 import { CreatePaymentIntentInputDto, CreatePaymentIntentOutputDto } from "../../DTOs/bookingDto/BookingDto";
 
-export interface IcreatePaymentIntentUsecase{
+export interface ICreatePaymentIntentUsecase{
     createPaymentIntent(input: CreatePaymentIntentInputDto): Promise<CreatePaymentIntentOutputDto>
 }

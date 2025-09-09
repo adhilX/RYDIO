@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { IcreatePaymentIntentUsecase } from "../../../../domain/interface/usecaseInterface/payments/IcreatePaymentIntentUsecase";
+import { ICreatePaymentIntentUsecase } from "../../../../domain/interface/usecaseInterface/payments/ICreatePaymentIntentUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class CreatePaymentIntentController {
-    constructor(private _createPaymentIntentUsecase: IcreatePaymentIntentUsecase) {
+    constructor(private _createPaymentIntentUsecase: ICreatePaymentIntentUsecase) {
         this._createPaymentIntentUsecase = _createPaymentIntentUsecase
     }
     async createPaymentIntent(req: Request, res: Response) {

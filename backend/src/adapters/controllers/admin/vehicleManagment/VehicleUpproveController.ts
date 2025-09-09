@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { IvehicleAproveUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicles/IvehicleUpproveUsecase";
+import { IVehicleApproveUsecase } from "../../../../domain/interface/usecaseInterface/admin/vehicles/IvehicleUpproveUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class VehicleUpproveController{
-    private _vehicleUpproveUsecase: IvehicleAproveUsecase
+    private _vehicleUpproveUsecase: IVehicleApproveUsecase
 
-    constructor(vehicleUpproveUsecase: IvehicleAproveUsecase) {
+    constructor(vehicleUpproveUsecase: IVehicleApproveUsecase) {
         this._vehicleUpproveUsecase = vehicleUpproveUsecase
     }
     

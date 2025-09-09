@@ -1,14 +1,14 @@
 import { SendForgotPasswordOtpInputDto, SendForgotPasswordOtpOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository"
-import { IemailServise } from "../../../domain/interface/serviceInterface/IemailService"
-import { IotpService } from "../../../domain/interface/serviceInterface/IotpService"
-import { IsendOptUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase"
+import { IEmailService } from "../../../domain/interface/serviceInterface/IemailService"
+import { IOtpService } from "../../../domain/interface/serviceInterface/IOtpService"
+import { ISendOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase"
 
-export class ForgotPasswordUsecase implements IsendOptUsecase{
-     private _otpService : IotpService
-     private _emailService : IemailServise
+export class ForgotPasswordUsecase implements ISendOtpUsecase{
+     private _otpService : IOtpService
+     private _emailService : IEmailService
      private _userRepository : IUserRepository
-     constructor(otpService:IotpService,emailSevice:IemailServise,userRepository:IUserRepository){
+     constructor(otpService:IOtpService,emailSevice:IEmailService,userRepository:IUserRepository){
         this._otpService = otpService
         this._emailService = emailSevice
         this._userRepository = userRepository

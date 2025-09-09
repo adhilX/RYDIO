@@ -5,10 +5,10 @@ import { TrasationRepository } from "../../adapters/repository/transation/Trasat
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { BookingStatus } from "../../domain/entities/BookingEntities";
 import { CancelBookingInputDto, CancelBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
-import { IcancelBookingUseCase } from "../../domain/interface/usecaseInterface/bookings/IcancelBookingUseCase";
+import { ICancelBookingUseCase } from "../../domain/interface/usecaseInterface/bookings/ICancelBookingUseCase";
 import { TransactionPurpose } from "../../domain/entities/transactionEntities";
 
-export class CancelBookingUseCase implements IcancelBookingUseCase  {
+export class CancelBookingUseCase implements ICancelBookingUseCase  {
     constructor(
         private _bookingRepository: IBookingRepository,
         private _walletRepository: WalletRepository,

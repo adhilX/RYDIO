@@ -1,12 +1,12 @@
-import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase";
+import { IVerifyOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IVerifyOtpUsecase";
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class VerifyForgotPassowordOtpController {
-    private _verifyOtpUsecase : IverfyOtpUsecase
+    private _verifyOtpUsecase : IVerifyOtpUsecase
 
 
-    constructor(verifyOtpUsecase:IverfyOtpUsecase){
+    constructor(verifyOtpUsecase:IVerifyOtpUsecase){
         this._verifyOtpUsecase = verifyOtpUsecase
     }
      async verify(req: Request, res: Response): Promise<void> {

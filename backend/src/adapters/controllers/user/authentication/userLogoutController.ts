@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IuserLogoutUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IuserLogoutUsecase";
+import { IUserLogoutUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IUserLogoutUsecase";
 
 export class UserLogoutController {
-    private _logoutUserusecase: IuserLogoutUsecase
-    constructor(logoutUserusecase: IuserLogoutUsecase) {
+    private _logoutUserusecase: IUserLogoutUsecase
+    constructor(logoutUserusecase: IUserLogoutUsecase) {
         this._logoutUserusecase = logoutUserusecase
     }
     async handleClientLogout(req: Request, res: Response): Promise<void> {

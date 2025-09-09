@@ -1,8 +1,8 @@
-import { IemailServise } from "../../domain/interface/serviceInterface/IemailService";
+import { IEmailService } from "../../domain/interface/serviceInterface/IemailService";
 import nodemailer from 'nodemailer'
 import { otpTemplate } from "../../shared/templates/otpTemplates";
 
-export class EmailService implements IemailServise {
+export class EmailService implements IEmailService {
   private _transporter: nodemailer.Transporter;
 
    constructor(){

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { IchangeVehicleStatusUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IchangeVehicleStatusUsecase";
+import { IChangeVehicleStatusUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IChangeVehicleStatusUsecase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class ChangeVehicleStatusController {
-    private _changeVehicleStatusUsecase: IchangeVehicleStatusUsecase;
-    constructor(changeVehicleStatusUsecase: IchangeVehicleStatusUsecase) {
+    private _changeVehicleStatusUsecase: IChangeVehicleStatusUsecase;
+    constructor(changeVehicleStatusUsecase: IChangeVehicleStatusUsecase) {
       this._changeVehicleStatusUsecase = changeVehicleStatusUsecase
     }
     async changeVehicleStatus(req:Request,res:Response){

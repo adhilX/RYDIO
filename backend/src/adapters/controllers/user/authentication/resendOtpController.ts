@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
-import { IresendOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IresendOtpUsecase";
+import { IResendOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IResendOtpUsecase";
 
 export class ResendOtpController{
-    private _ResendOtpUsecase:IresendOtpUsecase
+    private _ResendOtpUsecase:IResendOtpUsecase
 
-    constructor(ResendOtpUsecase:IresendOtpUsecase){
+    constructor(ResendOtpUsecase:IResendOtpUsecase){
         this._ResendOtpUsecase = ResendOtpUsecase
     }
 

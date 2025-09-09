@@ -1,5 +1,5 @@
 import { SendForgotPasswordOtpInputDto, SendForgotPasswordOtpOutputDto } from "../../../DTOs/userDto/AuthDto";
 
-export interface IsendOptUsecase {
+export interface ISendOtpUsecase {
     execute(input: SendForgotPasswordOtpInputDto): Promise<SendForgotPasswordOtpOutputDto>
 }

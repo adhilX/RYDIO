@@ -1,5 +1,5 @@
 import { IdProofActionInputDto, IdProofActionOutputDto } from "../../DTOs/adminDto/AdminDto";
 
-export interface IidProofActionUsecase {
+export interface IIdProofActionUsecase {
     setAction(input: IdProofActionInputDto): Promise<IdProofActionOutputDto>
 }

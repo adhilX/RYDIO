@@ -1,9 +1,9 @@
     import { User } from "../../domain/entities/userEntities";
 import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
-import { IsearchUserUsecase } from "../../domain/interface/usecaseInterface/admin/IsearchUserUsecase";
+import { ISearchUserUsecase } from "../../domain/interface/usecaseInterface/admin/ISearchUserUsecase";
 import { SearchUserInputDto, SearchUserOutputDto, BaseUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
-export class SearchUserusercase implements IsearchUserUsecase{
+export class SearchUserusercase implements ISearchUserUsecase{
     private _adminRepository: IAdminRepository
 
     constructor(adminRepository:IAdminRepository){

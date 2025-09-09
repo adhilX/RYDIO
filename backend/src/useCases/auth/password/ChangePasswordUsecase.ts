@@ -1,9 +1,9 @@
 import { ChangePasswordInputDto, ChangePasswordOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository"
 import { IHashPassword } from "../../../domain/interface/serviceInterface/IHashPassword"
-import { IchangePasswordUsecase } from "../../../domain/interface/usecaseInterface/auth/password/IchangePasswordUsecase"
+import { IChangePasswordUsecase } from "../../../domain/interface/usecaseInterface/auth/password/IChangePasswordUsecase"
 
-export class ChangePasswordUseCase implements IchangePasswordUsecase {
+export class ChangePasswordUseCase implements IChangePasswordUsecase {
     private _userRepository: IUserRepository
     private hashPassword: IHashPassword
     constructor(userRepository: IUserRepository, hashPassword: IHashPassword) {

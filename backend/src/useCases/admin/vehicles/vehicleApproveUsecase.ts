@@ -1,8 +1,8 @@
 import { VehicleRepository } from "../../../adapters/repository/user/vehicleRepository";
-import { IvehicleAproveUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicles/IvehicleUpproveUsecase";
+import { IVehicleApproveUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicles/IvehicleUpproveUsecase";
 import { VehicleApprovalInputDto, VehicleApprovalOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto";
 
-export class VehicleUpproveUsecase implements IvehicleAproveUsecase {
+export class VehicleUpproveUsecase implements IVehicleApproveUsecase {
     private _vehicleRepository: VehicleRepository
     constructor(vehicleRepository: VehicleRepository) {
         this._vehicleRepository = vehicleRepository

@@ -1,9 +1,9 @@
 import { LogoutUserInputDto, LogoutUserOutputDto } from "../../../domain/interface/DTOs/userDto/AuthDto";
 import { IJwtService } from "../../../domain/interface/serviceInterface/IJwtService";
 import { IRedisService } from "../../../domain/interface/serviceInterface/IRedisService";
-import { IuserLogoutUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IuserLogoutUsecase";
+import { IUserLogoutUsecase } from "../../../domain/interface/usecaseInterface/auth/login/IUserLogoutUsecase";
 
-export class UserLogoutUseCase implements IuserLogoutUsecase {
+export class UserLogoutUseCase implements IUserLogoutUsecase {
     private _redisService: IRedisService
     private _jwtService: IJwtService
     constructor(redisService: IRedisService, jwtService: IJwtService) {

@@ -1,9 +1,9 @@
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IgetAdminWalletUsecase } from "../../../../domain/interface/usecaseInterface/wallets/IgetAdminWalletUsecase";
+import { IGetAdminWalletUsecase } from "../../../../domain/interface/usecaseInterface/wallets/IGetAdminWalletUsecase";
 import { Request, Response } from "express";
 
 export class GetAdminWalletController {
-    constructor(private getAdminWalletUsecase: IgetAdminWalletUsecase){}
+    constructor(private getAdminWalletUsecase: IGetAdminWalletUsecase){}
     async getWalletDetails(req: Request, res: Response){
         try {
             // const {page, limit} = req.query

@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IcreateUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/userUsecaseInterface";
-import { IverfyOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase";
+import { ICreateUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/userUsecaseInterface";
+import { IVerifyOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IVerifyOtpUsecase";
 
 export class UserRegisterController {
-    private _verifyOtpUsecase : IverfyOtpUsecase
-    private _createuserUsecase : IcreateUserUsecase
+    private _verifyOtpUsecase : IVerifyOtpUsecase
+    private _createuserUsecase : ICreateUserUsecase
 
-    constructor(verifyOtpUsecase:IverfyOtpUsecase,createuserUsecase:IcreateUserUsecase){
+    constructor(verifyOtpUsecase:IVerifyOtpUsecase,createuserUsecase:ICreateUserUsecase){
         this._verifyOtpUsecase = verifyOtpUsecase
         this._createuserUsecase = createuserUsecase
     }

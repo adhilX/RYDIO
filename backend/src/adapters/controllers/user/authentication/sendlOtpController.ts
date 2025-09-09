@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
-import { IsendOptUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase";
+import { ISendOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase";
 export class SendOtpController{
-    private _userSendOtpUsecase:IsendOptUsecase
+    private _userSendOtpUsecase:ISendOtpUsecase
 
-    constructor(userSendOtpUsecase:IsendOptUsecase){
+    constructor(userSendOtpUsecase:ISendOtpUsecase){
         this._userSendOtpUsecase = userSendOtpUsecase
     }
 

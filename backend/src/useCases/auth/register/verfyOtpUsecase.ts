@@ -1,11 +1,11 @@
-import { IotpService } from "../../../domain/interface/serviceInterface/IotpService"
-import { IverfyOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IverfyOtpUsecase"
+import { IOtpService } from "../../../domain/interface/serviceInterface/IOtpService"
+import { IVerifyOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IVerifyOtpUsecase"
 
-export class VerifyOtpUsecase implements IverfyOtpUsecase{
+export class VerifyOtpUsecase implements IVerifyOtpUsecase{
 
-    private _otpService: IotpService
+    private _otpService: IOtpService
 
-    constructor(otpSevice:IotpService){
+    constructor(otpSevice:IOtpService){
         this._otpService = otpSevice
     }
 

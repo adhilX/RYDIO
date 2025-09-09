@@ -1,5 +1,5 @@
 import { VehicleDetailsInputDto, VehicleDetailsOutputDto } from "../../DTOs/userDto/VehicleDto";
 
-export interface IvehicleDetailsUsecase {
+export interface IVehicleDetailsUsecase {
     getVehicleDetails({ id }: VehicleDetailsInputDto): Promise<VehicleDetailsOutputDto | null>
 }

@@ -1,5 +1,5 @@
 import { GetAdminWalletOutputDto } from "../../DTOs/adminDto/AdminDto";
 
-export interface IgetAdminWalletUsecase {
+export interface IGetAdminWalletUsecase {
     getWalletDetails(): Promise<GetAdminWalletOutputDto | null>
 }

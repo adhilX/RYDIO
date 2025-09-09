@@ -1,5 +1,5 @@
 import { VehicleApprovalInputDto, VehicleApprovalOutputDto } from "../../../DTOs/adminDto/AdminDto";
 
-export interface IvehicleAproveUsecase {
+export interface IVehicleApproveUsecase {
     approveVehicle(input: VehicleApprovalInputDto): Promise<VehicleApprovalOutputDto>
 }

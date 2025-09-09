@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { IidProofActionUsecase } from "../../../domain/interface/usecaseInterface/admin/IidProofActionUsecase";
+import { IIdProofActionUsecase } from "../../../domain/interface/usecaseInterface/admin/IIdProofActionUsecase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class IdProofActionController {
 
-    constructor(private _idProofActionUsecase :IidProofActionUsecase){
+    constructor(private _idProofActionUsecase :IIdProofActionUsecase){
         this._idProofActionUsecase = _idProofActionUsecase
     }
 

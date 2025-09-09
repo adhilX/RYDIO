@@ -1,5 +1,5 @@
 import { UnblockUserInputDto, UnblockUserOutputDto } from "../../DTOs/adminDto/AdminDto";
 
-export interface IunblockUserUseCase{
+export interface IUnblockUserUsecase {
     unblockUser(input: UnblockUserInputDto): Promise<UnblockUserOutputDto>
 }

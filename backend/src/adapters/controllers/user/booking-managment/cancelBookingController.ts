@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IcancelBookingUseCase } from "../../../../domain/interface/usecaseInterface/bookings/IcancelBookingUseCase";
+import { ICancelBookingUseCase } from "../../../../domain/interface/usecaseInterface/bookings/ICancelBookingUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 export class CancelBookingController {
-    constructor(private cancelBookingUseCase: IcancelBookingUseCase){}
+    constructor(private cancelBookingUseCase: ICancelBookingUseCase){}
 
     async cancelBooking(req:Request,res:Response){
         try {

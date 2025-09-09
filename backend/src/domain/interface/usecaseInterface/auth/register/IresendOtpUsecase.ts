@@ -1,3 +1,3 @@
-export interface IresendOtpUsecase {
+export interface IResendOtpUsecase {
     resendOtp(email:string):Promise<void>
 }

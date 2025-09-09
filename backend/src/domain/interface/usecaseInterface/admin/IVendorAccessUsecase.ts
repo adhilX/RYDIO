@@ -1,5 +1,5 @@
 import { VendorAccessInputDto, VendorAccessOutputDto } from "../../DTOs/adminDto/AdminDto";
 
-export interface IvendorAccessUsecase {
+export interface IVendorAccessUsecase {
     vendorAccess(input: VendorAccessInputDto): Promise<VendorAccessOutputDto>
 }

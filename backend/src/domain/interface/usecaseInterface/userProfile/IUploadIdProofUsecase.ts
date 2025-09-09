@@ -1,5 +1,5 @@
 import { UploadIdProofInputDto, UploadIdProofOutputDto } from "../../DTOs/userDto/UserProfileDto";
 
-export interface IuploadIdProofUsecase{
+export interface IUploadIdProofUsecase{
     uploadProof(input: UploadIdProofInputDto): Promise<UploadIdProofOutputDto | null>
 }

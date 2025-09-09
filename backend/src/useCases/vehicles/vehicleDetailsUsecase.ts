@@ -1,8 +1,8 @@
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
-import { IvehicleDetailsUsecase } from "../../domain/interface/usecaseInterface/vehicles/IvehicleDetailsUsecase";
+import { IVehicleDetailsUsecase } from "../../domain/interface/usecaseInterface/vehicles/IVehicleDetailsUsecase";
 import { VehicleDetailsInputDto, VehicleDetailsOutputDto } from "../../domain/interface/DTOs/userDto/VehicleDto";
 
-export class VehicleDetailsUsecase implements IvehicleDetailsUsecase {
+export class VehicleDetailsUsecase implements IVehicleDetailsUsecase {
 
 
 constructor(private _vehicleRepository:IVehicleRepository){

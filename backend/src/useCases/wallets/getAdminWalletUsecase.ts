@@ -1,9 +1,9 @@
-import { IgetAdminWalletUsecase } from "../../domain/interface/usecaseInterface/wallets/IgetAdminWalletUsecase";
+import { IGetAdminWalletUsecase } from "../../domain/interface/usecaseInterface/wallets/IGetAdminWalletUsecase";
 import { GetAdminWalletOutputDto, WalletTransactionDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
 import { ITransaction } from "../../domain/entities/transactionEntities";
 
-export class GetAdminWalletUsecase implements IgetAdminWalletUsecase {
+export class GetAdminWalletUsecase implements IGetAdminWalletUsecase {
     constructor(private _adminWalletRepository: AdminWalletRepository){}
     
     async getWalletDetails(): Promise<GetAdminWalletOutputDto | null> {

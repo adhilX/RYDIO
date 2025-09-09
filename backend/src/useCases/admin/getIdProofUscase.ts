@@ -1,9 +1,9 @@
 import { User } from "../../domain/entities/userEntities";
 import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
-import { IgetIdProofUscase } from "../../domain/interface/usecaseInterface/admin/IgetIdProofUscase";
+import { IGetIdProofUsecase } from "../../domain/interface/usecaseInterface/admin/IGetIdProofUsecase";
 // import { GetIdProofInputDto, GetIdProofOutputDto, BaseUserOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 
-export class GetIdProofUscase implements IgetIdProofUscase{
+export class GetIdProofUscase implements IGetIdProofUsecase{
     constructor(private _adminRepository :IAdminRepository){
         this._adminRepository = _adminRepository
     }

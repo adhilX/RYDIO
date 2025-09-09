@@ -1,9 +1,9 @@
 import { IRedisService } from "../../domain/interface/serviceInterface/IRedisService";
 import { IStripeService } from "../../domain/interface/serviceInterface/IstripeService";
-import { IcreatePaymentIntentUsecase } from "../../domain/interface/usecaseInterface/payments/IcreatePaymentIntentUsecase";
+import { ICreatePaymentIntentUsecase } from "../../domain/interface/usecaseInterface/payments/ICreatePaymentIntentUsecase";
 import { CreatePaymentIntentInputDto, CreatePaymentIntentOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 
-export class CreatePaymentIntentUsecase implements IcreatePaymentIntentUsecase{
+export class CreatePaymentIntentUsecase implements ICreatePaymentIntentUsecase{
     constructor(private _stripeService: IStripeService,private _redisService: IRedisService) {
         this._stripeService = _stripeService
         this._redisService = _redisService
