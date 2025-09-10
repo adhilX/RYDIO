@@ -8,6 +8,7 @@ import { findOrCreateChat, getMessages } from '@/services/chat/chatService';
 import type { Ichat } from '@/Types/chat/Ichat';
 import toast from 'react-hot-toast';
 import socket from '@/hooks/ConnectSocketIo';
+import LoadingSpinner from '../LoadingSpinner';
 
 
 const MessageContainer = () => {
@@ -129,9 +130,7 @@ const handleSendMessage =(e:React.FormEvent)=>{
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-gray-400">Loading messages...</div>
-      </div>
+      <LoadingSpinner/>
     );
   }
 
