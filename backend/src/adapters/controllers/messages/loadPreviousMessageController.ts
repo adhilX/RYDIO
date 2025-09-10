@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
-import { ILoadPreviousChatUseCase } from "../../../domain/interface/usecaseInterface/message/IloadPreviousChatUseCase";
+import { ILoadPreviousChatUseCase } from "../../../domain/interface/usecaseInterface/message/ILoadPreviousChatUseCase";
 
 export class LoadPreviousMessageController {
     private loadPreviousChatUseCase: ILoadPreviousChatUseCase

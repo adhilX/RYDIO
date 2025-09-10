@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Navbar from '../../components/user/Navbar';
-import UserSidebar from '../../components/chat/UserSidebar';
+import ChatSidebar from '../../components/chat/ChatSidebar';
 
 
 const ChatLayout = () => {
@@ -13,8 +13,8 @@ const ChatLayout = () => {
     <div className="h-screen bg-[#212121] text-white flex flex-col">
       <Navbar />
       <div className="flex-1 flex pt-16 relative overflow-hidden">
-        {/* User Sidebar */}
-        <UserSidebar 
+        {/* Chat Sidebar */}
+        <ChatSidebar 
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />

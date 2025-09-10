@@ -7,6 +7,7 @@ import { getChatsOfUser } from '@/services/chat/chatService';
 import type { Ichat } from '@/Types/chat/Ichat';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
+import socket from '@/hooks/ConnectSocketIo';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 interface UserSidebarProps {
@@ -36,7 +37,7 @@ const formatLastMessageTime = (date: Date | string) => {
   }
 };
 
-const UserSidebar = ({isOpen, onClose }: UserSidebarProps) => {
+const ChatSidebar = ({isOpen, onClose }: UserSidebarProps) => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
   const userId = user?._id;
@@ -52,9 +53,43 @@ const UserSidebar = ({isOpen, onClose }: UserSidebarProps) => {
     
     const fetchChat = async () => {
       const result = await getChatsOfUser(userId!)
-      setChatUsers(result.data.chats || [])
+      // Set all users as offline initially
+      const chatsWithOfflineStatus = (result.data.chats || []).map((chat: Ichat) => ({
+        ...chat,
+        isOnline: false
+      }));
+      setChatUsers(chatsWithOfflineStatus)
     }
     fetchChat()
+  }, [userId]);
+
+  // Socket connection and online status tracking
+  useEffect(() => {
+    if (!userId) return;
+
+    // Connect socket and emit user online status
+    if (!socket.connected) {
+      socket.connect();
+    }
+    
+    socket.emit('user-online', userId);
+
+    // Listen for user status changes
+    const handleUserStatusChange = ({ userId: changedUserId, isOnline }: { userId: string, isOnline: boolean }) => {
+      setChatUsers(prev => 
+        prev.map(chat => 
+          chat._id === changedUserId 
+            ? { ...chat, isOnline } 
+            : chat
+        )
+      );
+    };
+
+    socket.on('user-status-changed', handleUserStatusChange);
+
+    return () => {
+      socket.off('user-status-changed', handleUserStatusChange);
+    };
   }, [userId]);
 
   if (!userId) return null;
@@ -150,4 +185,4 @@ const UserSidebar = ({isOpen, onClose }: UserSidebarProps) => {
   );
 };
 
-export default UserSidebar;
+export default ChatSidebar;

@@ -20,9 +20,10 @@ import { loadStripe } from "@stripe/stripe-js"
 import PaymentSuccess from "@/pages/User/PaymentSuccess"
 import MyBooking from "@/components/user/Dashboard/MyBooking"
 import IncomingBookings from "@/components/user/Dashboard/IncomingBookings"
-import ChatLayout from "@/layout/user/ChatLayout"
-import MessageTemplate from "@/components/chat/MessageTemplate"
-import MessageContainer from "@/components/chat/MessageContainer"
+import LoadingSpinner from "@/components/LoadingSpinner"
+const  ChatLayout = React.lazy(()=>import ("@/layout/user/ChatLayout"))
+const  MessageTemplate = React.lazy(()=>import ("@/components/chat/MessageTemplate")) 
+ const MessageContainer= React.lazy(()=>import("@/components/chat/MessageContainer"))
 const CheckoutForm = React.lazy(() => import("@/pages/User/CheckoutForm"))
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 
@@ -38,84 +39,19 @@ export const UserRoutes = () => {
             <Route path='/vehicle-details/:id' element={<TokenProtected><VehicleDetailPage /></TokenProtected>} />
             <Route path="/booking-confirmation" element={<TokenProtected><BookingConfirmation /></TokenProtected>} />
             <Route path="/payment-success" element={<TokenProtected><PaymentSuccess /></TokenProtected>} />
-            <Route
-                path="/payment"
-                element={
-                    <Elements stripe={stripePromise}>
-                        <TokenProtected>
-                            <Suspense fallback={<div>Loading...</div>}>
-                                <CheckoutForm />
-                            </Suspense>
-                        </TokenProtected>
-                    </Elements>
-                }
-            />
-            <Route
-                path="/userprofile"
-                element={
-                    <TokenProtected>
-                        <Suspense fallback={<div>Loading...</div>}>
-                            <Layout />
-                        </Suspense>
-                    </TokenProtected>
-                }
-            >
-                <Route index element={
-                    <TokenProtected>
-                        <UserProfile />
-                    </TokenProtected>
-                } />
-                <Route
-                    path="vehicles"
-                    element={
-                        <TokenProtected>
-                            <ListVehilce />
-                        </TokenProtected>
-                    }
-                />
-                <Route
-                    path="add-vehicle"
-                    element={
-                        <TokenProtected>
-                            <AddVehicleForm />
-                        </TokenProtected>
-                    }
-                />
-                <Route
-                    path="change-password"
-                    element={
-                        <TokenProtected>
-                            <ChangePassword />
-                        </TokenProtected>
-                    }
-                />
-                <Route
-                    path="wallet"
-                    element={
-                        <TokenProtected>
-                            <Wallet />
-                        </TokenProtected>
-                    }
-                />
-                <Route
-                    path="my-bookings"
-                    element={
-                        <TokenProtected>
-                            <MyBooking />
-                        </TokenProtected>
-                    }
-                />
-                    <Route
-                    path="incoming-bookings"
-                    element={
-                        <TokenProtected>
-                            <IncomingBookings />
-                        </TokenProtected>
-                    }
-                />
-                 
+            <Route path="/payment" element={<Elements stripe={stripePromise}><TokenProtected><Suspense 
+            fallback={<LoadingSpinner/>}><CheckoutForm /></Suspense></TokenProtected></Elements>} />
+            <Route path="/userprofile" element={<TokenProtected><Suspense 
+            fallback={<LoadingSpinner/>}><Layout /></Suspense></TokenProtected>}>
+                <Route index element={<TokenProtected><UserProfile /></TokenProtected>} />
+                <Route path="vehicles" element={<TokenProtected><ListVehilce /></TokenProtected>} />
+                <Route path="add-vehicle" element={<TokenProtected><AddVehicleForm /></TokenProtected>} />
+                <Route path="change-password" element={<TokenProtected><ChangePassword /></TokenProtected>} />
+                <Route path="wallet" element={<TokenProtected><Wallet /></TokenProtected>} />
+                <Route path="my-bookings" element={<TokenProtected><MyBooking /></TokenProtected>} />
+                <Route path="incoming-bookings" element={<TokenProtected><IncomingBookings /></TokenProtected>} />
             </Route>
-          <Route path='/chat' element={<TokenProtected><ChatLayout /></TokenProtected>}>
+            <Route path='/chat' element={<TokenProtected><ChatLayout /></TokenProtected>}>
             <Route index element={<MessageTemplate/>}/>
             <Route path=':chatId' element={<TokenProtected><MessageContainer /></TokenProtected>} />
           </Route>

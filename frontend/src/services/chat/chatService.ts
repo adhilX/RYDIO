@@ -24,8 +24,14 @@ export const getChatsOfUser = async (userId: string) => {
 };
 
 // Message APIs
-export const getMessages = async (chatId: string, page: number = 1) => {
-  return axiosInstance.get(`/chat/chats/${chatId}/messages?page=${page}`);
+export const getMessages = async (chatId: string) => {
+  try {
+    const response = await axiosInstance.get(`/chat/messages/${ chatId}`);
+    return response.data;
+  } catch (error) {
+    console.log('Error while getting messages:', error);
+    throw error;
+  }
 };
 
 export const sendMessage = async (chatId: string, senderId: string, senderModel: 'user' | 'owner', messageContent: string) => {

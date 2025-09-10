@@ -1,7 +1,6 @@
 import { BookingStatus, IBooking, PaymentStatus, PaymentType } from "../../domain/entities/BookingEntities"
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository"
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository"
-import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ITrasationRepository"
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository"
 import { IRedisService } from "../../domain/interface/serviceInterface/IRedisService"
 import { idGeneratorService } from "../../framework/DI/serviceInject"
@@ -10,9 +9,10 @@ import { CreateBookingInputDto, CreateBookingOutputDto } from "../../domain/inte
 import { ICreateBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/ICreateBookingUsecase"
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository"
 import { TransactionPurpose } from "../../domain/entities/transactionEntities"
+import {ITrasationRepository} from "../../domain/interface/repositoryInterface/ItrasationRepository"
 
 export class CreateBookingUsecase implements ICreateBookingUsecase {
-  constructor(private _bookingRepository: IBookingRepository, private _redisService: IRedisService,private _vehicleRepository: IVehicleRepository,private _adminWalletRepository: IAdminWalletRepository,private _walletRepository: IWalletRepository, private _trasationRepository: ItrasationRepository) {}
+  constructor(private _bookingRepository: IBookingRepository, private _redisService: IRedisService,private _vehicleRepository: IVehicleRepository,private _adminWalletRepository: IAdminWalletRepository,private _walletRepository: IWalletRepository, private _trasationRepository: ITrasationRepository) {}
 
   async createBooking(input: CreateBookingInputDto): Promise<CreateBookingOutputDto> {
     const { bookingData, user_id, stripeIntentId } = input;

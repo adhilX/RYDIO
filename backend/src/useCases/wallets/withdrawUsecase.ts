@@ -4,7 +4,7 @@ import { IBookingRepository } from "../../domain/interface/repositoryInterface/I
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
-import { ItrasationRepository } from "../../domain/interface/repositoryInterface/ITrasationRepository";
+import { ITrasationRepository } from "../../domain/interface/repositoryInterface/ItrasationRepository";
 import { TransactionPurpose } from "../../domain/entities/transactionEntities";
 import { BookingStatus } from "../../domain/entities/BookingEntities";
 
@@ -14,7 +14,7 @@ export class WithdrawUsecase implements IWithdrawUsecase{
         private vehicleRepository: IVehicleRepository,
         private walletRepository: IWalletRepository,
         private adminWalletRepository: IAdminWalletRepository,
-        private trasationRepository: ItrasationRepository
+        private trasationRepository: ITrasationRepository
     ){}
     
     async withdraw(input: WithdrawalInputDto): Promise<boolean> {
