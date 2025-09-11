@@ -32,7 +32,8 @@ export const getMessages = async (chatId: string) => {
     console.log('Error while getting messages:', error);
     throw error;
   }
-};
+}
+
 
 export const sendMessage = async (chatId: string, senderId: string, senderModel: 'user' | 'owner', messageContent: string) => {
   return axiosInstance.post('/chat/messages', { 

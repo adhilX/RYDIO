@@ -48,7 +48,6 @@ export class SocketIoController {
           const result = await this.createMessage.createMessage(message)
           console.log(result)
           
-          // Create consistent room ID by sorting user IDs
           const sortedIds = [data.senderId, data.receiverId].sort();
           const roomId = sortedIds[0] + sortedIds[1];
           console.log('Emitting to room:', roomId)
@@ -69,7 +68,7 @@ export class SocketIoController {
 
       // Handle user disconnect
       socket.on('disconnect', () => {
-        // Find user by socket ID and remove from online users
+
         for (const [userId, socketId] of this.userSockets.entries()) {
           if (socketId === socket.id) {
             this.userSockets.delete(userId);
@@ -80,8 +79,6 @@ export class SocketIoController {
       })
 
     })
-
-
 
 
   }
