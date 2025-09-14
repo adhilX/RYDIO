@@ -23,14 +23,17 @@ useEffect(()=>{
    })
 
    socket.on('notification', (data) => {
-       const notification: Notification = {
-           from: data.from,
-           message: data.message,
-           type: 'info'
+       // Only show notification if current user is the receiver
+       if (data.to === user._id) {
+           const notification: Notification = {
+               from: data.from,
+               message: data.message,
+               type: 'info'
+           }
+           setData(notification)
+           dispatch(addSingleNotification(data))
+           setNotification(true)
        }
-       setData(notification)
-       dispatch(addSingleNotification(data))
-       setNotification(true)
    })
 
    return () => {

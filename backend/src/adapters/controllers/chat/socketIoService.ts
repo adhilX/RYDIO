@@ -80,8 +80,7 @@ export class SocketIoController {
                   profileImage: sender?.profile_image || ''
                 }
               };
-
-              this.io.emit('notification', formattedNotification);
+                this.io.emit('notification', formattedNotification);
             }
             const sortedIds = [data.senderId, data.receiverId].sort();
             const roomId = sortedIds[0] + sortedIds[1];
@@ -94,7 +93,7 @@ export class SocketIoController {
             socket.emit('err', 'Failed to send message')
           }
         })
-
+        
         socket.on('typing', (data) => {
           socket.to(data.roomId).emit('typing')
         })
