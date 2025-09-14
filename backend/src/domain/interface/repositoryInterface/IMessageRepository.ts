@@ -1,9 +1,9 @@
-import { Imessage } from "../../entities/messageEntities"
+import { IMessage } from "../../entities/messageEntities"
+import { IBaseRepository } from "./IbaseRepo"
 
-export interface IMessageRepository {
-    createMessage(message: Imessage): Promise<Imessage>
-    getMessages(senderId: string): Promise<Imessage[] | []>
-    getMessagesOfAChat(chatId: string): Promise<{ messages: Imessage[] }>
-    markMessageAsSeen(messageId: string): Promise<Imessage | null>
+export interface IMessageRepository extends IBaseRepository<IMessage>{
+    getMessages(senderId: string): Promise<IMessage[] | []>
+    getMessagesOfAChat(chatId: string): Promise<{ messages: IMessage[] }>
+    markMessageAsSeen(messageId: string): Promise<IMessage | null>
     markAllMessagesAsSeenInChat(chatId: string): Promise<{ modifiedCount: number }>
 }

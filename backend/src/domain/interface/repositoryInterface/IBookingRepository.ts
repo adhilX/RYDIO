@@ -13,4 +13,5 @@ export interface IBookingRepository extends BaseRepository<IBooking>{
    endRide(booking:IBooking): Promise<IBooking | null>
    updateBookingFinance(booking_id: string, updateData: any): Promise<IBooking | null>
    findByBookingId(booking_id:string): Promise<IBooking | null>
+   checkBookingExistsBetweenUserAndOwner(userId: string, ownerId: string): Promise<IBooking | null>
 }

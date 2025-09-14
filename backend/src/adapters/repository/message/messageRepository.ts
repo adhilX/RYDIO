@@ -1,20 +1,21 @@
 import { IMessageRepository } from "../../../domain/interface/repositoryInterface/IMessageRepository"
 import { messageModel } from "../../../framework/database/models/messageModal"
 import { IMessage } from "../../../domain/entities/messageEntities"
+import { BaseRepository } from "../base/BaseRepo"
 
-export class MessageRepository implements IMessageRepository {
-    async createMessage(message: IMessage): Promise<IMessage> {
-        return await messageModel.create(message)
+export class MessageRepository extends BaseRepository<IMessage> implements IMessageRepository {
+    constructor() {
+        super(messageModel)
     }
     
     async getMessages(senderId: string): Promise<IMessage[] | []> {
-        return await messageModel.find({ senderId }).select('-__v -createdAt -updatedAt')
+        return await messageModel.find({ senderId })
     }
     
     async getMessagesOfAChat(chatId: string): Promise<{ messages: IMessage[] }> {
         const messages = await messageModel.find({ chatId })
-            .sort({ sendedTime: -1 })
-        return { messages: messages.reverse() }
+            .sort({ sendedTime: 1 })
+        return { messages}
     }
     
     async markMessageAsSeen(messageId: string): Promise<IMessage | null> {

@@ -18,7 +18,8 @@ import { SocketIoController } from './adapters/controllers/chat/socketIoService'
 import { ChatRoutes } from './framework/routes/chat/chatRoutes';
 import path from 'path';
 import { createWriteStream } from 'fs';
-import { createMessageUseCase } from './framework/DI/chatInject';
+import { createMessageUseCase, createNotificationUsecase, updateLastMessageUseCase } from './framework/DI/chatInject';
+import { userRepository } from './framework/DI/userInject';
 
 
 const options = {
@@ -147,7 +148,7 @@ export class App {
         }
     }
     private setSocketIo(){
-        this.socketIo = new SocketIoController(this.httpServer, createMessageUseCase)
+        this.socketIo = new SocketIoController(this.httpServer, createMessageUseCase, updateLastMessageUseCase,createNotificationUsecase,userRepository)
     }
 }
 

@@ -78,7 +78,7 @@ import { WithdrawUsecase } from "../../useCases/wallets/withdrawUsecase"
 // regester user 
 const otpService = new OtpService()
 const emailService = new EmailService()
-const userRepository = new UserRepository()
+export const userRepository = new UserRepository()
 const bookingRepository = new BookingRepository()
 const sendOtpUserUsecase = new SendOtpUserUsecase(otpService,emailService,userRepository)
 const verifyOtpUsecase = new VerifyOtpUsecase(otpService)

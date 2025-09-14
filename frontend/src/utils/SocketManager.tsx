@@ -1,21 +1,53 @@
-import { useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../store/store"
 import socket from "../hooks/ConnectSocketIo"
+import LiveNotification from "@/components/LiveNotification"
+import type { NotificationDTO } from "@/Types/notificationDTO"
+import type { Notification } from "@/Types/NotificationType"
+import { addNotifications, addSingleNotification } from "@/store/slice/notification/notificationSlice"
 
 const SocketManager = () => {
-//  const [data,setData] = useState<Notification|null>(null)
-//  const [notification,setNotification] = useState<boolean>(false)
+ const [data,setData] = useState<Notification|null>(null)
+ const [notification,setNotification] = useState<boolean>(false)
 
-
+const dispatch = useDispatch()
  const user = useSelector((state:RootState)=>state.auth.user)
- if (!user) return 
+ 
+ if (!user) return null
+
 useEffect(()=>{
    socket.connect()
-},[user])
+   socket.emit('register', { userId: user._id, name: user.name }, (data: NotificationDTO[]) => {
+       dispatch(addNotifications(data))
+   })
 
-return <></>
+   socket.on('notification', (data) => {
+       const notification: Notification = {
+           from: data.from,
+           message: data.message,
+           type: 'info'
+       }
+       setData(notification)
+       dispatch(addSingleNotification(data))
+       setNotification(true)
+   })
 
+   return () => {
+       socket.disconnect()
+       socket.off('notification')
+   }},[user])
+
+return     ( <>
+{notification && (
+    <LiveNotification
+        notification={data!}
+        onClose={() => setNotification(false)}
+        duration={5000}
+    />
+)}
+</>
+)
 
 }
 

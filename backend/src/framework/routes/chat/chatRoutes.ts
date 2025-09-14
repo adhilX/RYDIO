@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
-import { createChatController, getChatController, getMessageController } from "../../DI/chatInject";
+import { createChatController, getChatController, getMessageController, enableChatController } from "../../DI/chatInject";
 
 export class ChatRoutes {
     public ChatRoutes: Router
@@ -22,6 +22,10 @@ export class ChatRoutes {
             getChatController.getChatsOfUser(req,res)})
             
         this.ChatRoutes.get('/messages/:chatId', (req:Request, res:Response)=>{
-            getMessageController.getMessagesByChatId(req,res)}
-        )}
+            getMessageController.getMessagesByChatId(req,res)})
+            
+        this.ChatRoutes.post('/enable-chat', (req:Request, res:Response)=>{
+            enableChatController.enableChat(req,res)
+        })
+    }
 }

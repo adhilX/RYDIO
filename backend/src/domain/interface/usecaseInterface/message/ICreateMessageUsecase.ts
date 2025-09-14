@@ -1,5 +1,5 @@
-import { Imessage } from "../../../entities/messageEntities";
+import { IMessage } from "../../../entities/messageEntities";
 
 export interface ICreateMessageUsecase {
-    createMessage(message: Imessage): Promise<Imessage>;
+    createMessage(message: IMessage): Promise<IMessage>;
 }

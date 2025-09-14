@@ -1,18 +1,11 @@
+import { ObjectId } from "mongoose";
+
 export interface INotification {
-    _id?: string
-    userId: string
-    userModel: 'user' | 'owner'
-    title: string
-    message: string
-    type: 'booking' | 'payment' | 'chat' | 'system' | 'ride'
-    isRead: boolean
-    data?: {
-        bookingId?: string
-        chatId?: string
-        messageId?: string
-        transactionId?: string
-        [key: string]: any
-    }
-    createdAt?: Date
-    updatedAt?: Date
+    _id?: string;
+    from: ObjectId  ;             
+    to: ObjectId;              
+    message: string;           
+    read: boolean;           
+    senderModel: 'user' | 'owner'
+    receiverModel: 'user' | 'owner'
 }

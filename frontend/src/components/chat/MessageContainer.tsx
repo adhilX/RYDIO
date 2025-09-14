@@ -9,10 +9,11 @@ import type { Ichat } from '@/Types/chat/Ichat';
 import toast from 'react-hot-toast';
 import socket from '@/hooks/ConnectSocketIo';
 import LoadingSpinner from '../LoadingSpinner';
+import { useChatContext } from '@/contexts/ChatContext';
 
 
 const MessageContainer = () => {
-  const { chatId } = useParams();
+  const { chatId} = useParams();
   
 // Extract user IDs from chat ID (format: userId_ownerId)
 const [userId, ownerId] = chatId?.split('_') || [];
@@ -26,6 +27,9 @@ const [messages,setMessages] = useState<Imessage[]>([])
 const [isTyping,setIsTyping] = useState(false)
 const [user,setUser] = useState<Ichat>({ _id:'',lastMessage:'',lastMessageAt:new Date(),name:'',profile_image:'',isOnline:false })
 const [isUserOnline, setIsUserOnline] = useState(false)
+const { triggerSidebarRefetch } = useChatContext()
+// const [chatEnabled] = useState<boolean | null>(null)
+// const [chatMessage] = useState('')
  // Create consistent room ID by sorting user IDs
  const sortedIds = [userId, ownerId].sort();
  const roomId = sortedIds[0] + sortedIds[1];
@@ -33,9 +37,21 @@ useEffect(() => {
   const fetchMessages = async () => {
     try {
       setIsLoading(true)
+      
+      // Check if chat is enabled before loading messages
+      // const chatEligibility = await anableChat(ownerId,userId)
+      // setChatEnabled(chatEligibility.data.canChat)
+      // setChatMessage(chatEligibility.data.message)
+      
+      // if (!chatEligibility.data.canChat) {
+      //   setIsLoading(false)
+      //   return
+      // }
+      
       const response = await findOrCreateChat(userId,ownerId)
       setUser(response.data);
-      const chats = await getMessages(roomId)
+      console.log('user',user)
+      const chats = await getMessages(response.data._id)
       setMessages(chats.data.messages)
       setIsLoading(false)
       
@@ -60,6 +76,7 @@ useEffect(()=>{
 
   const handleReceiveMessage = (data: any) => {
     setMessages((prev) => [...prev, data])
+    triggerSidebarRefetch() // Refetch sidebar when receiving a message
   }
 
   const handleTyping = () => {
@@ -76,15 +93,12 @@ useEffect(()=>{
     }
   }
 
-  const handleError = (err: string) => alert(err)
-
   // Add event listeners
   socket.on('connected', handleConnected)
   socket.on('recive-message', handleReceiveMessage)
   socket.on('typing', handleTyping)
   socket.on('stop-typing', handleStopTyping)
   socket.on('user-status-changed', handleUserStatusChange)
-  socket.on('err', handleError)
 
   // Join room
   socket.emit('join-room', {roomId})
@@ -95,7 +109,6 @@ useEffect(()=>{
     socket.off('typing', handleTyping)
     socket.off('stop-typing', handleStopTyping)
     socket.off('user-status-changed', handleUserStatusChange)
-    socket.off('err', handleError)
   }
 },[roomId])
 
@@ -111,7 +124,7 @@ const handleSendMessage =(e:React.FormEvent)=>{
     
     const newMessage: Imessage = {
         _id:'',
-        chatId: roomId,
+        chatId: user._id!,
         messageContent: message,
         senderId: userId,
         senderModel: 'user',
@@ -124,6 +137,7 @@ const handleSendMessage =(e:React.FormEvent)=>{
     socket.emit('send-message', { ...newMessage, receiverId: ownerId })
     setMessages((prev)=>[...prev, newMessage])
     setMessage('')
+    triggerSidebarRefetch() // Refetch sidebar when sending a message
 }
 
 
@@ -133,6 +147,7 @@ const handleSendMessage =(e:React.FormEvent)=>{
       <LoadingSpinner/>
     );
   }
+
 
   return (
     <div className="flex flex-col h-full">
@@ -151,38 +166,62 @@ const handleSendMessage =(e:React.FormEvent)=>{
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-[#212121] relative min-h-0 chat-scrollbar">
-        {/* Date Separator */}
-        <div className="flex justify-center my-6">
-          <span className="bg-[#2f2f2f] text-[#8E8E93] text-sm px-4 py-2 rounded-full">
-            {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-          </span>
-        </div>
         
         <AnimatePresence>
-          {messages.map((message) => (
-            <motion.div
-              key={message._id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className={`flex ${message.senderId === userId ? 'justify-end' : 'justify-start'} mb-2`}
-            >
-              <div
-                className={`max-w-[280px] lg:max-w-md px-4 py-3 rounded-3xl shadow-sm ${
-                  message.senderId === userId
-                    ? 'bg-[#007AFF] text-white rounded-br-lg'
-                    : 'bg-[#2f2f2f] text-white rounded-bl-lg'
-                }`}
-              >
-                <p className="text-base leading-relaxed break-words">{message.messageContent}</p>
-                <div className={`flex items-center justify-end mt-2 space-x-1 text-xs ${
-                  message.senderId === userId ? 'text-blue-200' : 'text-[#8E8E93]'
-                }`}>
+          {messages.map((message, index) => {
+            const messageDate = new Date(message.sendedTime);
+            const prevMessage = index > 0 ? messages[index - 1] : null;
+            const prevMessageDate = prevMessage ? new Date(prevMessage.sendedTime) : null;
+            
+            const showDateSeparator = !prevMessage || 
+              messageDate.toDateString() !== prevMessageDate?.toDateString();
+            
+            return (
+              <div key={message._id}>
+                {/* Date Separator */}
+                {showDateSeparator && (
+                  <div className="flex justify-center my-6">
+                    <span className="bg-[#2f2f2f] text-[#8E8E93] text-sm px-4 py-2 rounded-full">
+                      {messageDate.toLocaleDateString('en-US', { 
+                        month: 'long', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                      })}
+                    </span>
+                  </div>
+                )}
                 
-                </div>
+                {/* Message */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className={`flex ${message.senderId === userId ? 'justify-end' : 'justify-start'} mb-2`}
+                >
+                  <div
+                    className={`max-w-[280px] lg:max-w-md px-4 py-3 rounded-3xl shadow-sm ${
+                      message.senderId === userId
+                        ? 'bg-[#007AFF] text-white rounded-br-lg'
+                        : 'bg-[#2f2f2f] text-white rounded-bl-lg'
+                    }`}
+                  >
+                    <p className="text-base leading-relaxed break-words">{message.messageContent}</p>
+                    <div className={`flex items-center justify-end mt-2 space-x-1 text-xs ${
+                      message.senderId === userId ? 'text-blue-200' : 'text-[#8E8E93]'
+                    }`}>
+                      <span>
+                        {messageDate.toLocaleTimeString('en-US', { 
+                          hour: 'numeric', 
+                          minute: '2-digit',
+                          hour12: true 
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-          ))}
+            );
+          })}
         </AnimatePresence>
         
         {/* Typing Indicator */}

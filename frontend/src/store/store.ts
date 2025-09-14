@@ -7,18 +7,21 @@ import tokenReducer from "./slice/user/UserTokenSlice";
 import AdminToken from "./slice/admin/AdminTokenSlice";
 import locationReducer from './slice/user/locationSlice'
 import searchDateReducer from './slice/user/SearchDateSlice';
+import notificationReducer from './slice/notification/notificationSlice'
+
 const rootReducer = combineReducers({
   auth: userReducer,
   userToken: tokenReducer,
   location: locationReducer,
   adminToken: AdminToken,
-  searchDate:searchDateReducer
+  searchDate:searchDateReducer,
+  notification: notificationReducer
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "userToken", 'adminToken','location','searchDate'],
+  whitelist: ["auth", "userToken", 'adminToken','location','searchDate','notification'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,5 +1,5 @@
 import mongoose, { isValidObjectId, Types } from "mongoose";
-import { IBooking } from "../../../domain/entities/BookingEntities";
+import { BookingStatus, IBooking, PaymentStatus } from "../../../domain/entities/BookingEntities";
 import { IBookingRepository } from "../../../domain/interface/repositoryInterface/IBookingRepository";
 import { bookingModel } from "../../../framework/database/models/bookingModel";
 import { BaseRepository } from "../base/BaseRepo";
@@ -240,5 +240,30 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
 
      async findByBookingId(booking_id:string): Promise<IBooking | null> {
           return await bookingModel.findOne({booking_id})
+     }
+
+     async checkBookingExistsBetweenUserAndOwner(userId: string, ownerId: string): Promise<IBooking | null> {
+          const pipeline = [
+               {
+                    $lookup: {
+                         from: "vehicles",
+                         localField: "vehicle_id",
+                         foreignField: "_id",
+                         as: "vehicle"
+                    }
+               },
+               { $unwind: "$vehicle" },
+               {
+                    $match: {
+                         user_id: new mongoose.Types.ObjectId(userId),
+                         "vehicle.owner_id": new mongoose.Types.ObjectId(ownerId),
+                         status: { $in: [BookingStatus.booked,BookingStatus.ongoing] },
+                         payment_status: PaymentStatus.Paid
+                    }
+               }
+          ];
+
+          const result = await bookingModel.aggregate(pipeline);
+          return result.length > 0 ? result[0] : null;
      }
 }

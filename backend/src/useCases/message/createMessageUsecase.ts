@@ -8,6 +8,6 @@ export class CreateMessageUseCase implements ICreateMessageUsecase {
         this.messageDatabase = messageDatabase
     }
     async createMessage(message: IMessage): Promise<IMessage> {
-        return this.messageDatabase.createMessage(message)
+        return this.messageDatabase.create(message)
     }
 }   

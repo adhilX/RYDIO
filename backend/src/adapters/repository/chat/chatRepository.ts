@@ -41,6 +41,7 @@ export class ChatRepository implements IChatRepository {
   }
 
   async updateLastMessage(message: IMessage): Promise<IChat | null> {
+    console.log(message)
     return await chatModel.findByIdAndUpdate(
       message.chatId,
       {

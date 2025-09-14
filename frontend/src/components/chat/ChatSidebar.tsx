@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Search, X } from 'lucide-react';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getChatsOfUser } from '@/services/chat/chatService';
 import type { Ichat } from '@/Types/chat/Ichat';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import socket from '@/hooks/ConnectSocketIo';
+import { useChatContext } from '@/contexts/ChatContext';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 interface UserSidebarProps {
@@ -39,9 +40,13 @@ const formatLastMessageTime = (date: Date | string) => {
 
 const ChatSidebar = ({isOpen, onClose }: UserSidebarProps) => {
   const navigate = useNavigate();
+  const { chatId } = useParams();
   const user = useSelector((state: RootState) => state.auth.user);
   const userId = user?._id;
   const [chatUsers, setChatUsers] = useState<Ichat[]>([]);
+  const { shouldRefetchSidebar, resetSidebarRefetch } = useChatContext();
+  
+  const currentChatUserId = chatId ? chatId.split('_').find(id => id !== userId) : null;
   
   const handleUserSelect = (id:string) => {
     navigate(`/chat/${userId}_${id}`);
@@ -62,6 +67,22 @@ const ChatSidebar = ({isOpen, onClose }: UserSidebarProps) => {
     }
     fetchChat()
   }, [userId]);
+
+  // Refetch sidebar data when shouldRefetchSidebar is true
+  useEffect(() => {
+    if (!userId || !shouldRefetchSidebar) return;
+    
+    const refetchChat = async () => {
+      const result = await getChatsOfUser(userId!)
+      const chatsWithOfflineStatus = (result.data.chats || []).map((chat: Ichat) => ({
+        ...chat,
+        isOnline: false
+      }));
+      setChatUsers(chatsWithOfflineStatus)
+      resetSidebarRefetch()
+    }
+    refetchChat()
+  }, [userId, shouldRefetchSidebar, resetSidebarRefetch]);
 
   // Socket connection and online status tracking
   useEffect(() => {
@@ -139,12 +160,16 @@ const ChatSidebar = ({isOpen, onClose }: UserSidebarProps) => {
               key={chat._id}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleUserSelect(chat._id!)}
-              className={`px-4 py-3 cursor-pointer transition-colors duration-150 border-b border-[#2f2f2f]/30 ${
-                userId === chat._id
-                  ? 'bg-[#2f2f2f]'
-                  : 'hover:bg-[#2a2a2a] active:bg-[#2f2f2f]'
+              className={`px-4 py-3 cursor-pointer transition-all duration-200 border-b border-[#2f2f2f]/30 relative ${
+                currentChatUserId === chat._id
+                  ? 'bg-gradient-to-r from-[#007AFF]/10 to-[#007AFF]/5 border-r-2 border-r-[#007AFF] shadow-lg shadow-[#007AFF]/10'
+                  : 'hover:bg-[#2a2a2a] active:bg-[#2f2f2f] hover:shadow-md'
               }`}
-            > 
+            >
+              {/* Active indicator dot */}
+              {currentChatUserId === chat._id && (
+                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-[#007AFF] rounded-r-full"></div>
+              )} 
               <div className="flex items-center space-x-3">
                 <div className="relative flex-shrink-0">
                   <img
