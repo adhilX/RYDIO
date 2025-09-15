@@ -10,13 +10,22 @@ export class SearchUserController {
     }
     async searchUser(req: Request, res: Response): Promise<void> {
         try {
-            const { search, page, limit } = req.query;
+            const { search, page, limit, status, vendorAccess } = req.query;
             const searchStr: string = String(search);
             const pageNum: number = Number(String(page))
             const limitNum:number = Number(String(limit))
+            
+            const filters = {
+                status: String(status || 'all'),
+                vendorAccess: String(vendorAccess || 'all')
+            };
 
-            const users = await this._searchUserUsecase.searchUser({search: searchStr, page: pageNum, limit: limitNum});
-            // console.log('gggggggggggggggggggggggg',users)
+            const users = await this._searchUserUsecase.searchUser({
+                search: searchStr, 
+                page: pageNum, 
+                limit: limitNum,
+                filters
+            });
             res.status(HttpStatus.OK).json(users)
 
         } catch (error) {

@@ -11,7 +11,7 @@ export class SearchUserusercase implements ISearchUserUsecase{
     }
 
     async searchUser(input: SearchUserInputDto): Promise<SearchUserOutputDto | null> {
-         const result = await this._adminRepository.SearchUser(input.search, input.page, input.limit)
+         const result = await this._adminRepository.SearchUser(input.search, input.page, input.limit, input.filters)
          if(!result) return null
         const {users, total} = result
          const mappedUsers: BaseUserOutputDto[] = users.map((user: User) => {

@@ -12,10 +12,10 @@ export const getPendingVehicle = async (search= '',page = 1, limit = 6) => {
     throw error;
   }
 };
-export const getAprovedVehicle = async (search= '',page = 1, limit = 6) => {
+export const getAprovedVehicle = async (search= '',page = 1, limit = 6, filters = {}) => {
   try {
     const response = await axiosInstance.get("/admin/aproved-vehicle", {
-       params: {search,page, limit }
+       params: {search,page, limit, ...filters }
     });
     console.log(response.data)
     return response?.data;

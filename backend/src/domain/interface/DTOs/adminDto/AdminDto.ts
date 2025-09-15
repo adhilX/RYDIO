@@ -22,6 +22,10 @@ export interface SearchUserInputDto {
   search: string;
   page: number;
   limit: number;
+  filters?: {
+    status: string;
+    vendorAccess: string;
+  };
 }
 
 export interface SearchUserOutputDto {
@@ -93,6 +97,11 @@ export interface ApprovedVehicleInputDto {
   search: string;
   page: number;
   limit: number;
+  filters?: {
+    category: string;
+    fuelType: string;
+    transmission: string;
+  };
 }
 
 export interface ApprovedVehicleOutputDto {

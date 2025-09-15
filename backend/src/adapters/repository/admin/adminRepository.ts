@@ -15,14 +15,31 @@ export class AdminRepository extends BaseRepository<User> implements IAdminRepos
     return userModel.find()
   }
 
-  async SearchUser(search = "", page = 1, limit = 10): Promise<{ users: User[]; total: number } | null> {
-    const query = search
-      ? {
-        $or: [
-          { name: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } }
-        ]
-      } : {}
+  async SearchUser(search = "", page = 1, limit = 10, filters?: { status: string; vendorAccess: string }): Promise<{ users: User[]; total: number } | null> {
+    let query: any = {};
+    
+    // Search filter
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } }
+      ];
+    }
+    query.role = 'user'
+    // Status filter
+    if (filters?.status && filters.status !== 'all') {
+      if (filters.status === 'active') {
+        query.is_blocked = false;
+      } else if (filters.status === 'blocked') {
+        query.is_blocked = true;
+      }
+    }
+    
+    // Vendor access filter
+    if (filters?.vendorAccess && filters.vendorAccess !== 'all') {
+      query.vendor_access = filters.vendorAccess === 'true';
+    }
+    
     const skip = (page - 1) * limit;
     const [users, total] = await Promise.all([
       userModel.find(query).skip(skip).limit(limit),
@@ -50,21 +67,38 @@ export class AdminRepository extends BaseRepository<User> implements IAdminRepos
   ]);
   return { vehicles, total };
 }
-  async getApprovedVehicle(search='',page = 1, limit = 10): Promise<{ vehicles: IVehicle[]; total: number,totalCount:number } | null> {
+  async getApprovedVehicle(search='',page = 1, limit = 10, filters?: { category: string; fuelType: string; transmission: string }): Promise<{ vehicles: IVehicle[]; total: number,totalCount:number } | null> {
   const skip = (page - 1) * limit;
   console.log(search)
-  const searchFilter = search
-  ? {
-    $or: [
+  
+  let query: any = { admin_approve: 'accepted' };
+  
+  // Search filter
+  if (search) {
+    query.$or = [
       { name: { $regex: search, $options: 'i' } },
       { brand: { $regex: search, $options: 'i' } }
-        ]
-      }
-      : {};
-      const filter = { admin_approve: 'accepted',...searchFilter};
-  const [vehicles, total,totalCount] = await Promise.all([
-    VehicleModel.find(filter).populate('owner_id').populate('location_id').skip(skip).limit(limit),
-    VehicleModel.countDocuments(filter),
+    ];
+  }
+  
+  // Category filter
+  if (filters?.category && filters.category !== 'all') {
+    query.category = { $regex: filters.category, $options: 'i' };
+  }
+  
+  // Fuel type filter
+  if (filters?.fuelType && filters.fuelType !== 'all') {
+    query.fuel_type = { $regex: filters.fuelType, $options: 'i' };
+  }
+  
+  // Transmission filter
+  if (filters?.transmission && filters.transmission !== 'all') {
+    query.transmission = { $regex: filters.transmission, $options: 'i' };
+  }
+  
+  const [vehicles, total, totalCount] = await Promise.all([
+    VehicleModel.find(query).populate('owner_id').populate('location_id').skip(skip).limit(limit),
+    VehicleModel.countDocuments(query),
     VehicleModel.countDocuments()
   ]);
   return { vehicles, total, totalCount };

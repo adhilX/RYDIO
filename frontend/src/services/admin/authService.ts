@@ -16,10 +16,10 @@ export const loginadmin = async ({email, password}:TloginForm) => {
       }
 };
 
-export const getUsers = async (search = "", page = 1, limit = 6) => {
+export const getUsers = async (search = "", page = 1, limit = 6, filters = {}) => {
   try {
     const response = await axiosInstance.get("/admin/searchuser", {
-       params: { search, page, limit }
+       params: { search, page, limit, ...filters }
     });
     console.log(response.data)
     return response?.data
