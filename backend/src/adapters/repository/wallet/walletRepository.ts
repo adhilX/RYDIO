@@ -40,4 +40,19 @@ export class WalletRepository extends BaseRepository<IWallet> implements IWallet
       { new: true }
     )
   }
+
+  // Dashboard Analytics Method
+  async getAdminWalletBalance(): Promise<number> {
+    // Calculate total admin wallet balance from all transactions
+    const result = await WalletModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalBalance: { $sum: "$balance" }
+        }
+      }
+    ]);
+    
+    return result.length > 0 ? result[0].totalBalance : 0;
+  }
 }

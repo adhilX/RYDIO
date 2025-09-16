@@ -29,4 +29,54 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
           if(!user)throw new Error('no user found this id')
             return String(user.is_blocked)
       }
-}
+
+      // Dashboard Analytics Methods
+      async getTotalUsersCount(): Promise<number> {
+          return await userModel.countDocuments({ role: 'user' });
+      }
+
+      async getActiveUsersCount(): Promise<number> {
+          return await userModel.countDocuments({ role: 'user', is_blocked: false });
+      }
+
+      async getBlockedUsersCount(): Promise<number> {
+          return await userModel.countDocuments({ role: 'user', is_blocked: true });
+      }
+
+      async getUserActivityChartData(): Promise<Array<{ height: number; color: string }>> {
+          const totalUsers = await this.getTotalUsersCount();
+          const activeUsers = await this.getActiveUsersCount();
+          const blockedUsers = await this.getBlockedUsersCount();
+          
+          // Calculate percentages for chart heights (0-100)
+          const activePercentage = totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0;
+          const blockedPercentage = totalUsers > 0 ? Math.round((blockedUsers / totalUsers) * 100) : 0;
+          
+          return [
+              { height: activePercentage, color: '#10B981' }, // Green for active users
+              { height: blockedPercentage, color: '#EF4444' }  // Red for blocked users
+          ];
+      }
+
+      async getPendingVendorAccessRequests(): Promise<number> {
+          return await userModel.countDocuments({ 
+              role: 'user', 
+              vendor_access_requested: true,
+              vendor_access: false 
+          });
+      }
+
+      async getPendingVerificationRequests(): Promise<number> {
+          return await userModel.countDocuments({ 
+              role: 'user', 
+              verification_status: 'pending' 
+          });
+      }
+
+      async getVerifiedUsersCount(): Promise<number> {
+          return await userModel.countDocuments({ 
+              role: 'user', 
+              verification_status: 'verified' 
+          });
+      }
+    }

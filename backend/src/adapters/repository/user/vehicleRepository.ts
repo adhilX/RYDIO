@@ -117,4 +117,115 @@ async findVehicle(lat: number, lon: number, search: string, page: number, limit:
 async getVehicle(vehicleId:string):Promise<IVehicle | null>{
     return await this.findById(vehicleId);
 }
+
+// Dashboard Analytics Methods
+async getActiveVehiclesCount(): Promise<number> {
+    return await VehicleModel.countDocuments({ 
+        admin_approve: 'accepted', 
+        is_available: true 
+    });
+}
+
+async getLastMonthActiveVehiclesCount(): Promise<number> {
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    
+    return await VehicleModel.countDocuments({
+        admin_approve: 'accepted',
+        is_available: true,
+        createdAt: { $gte: lastMonth }
+    });
+}
+
+async getVehicleActivityChartData(): Promise<{ total: number; active: number; pending: number; rejected: number }> {
+    const [total, active, pending, rejected] = await Promise.all([
+        VehicleModel.countDocuments({}),
+        VehicleModel.countDocuments({ admin_approve: 'accepted', is_available: true }),
+        VehicleModel.countDocuments({ admin_approve: 'pending' }),
+        VehicleModel.countDocuments({ admin_approve: 'rejected' })
+    ]);
+    
+    return { total, active, pending, rejected };
+}
+
+async getPendingVehiclesCount(): Promise<number> {
+    return await VehicleModel.countDocuments({ 
+        admin_approve: 'pending' 
+    });
+}
+
+async getApprovedVehiclesCount(): Promise<number> {
+    return await VehicleModel.countDocuments({ 
+        admin_approve: 'accepted' 
+    });
+}
+
+async getRejectedVehiclesCount(): Promise<number> {
+    return await VehicleModel.countDocuments({ 
+        admin_approve: 'rejected' 
+    });
+}
+
+async getTopRevenueVehicles(): Promise<Array<{
+    type: string;
+    model: string;
+    revenue: number;
+}>> {
+    return await VehicleModel.aggregate([
+        {
+            $lookup: {
+                from: 'bookings',
+                localField: '_id',
+                foreignField: 'vehicle_id',
+                as: 'bookings'
+            }
+        },
+        {
+            $match: {
+                admin_approve: 'accepted'
+            }
+        },
+        {
+            $addFields: {
+                completedBookings: {
+                    $filter: {
+                        input: '$bookings',
+                        cond: { $eq: ['$$this.status', 'completed'] }
+                    }
+                }
+            }
+        },
+        {
+            $addFields: {
+                totalRevenue: {
+                    $sum: '$completedBookings.total_amount'
+                }
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    type: '$car_type',
+                    model: '$name'
+                },
+                revenue: { $sum: '$totalRevenue' }
+            }
+        },
+        {
+            $project: {
+                type: '$_id.type',
+                model: '$_id.model',
+                revenue: '$revenue',
+                _id: 0
+            }
+        },
+        {
+            $sort: { revenue: -1 }
+        },
+        {
+            $limit: 5
+        }
+    ]);
+}
+
 }

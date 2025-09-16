@@ -176,3 +176,5 @@ export interface RideEndOutputDto {
   success: boolean;
   message: string;
 }
+
+export  interface ICancleFinalce {security_deposit:number, owner_earnings:number}

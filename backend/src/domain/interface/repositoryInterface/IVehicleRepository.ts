@@ -25,4 +25,17 @@ export interface IVehicleRepository extends IBaseRepository<IVehicle> {
    deleteVehicle(vehicleId:string):Promise<boolean>
    changeVehicleStatus(vehicleId:string):Promise<boolean>
    getVehicle(vehicleId:string):Promise<IVehicle | null>
+   
+   // Dashboard Analytics Methods
+   getActiveVehiclesCount(): Promise<number>
+   getLastMonthActiveVehiclesCount(): Promise<number>
+   getVehicleActivityChartData(): Promise<{ total: number; active: number; pending: number; rejected: number }>
+   getPendingVehiclesCount(): Promise<number>
+   getApprovedVehiclesCount(): Promise<number>
+   getRejectedVehiclesCount(): Promise<number>
+   getTopRevenueVehicles(): Promise<Array<{
+       type: string;
+       model: string;
+       revenue: number;
+   }>>
 }

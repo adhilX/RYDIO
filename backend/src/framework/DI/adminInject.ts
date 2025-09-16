@@ -96,3 +96,30 @@ export const getBookingController = new GetBookingController(getBookingUsecase)
 //------get wallet details---------
 const getAdminWalletUsecase = new GetAdminWalletUsecase(adminWalletRepository)
 export const getAdminWalletController = new GetAdminWalletController(getAdminWalletUsecase)
+
+//------dashboard analytics---------
+import { UserRepository } from "../../adapters/repository/user/userRepository";
+import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
+import { DashboardStatsUseCase } from "../../useCases/admin/dashboardStatsUseCase";
+import { FinancialOverviewUseCase } from "../../useCases/admin/financialOverviewUseCase";
+import { UserManagementUseCase } from "../../useCases/admin/userManagementUseCase";
+import { VehicleManagementUseCase } from "../../useCases/admin/vehicleManagementUseCase";
+import { BookingAnalyticsUseCase } from "../../useCases/admin/bookingAnalyticsUseCase";
+import { DashboardController } from "../../adapters/controllers/admin/dashboardController";
+
+const userRepository = new UserRepository()
+const walletRepository = new WalletRepository()
+
+const dashboardStatsUseCase = new DashboardStatsUseCase(userRepository, vehicleRepository, bookingRepository, walletRepository)
+const financialOverviewUseCase = new FinancialOverviewUseCase(bookingRepository, walletRepository, vehicleRepository)
+const userManagementUseCase = new UserManagementUseCase(userRepository)
+const vehicleManagementUseCase = new VehicleManagementUseCase(vehicleRepository, bookingRepository)
+const bookingAnalyticsUseCase = new BookingAnalyticsUseCase(bookingRepository)
+
+export const dashboardController = new DashboardController(
+    dashboardStatsUseCase,
+    financialOverviewUseCase,
+    userManagementUseCase,
+    vehicleManagementUseCase,
+    bookingAnalyticsUseCase
+)

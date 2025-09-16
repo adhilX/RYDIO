@@ -14,9 +14,8 @@ const SocketManager = () => {
 const dispatch = useDispatch()
  const user = useSelector((state:RootState)=>state.auth.user)
  
- if (!user) return null
-
-useEffect(()=>{
+ useEffect(()=>{
+   if (!user) return
    socket.connect()
    socket.emit('register', { userId: user._id, name: user.name }, (data: NotificationDTO[]) => {
        dispatch(addNotifications(data))
@@ -40,6 +39,8 @@ useEffect(()=>{
        socket.disconnect()
        socket.off('notification')
    }},[user])
+
+if (!user) return null
 
 return     ( <>
 {notification && (

@@ -4,7 +4,7 @@ import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWal
 import { TrasationRepository } from "../../adapters/repository/transation/TrasationRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { BookingStatus } from "../../domain/entities/BookingEntities";
-import { CancelBookingInputDto, CancelBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
+import { CancelBookingInputDto, CancelBookingOutputDto, ICancleFinalce } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { ICancelBookingUseCase } from "../../domain/interface/usecaseInterface/bookings/ICancelBookingUseCase";
 import { TransactionPurpose } from "../../domain/entities/transactionEntities";
 
@@ -47,7 +47,13 @@ export class CancelBookingUseCase implements ICancelBookingUseCase  {
         const ownerCompensation = Math.round(totalAmount * 0.3);
 
         try {
-            await this._bookingRepository.cancelBooking(booking_id, cancellation_reason);            
+            // Update booking finance data for cancellation
+            const financeUpdate:ICancleFinalce = {
+                security_deposit: userRefund,
+                owner_earnings: ownerCompensation, 
+            };
+
+            await this._bookingRepository.cancelBooking(booking_id, cancellation_reason, financeUpdate);            
             await this._adminWalletRepository.updateWalletBalance(-totalAmount);
             const userTransaction = await this._trasationRepository.create({
                from: 'admin',   
