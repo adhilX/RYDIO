@@ -4,7 +4,7 @@ import { IBookingRepository } from "../../domain/interface/repositoryInterface/I
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository";
 import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
-import { ITrasationRepository } from "../../domain/interface/repositoryInterface/ItrasationRepository";
+import { ITrasationRepository } from "../../domain/interface/repositoryInterface/ITrasationRepository";
 import { TransactionPurpose } from "../../domain/entities/transactionEntities";
 import { BookingStatus } from "../../domain/entities/BookingEntities";
 

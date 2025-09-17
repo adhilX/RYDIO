@@ -13,7 +13,7 @@ export const VehicleSchema = new Schema<IVehicle>({
     automatic: { type: Boolean, required: true },
     price_per_day: { type: Number, required: true },
     description: { type: String, required: true },
-    admin_approve: {type: String, enum :['pending','accepted','rejected']},
+    admin_approve: {type: String, enum :['pending','accepted','rejected','reapplied']},
     reject_reason:{type:String},
     image_urls: { type: [String], required: true },
     is_available: { type: Boolean, default: true },

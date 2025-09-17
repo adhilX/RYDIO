@@ -86,6 +86,7 @@ export interface AdminLoginOutputDto {
 export interface PendingVehicleInputDto {
   page: number;
   limit: number;
+  search: string;
 }
 
 export interface PendingVehicleOutputDto {
@@ -178,9 +179,9 @@ export interface GetAdminWalletOutputDto {
   wallet: {
     _id: string;
     balance: number;
-    totalEarnings: number;
+    commission_balance: number;
     totalWithdrawals: number;
-    pendingAmount: number;
+    total_balance: number;
     transactions: WalletTransactionDto[];
   };
 }

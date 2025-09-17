@@ -27,9 +27,9 @@ export class GetAdminWalletUsecase implements IGetAdminWalletUsecase {
             wallet: {
                 _id: walletDetails._id!,
                 balance: walletDetails.balance,
-                totalEarnings: walletDetails.commission_balance,
+                commission_balance: walletDetails.commission_balance,
                 totalWithdrawals: walletDetails.penalty_balance,
-                pendingAmount: walletDetails.total_balance,
+                total_balance: walletDetails.total_balance,
                 transactions
             }
         };

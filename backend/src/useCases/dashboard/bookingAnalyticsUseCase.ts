@@ -1,6 +1,7 @@
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
+import { IBookingAnalyticsUseCase } from "../../domain/interface/usecaseInterface/dashboard/IBookingAnalyticsUseCase";
 
-export class BookingAnalyticsUseCase {
+export class BookingAnalyticsUseCase implements IBookingAnalyticsUseCase {
     constructor(
         private bookingRepository: IBookingRepository
     ) {}
@@ -22,7 +23,7 @@ export class BookingAnalyticsUseCase {
             
             // Get top city by bookings
             const topCity = await this.bookingRepository.getTopCityByBookings();
-
+            console.log(topCity)
             return {
                 chartData,
                 activeCities,

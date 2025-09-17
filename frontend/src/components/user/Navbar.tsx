@@ -2,7 +2,7 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
-import { Bell, Car, MessageCircle, User } from 'lucide-react';
+import { Car, MessageCircle, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import { useCurrentLocation } from '@/hooks/UseLocation';
 import { useEffect } from 'react';
@@ -32,10 +32,10 @@ function Navbar() {
           <div className="flex items-center space-x-4">
             {token ? (
               <>
-                <button className="p-2 rounded-full hover:bg-gray-800 transition-colors relative" title="Notifications">
+                {/* <button className="p-2 rounded-full hover:bg-gray-800 transition-colors relative" title="Notifications">
                   <Bell size={20} className="text-white" />
                   <span className="absolute -top-1 -right-1 bg-white text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
-                </button>
+                </button> */}
                 <Link to="/chat">
                 <button className="p-2 rounded-full hover:bg-gray-800 transition-colors" title="chat">
                   <MessageCircle size={20} className="text-white" />

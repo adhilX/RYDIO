@@ -106,3 +106,17 @@ export const deleteVehicle = async (vehicleId: string) => {
     throw new Error('An unexpected error occurred while deleting vehicle');
   }
 };
+
+export const reapplyVehicle = async (vehicleId: string) => {
+  try {
+    const response = await axiosInstance.post('/vehicles/reapply', { vehicleId });
+    return response?.data;
+  } catch (error) {
+    console.error('Error while reapplying vehicle:', error);
+    if (isAxiosError(error)) {
+      const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || 'An unknown error occurred while reapplying vehicle';
+      throw new Error(errorMsg);
+    }
+    throw new Error('An unexpected error occurred while reapplying vehicle');
+  }
+};

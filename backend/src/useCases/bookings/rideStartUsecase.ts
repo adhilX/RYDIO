@@ -1,5 +1,6 @@
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
+import { BookingStatus } from "../../domain/entities/BookingEntities";
 import { RideStartInputDto, RideStartOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { IRideStartUsecase } from "../../domain/interface/usecaseInterface/bookings/IRideStartUsecase";
 
@@ -15,7 +16,7 @@ export class RideStartUsecase implements IRideStartUsecase {
       throw new Error("Booking not found");
     }
    
-    if (bookingData.status !== "booked") {
+    if (bookingData.status !== BookingStatus.booked) {
       throw new Error("Ride cannot be started. Current status: " + bookingData.status);
     }
 
@@ -32,7 +33,7 @@ export class RideStartUsecase implements IRideStartUsecase {
     if (vehicleOwnerId !== scanner_user_id) {
       throw new Error("Access denied. Only the vehicle owner can start this ride.");
     }
-    const updatedBooking = await this._bookingRepository.changeBookingStatus(input.bookingId, "ongoing");
+    const updatedBooking = await this._bookingRepository.changeBookingStatus(input.bookingId, BookingStatus.ongoing);
     
     if (!updatedBooking) {
       throw new Error("Failed to update booking status");

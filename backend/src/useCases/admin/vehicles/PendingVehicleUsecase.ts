@@ -10,7 +10,7 @@ import { PendingVehicleInputDto, PendingVehicleOutputDto } from "../../../domain
         }
 
     async getPendingVehicle(input: PendingVehicleInputDto): Promise<PendingVehicleOutputDto | null> {
-        const result = await this._adminRepository.getPendingVehicle(input.page, input.limit);
+        const result = await this._adminRepository.getPendingVehicle(input.page, input.limit,input.search);
         if (!result) return null;
         return { vehicle: result.vehicles, total: result.total };
     }

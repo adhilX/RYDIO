@@ -36,7 +36,6 @@ import { MyBookingController } from "../../adapters/controllers/user/booking-man
 import { BookingRepository } from "../../adapters/repository/booking/bookingRepository"
 import { DeleteVehicleUsecase } from "../../useCases/vehicles/deleteVehicleUsecase"
 import { DeleteVehicleController } from "../../adapters/controllers/user/vehicle-mangment/deleteVehicleController"
-import { ChangeVehicleStatusUsecase } from "../../useCases/vehicles/changeVehicleStatusUsecase"
 import { ChangeVehicleStatusController } from "../../adapters/controllers/user/vehicle-mangment/changeVehicleStatusController"
 import { GetBookedVehicleController } from "../../adapters/controllers/user/booking-managment/getBookedVehicleController"
 import { GetUserController } from "../../adapters/controllers/user/profile-managment/getUserController"
@@ -74,6 +73,9 @@ import { IncomingBookingUsecase } from "../../useCases/bookings/incomingBookingU
 import { CancelBookingUseCase } from "../../useCases/bookings/cancelBookingUseCase"
 import { WithdrawController } from "../../adapters/controllers/admin/WalletManagment/withdrawController"
 import { WithdrawUsecase } from "../../useCases/wallets/withdrawUsecase"
+import { ReapplyVehicleController } from "../../adapters/controllers/user/vehicle-mangment/reapplyVehicleController"
+import { ReapplyVehicleUsecase } from "../../useCases/vehicles/reapplyVehicleUsecase"
+import { ChangeVehicleStatusUsecase } from "../../useCases/vehicles/changeVehicleStatusUsecase"
 
 // regester user 
 const otpService = new OtpService()
@@ -207,7 +209,7 @@ const rideStartUsecase = new RideStartUsecase(bookingRepository,vehicleRepositor
 export const rideStartController = new RideStartController(rideStartUsecase)
 
 //------ride end---------
-const rideEndUsecase = new RideEndUsecase(bookingRepository,vehicleRepository)
+const rideEndUsecase = new RideEndUsecase(bookingRepository,vehicleRepository,adminWalletRepository)
 export const rideEndController = new RideEndController(rideEndUsecase)
 
 
@@ -223,3 +225,7 @@ export const cancelBookingController = new CancelBookingController(cancelBooking
 
 const withdrawUsecase = new WithdrawUsecase(bookingRepository,vehicleRepository,walletRepository,adminWalletRepository,trasationRepository,)
 export const withdrawController = new WithdrawController(withdrawUsecase)
+
+//------reapply vehicle----------
+const reapplyVehicleUsecase = new ReapplyVehicleUsecase(vehicleRepository)
+export const reapplyVehicleController = new ReapplyVehicleController(reapplyVehicleUsecase)

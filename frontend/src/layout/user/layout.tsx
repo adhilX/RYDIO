@@ -6,14 +6,14 @@ import Navbar from "@/components/user/Navbar";
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white relative overflow-hidden">
+    <div className="h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white relative overflow-hidden">
       {/* Premium Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
       
       <Navbar />
       
-      <div className="relative z-10 flex flex-col md:flex-row min-h-[calc(100vh-80px)]">
+      <div className="relative z-10 flex flex-col md:flex-row h-[calc(100vh-80px)] gap-6 p-6">
         <Sidebar />
         
         {/* Premium Main Content Area */}
@@ -21,10 +21,16 @@ export default function Layout() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex-1 p-6 md:p-8 lg:p-10 mt-4 md:mt-0"
+          className="flex-1 overflow-hidden h-max"
         >
           {/* Glass Container for Content */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl min-h-full p-6 md:p-8">
+          <div 
+            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl h-[calc(100vh-40px)] p-6 md:p-8 overflow-y-auto custom-scrollbar"
+            style={{
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(255, 255, 255, 0.2) transparent',
+            }}
+          >
             <Outlet />
           </div>
         </motion.main>

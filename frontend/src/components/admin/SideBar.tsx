@@ -50,7 +50,7 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollap
 
   return (
     <motion.div
-      className="bg-black/90 backdrop-blur-xl border-r border-[#e63946]/30 shadow-2xl flex flex-col h-screen sticky top-0 z-50 rounded-r-2xl"
+      className="bg-black/90 backdrop-blur-xl border-r border-[#e63946]/30 shadow-2xl flex flex-col h-screen fixed left-0 top-0 z-50 rounded-r-2xl"
       variants={sidebarVariants}
       animate={isCollapsed ? 'collapsed' : 'expanded'}
       transition={{ duration: 0.3, ease: 'easeInOut' }}

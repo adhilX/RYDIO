@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController, getUserController, getWalletController, getSecurityDepositController, rideStartController, rideEndController, incomingBookingController, cancelBookingController, withdrawController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController, getUserController, getWalletController, getSecurityDepositController, rideStartController, rideEndController, incomingBookingController, cancelBookingController, withdrawController, reapplyVehicleController } from "../../DI/userInject";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -104,6 +104,9 @@ export class UserRoutes {
     })
     this.UserRoutes.post('/withdrawal/:bookingId',(req:Request,res:Response)=>{
         withdrawController.withdraw(req,res)
+    })
+    this.UserRoutes.post('/vehicles/reapply',(req:Request,res:Response)=>{
+        reapplyVehicleController.reapplyVehicle(req,res)
     })
 }
 }

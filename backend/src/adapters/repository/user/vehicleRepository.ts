@@ -228,4 +228,16 @@ async getTopRevenueVehicles(): Promise<Array<{
     ]);
 }
 
+// Reapply functionality
+async reapplyVehicle(vehicleId: string): Promise<boolean> {
+    const result = await VehicleModel.findByIdAndUpdate(
+        vehicleId, 
+        { 
+            admin_approve: 'reapplied',
+            $unset: { reject_reason: 1 }
+        }
+    );
+    return result !== null;
+}
+
 }

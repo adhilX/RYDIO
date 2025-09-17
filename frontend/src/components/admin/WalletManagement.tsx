@@ -143,7 +143,7 @@ function WalletManagement() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">
-                {isLoading ? '••••••••' : `₹${walletDetails?.balance || 0}`}
+                {isLoading ? '••••••••' : `₹${walletDetails?.total_balance || 0}`}
               </div>
               <p className="text-xs opacity-80 mt-1">
                 <TrendingUp className="w-3 h-3 inline mr-1" />
@@ -180,10 +180,10 @@ function WalletManagement() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {isLoading ? '••••••••' : `₹${walletDetails?.penalty_balance || 0}`}
+                {isLoading ? '••••••••' : `₹${walletDetails?.balance || 0}`}
               </div>
               <p className="text-xs text-red-400 mt-1">
-                Penalty Balance
+                balance
               </p>
             </CardContent>
           </Card>
@@ -293,12 +293,12 @@ function WalletManagement() {
                     </div>
                     <div className="text-right">
                       <p className={`text-lg font-bold ${
-                        transaction.transactionType === 'credit' ? 'text-green-400' : 'text-red-400'
+                        transaction.transactionType === 'debit' ? 'text-green-400' : 'text-red-400'
                       }`}>
-                        {transaction.transactionType === 'credit' ? '+' : '-'}
+                        {transaction.transactionType === 'debit' ? '+' : '-'}
                         ₹{transaction.amount}
                       </p>
-                      <p className="text-xs text-gray-400 uppercase">From: {transaction.from}</p>
+                      {transaction.from!= 'admin'&&(<p className="text-xs text-gray-400 uppercase">From: {transaction.from }</p>)}
                     </div>
                   </motion.div>
                 ))

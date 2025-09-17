@@ -189,13 +189,13 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
      async getBookedBookingsByVehicleId(vehicle_id: string): Promise<IBooking[]|null> {
           return await bookingModel.find({
             vehicle_id,
-            status: "booked",
+            status: BookingStatus.booked,
             payment_status: "paid",
           });
         }
 
         
-     async changeBookingStatus(booking_id: string, status: string): Promise<IBooking | null> {
+     async changeBookingStatus(booking_id: string, status: BookingStatus): Promise<IBooking | null> {
         return await bookingModel.findOneAndUpdate({ booking_id }, { status }, { new: true })
     }
 
@@ -233,7 +233,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
                { booking_id: booking.booking_id }, 
                { 
                     ride_end_time: booking.ride_end_time,
-                    status: "completed",
+                    status: BookingStatus.Completed,
                     finance: booking.finance
                },
                { new: true }

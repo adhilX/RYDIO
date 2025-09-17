@@ -25,6 +25,7 @@ export interface IVehicleRepository extends IBaseRepository<IVehicle> {
    deleteVehicle(vehicleId:string):Promise<boolean>
    changeVehicleStatus(vehicleId:string):Promise<boolean>
    getVehicle(vehicleId:string):Promise<IVehicle | null>
+   reapplyVehicle(vehicleId: string): Promise<boolean>
    
    // Dashboard Analytics Methods
    getActiveVehiclesCount(): Promise<number>
@@ -38,4 +39,5 @@ export interface IVehicleRepository extends IBaseRepository<IVehicle> {
        model: string;
        revenue: number;
    }>>
+   
 }

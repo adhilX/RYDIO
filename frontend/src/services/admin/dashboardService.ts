@@ -1,65 +1,8 @@
 import { adminAxios as axiosInstance } from "@/axios/interceptors";
+import type { DashboardData } from "@/Types/admin/dashboardType";
 import { isAxiosError } from "axios";
 
-export interface DashboardData {
-  totalRevenue: {
-    totalRevenue: number;
-    growthPercentage: number;
-    chartData: number[];
-  };
-  totalBookings: {
-    totalBookings: number;
-    growthPercentage: number;
-    chartData: number[];
-  };
-  totalUsers: {
-    totalUsers: number;
-    growthPercentage: number;
-    chartData: number[];
-  };
-  activeVehicles: {
-    activeVehicles: number;
-    growthPercentage: number;
-    chartData: number[];
-  };
-  financialOverview: {
-    commission: number;
-    penalties: number;
-    refunds: number;
-    topRevenueVehicles: Array<{
-      type: string;
-      model: string;
-      revenue: number;
-      percentage: number;
-    }>;
-    walletBalance: number;
-  };
-  userManagement: {
-    totalUsers: number;
-    activeUsers: number;
-    blockedUsers: number;
-    activePercentage: number;
-    blockedPercentage: number;
-    vendorAccessRequests: number;
-    verificationRequests: number;
-    chartData: Array<{ height: number; color: string }>;
-  };
-  vehicleManagement: {
-    pendingVehicles: number;
-    approvedVehicles: number;
-    rejectedVehicles: number;
-    averageRevenuePerBooking: number;
-    chartData: Array<{ height: number; color: string }>;
-  };
-  bookingAnalytics: {
-    weeklyBookingData: Array<{ day: string; bookings: number }>;
-    activeCities: number;
-    topCity: {
-      name: string;
-      bookings: number;
-    };
-  };
-}
+
 
 export const getAllDashboardData = async (): Promise<DashboardData> => {
   try {
@@ -196,6 +139,7 @@ export const getVehicleManagementStats = async () => {
 export const getBookingAnalytics = async () => {
   try {
     const response = await axiosInstance.get("/admin/dashboard/booking-analytics");
+    console.log('Booking analytics API response:', response.data);
     return response.data.data;
   } catch (error) {
     console.log('error while fetching booking analytics', error);

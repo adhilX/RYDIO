@@ -9,7 +9,7 @@ import { CreateBookingInputDto, CreateBookingOutputDto } from "../../domain/inte
 import { ICreateBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/ICreateBookingUsecase"
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository"
 import { TransactionPurpose } from "../../domain/entities/transactionEntities"
-import {ITrasationRepository} from "../../domain/interface/repositoryInterface/ItrasationRepository"
+import { ITrasationRepository } from "../../domain/interface/repositoryInterface/ITrasationRepository"
 
 export class CreateBookingUsecase implements ICreateBookingUsecase {
   constructor(private _bookingRepository: IBookingRepository, private _redisService: IRedisService,private _vehicleRepository: IVehicleRepository,private _adminWalletRepository: IAdminWalletRepository,private _walletRepository: IWalletRepository, private _trasationRepository: ITrasationRepository) {}
@@ -70,10 +70,19 @@ export class CreateBookingUsecase implements ICreateBookingUsecase {
       }
     }
     
+        // Update admin wallet with all booking-related data
+        const commissionAmount = Math.round(bookingData.total_amount * 0.1);
+        
+        // Update commission balance (admin earnings from booking)
+        await this._adminWalletRepository.updateCommissionBalance(commissionAmount);
+        
+        // Update main wallet balance with full booking amount  
         await this._adminWalletRepository.updateWalletBalance(bookingData.total_amount);
+        
+        // Create transaction for the full booking amount
         const transaction  =await this._trasationRepository.create({from:user_id,to:'admin',amount:bookingData.total_amount,purpose:TransactionPurpose.booking,bookingId:booking_id,transactionType:'debit'})
         await this._walletRepository.addTransaction(user_id,transaction._id!)
-         await this._adminWalletRepository.addTransaction(transaction._id!)
+        await this._adminWalletRepository.addTransaction(transaction._id!)
     const savedBooking = await this._bookingRepository.create(newBooking);
         
     return {

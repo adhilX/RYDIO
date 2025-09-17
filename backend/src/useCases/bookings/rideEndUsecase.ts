@@ -1,5 +1,7 @@
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
+import { IAdminWalletRepository } from "../../domain/interface/repositoryInterface/IAdminWalletRepository";
+import { BookingStatus } from "../../domain/entities/BookingEntities";
 import { setings } from "../../domain/constants/settings";
 import { RideEndInputDto, RideEndOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto";
 import { IRideEndUsecase } from "../../domain/interface/usecaseInterface/bookings/IRideEndUsecase";
@@ -8,13 +10,14 @@ export class RideEndUsecase implements IRideEndUsecase{
     constructor(
         private _bookingRepository: IBookingRepository, 
         private _vehicleRepository: IVehicleRepository,
+        private _adminWalletRepository: IAdminWalletRepository,
     ) {}
     async execute(input: RideEndInputDto, scanner_user_id: string): Promise<RideEndOutputDto> {
         try {
             const booking = await this._bookingRepository.findByBookingId(input.bookingId);
             if (!booking) throw new Error("Booking not found");
             
-            if (booking.status !== 'ongoing') {
+            if (booking.status !== BookingStatus.ongoing) {
                 throw new Error("Booking is not in ongoing status. Current status: " + booking.status);
             }
             
@@ -44,6 +47,9 @@ export class RideEndUsecase implements IRideEndUsecase{
                 
                 booking.finance.fine_amount = penaltyAmount;
                 booking.finance.is_late_return = true;
+                
+                // Update admin wallet penalty balance
+                await this._adminWalletRepository.updatePenaltyBalance(penaltyAmount);
             }
             
             booking.ride_end_time = currentTime;

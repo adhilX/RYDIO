@@ -1,8 +1,9 @@
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
+import { IFinancialOverviewUseCase } from "../../domain/interface/usecaseInterface/dashboard/IFinancialOverviewUseCase";
 
-export class FinancialOverviewUseCase {
+export class FinancialOverviewUseCase implements IFinancialOverviewUseCase{
     constructor(
         private bookingRepository: IBookingRepository,
         private walletRepository: IWalletRepository,

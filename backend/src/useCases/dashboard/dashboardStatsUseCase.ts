@@ -2,8 +2,9 @@ import { IUserRepository } from "../../domain/interface/repositoryInterface/IUse
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository";
+import { IDashboardStatsUseCase } from "../../domain/interface/usecaseInterface/dashboard/IDashboardStatsUseCase";
 
-export class DashboardStatsUseCase {
+export class DashboardStatsUseCase implements IDashboardStatsUseCase {
     constructor(
         private userRepository: IUserRepository,
         private vehicleRepository: IVehicleRepository,

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { DashboardStatsUseCase } from "../../../useCases/admin/dashboardStatsUseCase";
-import { FinancialOverviewUseCase } from "../../../useCases/admin/financialOverviewUseCase";
+import { DashboardStatsUseCase } from "../../../useCases/dashboard/dashboardStatsUseCase";
+import { FinancialOverviewUseCase } from "../../../useCases/dashboard/financialOverviewUseCase";
 import { UserManagementUseCase } from "../../../useCases/admin/userManagementUseCase";
 import { VehicleManagementUseCase } from "../../../useCases/admin/vehicleManagementUseCase";
-import { BookingAnalyticsUseCase } from "../../../useCases/admin/bookingAnalyticsUseCase";
+import { BookingAnalyticsUseCase } from "../../../useCases/dashboard/bookingAnalyticsUseCase";
 
 export class DashboardController {
     constructor(

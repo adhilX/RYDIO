@@ -1,5 +1,5 @@
 import { BaseRepository } from "../../../adapters/repository/base/BaseRepo";
-import { IBooking } from "../../entities/BookingEntities";
+import { IBooking, BookingStatus } from "../../entities/BookingEntities";
 import { ICancleFinalce } from "../DTOs/bookingDto/BookingDto";
 
 export interface IBookingRepository extends BaseRepository<IBooking>{
@@ -8,7 +8,7 @@ export interface IBookingRepository extends BaseRepository<IBooking>{
     getBookingData(search: string, limit: number, page: number): Promise<{ bookings: IBooking[], total: number } | null>
    bookedVehicle(pickupDate: string, returnDate: string): Promise<string[]>
    getBookedBookingsByVehicleId(vehicle_id: string): Promise<IBooking[]|null> 
-   changeBookingStatus(booking_id:string,status:string): Promise<IBooking | null>
+   changeBookingStatus(booking_id:string,status:BookingStatus): Promise<IBooking | null>
    getOwnerBookings(userId:string,limit:number,page:number,search:string,status:string): Promise<{bookings:IBooking[],total:number}|null>
    cancelBooking(booking_id:string,reason:string, financeUpdate?: ICancleFinalce): Promise<boolean>
    endRide(booking:IBooking): Promise<IBooking | null>

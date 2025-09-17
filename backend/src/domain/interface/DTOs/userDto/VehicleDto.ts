@@ -37,7 +37,7 @@ export interface AddVehicleOutputDto extends BaseVehicleDto {
   location_id: string | object;
   registration_number: string;
   description: string;
-  admin_approve: 'pending' | 'accepted' | 'rejected';
+  admin_approve: 'pending' | 'accepted' | 'rejected' | 'reapplied';
   reject_reason?: string;
   is_available: boolean;
   created_at: Date;

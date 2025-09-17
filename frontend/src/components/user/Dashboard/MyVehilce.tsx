@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PlusCircle, Search, Trash2, Check, X } from 'lucide-react';
+import { PlusCircle, Search, Trash2, Check, X, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { getMyVehicle, updateVehicleStatus, deleteVehicle } from '@/services/user/vehicleService';
@@ -8,6 +8,7 @@ import type { RootState } from '@/store/store';
 import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
 import Pagination from '@/components/Pagination';
 import { toast } from 'react-hot-toast';
+import RejectedVehicleModal from '@/components/user/modals/RejectedVehicleModal';
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
 const ListVehilce = () => {
@@ -23,6 +24,8 @@ const ListVehilce = () => {
     const [updatingStatus, setUpdatingStatus] = useState<Record<string, boolean>>({});
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
+    const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
 
   const handleDelete = useCallback(async (vehicleId: string) => {
@@ -85,6 +88,26 @@ const ListVehilce = () => {
             setUpdatingStatus({ [vehicleId]: false });
         }
     },[])
+
+    const handleViewRejectedVehicle = useCallback((vehicle: Vehicle) => {
+        setSelectedVehicle(vehicle);
+        setIsModalOpen(true);
+    }, []);
+
+    const handleCloseModal = useCallback(() => {
+        setIsModalOpen(false);
+        setSelectedVehicle(null);
+    }, []);
+
+    const handleReapplySuccess = useCallback((vehicleId: string) => {
+        // Remove the vehicle from the rejected list and update its status
+        setVehicles(prev => prev.map(v => 
+            v._id === vehicleId 
+                ? { ...v, admin_approve: 'reapplied' as const, reject_reason: undefined }
+                : v
+        ));
+        toast.success('Vehicle re-submitted for review');
+    }, []);
 
   
     return (
@@ -166,11 +189,16 @@ const ListVehilce = () => {
                              {vehicle.fuel_type}
                          </td>
                          <td className="px-4 py-4 text-center">
-                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${vehicle.admin_approve === 'accepted'
-                                 ? 'bg-green-100 text-green-800'
-                                 : vehicle.admin_approve === 'pending'
-                                     ? 'bg-red-100 text-red-800'
-                                     : 'bg-yellow-100 text-yellow-800'
+                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                                 vehicle.admin_approve === 'accepted'
+                                     ? 'bg-green-100 text-green-800'
+                                     : vehicle.admin_approve === 'pending'
+                                         ? 'bg-yellow-100 text-yellow-800'
+                                         : vehicle.admin_approve === 'rejected'
+                                             ? 'bg-red-100 text-red-800'
+                                             : vehicle.admin_approve === 'reapplied'
+                                                 ? 'bg-blue-100 text-blue-800'
+                                                 : 'bg-gray-100 text-gray-800'
                                  }`}>
                                  {vehicle.admin_approve}
                              </span>
@@ -199,17 +227,16 @@ const ListVehilce = () => {
                          <td className="px-4 py-4">
                              <div className="flex justify-center space-x-3">
                                  <div className="flex items-center space-x-2">
-                                     {/* <button
-                                         onClick={() => {
-                                             if (vehicle._id) {
-                                                 navigate(`/userProfile/edit-vehicle/${vehicle._id}`);
-                                             }
-                                         }}
-                                         className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
-                                         title="Edit Vehicle"
-                                     >
-                                         <Edit className="w-4 h-4" />
-                                     </button> */}
+                                     {/* View button for rejected vehicles */}
+                                     {vehicle.admin_approve === 'rejected' && (
+                                         <button
+                                             onClick={() => handleViewRejectedVehicle(vehicle)}
+                                             className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+                                             title="View Details & Reapply"
+                                         >
+                                             <Eye className="w-4 h-4" />
+                                         </button>
+                                     )}
                                      <div className="relative">
                                          {showDeleteConfirm === vehicle._id ? (
                                              <div className="absolute right-0 z-10 flex items-center bg-white rounded-lg shadow-lg p-1 space-x-1">
@@ -273,6 +300,16 @@ const ListVehilce = () => {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                />
+            )}
+
+            {/* Rejected Vehicle Modal */}
+            {selectedVehicle && (
+                <RejectedVehicleModal
+                    vehicle={selectedVehicle}
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    onReapplySuccess={handleReapplySuccess}
                 />
             )}
         </div>

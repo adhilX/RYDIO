@@ -52,14 +52,14 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside className={`
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-           md:sticky md:top-[88px] left-6 z-1
-        w-[300px] bg-gradient-to-b from-[#232b3a] via-[#181f23] to-[#232b3a] text-white border border-white/10
-        h-[calc(100vh-40px)] my-[20px] flex flex-col items-stretch justify
+        fixed md:relative left-6 md:left-0 z-30
+        w-[300px] md:w-[320px] bg-gradient-to-b from-[#232b3a] via-[#181f23] to-[#232b3a] text-white border border-white/10
+        h-[calc(100vh-108px)] md:h-full my-[20px] md:my-0 md:mr-6 flex flex-col items-stretch justify-between
         rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out pt-14
-        ring-1 ring-[#6DA5C0]/10
+        ring-1 ring-[#6DA5C0]/10 overflow-hidden flex-shrink-0
       `}>
 
-        <nav className="flex-1 flex flex-col  gap-4 px-4 py-6">
+        <nav className="flex-1 flex flex-col gap-4 px-4 py-6 overflow-y-auto">
           {links.map(({ to, label, icon: Icon }) => {
             const active = isActive(to);
             return (
@@ -67,7 +67,7 @@ export function Sidebar() {
                 to={`/${to}`}
                 key={to}
                 onClick={() => setIsMobileOpen(false)}
-                className={`flex items-center gap-4 px-4 py-3 rounded-full font-semibold text-base transition-all duration-200 group relative
+                className={`flex items-center gap-4 px-4 py-3 rounded-full font-semibold text-base transition-all duration-200 group relative flex-shrink-0
                   ${active
                     ? 'bg-[#eaf6fa] dark:bg-[#1a232a] text-[#6DA5C0] shadow-lg scale-105 ring-2 ring-[#6DA5C0]'
                     : 'hover:bg-[#232b3a] hover:text-[#6DA5C0] text-gray-200'}`}

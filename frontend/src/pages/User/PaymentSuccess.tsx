@@ -36,7 +36,7 @@ const PaymentSuccess = () => {
             Booking Successful!
           </motion.h1>
 
-          <QRGenerator booking_id={booking_id}/>
+          <QRGenerator action='start' booking_id={booking_id}/>
           {/* Success Message */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}

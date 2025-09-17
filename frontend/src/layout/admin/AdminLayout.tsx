@@ -21,18 +21,14 @@ const AdminLayout = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black flex text-white w-full relative overflow-hidden">
-            {/* <div className="absolute inset-0 bg-[url('/placeholder.svg?heigh    t=1080&width=1920')] bg-cover bg-center opacity-10"></div> */}
-            {/* <div className="absolute inset-0 bg-black/70"></div> */}
-            {/* <div className="absolute top-20 left-20 w-72 h-72"></div>
-            <div className="absolute bottom-20 right-20 w-96 h-96"></div> */}
+        <div className="h-screen bg-black flex text-white w-full relative overflow-hidden">
             <Sidebar
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
                 isCollapsed={isSidebarCollapsed}
                 onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             />
-            <main className="flex-1 overflow-hidden">
+            <main className="flex-1 h-screen overflow-hidden" style={{ marginLeft: isSidebarCollapsed ? '80px' : '280px' }}>
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentPage}
@@ -41,7 +37,7 @@ const AdminLayout = () => {
                         exit="out"
                         variants={pageVariants}
                         transition={pageTransition}
-                        className="h-full overflow-y-auto"
+                        className="h-full overflow-y-auto custom-scrollbar"
                     >
                         <Outlet />
                     </motion.div>

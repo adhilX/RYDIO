@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Car, MapPin,Loader2, Shield, CreditCard } from 'lucide-react';
-import { getAllDashboardData, type DashboardData } from '../../services/admin/dashboardService';
+import { Car, MapPin, Loader2, Shield } from 'lucide-react';
+import { getAllDashboardData} from '../../services/admin/dashboardService';
+import type { DashboardData } from '@/Types/admin/dashboardType';
+import { ChartLineLabel } from '@/components/chart-line-label';
+import '../../styles/animations.css';
 
 export const Dashboard: React.FC = () => {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
@@ -16,6 +19,8 @@ export const Dashboard: React.FC = () => {
       setLoading(true);
       setError(null);
       const data = await getAllDashboardData();
+      console.log('Dashboard data received:', data);
+      console.log('Booking analytics:', data.bookingAnalytics);
       setDashboardData(data);
     } catch (err) {
       setError('Failed to load dashboard data');
@@ -27,10 +32,101 @@ export const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="flex items-center space-x-2 text-white">
-          <Loader2 className="h-6 w-6 animate-spin" />
-          <span>Loading dashboard...</span>
+      <div className="p-6 space-y-6 bg-black min-h-screen">
+        {/* Skeleton for Top Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="bg-white/10 p-6 rounded-2xl animate-pulse" style={{ animationDelay: `${i * 0.1}s` }}>
+              <div className="h-3 skeleton rounded w-24 mb-4"></div>
+              <div className="h-8 skeleton rounded w-20 mb-4"></div>
+              <div className="h-2 skeleton rounded w-32 mb-4"></div>
+              <div className="h-12 skeleton rounded"></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Skeleton for Second Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Financial Overview Skeleton */}
+          <div className="bg-white/10 p-6 rounded-2xl animate-pulse">
+            <div className="h-5 bg-gray-600 rounded w-32 mb-6"></div>
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="bg-gray-600 p-4 rounded-xl h-20"></div>
+              ))}
+            </div>
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex items-center space-x-4">
+                  <div className="w-5 h-5 bg-gray-600 rounded"></div>
+                  <div className="h-4 bg-gray-600 rounded flex-1"></div>
+                  <div className="h-4 bg-gray-600 rounded w-16"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* User Management Skeleton */}
+          <div className="bg-white/10 p-6 rounded-2xl animate-pulse">
+            <div className="h-5 bg-gray-600 rounded w-32 mb-6"></div>
+            <div className="flex items-center justify-center mb-6">
+              <div className="w-32 h-32 bg-gray-600 rounded-full"></div>
+            </div>
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex justify-between items-center">
+                  <div className="h-4 bg-gray-600 rounded w-24"></div>
+                  <div className="h-4 bg-gray-600 rounded w-16"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Skeleton for Third Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Vehicle Management Skeleton */}
+          <div className="bg-white/10 p-6 rounded-2xl animate-pulse">
+            <div className="h-5 bg-gray-600 rounded w-32 mb-6"></div>
+            <div className="space-y-4 mb-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex justify-between items-center">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+                    <div className="h-4 bg-gray-600 rounded w-16"></div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="h-4 bg-gray-600 rounded w-8"></div>
+                    <div className="flex space-x-1">
+                      <div className="w-6 h-6 bg-gray-600 rounded"></div>
+                      <div className="w-6 h-6 bg-gray-600 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="bg-gray-600 p-4 rounded-lg h-16"></div>
+          </div>
+
+          {/* Booking Analytics Skeleton */}
+          <div className="bg-white/10 p-6 rounded-2xl animate-pulse">
+            <div className="h-5 bg-gray-600 rounded w-32 mb-6"></div>
+            <div className="h-40 bg-gray-600 rounded mb-6"></div>
+            <div className="space-y-3">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="flex justify-between items-center">
+                  <div className="h-4 bg-gray-600 rounded w-20"></div>
+                  <div className="h-4 bg-gray-600 rounded w-12"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Loading indicator */}
+        <div className="fixed top-4 right-4 flex items-center space-x-2 text-white bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-sm">Loading dashboard...</span>
         </div>
       </div>
     );
@@ -38,7 +134,7 @@ export const Dashboard: React.FC = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+      <div className="flex items-center justify-center min-h-screen bg-black">
         <div className="text-center">
           <div className="text-red-400 mb-4">{error}</div>
           <button 
@@ -53,15 +149,19 @@ export const Dashboard: React.FC = () => {
   }
 
   if (!dashboardData) {
-    return null;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-white">No dashboard data available</div>
+      </div>
+    );
   }
 
   return (
     <div className="p-6 space-y-6 bg-black min-h-screen">
         {/* Top Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             {/* Total Revenue Card */}
-            <div className="bg-white/10 p-6 rounded-2xl text-white relative overflow-hidden">
+            <div className="bg-white/10 p-6 rounded-2xl text-white relative overflow-hidden card-hover">
                 <div className="relative z-10">
                     <p className="text-xs text-gray-400 font-medium tracking-wide mb-2">TOTAL REVENUE</p>
                     <p className="text-3xl font-bold mb-4">
@@ -90,7 +190,7 @@ export const Dashboard: React.FC = () => {
             </div>
 
             {/* Total Bookings Card */}
-            <div className="bg-white/10 p-6 rounded-2xl text-white relative overflow-hidden">
+            <div className="bg-white/10 p-6 rounded-2xl text-white relative overflow-hidden card-hover">
                 <div className="relative z-10">
                     <p className="text-xs text-gray-400 font-medium tracking-wide mb-2">TOTAL BOOKINGS</p>
                     <p className="text-3xl font-bold mb-4">{dashboardData.totalBookings.totalBookings.toLocaleString()}</p>
@@ -112,7 +212,7 @@ export const Dashboard: React.FC = () => {
             </div>
 
             {/* Total Users Card */}
-            <div className="bg-white/10 p-6 rounded-2xl text-white relative overflow-hidden">
+            <div className="bg-white/10 p-6 rounded-2xl text-white relative overflow-hidden card-hover">
                 <div className="relative z-10">
                     <p className="text-xs text-gray-400 font-medium tracking-wide mb-2">TOTAL USERS</p>
                     <p className="text-3xl font-bold mb-4">{dashboardData.totalUsers.totalUsers.toLocaleString()}</p>
@@ -134,7 +234,7 @@ export const Dashboard: React.FC = () => {
             </div>
 
             {/* Active Vehicles Card */}
-            <div className="bg-white/10 p-6 rounded-2xl text-white relative overflow-hidden">
+            <div className="bg-white/10 p-6 rounded-2xl text-white relative overflow-hidden card-hover">
                 <div className="relative z-10">
                     <p className="text-xs text-gray-400 font-medium tracking-wide mb-2">ACTIVE VEHICLES</p>
                     <p className="text-3xl font-bold mb-4">{dashboardData.activeVehicles.activeVehicles.toLocaleString()}</p>
@@ -157,7 +257,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Second Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             {/* Financial Overview */}
             <div className="bg-white/10 p-6 rounded-2xl shadow-sm">
                 <h2 className="text-lg font-semibold text-white mb-6">FINANCIAL OVERVIEW</h2>
@@ -176,13 +276,13 @@ export const Dashboard: React.FC = () => {
                         <p className="text-xs font-medium mb-1">PENALTIES</p>
                         <p className="text-2xl font-bold">${(dashboardData.financialOverview.penalties / 1000).toFixed(0)}K</p>
                     </div>
-                    <div className="bg-gray-300 p-4 rounded-xl text-gray-700 text-center">
+                    {/* <div className="bg-gray-300 p-4 rounded-xl text-gray-700 text-center">
                         <div className="flex items-center justify-center mb-2">
                             <CreditCard className="w-6 h-6 mr-2" />
                         </div>
                         <p className="text-xs font-medium mb-1">REFUNDS</p>
                         <p className="text-2xl font-bold">${(dashboardData.financialOverview.refunds / 1000).toFixed(0)}K</p>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="space-y-4">
                     <div className="flex justify-between items-center text-sm">
@@ -260,7 +360,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Third Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             {/* Vehicle Management */}
             <div className="bg-white/10 p-6 rounded-2xl text-white">
                 <h2 className="text-lg font-semibold mb-6">VEHICLE MANAGEMENT</h2>
@@ -316,59 +416,26 @@ export const Dashboard: React.FC = () => {
             {/* Booking Analytics */}
             <div className="bg-white/10 p-6 rounded-2xl text-white">
                 <h2 className="text-lg font-semibold mb-6">BOOKING ANALYTICS</h2>
-                <div className="h-40 mb-6 relative">
-                    <svg className="w-full h-full" viewBox="0 0 400 160">
-                        {/* Grid lines */}
-                        <defs>
-                            <pattern id="grid" width="40" height="20" patternUnits="userSpaceOnUse">
-                                <path d="M 40 0 L 0 0 0 20" fill="none" stroke="#374151" strokeWidth="0.5"/>
-                            </pattern>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grid)" />
-                        
-                        {/* Chart line */}
-                        <polyline
-                            fill="none"
-                            stroke="#e63946"
-                            strokeWidth="3"
-                            points="20,140 60,120 100,100 140,80 180,70 220,60 260,50 300,40 340,30 380,25"
-                        />
-                        
-                        {/* Data points */}
-                        <circle cx="20" cy="140" r="4" fill="#e63946" />
-                        <circle cx="60" cy="120" r="4" fill="#e63946" />
-                        <circle cx="100" cy="100" r="4" fill="#e63946" />
-                        <circle cx="140" cy="80" r="4" fill="#e63946" />
-                        <circle cx="180" cy="70" r="4" fill="#e63946" />
-                        <circle cx="220" cy="60" r="4" fill="#e63946" />
-                        <circle cx="260" cy="50" r="4" fill="#e63946" />
-                        <circle cx="300" cy="40" r="4" fill="#e63946" />
-                        <circle cx="340" cy="30" r="4" fill="#e63946" />
-                        <circle cx="380" cy="25" r="4" fill="#e63946" />
-                    </svg>
-                    
-                    {/* X-axis labels */}
-                    <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-400 px-2">
-                        <span>MON</span>
-                        <span>TUE</span>
-                        <span>WED</span>
-                        <span>THU</span>
-                        <span>FRI</span>
-                        <span>SAT</span>
-                        <span>SUN</span>
-                    </div>
+                <div className="h-40 mb-6 chart-enter">
+                    {dashboardData?.bookingAnalytics?.chartData && dashboardData.bookingAnalytics.chartData.length > 0 ? (
+                        <ChartLineLabel data={dashboardData.bookingAnalytics.chartData} />
+                    ) : (
+                        <div className="flex items-center justify-center h-full text-gray-400">
+                            No data available
+                        </div>
+                    )}
                 </div>
                 <div className="space-y-3">
                     <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-400">ACTIVE CITIES</span>
-                        <span className="text-sm font-medium">{dashboardData.bookingAnalytics.activeCities}</span>
+                        <span className="text-sm font-medium">{dashboardData?.bookingAnalytics?.activeCities || 0}</span>
                     </div>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <MapPin className="w-4 h-4 text-[#e63946]" />
-                            <span className="text-sm">TOP CITY {dashboardData.bookingAnalytics.topCity.name.toUpperCase()}</span>
+                            <span className="text-sm">TOP CITY {dashboardData?.bookingAnalytics?.topCity?.name?.toUpperCase() || 'N/A'}</span>
                         </div>
-                        <span className="text-sm">({dashboardData.bookingAnalytics.topCity.bookings.toLocaleString()} BOOKINGS)</span>
+                        <span className="text-sm">({dashboardData?.bookingAnalytics?.topCity?.bookings?.toLocaleString() || 0} BOOKINGS)</span>
                     </div>
                 </div>
             </div>

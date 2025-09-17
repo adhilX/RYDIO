@@ -57,10 +57,10 @@ export class AdminRepository extends BaseRepository<User> implements IAdminRepos
     return !blockedUser?.is_blocked || null
   }
 
-  async getPendingVehicle(page = 1, limit = 10): Promise<{ vehicles: IVehicle[]; total: number } | null> {
+  async getPendingVehicle(page = 1, limit = 10,search:string): Promise<{ vehicles: IVehicle[]; total: number } | null> {
   const skip = (page - 1) * limit;
-  const filter = { admin_approve: { $ne: 'accepted' } };
-
+  let filter = { admin_approve: { $ne: 'accepted' } };
+  
   const [vehicles, total] = await Promise.all([
     VehicleModel.find(filter).populate('owner_id').populate('location_id').skip(skip).limit(limit),
     VehicleModel.countDocuments(filter)

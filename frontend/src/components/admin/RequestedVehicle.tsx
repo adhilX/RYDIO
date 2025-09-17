@@ -20,7 +20,7 @@ export default function AdminRequestedVehicles() {
   const [vehicle, setVehicles] = useState<(Vehicle & { owner_id: Iuser, location_id: Ilocation })[]>([])
   const [totalPage, setTotalPage] = useState(1)
   const filteredVehicles = vehicle.filter((v) =>
-    v.admin_approve === (showRejected ? 'rejected' : 'pending')
+    showRejected ? v.admin_approve === 'rejected': (v.admin_approve === 'pending' || v.admin_approve === 'reapplied') 
   );
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   useEffect(() => {
