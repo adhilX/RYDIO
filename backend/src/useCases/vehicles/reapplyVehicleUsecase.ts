@@ -25,20 +25,11 @@ export class ReapplyVehicleUsecase implements IReapplyVehicleUsecase {
                     message: "Vehicle must be in rejected status to reapply"
                 };
             }
-
-            const result = await this._vehicleRepository.reapplyVehicle(vehicleId);
-            
-            if (result) {
-                return {
-                    success: true,
-                    message: "Vehicle status changed to reapplied"
-                };
-            } else {
-                return {
-                    success: false,
-                    message: "Failed to update vehicle status"
-                };
-            }
+            await this._vehicleRepository.reapplyVehicle(vehicleId);   
+             return {
+                success: true,
+                message :"Vehicle reapply successfully"
+             }
         } catch (error) {
             console.error("Error in reapplyVehicle usecase:", error);
             return {

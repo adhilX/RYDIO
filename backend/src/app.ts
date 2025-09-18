@@ -20,6 +20,7 @@ import path from 'path';
 import { createWriteStream } from 'fs';
 import { createMessageUseCase, createNotificationUsecase, updateLastMessageUseCase } from './framework/DI/chatInject';
 import { userRepository } from './framework/DI/userInject';
+import { createStream } from 'rotating-file-stream';
 
 
 const options = {
@@ -138,10 +139,27 @@ export class App {
         if (process.env.NODE_ENV === 'development') {
             this._app.use(morgan('combined'))
         } else if (process.env.NODE_ENV === 'production') {
+
+            const accessLogs = createStream((time, index) => {
+                if (!time) return path.join(__dirname, "logs", "accessLogs", "buffer.txt");
+                return path.join(__dirname, "logs", "accessLogs", new Date().toDateString() + index + ".txt")
+            }, {
+                interval: '1d',
+                size: "100M",
+                maxFiles: 10
+            })
+
+            const errorLogs = createStream((time, index) => {
+                if (!time) return path.join(__dirname, "logs", "errorLogs", "buffer.txt");
+                return path.join(__dirname, "logs", "errorLogs", new Date().toDateString() + index + ".txt")
+            }, {
+                interval: '1d',
+                size: "100M",
+                maxFiles: 10
+            })
+
             // accesslogs middleware
-            const accessLogs = createWriteStream(path.join(__dirname, 'logs', 'access.log'), { flags: 'a' });
-            const errorLogs = createWriteStream(path.join(__dirname, 'logs', 'error.log'), { flags: 'a' });
-            this._app.use(morgan('combined', { stream: accessLogs, skip: (req)=> req.url === '/metrics' }))
+            this._app.use(morgan('combined', { stream: accessLogs }))
 
             // error logs (skips if statuscode is less than 400)
             this._app.use(morgan('combined', { stream: errorLogs, skip: (req, res) => res.statusCode < 400 }))

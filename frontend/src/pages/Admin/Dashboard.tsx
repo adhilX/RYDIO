@@ -166,10 +166,10 @@ export const Dashboard: React.FC = () => {
                     <p className="text-xs text-gray-400 font-medium tracking-wide mb-2">TOTAL REVENUE</p>
                     <p className="text-3xl font-bold mb-4">
                         {dashboardData.totalRevenue.totalRevenue >= 1000000 
-                            ? `$${(dashboardData.totalRevenue.totalRevenue / 1000000).toFixed(1)}M`
+                            ? `₹${(dashboardData.totalRevenue.totalRevenue / 1000000).toFixed(1)}M`
                             : dashboardData.totalRevenue.totalRevenue >= 1000
-                                ? `$${(dashboardData.totalRevenue.totalRevenue / 1000).toFixed(1)}K`
-                                : `$${dashboardData.totalRevenue.totalRevenue.toLocaleString()}`
+                                ? `₹${(dashboardData.totalRevenue.totalRevenue / 1000).toFixed(1)}K`
+                                : `₹${dashboardData.totalRevenue.totalRevenue.toLocaleString()}`
                         }
                     </p>
                     <div className="flex items-center mb-4">
@@ -267,14 +267,14 @@ export const Dashboard: React.FC = () => {
                             <Car className="w-6 h-6 mr-2" />
                         </div>
                         <p className="text-xs font-medium mb-1">COMMISSION</p>
-                        <p className="text-2xl font-bold">${(dashboardData.financialOverview.commission / 1000).toFixed(0)}K</p>
+                        <p className="text-2xl font-bold">₹{(dashboardData.financialOverview.commission / 1000).toFixed(0)}K</p>
                     </div>
                     <div className="bg-gray-300 p-4 rounded-xl text-gray-700 text-center">
                         <div className="flex items-center justify-center mb-2">
                             <Shield className="w-6 h-6 mr-2" />
                         </div>
                         <p className="text-xs font-medium mb-1">PENALTIES</p>
-                        <p className="text-2xl font-bold">${(dashboardData.financialOverview.penalties / 1000).toFixed(0)}K</p>
+                        <p className="text-2xl font-bold">₹{(dashboardData.financialOverview.penalties / 1000).toFixed(0)}K</p>
                     </div>
                     {/* <div className="bg-gray-300 p-4 rounded-xl text-gray-700 text-center">
                         <div className="flex items-center justify-center mb-2">
@@ -287,7 +287,7 @@ export const Dashboard: React.FC = () => {
                 <div className="space-y-4">
                     <div className="flex justify-between items-center text-sm">
                         <span className="text-white">TOP REVENUE VEHICLES</span>
-                        <span className="text-white">WALLET BALANCE ${(dashboardData.financialOverview.walletBalance / 1000).toFixed(0)}K</span>
+                        <span className="text-white">WALLET BALANCE ₹{(dashboardData.financialOverview.walletBalance / 1000).toFixed(0)}K</span>
                     </div>
                     {dashboardData.financialOverview.topRevenueVehicles.map((vehicle, index) => (
                         <div key={index} className="flex items-center space-x-4 text-white">
@@ -297,7 +297,7 @@ export const Dashboard: React.FC = () => {
                                 <div className="w-16 bg-gray-200 rounded-full h-2">
                                     <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${vehicle.percentage}%` }}></div>
                                 </div>
-                                <span className="text-sm font-medium text-white">${(vehicle.revenue / 1000).toFixed(0)}K</span>
+                                <span className="text-sm font-medium text-white">₹{(vehicle.revenue / 1000).toFixed(0)}K</span>
                             </div>
                         </div>
                     ))}
@@ -408,7 +408,7 @@ export const Dashboard: React.FC = () => {
                 <div className="bg-gray-700/50 p-4 rounded-lg">
                     <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-400">AVERAGE REVENUE PER BOOKING</span>
-                        <span className="text-lg font-bold">${dashboardData.vehicleManagement.averageRevenuePerBooking}</span>
+                        <span className="text-lg font-bold">₹{dashboardData.vehicleManagement.averageRevenuePerBooking}</span>
                     </div>
                 </div>
             </div>

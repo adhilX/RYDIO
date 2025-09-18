@@ -1,5 +1,5 @@
 import mongoose, { isValidObjectId, Types } from "mongoose";
-import { BookingStatus, IBooking, PaymentStatus } from "../../../domain/entities/BookingEntities";
+import { BookingStatus, IBooking } from "../../../domain/entities/BookingEntities";
 import { IBookingRepository } from "../../../domain/interface/repositoryInterface/IBookingRepository";
 import { bookingModel } from "../../../framework/database/models/bookingModel";
 import { BaseRepository } from "../base/BaseRepo";

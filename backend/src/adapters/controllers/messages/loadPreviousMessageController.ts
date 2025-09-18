@@ -15,7 +15,7 @@ export class LoadPreviousMessageController {
                 res.status(HttpStatus.BAD_REQUEST).json({ error: "pageNo or chatId is nott provided" })
                 return
             }
-            const page = parseInt(pageNo, 10) || 1
+            // const page = parseInt(pageNo, 10) || 1
             const { messages } = await this.loadPreviousChatUseCase.loadPreviousChat(chatId)
             res.status(HttpStatus.OK).json({ message: "Previous chat loaded", messages })
         } catch (error) {

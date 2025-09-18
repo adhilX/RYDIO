@@ -3,6 +3,7 @@ import { IVehicleRepository } from "../../../domain/interface/repositoryInterfac
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
 import { locationModel } from "../../../framework/database/models/locationModel";
 import { BaseRepository } from "../base/BaseRepo";
+import { BookingStatus } from "../../../domain/entities/BookingEntities";
 
 export class VehicleRepository extends BaseRepository<IVehicle> implements IVehicleRepository {
   constructor() {
@@ -173,6 +174,11 @@ async getTopRevenueVehicles(): Promise<Array<{
 }>> {
     return await VehicleModel.aggregate([
         {
+            $match: {
+                admin_approve: 'accepted'
+            }
+        },
+        {
             $lookup: {
                 from: 'bookings',
                 localField: '_id',
@@ -181,16 +187,17 @@ async getTopRevenueVehicles(): Promise<Array<{
             }
         },
         {
-            $match: {
-                admin_approve: 'accepted'
-            }
-        },
-        {
             $addFields: {
                 completedBookings: {
                     $filter: {
                         input: '$bookings',
-                        cond: { $eq: ['$$this.status', 'completed'] }
+                        cond: { 
+                            $and: [
+                                { $eq: ['$$this.status', 'completed'] },
+                                { $ne: ['$$this.total_amount', null] },
+                                { $gt: ['$$this.total_amount', 0] }
+                            ]
+                        }
                     }
                 }
             }
@@ -198,24 +205,19 @@ async getTopRevenueVehicles(): Promise<Array<{
         {
             $addFields: {
                 totalRevenue: {
-                    $sum: '$completedBookings.total_amount'
+                    $cond: {
+                        if: { $gt: [{ $size: '$completedBookings' }, 0] },
+                        then: { $sum: '$completedBookings.total_amount' },
+                        else: 0
+                    }
                 }
             }
         },
         {
-            $group: {
-                _id: {
-                    type: '$car_type',
-                    model: '$name'
-                },
-                revenue: { $sum: '$totalRevenue' }
-            }
-        },
-        {
             $project: {
-                type: '$_id.type',
-                model: '$_id.model',
-                revenue: '$revenue',
+                type: '$car_type',
+                model: '$name',
+                revenue: '$totalRevenue',
                 _id: 0
             }
         },
