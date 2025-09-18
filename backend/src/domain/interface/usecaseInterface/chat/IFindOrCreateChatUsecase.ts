@@ -1,5 +1,5 @@
-import { IbaseChatOut, IcreateChatInputDto } from "../../DTOs/chatDto/chatDto";
+import { IBaseChatOut, ICreateChatInputDto } from "../../DTOs/chatDto/chatDto";
 
 export interface IFindOrCreateChatUsecase {
-    createChat(input: IcreateChatInputDto): Promise<IbaseChatOut>
+    createChat(input: ICreateChatInputDto): Promise<IBaseChatOut>
 }

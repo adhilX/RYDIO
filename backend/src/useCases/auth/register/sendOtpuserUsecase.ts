@@ -1,4 +1,4 @@
-import { ISendOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase"
+import { ISendOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/ISendOtpUsecase"
 import { IEmailService } from "../../../domain/interface/serviceInterface/IemailService"
 import { IOtpService } from "../../../domain/interface/serviceInterface/IOtpService"
 import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository"

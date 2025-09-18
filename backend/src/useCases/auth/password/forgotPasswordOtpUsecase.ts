@@ -2,7 +2,7 @@ import { SendForgotPasswordOtpInputDto, SendForgotPasswordOtpOutputDto } from ".
 import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository"
 import { IEmailService } from "../../../domain/interface/serviceInterface/IemailService"
 import { IOtpService } from "../../../domain/interface/serviceInterface/IOtpService"
-import { ISendOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/IsendOtpUsecase"
+import { ISendOtpUsecase } from "../../../domain/interface/usecaseInterface/auth/register/ISendOtpUsecase"
 
 export class ForgotPasswordUsecase implements ISendOtpUsecase{
      private _otpService : IOtpService

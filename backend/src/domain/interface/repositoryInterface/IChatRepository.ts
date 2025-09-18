@@ -1,9 +1,9 @@
-import { Ichat, IchatPopulated } from "../../entities/chatEntites"
-import { Imessage } from "../../entities/messageEntities"
+import { IChat, IChatPopulated } from "../../entities/chatEntites"
+import { IMessage } from "../../entities/messageEntities"
 
 export interface IChatRepository {
-    createChat(chat: Ichat): Promise<IchatPopulated>
-    getchatOfUser(userId: string,ownerId:string): Promise<IchatPopulated|null>
-    findChatsOfUser(userId:string): Promise<{chats:IchatPopulated[]|null}>
-    updateLastMessage(message: Imessage): Promise<Ichat | null>
+    createChat(chat: IChat): Promise<IChatPopulated>
+    getchatOfUser(userId: string,ownerId:string): Promise<IChatPopulated|null>
+    findChatsOfUser(userId:string): Promise<{chats:IChatPopulated[]|null}>
+    updateLastMessage(message: IMessage): Promise<IChat | null>
 }
