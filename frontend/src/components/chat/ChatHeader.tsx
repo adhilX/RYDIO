@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Phone, MoreVertical, ArrowLeft } from 'lucide-react';
+import { MoreVertical, ArrowLeft } from 'lucide-react';
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 interface ChatHeaderProps {
   user: {
@@ -74,9 +74,9 @@ const ChatHeader = ({ user, onBackClick, showBackButton = false }: ChatHeaderPro
         transition={{ duration: 0.3, delay: 0.3 }}
         className="flex items-center space-x-2"
       >
-        <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white hover:bg-[#2f2f2f] rounded-full p-2">
+        {/* <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white hover:bg-[#2f2f2f] rounded-full p-2">
           <Phone className="w-5 h-5" />
-        </Button>
+        </Button> */}
         <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white hover:bg-[#2f2f2f] rounded-full p-2">
           <MoreVertical className="w-5 h-5" />
         </Button>
