@@ -9,28 +9,30 @@ export class NotificationRepository extends BaseRepository<INotification> implem
     }
 
     async findByUserId(userId: string): Promise<INotification[]> {
-        return await notificationModel.find({ userId })
-            .sort({ createdAt: -1 })
-            .exec();
+        return await notificationModel.find({ to: userId }).sort({ createdAt: -1 }).populate('from')
     }
 
     async markAsRead(id: string): Promise<INotification | null> {
-        return await notificationModel.findByIdAndUpdate(
-            id,
-            { isRead: true },
-            { new: true }
-        );
+        return await notificationModel.findByIdAndUpdate(id,{ read: true },{ new: true }).populate('from')
     }
 
     async markAllAsRead(userId: string): Promise<{ modifiedCount: number }> {
         const result = await notificationModel.updateMany(
-            { userId, isRead: false },
-            { isRead: true }
-        );
+            { to: userId, read: false }, { read: true })
         return { modifiedCount: result.modifiedCount };
     }
 
     async getUnreadCount(userId: string): Promise<number> {
-        return await notificationModel.countDocuments({ userId, isRead: false });
+        return await notificationModel.countDocuments({ to: userId, read: false });
+    }
+
+    async deleteNotification(id: string): Promise<{ deletedCount: number }> {
+        const result = await notificationModel.deleteOne({ _id: id });
+        return { deletedCount: result.deletedCount };
+    }
+
+    async deleteAllNotifications(userId: string): Promise<{ deletedCount: number }> {
+        const result = await notificationModel.deleteMany({ to: userId });
+        return { deletedCount: result.deletedCount };
     }
 }

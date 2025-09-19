@@ -27,6 +27,7 @@ const dispatch = useDispatch()
            const notification: Notification = {
                from: data.from,
                message: data.message,
+               read: data.read,
                type: 'info'
            }
            setData(notification)

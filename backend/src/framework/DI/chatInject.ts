@@ -19,7 +19,7 @@ import { NotificationRepository } from "../../adapters/repository/notification/n
 const chatRepository = new ChatRepository();
 const messageRepository = new MessageRepository();
 const bookingRepository = new BookingRepository();
-const notificationRepository =  new NotificationRepository()
+export const notificationRepository =  new NotificationRepository()
 // Use Cases
  const findOrCreateChatUsecase = new FindOrCreateChatUsecase(chatRepository);
 export const createMessageUseCase = new CreateMessageUseCase(messageRepository);

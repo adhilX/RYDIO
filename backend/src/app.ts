@@ -16,9 +16,9 @@ import { createLogger } from "winston";
 import LokiTransport from "winston-loki";
 import { SocketIoController } from './adapters/controllers/chat/socketIoService';
 import { ChatRoutes } from './framework/routes/chat/chatRoutes';
+import { NotificationRoutes } from './framework/routes/notification/notificationRoutes';
 import path from 'path';
-import { createWriteStream } from 'fs';
-import { createMessageUseCase, createNotificationUsecase, updateLastMessageUseCase } from './framework/DI/chatInject';
+import { createMessageUseCase, createNotificationUsecase, notificationRepository, updateLastMessageUseCase } from './framework/DI/chatInject';
 import { userRepository } from './framework/DI/userInject';
 import { createStream } from 'rotating-file-stream';
 
@@ -68,6 +68,7 @@ export class App {
         this.setAdminRoutes();
         this.setUserRoutes();
         this.setChatRoutes();
+        this.setNotificationRoutes();
         this.setErrorHandler()
     }
 
@@ -95,6 +96,10 @@ export class App {
     
     private setChatRoutes(){
         this._app.use('/api/v1/chat', new ChatRoutes().ChatRoutes);
+    }
+
+    private setNotificationRoutes(){
+        this._app.use('/api/v1/notifications',  new NotificationRoutes().NotificationRoutes);
     }
 
     private setMetricsRoute(){
@@ -166,7 +171,7 @@ export class App {
         }
     }
     private setSocketIo(){
-        this.socketIo = new SocketIoController(this.httpServer, createMessageUseCase, updateLastMessageUseCase,createNotificationUsecase,userRepository)
+        this.socketIo = new SocketIoController(this.httpServer, createMessageUseCase, updateLastMessageUseCase,createNotificationUsecase,userRepository,notificationRepository)
     }
 }
 

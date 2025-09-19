@@ -214,10 +214,19 @@ async getTopRevenueVehicles(): Promise<Array<{
             }
         },
         {
+            $group: {
+                _id: {
+                    type: '$car_type',
+                    model: '$name'
+                },
+                revenue: { $sum: '$totalRevenue' }
+            }
+        },
+        {
             $project: {
-                type: '$car_type',
-                model: '$name',
-                revenue: '$totalRevenue',
+                type: '$_id.type',
+                model: '$_id.model',
+                revenue: '$revenue',
                 _id: 0
             }
         },

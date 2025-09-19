@@ -76,6 +76,9 @@ import { WithdrawUsecase } from "../../useCases/wallets/withdrawUsecase"
 import { ReapplyVehicleController } from "../../adapters/controllers/user/vehicle-mangment/reapplyVehicleController"
 import { ReapplyVehicleUsecase } from "../../useCases/vehicles/reapplyVehicleUsecase"
 import { ChangeVehicleStatusUsecase } from "../../useCases/vehicles/changeVehicleStatusUsecase"
+import { NotificationRepository } from "../../adapters/repository/notification/notificationRepository"
+import { GetNotificationUsecase } from "../../useCases/notification/GetNotificationUsecase"
+import { NotificationController } from "../../adapters/controllers/notification/notificationController"
 
 // regester user 
 const otpService = new OtpService()
@@ -229,3 +232,8 @@ export const withdrawController = new WithdrawController(withdrawUsecase)
 //------reapply vehicle----------
 const reapplyVehicleUsecase = new ReapplyVehicleUsecase(vehicleRepository)
 export const reapplyVehicleController = new ReapplyVehicleController(reapplyVehicleUsecase)
+
+//------notification----------
+const notificationRepository = new NotificationRepository()
+const getNotificationUsecase = new GetNotificationUsecase(notificationRepository)
+export const notificationController = new NotificationController(getNotificationUsecase)

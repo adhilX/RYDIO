@@ -9,10 +9,10 @@ import { CreateBookingInputDto, CreateBookingOutputDto } from "../../domain/inte
 import { ICreateBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/ICreateBookingUsecase"
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository"
 import { TransactionPurpose } from "../../domain/entities/transactionEntities"
-import { ITrasationRepository } from "../../domain/interface/repositoryInterface/ITrasationRepository"
+import { ITransactionRepository } from "../../domain/interface/repositoryInterface/ITransactionRepository"
 
 export class CreateBookingUsecase implements ICreateBookingUsecase {
-  constructor(private _bookingRepository: IBookingRepository, private _redisService: IRedisService,private _vehicleRepository: IVehicleRepository,private _adminWalletRepository: IAdminWalletRepository,private _walletRepository: IWalletRepository, private _trasationRepository: ITrasationRepository) {}
+  constructor(private _bookingRepository: IBookingRepository, private _redisService: IRedisService,private _vehicleRepository: IVehicleRepository,private _adminWalletRepository: IAdminWalletRepository,private _walletRepository: IWalletRepository, private _trasationRepository: ITransactionRepository) {}
 
   async createBooking(input: CreateBookingInputDto): Promise<CreateBookingOutputDto> {
     const { bookingData, user_id, stripeIntentId } = input;
