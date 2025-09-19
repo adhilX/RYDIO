@@ -93,22 +93,33 @@ const ChatSidebar = ({isOpen, onClose }: UserSidebarProps) => {
       socket.connect();
     }
     
+    console.log('Emitting user-online for userId:', userId);
     socket.emit('user-online', userId);
 
     // Listen for user status changes
     const handleUserStatusChange = ({ userId: changedUserId, isOnline }: { userId: string, isOnline: boolean }) => {
-      setChatUsers(prev => 
-        prev.map(chat => 
+      setChatUsers(prev => {
+        const updated = prev.map(chat => 
           chat._id === changedUserId 
             ? { ...chat, isOnline } 
             : chat
-        )
-      );
+        );
+        console.log('Updated chat users:', updated);
+        return updated;
+      });
     };
 
+    // Listen for socket connection
+    const handleConnect = () => {
+      console.log('Socket connected, re-emitting user-online');
+      socket.emit('user-online', userId);
+    };
+    
+    socket.on('connect', handleConnect);
     socket.on('user-status-changed', handleUserStatusChange);
 
     return () => {
+      socket.off('connect', handleConnect);
       socket.off('user-status-changed', handleUserStatusChange);
     };
   }, [userId]);

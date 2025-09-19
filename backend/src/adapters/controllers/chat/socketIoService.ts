@@ -35,8 +35,10 @@ export class SocketIoController {
         
         // Handle user going online
         socket.on('user-online', (userId) => {
+          console.log('User going online:', userId);
           this.userSockets.set(userId, socket.id);
           socket.broadcast.emit('user-status-changed', { userId, isOnline: true });
+          console.log('Broadcasted user-status-changed for:', userId, 'isOnline: true');
         })
         socket.on('join-room', (data) => {
           console.log('User joined room:', data.roomId)
@@ -106,11 +108,13 @@ export class SocketIoController {
 
         // Handle user disconnect
         socket.on('disconnect', () => {
-
+          console.log('Socket disconnected:', socket.id);
           for (const [userId, socketId] of this.userSockets.entries()) {
             if (socketId === socket.id) {
+              console.log('User going offline:', userId);
               this.userSockets.delete(userId);
               socket.broadcast.emit('user-status-changed', { userId, isOnline: false });
+              console.log('Broadcasted user-status-changed for:', userId, 'isOnline: false');
               break;
             }
           }
