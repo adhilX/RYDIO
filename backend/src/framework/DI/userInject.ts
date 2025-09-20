@@ -40,9 +40,6 @@ import { ChangeVehicleStatusController } from "../../adapters/controllers/user/v
 import { GetBookedVehicleController } from "../../adapters/controllers/user/booking-managment/getBookedVehicleController"
 import { GetUserController } from "../../adapters/controllers/user/profile-managment/getUserController"
 import { GetUserUsecase} from "../../useCases/userProfile/GetuserUsecase"
-import { GetWishlistController } from "../../adapters/controllers/user/wishlist-magagment/getWishlistController"
-import { GetWishlistUseCase } from "../../useCases/wishlist/getWishlistUseCase"
-import { WishlistRepository } from "../../adapters/repository/user/wishlistRepository"
 import { WalletRepository } from "../../adapters/repository/wallet/walletRepository"
 import { GetWalletController } from "../../adapters/controllers/wallet/getWalletController"
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository"
@@ -198,11 +195,6 @@ export const getBookedVehicleController = new GetBookedVehicleController(getBook
 const getWalletUsecase = new GetWalletUsecase(walletRepository)
 export const getWalletController = new GetWalletController(getWalletUsecase)
     
-//------get wishlist details---------
-const wishlistRepository = new WishlistRepository() 
-const getWishlistUseCase = new GetWishlistUseCase(wishlistRepository)
-export const getWishlistController = new GetWishlistController(getWishlistUseCase)
-
 //------get security deposit details---------
 const getSecurityDepositUsecase = new GetSecurityDepositUsecase()
 export const getSecurityDepositController = new GetSecurityDepositController(getSecurityDepositUsecase)

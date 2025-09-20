@@ -20,7 +20,6 @@ function Navbar() {
   const notification = useSelector((state:RootState)=>state.notification.notification)
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  if(!user)return null
   
   const fetchUnreadCount = async (userId:string) => {
     console.log( userId)
@@ -41,7 +40,7 @@ function Navbar() {
   }, [location]);
 
   useEffect(() => {
-    fetchUnreadCount(user._id);
+    if(user)fetchUnreadCount(user._id);
   }, [token,notification]);
 
   return (
@@ -53,7 +52,7 @@ function Navbar() {
         </div>
         <div className="flex items-center space-x-8">
           <div className="flex items-center space-x-4">
-            {token ? (
+            {token && user? (
               <>
                 <button 
                   onClick={() => {
@@ -98,11 +97,11 @@ function Navbar() {
       </nav>
       
       {/* Notification Modal */}
-      <NotificationModal 
+     {user &&  <NotificationModal 
         isOpen={isNotificationModalOpen}
         onClose={() => setIsNotificationModalOpen(false)}
-        onNotificationUpdate={() => fetchUnreadCount(user?._id)}
-      />
+        onNotificationUpdate={() => fetchUnreadCount(user?._id)} 
+     />}
     </header>
   );
 }

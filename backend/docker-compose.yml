@@ -1,4 +1,4 @@
-
+  
 services:
   prom-server:
     image: prom/prometheus

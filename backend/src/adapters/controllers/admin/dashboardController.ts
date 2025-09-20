@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { DashboardStatsUseCase } from "../../../useCases/dashboard/dashboardStatsUseCase";
-import { FinancialOverviewUseCase } from "../../../useCases/dashboard/financialOverviewUseCase";
-import { UserManagementUseCase } from "../../../useCases/admin/userManagementUseCase";
-import { VehicleManagementUseCase } from "../../../useCases/admin/vehicleManagementUseCase";
-import { BookingAnalyticsUseCase } from "../../../useCases/dashboard/bookingAnalyticsUseCase";
+import { IDashboardStatsUseCase } from "../../../domain/interface/usecaseInterface/dashboard/IDashboardStatsUseCase";
+import { IFinancialOverviewUseCase } from "../../../domain/interface/usecaseInterface/dashboard/IFinancialOverviewUseCase";
+import { IUserMangementUsecase } from "../../../domain/interface/usecaseInterface/admin/IUserMangmentUsecase";
+import { IVehileManagmentUsecase } from "../../../domain/interface/usecaseInterface/admin/IVehicleMangementUsecase";
+import { IBookingAnalyticsUseCase } from "../../../domain/interface/usecaseInterface/dashboard/IBookingAnalyticsUseCase";
 
 export class DashboardController {
     constructor(
-        private dashboardStatsUseCase: DashboardStatsUseCase,
-        private financialOverviewUseCase: FinancialOverviewUseCase,
-        private userManagementUseCase: UserManagementUseCase,
-        private vehicleManagementUseCase: VehicleManagementUseCase,
-        private bookingAnalyticsUseCase: BookingAnalyticsUseCase
+        private dashboardStatsUseCase: IDashboardStatsUseCase,
+        private financialOverviewUseCase: IFinancialOverviewUseCase,
+        private userManagementUseCase: IUserMangementUsecase,
+        private vehicleManagementUseCase: IVehileManagmentUsecase,
+        private bookingAnalyticsUseCase: IBookingAnalyticsUseCase
     ) {}
 
     async getTotalRevenue(req: Request, res: Response): Promise<void> {

@@ -3,6 +3,7 @@ import { IVehicleRepository } from "../../domain/interface/repositoryInterface/I
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository";
 import { IDashboardStatsUseCase } from "../../domain/interface/usecaseInterface/dashboard/IDashboardStatsUseCase";
+import { IGetTotalReviewOutputDto } from "../../domain/interface/DTOs/DashboardDto/DashboardDto";
 
 export class DashboardStatsUseCase implements IDashboardStatsUseCase {
     constructor(
@@ -12,7 +13,7 @@ export class DashboardStatsUseCase implements IDashboardStatsUseCase {
         private walletRepository: IWalletRepository
     ) {}
 
-    async getTotalRevenue(): Promise<{ totalRevenue: number; growthPercentage: number; chartData: number[] }> {
+    async getTotalRevenue(): Promise<IGetTotalReviewOutputDto> {
         try {
             // Get total revenue from completed bookings
             const totalRevenue = await this.bookingRepository.getTotalRevenue();

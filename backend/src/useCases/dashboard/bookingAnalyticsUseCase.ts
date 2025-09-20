@@ -1,3 +1,4 @@
+import { IGetBookingAnalyticsOutPutDto } from "../../domain/interface/DTOs/DashboardDto/DashboardDto";
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository";
 import { IBookingAnalyticsUseCase } from "../../domain/interface/usecaseInterface/dashboard/IBookingAnalyticsUseCase";
 
@@ -6,14 +7,7 @@ export class BookingAnalyticsUseCase implements IBookingAnalyticsUseCase {
         private bookingRepository: IBookingRepository
     ) {}
 
-    async getBookingAnalytics(): Promise<{
-        chartData: Array<{ day: string; bookings: number }>;
-        activeCities: number;
-        topCity: {
-            name: string;
-            bookings: number;
-        };
-    }> {
+    async getBookingAnalytics(): Promise<IGetBookingAnalyticsOutPutDto> {
         try {
             // Get booking data for the last 7 days
             const chartData = await this.bookingRepository.getWeeklyBookingData();

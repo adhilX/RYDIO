@@ -1,20 +1,13 @@
+import { GetuserStatusOutputDto } from "../../domain/interface/DTOs/DashboardDto/DashboardDto";
 import { IUserRepository } from "../../domain/interface/repositoryInterface/IUserRepository";
+import { IUserMangementUsecase } from "../../domain/interface/usecaseInterface/admin/IUserMangmentUsecase";
 
-export class UserManagementUseCase {
+export class UserManagementUseCase  implements IUserMangementUsecase{
     constructor(
         private userRepository: IUserRepository
     ) {}
 
-    async getUserManagementStats(): Promise<{
-        totalUsers: number;
-        activeUsers: number;
-        blockedUsers: number;
-        activePercentage: number;
-        blockedPercentage: number;
-        vendorAccessRequests: number;
-        verificationRequests: number;
-        chartData: Array<{ height: number; color: string }>;
-    }> {
+    async getUserManagementStats(): Promise<GetuserStatusOutputDto> {
         try {
             const totalUsers = await this.userRepository.getTotalUsersCount();
             const activeUsers = await this.userRepository.getActiveUsersCount();

@@ -1,9 +1,9 @@
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
-import { CreateBookingUsecase } from "../../../../useCases/bookings/createBookingUsecase";
+import { ICreateBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/ICreateBookingUsecase";
 
 export class CreateBookingController {
-    private _createBookingUsecase: CreateBookingUsecase
-    constructor(createBookingUsecase: CreateBookingUsecase) {
+    private _createBookingUsecase: ICreateBookingUsecase
+    constructor(createBookingUsecase: ICreateBookingUsecase) {
         this._createBookingUsecase = createBookingUsecase
     }
 

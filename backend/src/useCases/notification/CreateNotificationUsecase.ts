@@ -8,7 +8,6 @@ export class CreateNotificationUsecase implements ICreateNotificationUsecase {
     ) {}
 
     async createNotification(notification: INotification): Promise<INotification> {
-        console.log('notificatons creading ')
         return await this.notificationRepository.create(notification);
     }
 }

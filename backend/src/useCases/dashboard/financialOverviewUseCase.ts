@@ -2,6 +2,7 @@ import { IBookingRepository } from "../../domain/interface/repositoryInterface/I
 import { IWalletRepository } from "../../domain/interface/repositoryInterface/IWalletRepository";
 import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
 import { IFinancialOverviewUseCase } from "../../domain/interface/usecaseInterface/dashboard/IFinancialOverviewUseCase";
+import { IFinancialOverviewOutPutDto } from "../../domain/interface/DTOs/DashboardDto/DashboardDto";
 
 export class FinancialOverviewUseCase implements IFinancialOverviewUseCase{
     constructor(
@@ -10,18 +11,7 @@ export class FinancialOverviewUseCase implements IFinancialOverviewUseCase{
         private vehicleRepository: IVehicleRepository
     ) {}
 
-    async getFinancialOverview(): Promise<{
-        commission: number;
-        penalties: number;
-        refunds: number;
-        topRevenueVehicles: Array<{
-            type: string;
-            model: string;
-            revenue: number;
-            percentage: number;
-        }>;
-        walletBalance: number;
-    }> {
+    async getFinancialOverview(): Promise<IFinancialOverviewOutPutDto> {
         try {
             // Get commission from completed bookings
             const commission = await this.bookingRepository.getTotalCommission();

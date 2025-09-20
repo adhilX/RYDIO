@@ -19,3 +19,8 @@ export interface ICreateChatInputDto {
     userId: string;
     ownerId: string;
 }
+
+
+export interface IEnableChatOutputDto {
+     canChat: boolean; message: string 
+}
