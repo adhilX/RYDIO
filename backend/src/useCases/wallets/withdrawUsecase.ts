@@ -10,18 +10,18 @@ import { BookingStatus } from "../../domain/entities/BookingEntities";
 
 export class WithdrawUsecase implements IWithdrawUsecase{
     constructor(
-        private bookingRepository: IBookingRepository,
-        private vehicleRepository: IVehicleRepository,
-        private walletRepository: IWalletRepository,
-        private adminWalletRepository: IAdminWalletRepository,
-        private trasationRepository: ITransactionRepository
+        private _bookingRepository: IBookingRepository,
+        private _vehicleRepository: IVehicleRepository,
+        private _walletRepository: IWalletRepository,
+        private _adminWalletRepository: IAdminWalletRepository,
+        private _trasationRepository: ITransactionRepository
     ){}
     
     async withdraw(input: WithdrawalInputDto): Promise<boolean> {
         const {bookingId, userId} = input;
         
         // Get booking details
-        const booking = await this.bookingRepository.findByBookingId(bookingId);
+        const booking = await this._bookingRepository.findByBookingId(bookingId);
         if(!booking) throw new Error('Booking not found');
         
         // Check if booking is completed (required for withdrawals)
@@ -30,7 +30,7 @@ export class WithdrawUsecase implements IWithdrawUsecase{
         }
         
         // Get vehicle details to find owner
-        const vehicle = await this.vehicleRepository.findById(booking.vehicle_id.toString());
+        const vehicle = await this._vehicleRepository.findById(booking.vehicle_id.toString());
         if(!vehicle) throw new Error('Vehicle not found');
         
         const isOwner = vehicle.owner_id.toString() === userId;
@@ -63,7 +63,7 @@ export class WithdrawUsecase implements IWithdrawUsecase{
         }
         
         // Create transaction record
-        const transaction = await this.trasationRepository.create({
+        const transaction = await this._trasationRepository.create({
             from: 'admin',
             to: userId,
             amount: withdrawalAmount,
@@ -78,32 +78,32 @@ export class WithdrawUsecase implements IWithdrawUsecase{
         
         try {
             // Update admin wallet (subtract the withdrawal amount)
-            const adminWallet = await this.adminWalletRepository.getwalletDetails()
+            const adminWallet = await this._adminWalletRepository.getwalletDetails()
             if(!adminWallet){
                 throw new Error('Admin wallet not found');
             }
             if(adminWallet.total_balance < withdrawalAmount){
                 throw new Error('Insufficient balance in admin wallet');
             }
-            await this.adminWalletRepository.updateWalletBalance(-withdrawalAmount);
-            await this.adminWalletRepository.addTransaction(transaction._id.toString());
+            await this._adminWalletRepository.updateWalletBalance(-withdrawalAmount);
+            await this._adminWalletRepository.addTransaction(transaction._id.toString());
             
             // Update user's wallet balance (add the withdrawal amount)
-            const updatedWallet = await this.walletRepository.updateWallet(userId, withdrawalAmount);
+            const updatedWallet = await this._walletRepository.updateWallet(userId, withdrawalAmount);
             if (!updatedWallet) {
                 throw new Error('Failed to update wallet balance');
             }
             
             // Add transaction to user's wallet
-            await this.walletRepository.addTransaction(userId, transaction._id.toString());
+            await this._walletRepository.addTransaction(userId, transaction._id.toString());
             
             // Mark as withdrawn in booking (only after successful wallet updates)
             if (isOwner) {
-                await this.bookingRepository.updateBookingFinance(bookingId, {
+                await this._bookingRepository.updateBookingFinance(bookingId, {
                     'finance.owner_withdraw': true
                 });
             } else if (isUser) {
-                await this.bookingRepository.updateBookingFinance(bookingId, {
+                await this._bookingRepository.updateBookingFinance(bookingId, {
                     'finance.user_withdraw': true
                 });
             }

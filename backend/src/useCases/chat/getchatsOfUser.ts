@@ -3,13 +3,13 @@ import { IChatRepository } from "../../domain/interface/repositoryInterface/ICha
 import { IBaseChatOut } from "../../domain/interface/DTOs/chatDto/chatDto";
 
 export class GetChatUsecase implements IGetChatUsecase {
-    private chatRepository: IChatRepository
+    private _chatRepository: IChatRepository
     constructor(chatRepository: IChatRepository) {
-        this.chatRepository = chatRepository
+        this._chatRepository = chatRepository
     }
     
     async getchatsOfUser(userId: string): Promise<{chats:IBaseChatOut[]|null}> {
-        const result = await this.chatRepository.findChatsOfUser(userId);
+        const result = await this._chatRepository.findChatsOfUser(userId);
         
         if (!result.chats || result.chats.length === 0) {
             return { chats: null };

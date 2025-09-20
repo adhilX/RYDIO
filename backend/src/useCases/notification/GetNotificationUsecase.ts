@@ -3,7 +3,7 @@ import { IGetNotificationUsecase } from "../../domain/interface/usecaseInterface
 import { NotificationResponseDto, UnreadCountDto, MarkAllAsReadDto, DeleteNotificationDto, DeleteAllNotificationsDto } from "../../domain/interface/DTOs/notificationDto/notificationDto";
 
 export class GetNotificationUsecase implements IGetNotificationUsecase {
-    constructor(private notificationRepository: INotificationRepository) {}
+    constructor(private _notificationRepository: INotificationRepository) {}
 
     private mapToNotificationDto(notification: any): NotificationResponseDto {
         return {
@@ -23,32 +23,32 @@ export class GetNotificationUsecase implements IGetNotificationUsecase {
     }
 
     async getNotificationsByUserId(userId: string): Promise<NotificationResponseDto[]> {
-        const notifications = await this.notificationRepository.findByUserId(userId);
+        const notifications = await this._notificationRepository.findByUserId(userId);
         return notifications.map(notification => this.mapToNotificationDto(notification));
     }
 
     async markNotificationAsRead(notificationId: string): Promise<NotificationResponseDto | null> {
-        const notification = await this.notificationRepository.markAsRead(notificationId);
+        const notification = await this._notificationRepository.markAsRead(notificationId);
         return notification ? this.mapToNotificationDto(notification) : null;
     }
 
     async markAllNotificationsAsRead(userId: string): Promise<MarkAllAsReadDto> {
-        const result = await this.notificationRepository.markAllAsRead(userId);
+        const result = await this._notificationRepository.markAllAsRead(userId);
         return { modifiedCount: result.modifiedCount };
     }
 
     async getUnreadNotificationCount(userId: string): Promise<UnreadCountDto> {
-        const count = await this.notificationRepository.getUnreadCount(userId);
+        const count = await this._notificationRepository.getUnreadCount(userId);
         return { unreadCount: count };
     }
 
     async deleteNotification(notificationId: string): Promise<DeleteNotificationDto> {
-        const result = await this.notificationRepository.deleteNotification(notificationId);
+        const result = await this._notificationRepository.deleteNotification(notificationId);
         return { deletedCount: result.deletedCount };
     }
 
     async deleteAllNotifications(userId: string): Promise<DeleteAllNotificationsDto> {
-        const result = await this.notificationRepository.deleteAllNotifications(userId);
+        const result = await this._notificationRepository.deleteAllNotifications(userId);
         return { deletedCount: result.deletedCount };
     }
 }

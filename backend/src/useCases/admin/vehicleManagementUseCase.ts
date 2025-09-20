@@ -5,20 +5,20 @@ import { GetvehilceStatusOutputDto } from "../../domain/interface/DTOs/Dashboard
 
 export class VehicleManagementUseCase implements IVehileManagmentUsecase{
     constructor(
-        private vehicleRepository: IVehicleRepository,
-        private bookingRepository: IBookingRepository
+        private _vehicleRepository: IVehicleRepository,
+        private _bookingRepository: IBookingRepository
     ) {}
 
     async getVehicleManagementStats(): Promise<GetvehilceStatusOutputDto> {
         try {
-            const pendingVehicles = await this.vehicleRepository.getPendingVehiclesCount();
-            const approvedVehicles = await this.vehicleRepository.getApprovedVehiclesCount();
-            const rejectedVehicles = await this.vehicleRepository.getRejectedVehiclesCount();
+            const pendingVehicles = await this._vehicleRepository.getPendingVehiclesCount();
+            const approvedVehicles = await this._vehicleRepository.getApprovedVehiclesCount();
+            const rejectedVehicles = await this._vehicleRepository.getRejectedVehiclesCount();
             
-            const averageRevenuePerBooking = await this.bookingRepository.getAverageRevenuePerBooking();
+            const averageRevenuePerBooking = await this._bookingRepository.getAverageRevenuePerBooking();
             
             // Get raw vehicle activity data from repository
-            const rawChartData = await this.vehicleRepository.getVehicleActivityChartData();
+            const rawChartData = await this._vehicleRepository.getVehicleActivityChartData();
             
             // Calculate chart data with percentages and colors (business logic)
             const totalVehicles = rawChartData.total;

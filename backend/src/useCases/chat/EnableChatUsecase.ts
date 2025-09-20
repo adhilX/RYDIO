@@ -2,15 +2,15 @@ import { IBookingRepository } from "../../domain/interface/repositoryInterface/I
 import { IEnableChatUsecase } from "../../domain/interface/usecaseInterface/chat/IEnableChatUsecase";
 
 export class EnableChatUsecase implements IEnableChatUsecase {
-    private bookingRepository: IBookingRepository;
+    private _bookingRepository: IBookingRepository;
 
     constructor(bookingRepository: IBookingRepository) {
-        this.bookingRepository = bookingRepository;
+        this._bookingRepository = bookingRepository;
     }
 
     async checkBookingExists(userId: string, ownerId: string): Promise<{ canChat: boolean; message: string }> {
         try {
-            const booking = await this.bookingRepository.checkBookingExistsBetweenUserAndOwner(userId, ownerId);
+            const booking = await this._bookingRepository.checkBookingExistsBetweenUserAndOwner(userId, ownerId);
             
             if (booking) {
                 return {

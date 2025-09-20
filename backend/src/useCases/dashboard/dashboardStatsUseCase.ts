@@ -7,25 +7,25 @@ import { IGetTotalReviewOutputDto } from "../../domain/interface/DTOs/DashboardD
 
 export class DashboardStatsUseCase implements IDashboardStatsUseCase {
     constructor(
-        private userRepository: IUserRepository,
-        private vehicleRepository: IVehicleRepository,
-        private bookingRepository: IBookingRepository,
-        private walletRepository: IWalletRepository
+        private _userRepository: IUserRepository,
+        private _vehicleRepository: IVehicleRepository,
+        private _bookingRepository: IBookingRepository,
+        private _walletRepository: IWalletRepository
     ) {}
 
     async getTotalRevenue(): Promise<IGetTotalReviewOutputDto> {
         try {
             // Get total revenue from completed bookings
-            const totalRevenue = await this.bookingRepository.getTotalRevenue();
+            const totalRevenue = await this._bookingRepository.getTotalRevenue();
             
             // Get revenue from last month for growth calculation
-            const lastMonthRevenue = await this.bookingRepository.getLastMonthRevenue();
+            const lastMonthRevenue = await this._bookingRepository.getLastMonthRevenue();
             const growthPercentage = lastMonthRevenue > 0 
                 ? ((totalRevenue - lastMonthRevenue) / lastMonthRevenue) * 100 
                 : 0;
 
             // Get chart data for the last 8 periods
-            const chartData = await this.bookingRepository.getRevenueChartData();
+            const chartData = await this._bookingRepository.getRevenueChartData();
 
             return {
                 totalRevenue,
@@ -39,14 +39,14 @@ export class DashboardStatsUseCase implements IDashboardStatsUseCase {
 
     async getTotalBookings(): Promise<{ totalBookings: number; growthPercentage: number; chartData: number[] }> {
         try {
-            const totalBookings = await this.bookingRepository.getTotalBookingsCount();
-            const lastMonthBookings = await this.bookingRepository.getLastMonthBookingsCount();
+            const totalBookings = await this._bookingRepository.getTotalBookingsCount();
+            const lastMonthBookings = await this._bookingRepository.getLastMonthBookingsCount();
             
             const growthPercentage = lastMonthBookings > 0 
                 ? ((totalBookings - lastMonthBookings) / lastMonthBookings) * 100 
                 : 0;
 
-            const chartData = await this.bookingRepository.getBookingsChartData();
+            const chartData = await this._bookingRepository.getBookingsChartData();
 
             return {
                 totalBookings,
@@ -60,8 +60,8 @@ export class DashboardStatsUseCase implements IDashboardStatsUseCase {
 
     async getTotalUsers(): Promise<{ totalUsers: number; growthPercentage: number; chartData: number[] }> {
         try {
-            const totalUsers = await this.userRepository.getTotalUsersCount();
-            const activeUsers = await this.userRepository.getActiveUsersCount();
+            const totalUsers = await this._userRepository.getTotalUsersCount();
+            const activeUsers = await this._userRepository.getActiveUsersCount();
             
             // Calculate growth percentage (mock calculation)
             const growthPercentage = totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0;
@@ -81,8 +81,8 @@ export class DashboardStatsUseCase implements IDashboardStatsUseCase {
 
     async getActiveVehicles(): Promise<{ activeVehicles: number; growthPercentage: number; chartData: number[] }> {
         try {
-            const activeVehicles = await this.vehicleRepository.getActiveVehiclesCount();
-            const lastMonthActiveVehicles = await this.vehicleRepository.getLastMonthActiveVehiclesCount();
+            const activeVehicles = await this._vehicleRepository.getActiveVehiclesCount();
+            const lastMonthActiveVehicles = await this._vehicleRepository.getLastMonthActiveVehiclesCount();
             
             const growthPercentage = lastMonthActiveVehicles > 0 
                 ? ((activeVehicles - lastMonthActiveVehicles) / lastMonthActiveVehicles) * 100 

@@ -6,13 +6,13 @@ import { IUpdateLastMessageUseCase } from "../../domain/interface/usecaseInterfa
 export class UpdateLastMessageUseCase implements IUpdateLastMessageUseCase {
 
     constructor(
-        private chatRepository: IChatRepository
+        private _chatRepository: IChatRepository
     ) {}
 
     async updateLastMessage(message: IMessage): Promise<IChat | null> {
         const actualChatId = message.chatId.slice(0,24); 
         message.chatId = actualChatId;
-        const result = await this.chatRepository.updateLastMessage(message)
+        const result = await this._chatRepository.updateLastMessage(message)
         console.log(result)
         return result
     }

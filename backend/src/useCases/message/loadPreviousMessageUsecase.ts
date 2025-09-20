@@ -3,11 +3,11 @@ import { IMessageRepository } from "../../domain/interface/repositoryInterface/I
 import { ILoadPreviousChatUseCase } from "../../domain/interface/usecaseInterface/message/ILoadPreviousChatUseCase";
 
 export class LoadPreviousChatUseCase implements ILoadPreviousChatUseCase{
-    private messageDatabase: IMessageRepository
+    private _messageDatabase: IMessageRepository
     constructor(messageDatabase: IMessageRepository) {
-        this.messageDatabase = messageDatabase
+        this._messageDatabase = messageDatabase
     }
     async loadPreviousChat(chatId: string): Promise<{ messages:IMessage[] }> {
-        return await this.messageDatabase.getMessagesOfAChat(chatId)
+        return await this._messageDatabase.getMessagesOfAChat(chatId)
     }
 }

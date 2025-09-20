@@ -4,23 +4,23 @@ import { IUserMangementUsecase } from "../../domain/interface/usecaseInterface/a
 
 export class UserManagementUseCase  implements IUserMangementUsecase{
     constructor(
-        private userRepository: IUserRepository
+        private _userRepository: IUserRepository
     ) {}
 
     async getUserManagementStats(): Promise<GetuserStatusOutputDto> {
         try {
-            const totalUsers = await this.userRepository.getTotalUsersCount();
-            const activeUsers = await this.userRepository.getActiveUsersCount();
-            const blockedUsers = await this.userRepository.getBlockedUsersCount();
+            const totalUsers = await this._userRepository.getTotalUsersCount();
+            const activeUsers = await this._userRepository.getActiveUsersCount();
+            const blockedUsers = await this._userRepository.getBlockedUsersCount();
             
             const activePercentage = totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0;
             const blockedPercentage = totalUsers > 0 ? Math.round((blockedUsers / totalUsers) * 100) : 0;
             
-            const vendorAccessRequests = await this.userRepository.getPendingVendorAccessRequests();
-            const verificationRequests = await this.userRepository.getPendingVerificationRequests();
+            const vendorAccessRequests = await this._userRepository.getPendingVendorAccessRequests();
+            const verificationRequests = await this._userRepository.getPendingVerificationRequests();
             
             // Generate chart data for user activity
-            const chartData = await this.userRepository.getUserActivityChartData();
+            const chartData = await this._userRepository.getUserActivityChartData();
 
             return {
                 totalUsers,

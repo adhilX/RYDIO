@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import { ICancelBookingUseCase } from "../../../../domain/interface/usecaseInterface/bookings/ICancelBookingUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
 export class CancelBookingController {
-    constructor(private cancelBookingUseCase: ICancelBookingUseCase){}
+    constructor(private _cancelBookingUseCase: ICancelBookingUseCase){}
 
     async cancelBooking(req:Request,res:Response){
         try {
             const {reason} = req.body;
             const {bookingId}= req.params
-            await this.cancelBookingUseCase.execute({ booking_id: bookingId, cancellation_reason: reason });
+            await this._cancelBookingUseCase.execute({ booking_id: bookingId, cancellation_reason: reason });
             res.status(HttpStatus.OK).json({message:"Booking Cancelled"})
         } catch (error) {
             console.log('error while canceling booking ', error)

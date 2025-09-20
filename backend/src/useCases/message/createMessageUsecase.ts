@@ -3,11 +3,11 @@ import { IMessageRepository } from "../../domain/interface/repositoryInterface/I
 import { ICreateMessageUsecase } from "../../domain/interface/usecaseInterface/message/ICreateMessageUsecase";
 
 export class CreateMessageUseCase implements ICreateMessageUsecase {
-    private messageDatabase: IMessageRepository
+    private _messageRepository: IMessageRepository
     constructor(messageDatabase: IMessageRepository) {
-        this.messageDatabase = messageDatabase
+        this._messageRepository = messageDatabase
     }
     async createMessage(message: IMessage): Promise<IMessage> {
-        return this.messageDatabase.create(message)
+        return this._messageRepository.create(message)
     }
 }   

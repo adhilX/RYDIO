@@ -4,13 +4,13 @@ import { IChat } from "../../domain/entities/chatEntites"
 import { IFindOrCreateChatUsecase } from "../../domain/interface/usecaseInterface/chat/IFindOrCreateChatUsecase"
 
 export class FindOrCreateChatUsecase implements IFindOrCreateChatUsecase {
-    private chatRepository: IChatRepository
+    private _chatRepository: IChatRepository
     constructor(chatRepository: IChatRepository) {
-        this.chatRepository = chatRepository
+        this._chatRepository = chatRepository
     }
     async createChat(input:ICreateChatInputDto): Promise<IBaseChatOut> {
         const {userId,ownerId} = input
-    const existingChat = await this.chatRepository.getchatOfUser(userId,ownerId)
+    const existingChat = await this._chatRepository.getchatOfUser(userId,ownerId)
         if (existingChat) {
             const otherUser = existingChat.senderId._id.toString() === userId ? existingChat.receiverId : existingChat.senderId;
 
@@ -33,7 +33,7 @@ export class FindOrCreateChatUsecase implements IFindOrCreateChatUsecase {
             lastMessageAt: new Date()
         }
         
-        const createdChat = await this.chatRepository.createChat(newChat)
+        const createdChat = await this._chatRepository.createChat(newChat)
         if (!createdChat) throw new Error('Error while creating new chat')
         
             const otherUser = createdChat.senderId._id.toString() === userId ? createdChat.receiverId : createdChat.senderId;

@@ -4,10 +4,10 @@ import { ICreateNotificationUsecase } from "../../domain/interface/usecaseInterf
 
 export class CreateNotificationUsecase implements ICreateNotificationUsecase {
     constructor(
-        private notificationRepository: INotificationRepository
+        private _notificationRepository: INotificationRepository
     ) {}
 
     async createNotification(notification: INotification): Promise<INotification> {
-        return await this.notificationRepository.create(notification);
+        return await this._notificationRepository.create(notification);
     }
 }

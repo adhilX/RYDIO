@@ -5,16 +5,16 @@ import { IChangePasswordUsecase } from "../../../domain/interface/usecaseInterfa
 
 export class ChangePasswordUseCase implements IChangePasswordUsecase {
     private _userRepository: IUserRepository
-    private hashPassword: IHashPassword
+    private _hashPassword: IHashPassword
     constructor(userRepository: IUserRepository, hashPassword: IHashPassword) {
         this._userRepository = userRepository
-        this.hashPassword = hashPassword
+        this._hashPassword = hashPassword
     }
     async ChangePassword(input: ChangePasswordInputDto): Promise<ChangePasswordOutputDto> {
         const { email, newPassword } = input;
         const user = await this._userRepository.findByEmail(email)
         if (!user) throw new Error('No client exist in this email')
-        const hashedPassword = await this.hashPassword.hashPassword(newPassword)
+        const hashedPassword = await this._hashPassword.hashPassword(newPassword)
         if (!hashedPassword) throw new Error('Error while hashing password')
         const updatedUser = await this._userRepository.changePassword(user._id?.toString(), hashedPassword)
         if (!updatedUser) throw new Error('error while updating new password in client')

@@ -3,10 +3,10 @@ import { IFindOrCreateChatUsecase } from "../../../domain/interface/usecaseInter
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class FindOrCreateChatController {
-    private createChatUseCase: IFindOrCreateChatUsecase;
+    private _createChatUseCase: IFindOrCreateChatUsecase;
 
     constructor(_createChatUseCase: IFindOrCreateChatUsecase) {
-        this.createChatUseCase = _createChatUseCase;
+        this._createChatUseCase = _createChatUseCase;
     }
 
     async findOrCreateChat(req: Request, res: Response): Promise<void> {
@@ -19,7 +19,7 @@ export class FindOrCreateChatController {
                 });
                 return;
             }
-             const chat = await this.createChatUseCase.createChat({ userId, ownerId });
+             const chat = await this._createChatUseCase.createChat({ userId, ownerId });
             res.status(HttpStatus.OK).json({
                 success: true,
                 data: chat

@@ -6,24 +6,24 @@ import { IFinancialOverviewOutPutDto } from "../../domain/interface/DTOs/Dashboa
 
 export class FinancialOverviewUseCase implements IFinancialOverviewUseCase{
     constructor(
-        private bookingRepository: IBookingRepository,
-        private walletRepository: IWalletRepository,
-        private vehicleRepository: IVehicleRepository
+        private _bookingRepository: IBookingRepository,
+        private _walletRepository: IWalletRepository,
+        private _vehicleRepository: IVehicleRepository
     ) {}
 
     async getFinancialOverview(): Promise<IFinancialOverviewOutPutDto> {
         try {
             // Get commission from completed bookings
-            const commission = await this.bookingRepository.getTotalCommission();
+            const commission = await this._bookingRepository.getTotalCommission();
             
             // Get penalties from cancelled/violated bookings
-            const penalties = await this.bookingRepository.getTotalPenalties();
+            const penalties = await this._bookingRepository.getTotalPenalties();
             
             // Get refunds from cancelled bookings
-            const refunds = await this.bookingRepository.getTotalRefunds();
+            const refunds = await this._bookingRepository.getTotalRefunds();
             
             // Get top revenue generating vehicles
-            const rawTopRevenueVehicles = await this.vehicleRepository.getTopRevenueVehicles();
+            const rawTopRevenueVehicles = await this._vehicleRepository.getTopRevenueVehicles();
             
             // Calculate percentages for top revenue vehicles (business logic)
             const totalRevenue = rawTopRevenueVehicles.reduce((sum, vehicle) => sum + vehicle.revenue, 0);
@@ -35,7 +35,7 @@ export class FinancialOverviewUseCase implements IFinancialOverviewUseCase{
             }));
             
             // Get wallet balance
-            const walletBalance = await this.walletRepository.getAdminWalletBalance();
+            const walletBalance = await this._walletRepository.getAdminWalletBalance();
 
             return {
                 commission,
