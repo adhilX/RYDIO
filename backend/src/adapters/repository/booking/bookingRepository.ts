@@ -1,4 +1,4 @@
-import mongoose, { isValidObjectId, Types } from "mongoose";
+import mongoose, { isValidObjectId, PipelineStage, Types } from "mongoose";
 import { BookingStatus, IBooking } from "../../../domain/entities/BookingEntities";
 import { IBookingRepository } from "../../../domain/interface/repositoryInterface/IBookingRepository";
 import { bookingModel } from "../../../framework/database/models/bookingModel";
@@ -12,7 +12,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
 
      //   Creates base aggregation pipeline with user and vehicle lookups
  
-     private createBaseAggregationPipeline(): any[] {
+     private createBaseAggregationPipeline(): PipelineStage[] {
           return [
                {
                     $lookup: {
@@ -38,7 +38,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
      /**
       * Creates vehicle aggregation pipeline with location lookup
       */
-     private createVehicleAggregationPipeline(): any[] {
+     private createVehicleAggregationPipeline(): PipelineStage[] {
           return [
                {
                     $lookup: {
@@ -68,7 +68,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
           matchStage: any,
           limit: number,
           page: number,
-          additionalPipelineStages: any[] = []
+          additionalPipelineStages: PipelineStage[] = []
      ): Promise<{ bookings: IBooking[], total: number }> {
           const skip = (page - 1) * limit;
           const basePipeline = this.createBaseAggregationPipeline();
@@ -80,7 +80,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
                { $match: matchStage },
                { $skip: skip },
                { $limit: limit },
-               { $sort: { 'createdAt': -1 } }
+               { $sort: { 'createdAt': -1 as const } }
           ];
 
           // Pipeline for total count
@@ -104,7 +104,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
       * Executes vehicle-based aggregation pipeline and returns paginated results with total count
       */
      private async executeVehicleAggregationWithCount(
-          matchStage: any,
+          matchStage: PipelineStage,
           limit: number,
           page: number
      ): Promise<{ bookings: IBooking[], total: number }> {
@@ -117,7 +117,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
                { $match: matchStage },
                { $skip: skip },
                { $limit: limit },
-               { $sort: { 'createdAt': -1 } }
+               { $sort: { 'createdAt': -1 as const } }
           ];
 
           // Pipeline for total count
