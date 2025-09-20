@@ -16,7 +16,7 @@ export class AdminRepository extends BaseRepository<User> implements IAdminRepos
   }
 
   async SearchUser(search = "", page = 1, limit = 10, filters?: { status: string; vendorAccess: string }): Promise<{ users: User[]; total: number } | null> {
-    const  query: any = {};
+    const  query: Record<string, unknown> = {};
     
     // Search filter
     if (search) {
@@ -71,7 +71,7 @@ export class AdminRepository extends BaseRepository<User> implements IAdminRepos
   const skip = (page - 1) * limit;
   console.log(search)
   
-  const query: any = { admin_approve: 'accepted' };
+  const query: Record<string, unknown> = { admin_approve: 'accepted' };
   
   // Search filter
   if (search) {

@@ -44,9 +44,11 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       }
 
       async getUserActivityChartData(): Promise<Array<{ height: number; color: string }>> {
-          const totalUsers = await this.getTotalUsersCount();
-          const activeUsers = await this.getActiveUsersCount();
-          const blockedUsers = await this.getBlockedUsersCount();
+          const [totalUsers, activeUsers, blockedUsers] = await Promise.all([
+              this.getTotalUsersCount(),
+              this.getActiveUsersCount(),
+              this.getBlockedUsersCount()
+          ]);
           
           // Calculate percentages for chart heights (0-100)
           const activePercentage = totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0;

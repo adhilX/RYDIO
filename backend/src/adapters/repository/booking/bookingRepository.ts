@@ -65,7 +65,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
       * Executes aggregation pipeline and returns paginated results with total count
       */
      private async executeAggregationWithCount(
-          matchStage: any,
+          matchStage: Record<string, unknown>,
           limit: number,
           page: number,
           additionalPipelineStages: PipelineStage[] = []
@@ -154,7 +154,9 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
           return await this.executeVehicleAggregationWithCount(match, limit, page);
      }
      async getBookingData(search: string, limit: number, page: number): Promise<{ bookings: IBooking[], total: number } | null> {
-          const matchConditions: any[] = [
+          const matchConditions: {
+               [key: string]: { $regex: string, $options: string } | Types.ObjectId;
+          }[] = [
                { "user.name": { $regex: search, $options: "i" } },
                { "vehicle.name": { $regex: search, $options: "i" } },
                { "vehicle.brand": { $regex: search, $options: "i" } },

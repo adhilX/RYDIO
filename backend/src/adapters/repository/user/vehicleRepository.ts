@@ -3,7 +3,6 @@ import { IVehicleRepository } from "../../../domain/interface/repositoryInterfac
 import { VehicleModel } from "../../../framework/database/models/vehicleModel";
 import { locationModel } from "../../../framework/database/models/locationModel";
 import { BaseRepository } from "../base/BaseRepo";
-import { BookingStatus } from "../../../domain/entities/BookingEntities";
 
 export class VehicleRepository extends BaseRepository<IVehicle> implements IVehicleRepository {
   constructor() {
@@ -20,7 +19,7 @@ export class VehicleRepository extends BaseRepository<IVehicle> implements IVehi
     return result !== null;
   }
   async myVehicle(owner_id: string, search: string, page: string, limit: string): Promise<{ vehicle: IVehicle[], total: number } | null> {
-    const owner: any = { owner_id };
+    const owner: { owner_id: string } = { owner_id };
     const query = search
       ? {
         ...owner,
@@ -39,7 +38,7 @@ export class VehicleRepository extends BaseRepository<IVehicle> implements IVehi
     ]);
     return { vehicle, total };
   }
-async findVehicle(lat: number, lon: number, search: string, page: number, limit: number, user_id: string, filters: any): Promise<{ vehicles: IVehicle[], total: number } | null> {
+async findVehicle(lat: number, lon: number, search: string, page: number, limit: number, user_id: string, filters: { distance_range: number; fuel_types?: string[]; seats?: number[]; car_types?: string[]; transmission?: string[] }): Promise<{ vehicles: IVehicle[], total: number } | null> {
   
   const locations = await locationModel.find({
     location: {
@@ -56,7 +55,7 @@ async findVehicle(lat: number, lon: number, search: string, page: number, limit:
 
   const locationIds = locations.map(loc => loc._id);
   
-  const query: any = {
+  const query: Record<string, unknown> = {
     location_id: { $in: locationIds },
     admin_approve: 'accepted',
     is_available: true,
