@@ -5,7 +5,6 @@ import { IUpdateLastMessageUseCase } from "../../../domain/interface/usecaseInte
 import { ICreateMessageUsecase } from "../../../domain/interface/usecaseInterface/message/ICreateMessageUsecase";
 import { ICreateNotificationUsecase } from "../../../domain/interface/usecaseInterface/notification/ICreateNotificationUsecase";
 import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository";
-import { INotificationRepository } from "../../../domain/interface/repositoryInterface/INotificationRepository";
 
 export class SocketIoController {
   private io: Server
@@ -17,7 +16,6 @@ export class SocketIoController {
     private updateLastMessageUseCase: IUpdateLastMessageUseCase,
     private createNotificationUsecase: ICreateNotificationUsecase,
     private userRepository: IUserRepository,
-    private notificationRepository: INotificationRepository
   ) {
       this.io = new Server(server, {
         cors: {

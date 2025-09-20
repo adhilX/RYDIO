@@ -18,7 +18,7 @@ import { SocketIoController } from './adapters/controllers/chat/socketIoService'
 import { ChatRoutes } from './framework/routes/chat/chatRoutes';
 import { NotificationRoutes } from './framework/routes/notification/notificationRoutes';
 import path from 'path';
-import { createMessageUseCase, createNotificationUsecase, notificationRepository, updateLastMessageUseCase } from './framework/DI/chatInject';
+import { createMessageUseCase, createNotificationUsecase, updateLastMessageUseCase } from './framework/DI/chatInject';
 import { userRepository } from './framework/DI/userInject';
 import { createStream } from 'rotating-file-stream';
 
@@ -171,7 +171,7 @@ export class App {
         }
     }
     private setSocketIo(){
-        this.socketIo = new SocketIoController(this.httpServer, createMessageUseCase, updateLastMessageUseCase,createNotificationUsecase,userRepository,notificationRepository)
+        this.socketIo = new SocketIoController(this.httpServer, createMessageUseCase, updateLastMessageUseCase,createNotificationUsecase,userRepository)
     }
 }
 

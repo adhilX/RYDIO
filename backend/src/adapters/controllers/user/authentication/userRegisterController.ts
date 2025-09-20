@@ -12,12 +12,9 @@ export class UserRegisterController {
         this._createuserUsecase = createuserUsecase
     }
      async register(req: Request, res: Response): Promise<void> {
-        console.log(req.body,'ggg')
         const { user, otp } = req.body as { user: any; otp: string };
         try {
-            console.log(user,otp)
             const verify = await this._verifyOtpUsecase.verifyOtp(user?.email, otp);
-            console.log(verify)
             if (verify) {
                 const newUser = await this._createuserUsecase.createUser(user);
                 res.status(HttpStatus.CREATED).json({ message: 'user created', newUser });
