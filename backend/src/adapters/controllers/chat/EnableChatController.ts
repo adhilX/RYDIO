@@ -3,10 +3,10 @@ import { IEnableChatUsecase } from "../../../domain/interface/usecaseInterface/c
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class EnableChatController {
-    private enableChatUseCase: IEnableChatUsecase;
+    private _enableChatUseCase: IEnableChatUsecase;
 
-    constructor(enableChatUseCase: IEnableChatUsecase) {
-        this.enableChatUseCase = enableChatUseCase;
+    constructor(_enableChatUseCase: IEnableChatUsecase) {
+        this._enableChatUseCase = _enableChatUseCase;
     }
 
     async enableChat(req: Request, res: Response): Promise<void> {
@@ -21,7 +21,7 @@ export class EnableChatController {
                 return;
             }
 
-            const result = await this.enableChatUseCase.checkBookingExists(userId, ownerId);
+            const result = await this._enableChatUseCase.checkBookingExists(userId, ownerId);
             
             res.status(HttpStatus.OK).json({
                 success: true,

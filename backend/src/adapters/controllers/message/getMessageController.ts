@@ -3,10 +3,10 @@ import { IGetMessagesUsecase } from "../../../domain/interface/usecaseInterface/
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class GetMessageController {
-    private getMessagesUsecase: IGetMessagesUsecase;
+    private _getMessagesUsecase: IGetMessagesUsecase;
 
     constructor(getMessagesUsecase: IGetMessagesUsecase) {
-        this.getMessagesUsecase = getMessagesUsecase;
+        this._getMessagesUsecase = getMessagesUsecase;
     }
 
     async getMessagesByChatId(req: Request, res: Response): Promise<void> {
@@ -21,7 +21,7 @@ export class GetMessageController {
                 return;
             }
 
-            const result = await this.getMessagesUsecase.getMessages(chatId);
+            const result = await this._getMessagesUsecase.getMessages(chatId);
             
             res.status(HttpStatus.OK).json({
                 success: true,

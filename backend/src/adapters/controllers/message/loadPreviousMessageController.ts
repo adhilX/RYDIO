@@ -3,9 +3,9 @@ import { HttpStatus } from "../../../domain/entities/httpStatus";
 import { ILoadPreviousChatUseCase } from "../../../domain/interface/usecaseInterface/message/ILoadPreviousChatUseCase";
 
 export class LoadPreviousMessageController {
-    private loadPreviousChatUseCase: ILoadPreviousChatUseCase
+    private _loadPreviousChatUseCase: ILoadPreviousChatUseCase
     constructor(loadPreviousChatUseCase: ILoadPreviousChatUseCase) {
-        this.loadPreviousChatUseCase = loadPreviousChatUseCase
+        this._loadPreviousChatUseCase = loadPreviousChatUseCase
     }
     async handleLoadPreviousMessage(req: Request, res: Response): Promise<void> {
         try {
@@ -16,7 +16,7 @@ export class LoadPreviousMessageController {
                 return
             }
             // const page = parseInt(pageNo, 10) || 1
-            const { messages } = await this.loadPreviousChatUseCase.loadPreviousChat(chatId)
+            const { messages } = await this._loadPreviousChatUseCase.loadPreviousChat(chatId)
             res.status(HttpStatus.OK).json({ message: "Previous chat loaded", messages })
         } catch (error) {
             console.log('error while loading previous message of chat', error)

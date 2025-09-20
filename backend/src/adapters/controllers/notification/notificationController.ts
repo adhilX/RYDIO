@@ -3,7 +3,7 @@ import { IGetNotificationUsecase } from "../../../domain/interface/usecaseInterf
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class NotificationController {
-    constructor(private getNotificationUsecase: IGetNotificationUsecase) {}
+    constructor(private _getNotificationUsecase: IGetNotificationUsecase) {}
 
     async getUserNotifications(req: Request, res: Response): Promise<void> {
         try {
@@ -13,7 +13,7 @@ export class NotificationController {
                 return;
             }
 
-            const notifications = await this.getNotificationUsecase.getNotificationsByUserId(userId);
+            const notifications = await this._getNotificationUsecase.getNotificationsByUserId(userId);
             res.status(HttpStatus.OK).json({
                 success: true,
                 data: notifications
@@ -30,7 +30,7 @@ export class NotificationController {
     async markNotificationAsRead(req: Request, res: Response): Promise<void> {
         try {
             const { notificationId } = req.params;
-            const notification = await this.getNotificationUsecase.markNotificationAsRead(notificationId);
+            const notification = await this._getNotificationUsecase.markNotificationAsRead(notificationId);
             
             if (!notification) {
                 res.status(HttpStatus.NOT_FOUND).json({
@@ -61,7 +61,7 @@ export class NotificationController {
                 return;
             }
 
-            const result = await this.getNotificationUsecase.markAllNotificationsAsRead(userId);
+            const result = await this._getNotificationUsecase.markAllNotificationsAsRead(userId);
             res.status(HttpStatus.OK).json({
                 success: true,
                 data: result
@@ -83,7 +83,7 @@ export class NotificationController {
                 return;
             }
 
-            const countResult = await this.getNotificationUsecase.getUnreadNotificationCount(userId);
+            const countResult = await this._getNotificationUsecase.getUnreadNotificationCount(userId);
             res.status(HttpStatus.OK).json({
                 success: true,
                 data: countResult
@@ -108,7 +108,7 @@ export class NotificationController {
                 return;
             }
 
-            const result = await this.getNotificationUsecase.deleteNotification(notificationId);
+            const result = await this._getNotificationUsecase.deleteNotification(notificationId);
             res.status(HttpStatus.OK).json({
                 success: true,
                 data: result,
@@ -131,7 +131,7 @@ export class NotificationController {
                 return;
             }
 
-            const result = await this.getNotificationUsecase.deleteAllNotifications(userId);
+            const result = await this._getNotificationUsecase.deleteAllNotifications(userId);
             res.status(HttpStatus.OK).json({
                 success: true,
                 data: result,

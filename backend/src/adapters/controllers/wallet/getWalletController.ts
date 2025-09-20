@@ -3,8 +3,8 @@ import { HttpStatus } from "../../../domain/entities/httpStatus";
 import { IGetWalletUsecase } from "../../../domain/interface/usecaseInterface/wallets/IGetWalletUsecase";
 
 export class GetWalletController{
-    constructor(private getWalletUsecase: IGetWalletUsecase) {
-        this.getWalletUsecase = getWalletUsecase;
+    constructor(private _getWalletUsecase: IGetWalletUsecase) {
+        this._getWalletUsecase = _getWalletUsecase;
     }
 
     async getWalletDetails(req: Request, res: Response): Promise<void> {
@@ -12,7 +12,7 @@ export class GetWalletController{
             const {userId} = req.params
             
             const input = { userId };
-            const wallet = await this.getWalletUsecase.getWalletByUserId(input);
+            const wallet = await this._getWalletUsecase.getWalletByUserId(input);
             if (!wallet) {
                 res.status(HttpStatus.NOT_FOUND).json({ message: 'Wallet not found' });
                 return;

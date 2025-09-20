@@ -4,6 +4,7 @@ import { IFinancialOverviewUseCase } from "../../../domain/interface/usecaseInte
 import { IUserMangementUsecase } from "../../../domain/interface/usecaseInterface/admin/IUserMangmentUsecase";
 import { IVehileManagmentUsecase } from "../../../domain/interface/usecaseInterface/admin/IVehicleMangementUsecase";
 import { IBookingAnalyticsUseCase } from "../../../domain/interface/usecaseInterface/dashboard/IBookingAnalyticsUseCase";
+import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class DashboardController {
     constructor(
@@ -17,12 +18,12 @@ export class DashboardController {
     async getTotalRevenue(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.dashboardStatsUseCase.getTotalRevenue();
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get total revenue'
             });
@@ -32,12 +33,12 @@ export class DashboardController {
     async getTotalBookings(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.dashboardStatsUseCase.getTotalBookings();
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get total bookings'
             });
@@ -47,12 +48,12 @@ export class DashboardController {
     async getTotalUsers(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.dashboardStatsUseCase.getTotalUsers();
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get total users'
             });
@@ -62,12 +63,12 @@ export class DashboardController {
     async getActiveVehicles(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.dashboardStatsUseCase.getActiveVehicles();
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get active vehicles'
             });
@@ -77,12 +78,12 @@ export class DashboardController {
     async getFinancialOverview(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.financialOverviewUseCase.getFinancialOverview();
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get financial overview'
             });
@@ -92,12 +93,12 @@ export class DashboardController {
     async getUserManagementStats(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.userManagementUseCase.getUserManagementStats();
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get user management stats'
             });
@@ -107,12 +108,12 @@ export class DashboardController {
     async getVehicleManagementStats(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.vehicleManagementUseCase.getVehicleManagementStats();
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get vehicle management stats'
             });
@@ -122,12 +123,12 @@ export class DashboardController {
     async getBookingAnalytics(req: Request, res: Response): Promise<void> {
         try {
             const data = await this.bookingAnalyticsUseCase.getBookingAnalytics();
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get booking analytics'
             });
@@ -156,7 +157,7 @@ export class DashboardController {
                 this.bookingAnalyticsUseCase.getBookingAnalytics()
             ]);
 
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
                 data: {
                     totalRevenue,
@@ -170,7 +171,7 @@ export class DashboardController {
                 }
             });
         } catch (error) {
-            res.status(500).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 message: error instanceof Error ? error.message : 'Failed to get dashboard data'
             });

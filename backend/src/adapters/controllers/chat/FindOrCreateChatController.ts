@@ -5,8 +5,8 @@ import { HttpStatus } from "../../../domain/entities/httpStatus";
 export class FindOrCreateChatController {
     private createChatUseCase: IFindOrCreateChatUsecase;
 
-    constructor(createChatUseCase: IFindOrCreateChatUsecase) {
-        this.createChatUseCase = createChatUseCase;
+    constructor(_createChatUseCase: IFindOrCreateChatUsecase) {
+        this.createChatUseCase = _createChatUseCase;
     }
 
     async findOrCreateChat(req: Request, res: Response): Promise<void> {

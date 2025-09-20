@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { HttpStatus } from "../../../../domain/entities/httpStatus"
 import { ICreateBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/ICreateBookingUsecase";
 
@@ -7,7 +8,7 @@ export class CreateBookingController {
         this._createBookingUsecase = createBookingUsecase
     }
 
-    async createBooking(req: any, res: any) {
+    async createBooking(req:Request,res:Response) {
       try {
         const {stripeIntentId, user_id, bookingData} = req.body
 
