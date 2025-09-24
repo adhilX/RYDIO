@@ -17,6 +17,10 @@ const dispatch = useDispatch()
  useEffect(()=>{
    if (!user) return
    socket.connect()
+   
+   // Emit user-online event for live notification tracking
+   socket.emit('user-online', user._id)
+   
    socket.emit('register', { userId: user._id, name: user.name }, (data: NotificationDTO[]) => {
        dispatch(addNotifications(data))
    })

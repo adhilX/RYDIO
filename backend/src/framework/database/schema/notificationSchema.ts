@@ -3,9 +3,8 @@ import { INotification } from "../../../domain/entities/notificationEntities";
 
 export const notificationSchema = new Schema<INotification>({
     from: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        refPath: 'senderModel'
+        type: Schema.Types.Mixed, 
+        required: true
     },
     message: {
         type: String,

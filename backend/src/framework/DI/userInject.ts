@@ -76,6 +76,11 @@ import { ChangeVehicleStatusUsecase } from "../../useCases/vehicles/changeVehicl
 import { NotificationRepository } from "../../adapters/repository/notification/notificationRepository"
 import { GetNotificationUsecase } from "../../useCases/notification/GetNotificationUsecase"
 import { NotificationController } from "../../adapters/controllers/notification/notificationController"
+import { ReportRepository } from "../../adapters/repository/report/reportRepository"
+import { CreateReportUsecase } from "../../useCases/report/CreateReportUsecase"
+import { GetReportsUsecase } from "../../useCases/report/GetReportsUsecase"
+import { CreateReportController } from "../../adapters/controllers/report/CreateReportController"
+import { GetReportsController } from "../../adapters/controllers/report/GetReportsController"
 
 // regester user 
 const otpService = new OtpService()
@@ -229,3 +234,10 @@ export const reapplyVehicleController = new ReapplyVehicleController(reapplyVehi
 const notificationRepository = new NotificationRepository()
 const getNotificationUsecase = new GetNotificationUsecase(notificationRepository)
 export const notificationController = new NotificationController(getNotificationUsecase)
+
+//------report----------
+const reportRepository = new ReportRepository()
+const createReportUsecase = new CreateReportUsecase(reportRepository)
+const getReportsUsecase = new GetReportsUsecase(reportRepository,userRepository,bookingRepository,vehicleRepository)
+export const createReportController = new CreateReportController(createReportUsecase)
+export const getReportsController = new GetReportsController(getReportsUsecase)

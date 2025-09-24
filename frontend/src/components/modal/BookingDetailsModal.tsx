@@ -4,9 +4,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Car, Clock, MapPin, User, X, CreditCard, DollarSign, Receipt, Shield, AlertCircle } from 'lucide-react'
+import { Car, Clock, MapPin, User, X, CreditCard, DollarSign, Receipt, Shield, AlertCircle, Flag } from 'lucide-react'
 import QRGenerator from '../user/QRGenerator'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import CancelReasonModal from './CancelReasonModal'
 import CancelConfirmationModal from './CancelConfirmationModal'
@@ -17,6 +17,8 @@ import type { IbookedData } from '@/Types/User/Booking/bookedData'
 import { withdrawMoney } from '@/services/wallet/walletService'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
+import { createReport, checkIfUserReportedBooking } from '@/services/user/reportService'
+import ReportModal from './ReportModal'
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 interface BookingDetailsModalProps {
@@ -31,13 +33,52 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
   const [cancelReason, setCancelReason] = useState('')
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [isCancelling, setIsCancelling] = useState(false)
+  const [showReportModal, setShowReportModal] = useState(false)
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false)
+  const [hasUserReported, setHasUserReported] = useState(false)
+  const [isCheckingReport, setIsCheckingReport] = useState(false)
   const navigate = useNavigate()
   const calculateDays = (startDate: string | Date, endDate: string | Date) => {
     const start = new Date(startDate)
     const end = new Date(endDate)
     const diffTime = end.getTime() - start.getTime()
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
   }
+
+  // Check if report button should be shown
+  const shouldShowReportButton = () => {
+    if (!booking) return false
+    
+    const now = new Date()
+    const endDate = new Date(booking.end_date)
+    const timeDiff = now.getTime() - endDate.getTime()
+    const hoursDiff = timeDiff / (1000 * 60 * 60)
+    
+    // Show report button if booking is ongoing or completed within 24 hours
+    return booking.status === 'ongoing' || 
+           (booking.status === 'completed' && hoursDiff <= 24)
+  }
+
+  // Check if user has already reported this booking when modal opens
+  useEffect(() => {
+    const checkExistingReport = async () => {
+      if (isOpen && booking?.booking_id && user?._id && shouldShowReportButton()) {
+        setIsCheckingReport(true)
+        try {
+          const hasReported = await checkIfUserReportedBooking(booking.booking_id, user._id)
+          setHasUserReported(hasReported)
+        } catch (error) {
+          console.error('Error checking existing report:', error)
+          setHasUserReported(false)
+        } finally {
+          setIsCheckingReport(false)
+        }
+      }
+    }
+
+    checkExistingReport()
+  }, [isOpen, booking?.booking_id, user?._id])
 
   if(!user) return null
   const handleCancelBooking = () => {
@@ -90,8 +131,49 @@ try {
     }
   }
 
-  if (!booking) return null
+  const handleOpenReportModal = () => {
+    console.log('Opening report modal...');
+    // Close any other modals first
+    setShowReasonModal(false)
+    setShowConfirmation(false)
+    // Then open report modal
+    setShowReportModal(true)
+    console.log('Report modal state set to true');
+  }
 
+  const handleReportSubmit = async (reason: string) => {
+    if (!booking?.booking_id || !user?._id) {
+      toast.error('Invalid booking or user data')
+      return
+    }
+
+    if (!booking?.vehicle?.owner_id) {
+      toast.error('Vehicle owner information not available')
+      return
+    }
+    setIsSubmittingReport(true)
+    
+    try {
+      await createReport({
+        reporterId: user._id,
+        bookingId: booking.booking_id,
+        ownerId: booking.vehicle.owner_id.toString(),
+        reason: reason.trim()
+      })
+      toast.success('Report submitted successfully!')
+      setShowReportModal(false)
+      setHasUserReported(true) 
+      onClose()
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to submit report'
+      toast.error(errorMessage)
+      console.error('Submit report error:', error)
+    } finally {
+      setIsSubmittingReport(false)
+    }
+  }
+  
+  if (!booking) return null
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
@@ -316,6 +398,33 @@ try {
           </Button>
         </section>
           )}
+
+          {/* Report Button */}
+          {shouldShowReportButton() && !hasUserReported && (
+            <section>
+              <Button
+                onClick={handleOpenReportModal}
+                variant="outline"
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white border-orange-600 hover:border-orange-700"
+                disabled={isSubmittingReport || isCheckingReport}
+              >
+                <Flag className="w-4 h-4 mr-2" />
+                {isCheckingReport ? 'Checking...' : isSubmittingReport ? 'Submitting...' : 'Report Issue'}
+              </Button>
+            </section>
+          )}
+
+          {/* Already Reported Message */}
+          {shouldShowReportButton() && hasUserReported && (
+            <section>
+              <div className="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-center">
+                <div className="flex items-center justify-center gap-2 text-gray-400">
+                  <Flag className="w-4 h-4" />
+                  <span className="text-sm">Issue already reported</span>
+                </div>
+              </div>
+            </section>
+          )}
         {/* QR Code Section */}
         <section>
           {booking.status === 'booked' && (
@@ -356,6 +465,15 @@ try {
         totalAmount={booking.total_amount}
         reason={cancelReason}
         isLoading={isCancelling}
+      />
+
+      {/* Report Modal */}
+      <ReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onSubmit={handleReportSubmit}
+        isSubmitting={isSubmittingReport}
+        bookingId={booking?.booking_id}
       />
     </>
   )

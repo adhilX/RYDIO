@@ -26,6 +26,19 @@ export class SocketIoController {
       this.setSocketIo()
     }
 
+    public sendLiveNotification(userId: string, notification: any) {
+      const userSocketId = this.userSockets.get(userId);
+      if (userSocketId) {
+        this.io.to(userSocketId).emit('notification', notification);
+        return true; 
+      }
+      return false; 
+    }
+
+    public isUserOnline(userId: string): boolean {
+      return this.userSockets.has(userId);
+    }
+
     private setSocketIo() {
       this.io.on('connect', (socket) => {
         console.log(socket.id, 'socked connected')
