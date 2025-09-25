@@ -101,7 +101,7 @@ useEffect(()=>{
   socket.on('user-status-changed', handleUserStatusChange)
 
   // Join room
-  socket.emit('join-room', {roomId})
+  socket.emit('join-room', {roomId,userId})
 
   return () => {
     socket.off('connected', handleConnected)
@@ -109,6 +109,7 @@ useEffect(()=>{
     socket.off('typing', handleTyping)
     socket.off('stop-typing', handleStopTyping)
     socket.off('user-status-changed', handleUserStatusChange)
+    socket.emit('leave-room',{roomId,userId})
   }
 },[roomId])
 

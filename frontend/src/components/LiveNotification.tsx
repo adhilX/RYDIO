@@ -9,7 +9,7 @@ interface LiveNotificationProps {
     duration?: number;
 }
 
-const LiveNotification: React.FC<LiveNotificationProps> = ({
+const   LiveNotification: React.FC<LiveNotificationProps> = ({
     notification,
     onClose,
     duration = 5000,
@@ -69,7 +69,7 @@ const LiveNotification: React.FC<LiveNotificationProps> = ({
             >
                 <div className="flex items-center px-2 py-3 w-full">
                     <div className="mx-3">
-                        {notification.from.profileImage ? (
+                        {notification?.from?.profileImage ? (
                             <img
                                 src={IMG_URL + notification.from.profileImage}
                                 alt={notification.from.name}
@@ -82,7 +82,7 @@ const LiveNotification: React.FC<LiveNotificationProps> = ({
 
                     <div className="flex-1 pr-6">
                         <h3 className="text-sm font-medium text-gray-800 dark:text-white">
-                            {`Message from ${notification.from.name}`}
+                            {`${notification?.from?.name ||'Admin'}`}
                         </h3>
                         <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
                             {notification.message}

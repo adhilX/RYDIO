@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, getAdminWalletController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController, dashboardController } from "../../DI/adminInject";
+import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, getAdminWalletController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController, dashboardController, adminReportQueryController, adminReportManagementController, adminNotificationController } from "../../DI/adminInject";
 import { injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 export class AdminRoutes {
@@ -77,6 +77,27 @@ export class AdminRoutes {
         })
         this.AdminRoute.get('/dashboard/booking-analytics', (req: Request, res: Response) => {
             dashboardController.getBookingAnalytics(req, res)
+        })
+
+        // Report Query Routes (Read Operations)
+        this.AdminRoute.get('/reports/all', (req: Request, res: Response) => {
+            adminReportQueryController.getAllReports(req, res)
+        })
+        this.AdminRoute.get('/reports/stats', (req: Request, res: Response) => {
+            adminReportQueryController.getReportsStats(req, res)
+        })
+        this.AdminRoute.get('/reports/:reportId', (req: Request, res: Response) => {
+            adminReportQueryController.getReportById(req, res)
+        })
+        
+        // Report Management Routes (Write Operations)
+        this.AdminRoute.patch('/reports/:reportId/status', (req: Request, res: Response) => {
+            adminReportManagementController.updateReportStatus(req, res)
+        })
+        
+        // Admin Notification Routes
+        this.AdminRoute.post('/send-notification', (req: Request, res: Response) => {
+            adminNotificationController.sendNotification(req, res)
         })
     }
 }

@@ -28,14 +28,32 @@ import { VendorAccessUsecase } from "../../useCases/admin/vendorAccessUsecase";
 import { HashPassword } from "../services/hashPassword";
 import { JwtService } from "../services/jwtService";
 import { AdminWalletRepository } from "../../adapters/repository/wallet/adminWalletRepository";
+import { NotificationRepository } from "../../adapters/repository/notification/notificationRepository";
 import { GetAdminWalletController } from "../../adapters/controllers/admin/WalletManagment/GetWalletController";
 import { GetAdminWalletUsecase } from "../../useCases/wallets/getAdminWalletUsecase";
+
+import { UserRepository } from "../../adapters/repository/user/userRepository";
+import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
+import { DashboardStatsUseCase } from "../../useCases/dashboard/dashboardStatsUseCase";
+import { FinancialOverviewUseCase } from "../../useCases/dashboard/financialOverviewUseCase";
+import { UserManagementUseCase } from "../../useCases/admin/userManagementUseCase";
+import { VehicleManagementUseCase } from "../../useCases/admin/vehicleManagementUseCase";
+import { BookingAnalyticsUseCase } from "../../useCases/dashboard/bookingAnalyticsUseCase";
+import { AdminReportQueryUsecase } from "../../useCases/report/AdminReportQueryUsecase";
+import { AdminReportManagementUsecase } from "../../useCases/report/AdminReportManagementUsecase";
+import { AdminNotificationUsecase } from "../../useCases/notification/AdminNotificationUsecase";
+import { DashboardController } from "../../adapters/controllers/admin/dashboardController";
+import { AdminReportQueryController } from "../../adapters/controllers/report/AdminReportQueryController";
+import { AdminReportManagementController } from "../../adapters/controllers/report/AdminReportManagementController";
+import { AdminNotificationController } from "../../adapters/controllers/report/AdminNotificationController";
+import { ReportRepository } from "../../adapters/repository/report/reportRepository";
+import { CreateNotificationUsecase } from "../../useCases/notification/CreateNotificationUsecase";
+import { NotificationManagerAdapter } from "../../adapters/controllers/notification/NotificationSocketIOAdapter";
 
 //-----------admin login------------
 const adminRepository = new AdminRepository()
 const hashPassword = new HashPassword()
 const jwtService = new JwtService()
-// const walletRepository = new WalletRepository()
 const adminWalletRepository = new AdminWalletRepository()
 const loginAdminUsecase = new LoginAdminUsecase(adminRepository,hashPassword,adminWalletRepository,jwtService)
 export const adminLoginController = new AdminLoginController(loginAdminUsecase)
@@ -59,8 +77,12 @@ const searchUserusercase = new SearchUserusercase(adminRepository)
 export const searchUserController = new SearchUserController(searchUserusercase)
 
 //------approve vehicle--------
+
 const vehicleRepository = new VehicleRepository()
-const vehicleUpproveUsecase = new VehicleUpproveUsecase(vehicleRepository)
+const notificationRepository = new NotificationRepository()
+const notificationManagerAdapter = new NotificationManagerAdapter()
+const createNotificationUsecase = new CreateNotificationUsecase(notificationRepository,notificationManagerAdapter)
+const vehicleUpproveUsecase = new VehicleUpproveUsecase(vehicleRepository,createNotificationUsecase)
 export const vehicleUpproveController = new VehicleUpproveController(vehicleUpproveUsecase)
 
 //-------fetch pending vehicle------
@@ -83,43 +105,35 @@ export const idProofActionController = new IdProofActionController(idProofAction
 
 //-------vendor access--------
 
-const vendorAccessUsecase = new VendorAccessUsecase(adminRepository)
+const vendorAccessUsecase = new VendorAccessUsecase(adminRepository,createNotificationUsecase,vehicleRepository)
 export const vendorAccessController = new VendorAccessController(vendorAccessUsecase)
-
 
 //-------get booking data--------
 const bookingRepository = new BookingRepository()
 const getBookingUsecase = new GetBookingUsecase(bookingRepository)
 export const getBookingController = new GetBookingController(getBookingUsecase)
 
-
 //------get wallet details---------
 const getAdminWalletUsecase = new GetAdminWalletUsecase(adminWalletRepository)
 export const getAdminWalletController = new GetAdminWalletController(getAdminWalletUsecase)
 
-//------dashboard analytics---------
-import { UserRepository } from "../../adapters/repository/user/userRepository";
-import { WalletRepository } from "../../adapters/repository/wallet/walletRepository";
-import { DashboardStatsUseCase } from "../../useCases/dashboard/dashboardStatsUseCase";
-import { FinancialOverviewUseCase } from "../../useCases/dashboard/financialOverviewUseCase";
-import { UserManagementUseCase } from "../../useCases/admin/userManagementUseCase";
-import { VehicleManagementUseCase } from "../../useCases/admin/vehicleManagementUseCase";
-import { BookingAnalyticsUseCase } from "../../useCases/dashboard/bookingAnalyticsUseCase";
-import { DashboardController } from "../../adapters/controllers/admin/dashboardController";
-
 const userRepository = new UserRepository()
 const walletRepository = new WalletRepository()
+const reportRepository = new ReportRepository()
 
 const dashboardStatsUseCase = new DashboardStatsUseCase(userRepository, vehicleRepository, bookingRepository, walletRepository)
 const financialOverviewUseCase = new FinancialOverviewUseCase(bookingRepository, walletRepository, vehicleRepository)
 const userManagementUseCase = new UserManagementUseCase(userRepository)
 const vehicleManagementUseCase = new VehicleManagementUseCase(vehicleRepository, bookingRepository)
 const bookingAnalyticsUseCase = new BookingAnalyticsUseCase(bookingRepository)
+const createNotificationUseCase = new CreateNotificationUsecase(notificationRepository,notificationManagerAdapter)
 
-export const dashboardController = new DashboardController(
-    dashboardStatsUseCase,
-    financialOverviewUseCase,
-    userManagementUseCase,
-    vehicleManagementUseCase,
-    bookingAnalyticsUseCase
-)
+const adminReportQueryUseCase = new AdminReportQueryUsecase(reportRepository, userRepository, bookingRepository, vehicleRepository)
+const adminReportManagementUseCase = new AdminReportManagementUsecase(reportRepository)
+const adminNotificationUseCase = new AdminNotificationUsecase(createNotificationUseCase)
+
+export const dashboardController = new DashboardController(dashboardStatsUseCase, financialOverviewUseCase,userManagementUseCase,vehicleManagementUseCase,bookingAnalyticsUseCase)
+
+export const adminReportQueryController = new AdminReportQueryController(adminReportQueryUseCase)
+export const adminReportManagementController = new AdminReportManagementController(adminReportManagementUseCase)
+export const adminNotificationController = new AdminNotificationController(adminNotificationUseCase)

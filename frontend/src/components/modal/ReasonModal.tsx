@@ -17,11 +17,11 @@ const ReasonModal = ({
   isOpen,
   onClose,
   onSubmit,
-  title ,
-  description,
-  submitButtonText,
-  cancelButtonText,
-  placeholder,
+  title = "Provide Reason",
+  description = "Please provide a reason for your action.",
+  submitButtonText = "Submit",
+  cancelButtonText = "Cancel",
+  placeholder = "Enter your reason here...",
 }: ReasonModalProps) => {
   const [reason, setReason] = useState('');
   const [error, setError] = useState('');
@@ -37,7 +37,7 @@ const ReasonModal = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!reason.trim()) {
-      setError('Please provide a reason for rejection');
+      setError('Please provide a reason');
       return;
     }
     onSubmit(reason);

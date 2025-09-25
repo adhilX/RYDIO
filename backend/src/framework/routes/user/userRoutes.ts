@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController, getUserController, getWalletController, getSecurityDepositController, rideStartController, rideEndController, incomingBookingController, cancelBookingController, withdrawController, reapplyVehicleController } from "../../DI/userInject";
+import { addVehicleController, changePasswordController, changePasswordUserController, changeVehicleStatusController, createBookingController, createPaymentIntentController, deleteVehicleController, editProfileController, getBookedVehicleController, myBookingController, myVehicleController, resendOtpController, vehicleDetailsController, sendendOtpController, sendOtpForgotPasswordController, uploadIdProofController, userLoginController, userlogoutController, userRegisterController, verifyForgotPassowordOtpController, searchVehicleController, getUserController, getWalletController, getSecurityDepositController, rideStartController, rideEndController, incomingBookingController, cancelBookingController, withdrawController, reapplyVehicleController, createReportController, getReportsController } from "../../DI/userInject";
 import { injectedUserBlockChecker, injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 
@@ -108,5 +108,16 @@ export class UserRoutes {
     this.UserRoutes.post('/vehicles/reapply',(req:Request,res:Response)=>{
         reapplyVehicleController.reapplyVehicle(req,res)
     })
-}
+
+    // Report routes
+    this.UserRoutes.post('/reports/create',(req:Request,res:Response)=>{
+        createReportController.createReport(req,res)
+    })
+    this.UserRoutes.get('/reports/user/:userId',(req:Request,res:Response)=>{
+        getReportsController.getReportsByUser(req,res)
+    })
+    this.UserRoutes.get('/reports/booking/:bookingId',(req:Request,res:Response)=>{
+        getReportsController.getReportsByBooking(req,res)
+    })
+    }
 }

@@ -9,7 +9,8 @@ import {
   LogOut,
   Car,
   MessageCircleWarning,
-  Wallet
+  Wallet,
+  Flag
 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -30,7 +31,8 @@ const menuItems = [
   { id: 'vehicle_requests', label: 'vehicle Requests', icon:MessageCircleWarning, path:'/admin/vehicle_requests'},
   { id: 'idproof-requests', label: 'ID proof Requests', icon:MessageCircleWarning, path:'/admin/idproof-requests'},
   {id:'bookings',label:'Bookings',icon:MessageCircleWarning,path:'/admin/bookings'},
-  {id:'wallet',label:'Wallet',icon:Wallet,path:'/admin/wallet'}
+  {id:'wallet',label:'Wallet',icon:Wallet,path:'/admin/wallet'},
+  {id:'reports',label:'Reports',icon:Flag,path:'/admin/reports'}
 ];
 
 export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggleCollapse, onLogout }: SidebarProps) {

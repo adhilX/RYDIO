@@ -13,6 +13,18 @@ export interface NotificationResponseDto {
     updatedAt: string;
 }
 
+export interface LiveNotificationDto {
+        _id :string
+        from :{
+            _id :string
+            name:string
+            profileImage?:string
+        }
+        to :string
+        message:string
+        type:string
+    }
+    
 export interface UnreadCountDto {
     unreadCount: number;
 }

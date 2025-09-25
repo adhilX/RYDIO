@@ -9,6 +9,7 @@ import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
 import Pagination from '@/components/Pagination';
 import { toast } from 'react-hot-toast';
 import RejectedVehicleModal from '@/components/user/modals/RejectedVehicleModal';
+import { getUser } from '@/services/user/authService';
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
 const ListVehilce = () => {
@@ -26,9 +27,14 @@ const ListVehilce = () => {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
     const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [vendorAccess, setVendorAccess] = useState<boolean>(true);
+    
+    // Check if user has vendor access - disable all actions if false
+    const isActionsDisabled = !vendorAccess;
     const navigate = useNavigate();
 
   const handleDelete = useCallback(async (vehicleId: string) => {
+        if (isActionsDisabled) return;
         try {
             setDeletingId(vehicleId);
             await deleteVehicle(vehicleId);
@@ -59,6 +65,12 @@ const ListVehilce = () => {
             };
         setIsLoading(true);
         try {
+            const userdata = await getUser(user._id)
+            if(userdata?.vendor_access === false){
+                setVendorAccess(false)
+            } else {
+                setVendorAccess(true)
+            }
             const response = await getMyVehicle(user._id, debouncedSearch, currentPage, limit);
             if (response?.vehicles) {
                 setVehicles(response.vehicles);
@@ -128,20 +140,23 @@ const ListVehilce = () => {
                         </div>
                     </div>
                 </motion.div>
-                {disableAddBtn && (
+                {(disableAddBtn || isActionsDisabled) && (
                     <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg shadow-sm text-sm font-medium max-w-md">
-                        Submit ID proof to add more vehicles.
+                        {isActionsDisabled 
+                            ? '⚠️ Vendor access required to manage vehicles. Please contact admin.' 
+                            : 'Submit ID proof to add more vehicles.'}
                     </div>
                 )}
                 <button
-                    disabled={disableAddBtn}
+                    disabled={disableAddBtn || isActionsDisabled}
                     onClick={() => navigate('/userProfile/add-vehicle')}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold shadow transition
-            ${disableAddBtn
+            ${disableAddBtn || isActionsDisabled
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             : 'bg-[#6DA5C0] text-white hover:bg-[#232b3a]'
                         }`
                     }
+                    title={isActionsDisabled ? 'Vendor access required to add vehicles' : ''}
                 >
                     <PlusCircle className="w-5 h-5" />
                     Add Vehicle
@@ -207,10 +222,17 @@ const ListVehilce = () => {
                              <div className="flex flex-col items-center space-y-1.5">
                                  <button
                                      onClick={() => {
-                                         handleStatusToggle(vehicle._id!, !!vehicle.is_available);
+                                         if (!isActionsDisabled) {
+                                             handleStatusToggle(vehicle._id!, !!vehicle.is_available);
+                                         }
                                      }}
-                                     disabled={updatingStatus[vehicle._id!]}
-                                     className={`relative inline-flex items-center h-7 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${vehicle.is_available ? 'bg-green-200' : 'bg-gray-400'}`}
+                                     disabled={updatingStatus[vehicle._id!] || isActionsDisabled}
+                                     className={`relative inline-flex items-center h-7 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                                         isActionsDisabled 
+                                             ? 'bg-gray-300 cursor-not-allowed' 
+                                             : vehicle.is_available ? 'bg-green-200' : 'bg-gray-400'
+                                     }`}
+                                     title={isActionsDisabled ? 'Vendor access required to manage vehicle availability' : ''}
                                  >
                                      <span className={`inline-block w-5 h-5 transform transition-transform bg-white rounded-full shadow-md ${vehicle.is_available ? 'translate-x-8' : 'translate-x-1'}`} />
                                      {updatingStatus[vehicle._id!] && (
@@ -230,9 +252,18 @@ const ListVehilce = () => {
                                      {/* View button for rejected vehicles */}
                                      {vehicle.admin_approve === 'rejected' && (
                                          <button
-                                             onClick={() => handleViewRejectedVehicle(vehicle)}
-                                             className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
-                                             title="View Details & Reapply"
+                                             onClick={() => {
+                                                 if (!isActionsDisabled) {
+                                                     handleViewRejectedVehicle(vehicle);
+                                                 }
+                                             }}
+                                             disabled={isActionsDisabled}
+                                             className={`p-2 rounded-lg transition-colors shadow-md hover:shadow-lg ${
+                                                 isActionsDisabled 
+                                                     ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                                                     : 'bg-blue-600 text-white hover:bg-blue-700'
+                                             }`}
+                                             title={isActionsDisabled ? 'Vendor access required to reapply vehicle' : 'View Details & Reapply'}
                                          >
                                              <Eye className="w-4 h-4" />
                                          </button>
@@ -273,12 +304,17 @@ const ListVehilce = () => {
                                              <button
                                                  onClick={(e) => {
                                                      e.stopPropagation();
-                                                     if (vehicle._id) {
+                                                     if (vehicle._id && !isActionsDisabled) {
                                                          setShowDeleteConfirm(vehicle._id);
                                                      }
                                                  }}
-                                                 className="p-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors shadow-md hover:shadow-lg"
-                                                 title="Delete Vehicle"
+                                                 disabled={isActionsDisabled}
+                                                 className={`p-2 rounded-lg transition-colors shadow-md hover:shadow-lg ${
+                                                     isActionsDisabled 
+                                                         ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                                                         : 'bg-red-600 text-white hover:bg-red-700'
+                                                 }`}
+                                                 title={isActionsDisabled ? 'Vendor access required to delete vehicle' : 'Delete Vehicle'}
                                              >
                                                  <Trash2 className="w-4 h-4" />
                                              </button>

@@ -15,6 +15,7 @@ import { GetChatUsecase } from "../../useCases/chat/getchatsOfUser";
 import { UpdateLastMessageUseCase } from "../../useCases/message/UpdateLastMessageUseCase";
 import { CreateNotificationUsecase } from "../../useCases/notification/CreateNotificationUsecase";
 import { NotificationRepository } from "../../adapters/repository/notification/notificationRepository";
+import { NotificationManagerAdapter } from "../../adapters/controllers/notification/NotificationSocketIOAdapter";
 // Repositories
 const chatRepository = new ChatRepository();
 const messageRepository = new MessageRepository();
@@ -26,8 +27,9 @@ export const createMessageUseCase = new CreateMessageUseCase(messageRepository);
  const getMessagesUsecase = new GetMessagesUsecase(messageRepository);
  const getChatUsecase = new GetChatUsecase(chatRepository);
  const enableChatUsecase = new EnableChatUsecase(bookingRepository);
+ const notificationManagerAdapter = new NotificationManagerAdapter()
 export const updateLastMessageUseCase = new UpdateLastMessageUseCase(chatRepository);
-export const createNotificationUsecase = new CreateNotificationUsecase(notificationRepository)
+export const createNotificationUsecase = new CreateNotificationUsecase(notificationRepository,notificationManagerAdapter)
 
 // Controllers
 export const createChatController = new FindOrCreateChatController(findOrCreateChatUsecase);

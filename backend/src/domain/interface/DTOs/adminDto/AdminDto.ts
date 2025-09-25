@@ -122,6 +122,18 @@ export interface VehicleApprovalOutputDto {
   message: string;
 }
 
+export interface VehicleRejectionInputDto {
+  vehicleId: string;
+  reason: string;
+  adminId: string;
+}
+
+export interface VehicleRejectionOutputDto {
+  success: boolean;
+  message: string;
+  notificationSent: boolean;
+}
+
 //=================== ID Proof Management DTOs ===================
 
 export interface GetIdProofInputDto {
@@ -157,6 +169,17 @@ export interface VendorAccessInputDto {
 export interface VendorAccessOutputDto {
   success: boolean;
   message: string;
+}
+
+export interface RemoveVendorAccessInputDto {
+  userId: string;
+  reason?: string;
+}
+
+export interface RemoveVendorAccessOutputDto {
+  success: boolean;
+  message: string;
+  notificationSent: boolean;
 }
 
 //=================== Booking Management DTOs ===================
