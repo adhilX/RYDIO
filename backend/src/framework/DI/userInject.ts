@@ -78,7 +78,7 @@ import { GetNotificationUsecase } from "../../useCases/notification/GetNotificat
 import { NotificationController } from "../../adapters/controllers/notification/notificationController"
 import { ReportRepository } from "../../adapters/repository/report/reportRepository"
 import { CreateReportUsecase } from "../../useCases/report/CreateReportUsecase"
-import { GetReportsUsecase } from "../../useCases/report/GetReportsUsecase"
+import { UserReportQueryUsecase } from "../../useCases/report/UserReportQueryUsecase"
 import { CreateReportController } from "../../adapters/controllers/report/CreateReportController"
 import { GetReportsController } from "../../adapters/controllers/report/GetReportsController"
 
@@ -238,6 +238,7 @@ export const notificationController = new NotificationController(getNotification
 //------report----------
 const reportRepository = new ReportRepository()
 const createReportUsecase = new CreateReportUsecase(reportRepository)
-const getReportsUsecase = new GetReportsUsecase(reportRepository,userRepository,bookingRepository,vehicleRepository)
+// SOLID-compliant: Use UserReportQueryUsecase for user-specific report operations
+const userReportQueryUsecase = new UserReportQueryUsecase(reportRepository)
 export const createReportController = new CreateReportController(createReportUsecase)
-export const getReportsController = new GetReportsController(getReportsUsecase)
+export const getReportsController = new GetReportsController(userReportQueryUsecase)

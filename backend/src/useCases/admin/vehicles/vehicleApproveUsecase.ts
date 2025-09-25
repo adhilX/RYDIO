@@ -2,20 +2,14 @@
 import { IChangeVehicleStatusUsecase } from "../../../domain/interface/usecaseInterface/admin/vehicles/IChangeVehicleStatusUsecase";
 import { VehicleApprovalInputDto, VehicleApprovalOutputDto } from "../../../domain/interface/DTOs/adminDto/AdminDto";
 import { INotification } from "../../../domain/entities/notificationEntities";
-import { INotificationRepository } from "../../../domain/interface/repositoryInterface/INotificationRepository";
 import { IVehicleRepository } from "../../../domain/interface/repositoryInterface/IVehicleRepository";
+import { ICreateNotificationUsecase } from "../../../domain/interface/usecaseInterface/notification/ICreateNotificationUsecase";
 
 export class VehicleUpproveUsecase implements IChangeVehicleStatusUsecase {
-    private _vehicleRepository: IVehicleRepository;
-    private _notificationRepository: INotificationRepository;
-    
     constructor(
-        vehicleRepository: IVehicleRepository,
-        notificationRepository: INotificationRepository
-    ) {
-        this._vehicleRepository = vehicleRepository;
-        this._notificationRepository = notificationRepository;
-    }
+      private  _vehicleRepository: IVehicleRepository,
+      private  _createNotificationUsecase: ICreateNotificationUsecase,
+    ) { }
     async approveVehicle(input: VehicleApprovalInputDto): Promise<VehicleApprovalOutputDto> {
         try {
             // Get vehicle details to find the owner
@@ -38,81 +32,42 @@ export class VehicleUpproveUsecase implements IChangeVehicleStatusUsecase {
                     message: notificationMessage,
                     read: false,
                     senderModel: 'owner',
-                    receiverModel: 'owner'
+                    receiverModel: 'owner',
+                    type: 'success'
                 };
 
-                const savedNotification = await this._notificationRepository.create(notification);
-                notificationSent = true;
-
-                // Send live notification if user is online
-                // const ownerId = vehicle.owner_id.toString();
-                // const isOwnerOnline = this.socketController.isUserOnline(ownerId);
+                await this._createNotificationUsecase.createNotification(notification);
+                notificationSent = true
                 
-                // if (isOwnerOnline) {
-                //     console.log(`Vehicle owner ${ownerId} is online, sending live notification for vehicle approval`);
-                //     const liveNotification = {
-                //         ...savedNotification,
-                //         from: {
-                //             _id: "Admin",
-                //             name: "RYDIO Admin",
-                //             profileImage: ""
-                //         },
-                //         type: "vehicle_approval",
-                //         vehicleName: vehicle.name
-                //     };
-                //     this.socketController.sendLiveNotification(ownerId, liveNotification);
-                // } else {
-                //     console.log(`Vehicle owner ${ownerId} is offline, notification saved to database only`);
-                // }
 
                 return {
                     success: true,
                     message: 'Vehicle approved successfully'
                 };
             } else {
-                // await this._vehicleRepository.rejectVehicle(input.id, input.action, input.reason);
-                // notificationMessage = `❌ Your vehicle "${vehicle.name}" has been rejected. Reason: ${input.reason || 'No specific reason provided'}. Please review and resubmit with the necessary corrections.`;
+                await this._vehicleRepository.rejectVehicle(input.id, input.action, input.reason!);
+                notificationMessage = `❌ Your vehicle "${vehicle.name}" has been rejected. Reason: ${input.reason || 'No specific reason provided'}. Please review and resubmit with the necessary corrections.`;
                 
-                // // Send rejection notification
-                // const notification: INotification = {
-                //     from: "Admin",
-                //     to: vehicle.owner_id as any,
-                //     message: notificationMessage,
-                //     read: false,
-                //     senderModel: 'owner',
-                //     receiverModel: 'owner'
-                // };
+                // Send rejection notification
+                const notification: INotification = {
+                    from: "Admin",
+                    to: vehicle.owner_id,
+                    message: notificationMessage,
+                    read: false,
+                    senderModel: 'owner',
+                    receiverModel: 'owner',
+                    type: 'info'
+                };
 
-                // const savedNotification = await this._notificationRepository.create(notification);
-                // notificationSent = true;
+                await this._createNotificationUsecase.createNotification(notification);
+                notificationSent = true;
 
-                // // Send live notification if user is online
-                // const ownerId = vehicle.owner_id.toString();
-                // const isOwnerOnline = this.socketController.isUserOnline(ownerId);
-                
-                // if (isOwnerOnline) {
-                //     console.log(`Vehicle owner ${ownerId} is online, sending live notification for vehicle rejection`);
-                //     const liveNotification = {
-                //         ...savedNotification,
-                //         from: {
-                //             _id: "Admin",
-                //             name: "RYDIO Admin",
-                //             profileImage: ""
-                //         },
-                //         type: "vehicle_rejection",
-                //         vehicleName: vehicle.name,
-                //         reason: input.reason
-                //     };
-                //     this.socketController.sendLiveNotification(ownerId, liveNotification);
-                // } else {
-                //     console.log(`Vehicle owner ${ownerId} is offline, notification saved to database only`);
-                // }
-
+               
                 return {
                     success: true,
                     message: 'Vehicle rejected successfully'
                 };
-            }
+            } 
         } catch (error) {
             console.error('Error in vehicle approval process:', error);
             throw error;

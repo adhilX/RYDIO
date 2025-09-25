@@ -14,13 +14,16 @@ import client, { Counter, Histogram } from 'prom-client';
 import responseTime from 'response-time';
 import { createLogger } from "winston";
 import LokiTransport from "winston-loki";
-import { SocketIoController } from './adapters/controllers/chat/socketIoService';
+import { ChatSocketIOAdapter } from './adapters/controllers/chat/chatSocketIOAdapter';
 import { ChatRoutes } from './framework/routes/chat/chatRoutes';
 import { NotificationRoutes } from './framework/routes/notification/notificationRoutes';
 import path from 'path';
 import { createMessageUseCase, createNotificationUsecase, updateLastMessageUseCase } from './framework/DI/chatInject';
 import { userRepository } from './framework/DI/userInject';
 import { createStream } from 'rotating-file-stream';
+import { NotificationManagerAdapter } from './adapters/controllers/notification/NotificationSocketIOAdapter';
+import { createhttpServer } from './httpServer';
+import { createSocketIOServer } from './IO';
 
 
 const options = {
@@ -41,12 +44,12 @@ export class App {
     private _app : Application                
     private port: number|string
     private database: ConnectMongoDB
-    private socketIo?: SocketIoController
+    private socketIo?: ChatSocketIOAdapter
     private httpServer:Server
 
     constructor() {
         this._app = express();
-        this.httpServer = createServer(this._app);
+        this.httpServer = createhttpServer(this._app)
         this._app.use(cors({
             origin: process.env.ORIGIN,
             credentials: true
@@ -149,7 +152,7 @@ export class App {
                 if (!time) return path.join(__dirname, "logs", "accessLogs", "buffer.txt");
                 return path.join(__dirname, "logs", "accessLogs", new Date().toDateString() + index + ".txt")
             }, {
-                interval: '1d',
+                interval: '1d', 
                 size: "100M",
                 maxFiles: 10
             })
@@ -171,7 +174,11 @@ export class App {
         }
     }
     private setSocketIo(){
-        this.socketIo = new SocketIoController(this.httpServer, createMessageUseCase, updateLastMessageUseCase,createNotificationUsecase,userRepository)
+     const socketIOServer = createSocketIOServer(this.httpServer)
+     // Initialize chat adapter
+     new ChatSocketIOAdapter(createMessageUseCase, updateLastMessageUseCase,createNotificationUsecase,userRepository)
+     // Initialize notification adapter with the Socket.IO server instance
+     new NotificationManagerAdapter(socketIOServer)
     }
 }
 

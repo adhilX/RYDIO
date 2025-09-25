@@ -28,6 +28,11 @@ export const notificationSchema = new Schema<INotification>({
         type: String,
         required: true,
         enum: ['user', 'owner']
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ['warning', 'info', 'success', 'error']
     }
 
 }, {

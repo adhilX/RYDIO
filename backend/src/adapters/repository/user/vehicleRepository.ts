@@ -105,13 +105,12 @@ async findVehicle(lat: number, lon: number, search: string, page: number, limit:
     const result = await this.delete(vehicleId);
     return result !== null;
  }
- async changeVehicleStatus(vehicleId: string): Promise<boolean> {
+ async changeVehicleStatus(vehicleId: string,action?:boolean): Promise<boolean> {
   const vehicle = await VehicleModel.findById(vehicleId);
   if (!vehicle) return false;
-
   vehicle.is_available = !vehicle.is_available;
+ action?? (vehicle.is_available = action)
   await vehicle.save();
-
   return true;
 }
 async getVehicle(vehicleId:string):Promise<IVehicle | null>{

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, getAdminWalletController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController, dashboardController, adminReportController } from "../../DI/adminInject";
+import { adminLoginController, ApprovedVehiceController, blockUserController, getAllUserController, getBookingController, getIdProofController, getAdminWalletController, idProofActionController, pendingVehicleController, searchUserController, unblockUserController, vehicleUpproveController, vendorAccessController, dashboardController, adminReportQueryController, adminReportManagementController, adminNotificationController } from "../../DI/adminInject";
 import { injectedVerfyToken, tokenTimeExpiryValidationMiddleware } from "../../DI/serviceInject";
 import { checkRoleBaseMiddleware } from "../../../adapters/middlewares/checkRoleBasedMIddleware";
 export class AdminRoutes {
@@ -79,21 +79,25 @@ export class AdminRoutes {
             dashboardController.getBookingAnalytics(req, res)
         })
 
-        // Report Routes
+        // Report Query Routes (Read Operations)
         this.AdminRoute.get('/reports/all', (req: Request, res: Response) => {
-            adminReportController.getAllReports(req, res)
+            adminReportQueryController.getAllReports(req, res)
         })
         this.AdminRoute.get('/reports/stats', (req: Request, res: Response) => {
-            adminReportController.getReportsStats(req, res)
+            adminReportQueryController.getReportsStats(req, res)
         })
         this.AdminRoute.get('/reports/:reportId', (req: Request, res: Response) => {
-            adminReportController.getReportById(req, res)
+            adminReportQueryController.getReportById(req, res)
         })
+        
+        // Report Management Routes (Write Operations)
         this.AdminRoute.patch('/reports/:reportId/status', (req: Request, res: Response) => {
-            adminReportController.updateReportStatus(req, res)
+            adminReportManagementController.updateReportStatus(req, res)
         })
+        
+        // Admin Notification Routes
         this.AdminRoute.post('/send-notification', (req: Request, res: Response) => {
-            adminReportController.sendNotification(req, res)
+            adminNotificationController.sendNotification(req, res)
         })
     }
 }

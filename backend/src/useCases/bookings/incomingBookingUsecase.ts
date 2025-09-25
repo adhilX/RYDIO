@@ -1,5 +1,5 @@
 import { IBookingRepository } from "../../domain/interface/repositoryInterface/IBookingRepository"
-import { IncomingBookingInputDto, IncomingBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
+import { IncomingBookingInputDto, IncomingBookingItemDto, IncomingBookingOutputDto } from "../../domain/interface/DTOs/bookingDto/BookingDto"
 import { IIncomingBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IIncomingBookingUsecase"
 
 export class IncomingBookingUsecase implements IIncomingBookingUsecase{
@@ -11,7 +11,7 @@ export class IncomingBookingUsecase implements IIncomingBookingUsecase{
         if (!result) return null;
         
         return {
-            bookings: (result.bookings).map((booking: any) => ({
+            bookings: (result.bookings).map((booking:any) => ({
                 booking_id: booking.booking_id,
                 user_id: booking.user_id.toString(),    
                 vehicle: booking.vehicle,

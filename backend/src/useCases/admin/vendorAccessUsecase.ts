@@ -1,20 +1,17 @@
 import { IAdminRepository } from "../../domain/interface/repositoryInterface/IAdminRepository";
-import { NotificationRepository } from "../../adapters/repository/notification/notificationRepository";
 import { IVendorAccessUsecase } from "../../domain/interface/usecaseInterface/admin/IVendorAccessUsecase";
 import { VendorAccessInputDto, VendorAccessOutputDto } from "../../domain/interface/DTOs/adminDto/AdminDto";
 import { INotification } from "../../domain/entities/notificationEntities";
+import { IVehicleRepository } from "../../domain/interface/repositoryInterface/IVehicleRepository";
+import { ICreateNotificationUsecase } from "../../domain/interface/usecaseInterface/notification/ICreateNotificationUsecase";
 
 export class VendorAccessUsecase implements IVendorAccessUsecase{
-    private _adminRepository: IAdminRepository;
-    private _notificationRepository: NotificationRepository;
-    
+  
     constructor(
-        adminRepository: IAdminRepository,
-        notificationRepository: NotificationRepository
-    ) {
-        this._adminRepository = adminRepository;
-        this._notificationRepository = notificationRepository;
-    }
+      private _adminRepository: IAdminRepository,
+      private _createNotificationUsecase: ICreateNotificationUsecase,
+      private _vehicleRepository: IVehicleRepository,
+    )  {}
 
  async vendorAccess(input: VendorAccessInputDto): Promise<VendorAccessOutputDto>{
     try {
@@ -23,11 +20,11 @@ export class VendorAccessUsecase implements IVendorAccessUsecase{
         
         // Update vendor access
         await this._adminRepository.vendorAccess(input.userId, input.vendorAccess)
-        
+        await this._vehicleRepository.changeVehicleStatus(input.userId,false)
         // Send notification to user
         const notificationMessage = input.vendorAccess 
-            ? `🎉 Congratulations! You now have vendor access on RYDIO. You can start listing your vehicles for rent!`
-            : `⚠️ Your vendor access has been revoked. You can no longer list vehicles for rent. Contact support if you have questions.`;
+        ? `⚠️ Your vendor access has been revoked. You can no longer list vehicles for rent. Contact support if you have questions.`
+         :`🎉 Congratulations! You now have vendor access on RYDIO. You can start listing your vehicles for rent!`
 
         const notification: INotification = {
             from: "Admin",
@@ -35,11 +32,12 @@ export class VendorAccessUsecase implements IVendorAccessUsecase{
             message: notificationMessage,
             read: false,
             senderModel: 'owner',
-            receiverModel: 'owner'
+            receiverModel: 'owner',
+            type: input.vendorAccess ? 'warning' : 'success'
         };
 
-        await this._notificationRepository.create(notification);
-        
+        await this._createNotificationUsecase.createNotification(notification)
+    
         return {
             success: true,
             message: `Vendor access ${input.vendorAccess ? 'granted' : 'revoked'} successfully`

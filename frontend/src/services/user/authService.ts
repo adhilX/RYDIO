@@ -45,7 +45,6 @@ export const verifyOtp = async (otp: string, user: SignupSchema) => {
 
 export const userLogout = async () => {
     try {
-      console.log('hiiiiiiiiiiii')
         const response = await axiosInstance.get('/logout')
         console.log(response)
         return response.data

@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { IGetReportsUsecase } from "../../../domain/interface/usecaseInterface/report/IGetReportsUsecase";
+import { IUserReportQueryUsecase } from "../../../domain/interface/usecaseInterface/report/IUserReportQueryUsecase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 
 export class GetReportsController {
-    private _getReportsUseCase: IGetReportsUsecase;
+    private _userReportQueryUseCase: IUserReportQueryUsecase;
 
-    constructor(getReportsUseCase: IGetReportsUsecase) {
-        this._getReportsUseCase = getReportsUseCase;
+    constructor(userReportQueryUseCase: IUserReportQueryUsecase) {
+        this._userReportQueryUseCase = userReportQueryUseCase;
     }
 
     async getReportsByUser(req: Request, res: Response): Promise<void> {
@@ -21,7 +21,7 @@ export class GetReportsController {
                 return;
             }
 
-            const result = await this._getReportsUseCase.getReportsByUser(userId);
+            const result = await this._userReportQueryUseCase.getReportsByUser(userId);
 
             res.status(HttpStatus.OK).json({
                 success: true,
@@ -50,7 +50,7 @@ export class GetReportsController {
                 return;
             }
 
-            const result = await this._getReportsUseCase.getReportsByBooking(bookingId);
+            const result = await this._userReportQueryUseCase.getReportsByBooking(bookingId);
 
             res.status(HttpStatus.OK).json({
                 success: true,

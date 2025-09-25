@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {Flag,Search,Filter,Eye,CheckCircle,XCircle,Clock,AlertTriangle,User,Car,X,ChevronLeft,ChevronRight,Calendar} from 'lucide-react';
+import {Flag,Search,Filter,Eye,CheckCircle,XCircle,Clock,AlertTriangle,User,Car,X,Calendar} from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { getAllReports, updateReportStatus, getReportsStats, type AdminReportData, type ReportFilters } from '@/services/admin/reportService';
 import ReportDetailsModal from '@/components/admin/reports/ReportDetailsModal';
+import Pagination from '@/components/Pagination';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
@@ -487,73 +488,13 @@ const Reports: React.FC = () => {
         </div>
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="bg-black/60 px-4 py-3 flex items-center justify-between border-t border-black/60 sm:px-6">
-            <div className="flex-1 flex justify-between sm:hidden">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="relative inline-flex items-center px-4 py-2 border border-black/60 text-sm font-medium rounded-md text-white bg-transparent hover:bg-black/40 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="ml-3 relative inline-flex items-center px-4 py-2 border border-black/60 text-sm font-medium rounded-md text-white bg-transparent hover:bg-black/40 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
-            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm text-gray-400">
-                  Showing <span className="font-medium">{((currentPage - 1) * (filters.limit || 10)) + 1}</span> to{' '}
-                  <span className="font-medium">
-                    {Math.min(currentPage * (filters.limit || 10), totalReports)}
-                  </span>{' '}
-                  of <span className="font-medium">{totalReports}</span> results
-                </p>
-              </div>
-              <div>
-                <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-black/60 bg-transparent text-sm font-medium text-gray-400 hover:bg-black/40 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <ChevronLeft className="h-5 w-5 text-gray-300" />
-                  </button>
-                  
-                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                    const page = i + 1;
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                          currentPage === page
-                            ? 'z-10 bg-[#e63946]/20 border-[#e63946] text-[#e63946]'
-                            : 'bg-transparent border-black/60 text-gray-400 hover:bg-black/40'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    );
-                  })}
-                  
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-black/60 bg-transparent text-sm font-medium text-gray-400 hover:bg-black/40 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <ChevronRight className="h-5 w-5 text-gray-300" />
-                  </button>
-                </nav>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* {totalPages > 1 && ( */}
+          <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          />
+        {/* )} */}
       </motion.div>
 
       {/* Report Details Modal */}

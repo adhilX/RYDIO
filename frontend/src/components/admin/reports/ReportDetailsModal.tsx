@@ -139,7 +139,7 @@ const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({
     }
   };
 
-
+console.log(report.status)
 
   if (!isOpen) return null;
 
@@ -393,7 +393,8 @@ const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({
           </div>
 
           {/* Admin Actions Section */}
-          <div className="bg-red-900/30 border border-red-700/30 rounded-lg p-4">
+ 
+           {(report.status == 'Pending'|| report.status == 'In Review') &&(<div className="bg-red-900/30 border border-red-700/30 rounded-lg p-4">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-red-400" />
               Admin Actions
@@ -446,7 +447,7 @@ const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({
                 </span>
               </p>
             </div>
-          </div>
+          </div>)}
 
           <div className="flex justify-end gap-3 pt-4 border-t border-red-800/40">
             <button onClick={onClose} className="px-4 py-2 border border-red-700/50 text-gray-300 hover:bg-red-900/30 rounded-md">

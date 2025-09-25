@@ -32,7 +32,7 @@ const dispatch = useDispatch()
                from: data.from,
                message: data.message,
                read: data.read,
-               type: 'info'
+               type: data.type||'info'
            }
            setData(notification)
            dispatch(addSingleNotification(data))

@@ -8,4 +8,5 @@ export interface INotification {
     read: boolean;           
     senderModel: 'user' | 'owner'
     receiverModel: 'user' | 'owner'
+    type: 'warning' | 'info' | 'success' | 'error'
 }
