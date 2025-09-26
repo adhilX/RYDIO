@@ -42,22 +42,25 @@ jobs:
         id: image-uri
         run: echo "IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/rydio-backend:${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
-      # 6️⃣ Render Production docker-compose.yml
+      # 6️⃣ Prepare deploy folder
+      - name: Prepare deploy folder
+        run: mkdir -p deploy
+
+      # 7️⃣ Render Production docker-compose.yml
       - name: Render deploy docker-compose.yml
         run: |
           IMAGE=${{ steps.image-uri.outputs.IMAGE }}
           sed "s|REPLACE_WITH_IMAGE_TAG|${IMAGE}|g" backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
           echo "Generated deploy-compose.generated.yml with image: $IMAGE"
 
-      # 7️⃣ Render Nginx config
+      # 8️⃣ Render Nginx config
       - name: Render Nginx config
         run: |
-          mkdir -p deploy
           DOMAIN=${{ secrets.DOMAIN_NAME }}
           sed "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g" backend/nginx/rydio.conf.template > deploy/rydio.conf
           echo "Nginx config rendered for domain ${DOMAIN}"
 
-      # 8️⃣ Copy deployment files to EC2
+      # 9️⃣ Copy deployment files to EC2
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -65,13 +68,10 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: |
-            deploy/deploy-compose.generated.yml
-            deploy/rydio.conf
-            backend/prometheus-config.yml
+          source: deploy/*
           target: ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}
 
-      # 9️⃣ SSH into EC2 and deploy
+      # 🔟 SSH into EC2 and deploy
       - name: SSH - Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
