@@ -1,0 +1,103 @@
+name: CI/CD - Build & Deploy to EC2 (Docker Compose + Nginx)
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  APP_NAME: rydio-backend
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      # 1️⃣ Checkout repository
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2️⃣ Set up QEMU (for cross-platform builds)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      # 3️⃣ Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 4️⃣ Build and push Docker image
+      - name: Build and push backend image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/rydio-backend:${{ github.sha }}
+
+      # 5️⃣ Render deploy-ready docker-compose.yml
+      - name: Render deploy docker-compose.yml
+        run: |
+          IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/rydio-backend:${GITHUB_SHA}
+          sed "s|REPLACE_WITH_IMAGE_TAG|${IMAGE}|g" docker-compose.yml > deploy/deploy-compose.yml
+          echo "Deploy docker-compose.yml created with image ${IMAGE}"
+
+      # 6️⃣ Render Nginx config from template
+      - name: Render deploy nginx config
+        run: |
+          DOMAIN=${{ secrets.DOMAIN_NAME }}
+          BACKEND_HOST=localhost
+          BACKEND_PORT=3003
+          GRAFANA_HOST=localhost
+          GRAFANA_PORT=3000
+
+          sed "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g; \
+               s|REPLACE_WITH_BACKEND_HOST|${BACKEND_HOST}|g; \
+               s|REPLACE_WITH_BACKEND_PORT|${BACKEND_PORT}|g; \
+               s|REPLACE_WITH_GRAFANA_HOST|${GRAFANA_HOST}|g; \
+               s|REPLACE_WITH_GRAFANA_PORT|${GRAFANA_PORT}|g" \
+               nginx/rydio.conf.template > deploy/rydio.conf
+          echo "Nginx config rendered for domain ${DOMAIN}"
+
+      # 7️⃣ Copy deploy files to EC2
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: |
+            deploy/deploy-compose.yml
+            deploy/rydio.conf
+            .env
+          target: ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}
+
+      # 8️⃣ SSH to EC2 and deploy using Docker Compose
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            set -e
+            cd ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}
+
+            # Ensure Docker & Docker Compose installed
+            docker --version || { echo "Docker not installed"; exit 1; }
+
+            # Pull new images and redeploy
+            docker compose pull
+            docker compose up -d --remove-orphans
+
+            # Move nginx config into place
+            sudo mv rydio.conf /etc/nginx/sites-available/rydio.conf || true
+            sudo ln -sf /etc/nginx/sites-available/rydio.conf /etc/nginx/sites-enabled/rydio.conf || true
+            sudo nginx -t
+            sudo systemctl reload nginx || sudo service nginx reload || true
+
+            echo "Deployment completed at $(date)"

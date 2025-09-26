@@ -31,16 +31,20 @@ services:
     
   rydio_backend:
     container_name: rydio_backend
-    image: adhiilll/rydio-backend:latest
+    build:
+      context : ./
+      dockerfile: ./Dockerfile
     ports:
       - 3003:3003
+    volumes:
+      - ./src:/app/src
+      - /app/node_modules
     networks:
       - rydio_network
     env_file:
       - ./.env
     depends_on:
       - redis
-
   redis:
     image: redis:alpine
     ports:
