@@ -21,7 +21,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 3️⃣ Login to Docker Hub
+      # 3️⃣ Login to DockerHub
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -42,28 +42,30 @@ jobs:
         id: image-uri
         run: echo "IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/rydio-backend:${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
-      # 6️⃣ Prepare deploy folder
-      - name: Prepare deploy folder
+      # 6️⃣ Render Production docker-compose.yml
+      - name: Render deploy docker-compose.yml
+        run: |
+          IMAGE=${{ steps.image-uri.outputs.IMAGE }}
+          mkdir -p deploy
+          sed "s|\${IMAGE}|${IMAGE}|g" backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
+          echo "Generated deploy-compose.generated.yml with image: $IMAGE"
+
+      # 7️⃣ Render Nginx config with domain and ports
+      - name: Render Nginx config
         run: |
           mkdir -p deploy
-          # Replace backend image
-          sed "s|REPLACE_WITH_IMAGE_TAG|${{ steps.image-uri.outputs.IMAGE }}|g" backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
-          # Replace domain and ports in nginx config
           DOMAIN=${{ secrets.DOMAIN_NAME }}
-          BACKEND_HOST=localhost
           BACKEND_PORT=3003
-          GRAFANA_HOST=localhost
           GRAFANA_PORT=3000
           sed -e "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g" \
-              -e "s|REPLACE_WITH_BACKEND_HOST|${BACKEND_HOST}|g" \
+              -e "s|REPLACE_WITH_BACKEND_HOST|localhost|g" \
               -e "s|REPLACE_WITH_BACKEND_PORT|${BACKEND_PORT}|g" \
-              -e "s|REPLACE_WITH_GRAFANA_HOST|${GRAFANA_HOST}|g" \
+              -e "s|REPLACE_WITH_GRAFANA_HOST|localhost|g" \
               -e "s|REPLACE_WITH_GRAFANA_PORT|${GRAFANA_PORT}|g" \
               backend/nginx/rydio.conf.template > deploy/rydio.conf
-          # Copy prometheus config into deploy folder
-          cp backend/prometheus-config.yml deploy/
+          echo "Nginx config rendered for domain ${DOMAIN}"
 
-      # 7️⃣ Copy deployment files to EC2
+      # 8️⃣ Copy deployment files to EC2
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -71,10 +73,13 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: deploy/
+          source: |
+            deploy/deploy-compose.generated.yml
+            deploy/rydio.conf
+            backend/prometheus-config.yml
           target: ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}
 
-      # 8️⃣ SSH into EC2 and deploy
+      # 9️⃣ SSH into EC2 and deploy
       - name: SSH - Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -84,7 +89,7 @@ jobs:
           port: 22
           script: |
             set -e
-            cd ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}/deploy
+            cd ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}
             docker compose -f deploy-compose.generated.yml pull
             docker compose -f deploy-compose.generated.yml up -d --remove-orphans
             sudo mv rydio.conf /etc/nginx/conf.d/rydio.conf
