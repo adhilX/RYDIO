@@ -19,13 +19,11 @@ const Reports: React.FC = () => {
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalReports, setTotalReports] = useState(0);
   
   // Filters
   const [filters, setFilters] = useState<ReportFilters>({
     status: '',
     search: '',
-    page: 1,
     limit: 10
   });
   const [showFilters, setShowFilters] = useState(false);
@@ -33,16 +31,14 @@ const Reports: React.FC = () => {
   useEffect(() => {
     fetchReports();
     fetchStats();
-  }, [filters]);
+  }, [filters, currentPage]);
 
   const fetchReports = async () => {
     try {
       setLoading(true);
-      const response = await getAllReports(filters);
+      const response = await getAllReports({ ...filters, page: currentPage });
       setReports(response.reports);
-      setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
-      setTotalReports(response.total);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to fetch reports');
     } finally {
@@ -65,13 +61,13 @@ const Reports: React.FC = () => {
     setUpdatingStatus(reportId);
     try {
       await updateReportStatus(reportId, newStatus);
-      setReports(prev => 
-        prev.map(report => 
-          report._id === reportId 
-            ? { ...report, status: newStatus as any }
-            : report
-        )
-      );
+        setReports(prev => 
+          prev.map(report => 
+            report._id === reportId 
+              ? { ...report, status: newStatus as any }
+              : report
+          )
+        );
       toast.success(`Report status updated to ${newStatus}`);
       // Refresh stats after status update
       fetchStats();
@@ -93,7 +89,6 @@ const Reports: React.FC = () => {
       status: '',
       dateFrom: '',
       dateTo: '',
-      page: 1,
       limit: 10
     });
     setCurrentPage(1);
@@ -107,15 +102,17 @@ const Reports: React.FC = () => {
   );
 
   const handleSearch = (searchTerm: string) => {
-    setFilters(prev => ({ ...prev, search: searchTerm, page: 1 }));
+    setFilters(prev => ({ ...prev, search: searchTerm }));
+    setCurrentPage(1);
   };
 
   const handleFilterChange = (key: keyof ReportFilters, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
+    setFilters(prev => ({ ...prev, [key]: value }));
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page: number) => {
-    setFilters(prev => ({ ...prev, page }));
+    setCurrentPage(page);
   };
 
   const getStatusColor = (status: string) => {
@@ -253,7 +250,7 @@ const Reports: React.FC = () => {
               Filters
               {hasActiveFilters && (
                 <span className="ml-2 px-2 py-1 text-xs bg-[#e63946] text-white rounded-full">
-                  {Object.values(filters).filter(Boolean).length}
+                  {[filters.status, filters.search, filters.dateFrom, filters.dateTo].filter(Boolean).length}
                 </span>
               )}
             </button>
@@ -488,13 +485,13 @@ const Reports: React.FC = () => {
         </div>
 
         {/* Pagination */}
-        {/* {totalPages > 1 && ( */}
+        {totalPages > 1 && (
           <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
           />
-        {/* )} */}
+        )}
       </motion.div>
 
       {/* Report Details Modal */}

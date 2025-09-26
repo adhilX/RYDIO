@@ -15,7 +15,7 @@ services:
     ports:
       - 3003:3003
     volumes:
-      - ./:/app
+      - ./src:/app/src
       - /app/node_modules
     networks:
       - rydio_network
