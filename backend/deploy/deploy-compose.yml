@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  backend:
+    image: ${IMAGE}
+    container_name: rydio-backend
+    restart: always
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3003:3003"
+
+  prom-server:
+    image: prom/prometheus
+    container_name: prom-server
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      # go up one level to find prometheus/
+      - ../prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    volumes:
+      - ./rydio.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - "80:80"
+      - "443:443"
+
