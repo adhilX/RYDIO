@@ -13,33 +13,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Verify secrets
-      - name: Verify secrets
-        run: |
-          if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ] || [ -z "${{ secrets.DOCKERHUB_TOKEN }}" ] || \
-             [ -z "${{ secrets.DOMAIN_NAME }}" ] || [ -z "${{ secrets.EC2_HOST }}" ] || \
-             [ -z "${{ secrets.EC2_USER }}" ] || [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ] || \
-             [ -z "${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}" ]; then
-            echo "Error: One or more secrets are not set"
-            exit 1
-          fi
-
-      # 2️⃣ Checkout code
+      # 1️⃣ Checkout code
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 3️⃣ Set up Docker Buildx
+      # 2️⃣ Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 4️⃣ Login to Docker Hub
+      # 3️⃣ Login to DockerHub
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 5️⃣ Build & Push Backend Image
+      # 4️⃣ Build & Push Backend Image
       - name: Build and push backend image
         uses: docker/build-push-action@v4
         with:
@@ -48,95 +37,37 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/rydio-backend:${{ github.sha }}
 
-      # 6️⃣ Compute Image URI
+      # 5️⃣ Compute Image URI
       - name: Compute image URI
         id: image-uri
         run: echo "IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/rydio-backend:${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
-      # 7️⃣ Create deploy folder
-      - name: Create deploy folder
-        run: mkdir -p deploy
-
-      # 8️⃣ Verify deploy-compose.yml exists
-      - name: Verify deploy-compose.yml exists
-        run: |
-          if [ ! -f backend/deploy/deploy-compose.yml ]; then
-            echo "Error: backend/deploy/deploy-compose.yml not found"
-            exit 1
-          fi
-          cat backend/deploy/deploy-compose.yml  # Debug: Show contents
-
-      # 9️⃣ Render Production docker-compose.yml
+      # 6️⃣ Render Production docker-compose.yml
       - name: Render deploy docker-compose.yml
         run: |
           IMAGE=${{ steps.image-uri.outputs.IMAGE }}
-          sed "s|REPLACE_WITH_IMAGE_TAG|${IMAGE}|g" backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
+          mkdir -p deploy
+          sed "s|\${IMAGE}|${IMAGE}|g" backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
           echo "Generated deploy-compose.generated.yml with image: $IMAGE"
-          if [ ! -f deploy/deploy-compose.generated.yml ]; then
-            echo "Error: Failed to generate deploy/deploy-compose.generated.yml"
-            exit 1
-          fi
-          cat deploy/deploy-compose.generated.yml  # Debug: Show generated file
 
-      # 🔟 Verify Nginx template exists
-      - name: Verify Nginx template exists
-        run: |
-          if [ ! -f backend/nginx/rydio.conf.template ]; then
-            echo "Error: backend/nginx/rydio.conf.template not found"
-            exit 1
-          fi
-          cat backend/nginx/rydio.conf.template  # Debug: Show contents
-
-      # 1️⃣1️⃣ Render Nginx config
+      # 7️⃣ Render Nginx config with domain and ports
       - name: Render Nginx config
         run: |
+          mkdir -p deploy
           DOMAIN=${{ secrets.DOMAIN_NAME }}
           BACKEND_PORT=3003
           GRAFANA_PORT=3000
-          sed "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g; \
-               s|REPLACE_WITH_BACKEND_HOST|127.0.0.1|g; \
-               s|REPLACE_WITH_BACKEND_PORT|${BACKEND_PORT}|g; \
-               s|REPLACE_WITH_GRAFANA_HOST|127.0.0.1|g; \
-               s|REPLACE_WITH_GRAFANA_PORT|${GRAFANA_PORT}|g" \
-          backend/nginx/rydio.conf.template > deploy/rydio.conf
+          sed -e "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g" \
+              -e "s|REPLACE_WITH_BACKEND_HOST|localhost|g" \
+              -e "s|REPLACE_WITH_BACKEND_PORT|${BACKEND_PORT}|g" \
+              -e "s|REPLACE_WITH_GRAFANA_HOST|localhost|g" \
+              -e "s|REPLACE_WITH_GRAFANA_PORT|${GRAFANA_PORT}|g" \
+              backend/nginx/rydio.conf.template > deploy/rydio.conf
           echo "Nginx config rendered for domain ${DOMAIN}"
-          if [ ! -f deploy/rydio.conf ]; then
-            echo "Error: Failed to generate deploy/rydio.conf"
-            exit 1
-          fi
-          cat deploy/rydio.conf  # Debug: Show generated file
 
-      # 1️⃣2️⃣ Verify Prometheus config exists
-      - name: Verify Prometheus config exists
-        run: |
-          if [ ! -f backend/prometheus-config.yml ]; then
-            echo "Error: backend/prometheus-config.yml not found"
-            exit 1
-          fi
-          cat backend/prometheus-config.yml  # Debug: Show contents
-
-      # 1️⃣3️⃣ Copy Prometheus config
-      - name: Copy Prometheus config
-        run: |
-          cp backend/prometheus-config.yml deploy/
-          if [ ! -f deploy/prometheus-config.yml ]; then
-            echo "Error: Failed to copy deploy/prometheus-config.yml"
-            exit 1
-          fi
-          cat deploy/prometheus-config.yml  # Debug: Show copied file
-
-      # 1️⃣4️⃣ Verify deploy folder
-      - name: List deploy folder
-        run: |
-          ls -l deploy/
-          if [ -z "$(ls -A deploy/)" ]; then
-            echo "Error: Deploy folder is empty"
-            exit 1
-          fi
-
-      # 1️⃣5️⃣ Copy deployment files to EC2
+      # 8️⃣ Copy deployment files to EC2
       - name: Copy files to EC2
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -145,12 +76,10 @@ jobs:
           source: |
             deploy/deploy-compose.generated.yml
             deploy/rydio.conf
-            deploy/prometheus-config.yml
+            backend/prometheus-config.yml
           target: ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}
-          working-directory: ${{ github.workspace }}
-          debug: true  # Enable debug logging
 
-      # 1️⃣6️⃣ SSH into EC2 and deploy
+      # 9️⃣ SSH into EC2 and deploy
       - name: SSH - Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
