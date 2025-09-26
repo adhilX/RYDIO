@@ -63,7 +63,7 @@ jobs:
 
       # 7️⃣ Copy deploy files to EC2
       - name: Copy files to EC2
-        uses: appleboy/scp-action@v0.1.8
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
