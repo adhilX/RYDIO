@@ -2,20 +2,20 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copy only package.json and lock file
+COPY backend/package*.json ./
+
 RUN npm install
-COPY . .
+
+# Copy rest of the source
+COPY backend/ ./
+
 RUN npm run build
 
-# Production stage
-FROM node:20-alpine
-
+# ---- Run stage ----
+FROM node:20-alpine AS runner
 WORKDIR /app
 
-COPY --from=builder /app/package*.json ./
-RUN npm install --production
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app ./
 
-EXPOSE 3003
-
-CMD ["node", "dist/app.js"]
+CMD ["npm", "start"]
