@@ -42,36 +42,40 @@ jobs:
         id: image-uri
         run: echo "IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/rydio-backend:${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
-      # 6️⃣ Render deploy docker-compose.yml
+      # 6️⃣ Create deploy folder
+      - name: Create deploy folder
+        run: mkdir -p deploy
+
+      # 7️⃣ Render Production docker-compose.yml
       - name: Render deploy docker-compose.yml
         run: |
-          mkdir -p deploy
           IMAGE=${{ steps.image-uri.outputs.IMAGE }}
           sed "s|REPLACE_WITH_IMAGE_TAG|${IMAGE}|g" backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
           echo "Generated deploy-compose.generated.yml with image: $IMAGE"
 
-      # 7️⃣ Render Nginx config
+      # 8️⃣ Render Nginx config with domain and ports
       - name: Render Nginx config
         run: |
           DOMAIN=${{ secrets.DOMAIN_NAME }}
-          BACKEND_HOST=${{ secrets.BACKEND_HOST }}
-          BACKEND_PORT=${{ secrets.BACKEND_PORT }}
-          GRAFANA_HOST=${{ secrets.GRAFANA_HOST }}
-          GRAFANA_PORT=${{ secrets.GRAFANA_PORT }}
-
-          sed "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g;
-               s|REPLACE_WITH_BACKEND_HOST|${BACKEND_HOST}|g;
-               s|REPLACE_WITH_BACKEND_PORT|${BACKEND_PORT}|g;
-               s|REPLACE_WITH_GRAFANA_HOST|${GRAFANA_HOST}|g;
+          BACKEND_PORT=3003
+          GRAFANA_PORT=3000
+          sed "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g; \
+               s|REPLACE_WITH_BACKEND_HOST|127.0.0.1|g; \
+               s|REPLACE_WITH_BACKEND_PORT|${BACKEND_PORT}|g; \
+               s|REPLACE_WITH_GRAFANA_HOST|127.0.0.1|g; \
                s|REPLACE_WITH_GRAFANA_PORT|${GRAFANA_PORT}|g" \
-               backend/nginx/rydio.conf.template > deploy/rydio.conf
-          echo "Nginx config rendered with domain and ports replaced."
+          backend/nginx/rydio.conf.template > deploy/rydio.conf
+          echo "Nginx config rendered for domain ${DOMAIN}"
 
-      # 8️⃣ Copy prometheus config to deploy folder
+      # 9️⃣ Copy Prometheus config to deploy folder
       - name: Copy Prometheus config
         run: cp backend/prometheus-config.yml deploy/
 
-      # 9️⃣ Copy deployment files to EC2
+      # 🔟 Verify deploy folder
+      - name: List deploy folder
+        run: ls -l deploy/
+
+      # 1️⃣1️⃣ Copy deployment files to EC2
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -85,7 +89,7 @@ jobs:
             deploy/prometheus-config.yml
           target: ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}
 
-      # 🔟 SSH into EC2 and deploy
+      # 1️⃣2️⃣ SSH into EC2 and deploy
       - name: SSH - Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
