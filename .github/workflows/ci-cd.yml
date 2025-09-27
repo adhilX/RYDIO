@@ -49,7 +49,7 @@ jobs:
       - name: Prepare deploy folder
         run: |
           mkdir -p deploy
-          echo "PORT=${{ secrets.SERVER_PORT }}" >> deploy/.env
+          echo "PORT=${{ secrets.PORT }}" >> deploy/.env
           echo "MONGO_URL=${{ secrets.MONGO_URL }}" >> deploy/.env
           echo "ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }}" >> deploy/.env
           echo "REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}" >> deploy/.env
@@ -65,7 +65,7 @@ jobs:
           # Replace domain and ports in nginx config
           DOMAIN=${{ secrets.DOMAIN_NAME }}
           BACKEND_HOST=localhost
-          BACKEND_PORT=3003
+          BACKEND_PORT=${{ secrets.PORT }}
           GRAFANA_HOST=localhost
           GRAFANA_PORT=3000
           sed -e "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g" \
