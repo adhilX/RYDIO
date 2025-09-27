@@ -17,7 +17,7 @@ services:
       - "9090:9090"
     volumes:
       # go up one level to find prometheus/
-      - ../prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus-config.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     image: grafana/grafana
