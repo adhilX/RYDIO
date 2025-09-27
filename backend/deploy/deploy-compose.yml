@@ -1,6 +1,7 @@
+version: "3.9"
 
 services:
-  backend:
+  rydio-backend:
     image: REPLACE_WITH_IMAGE_TAG
     container_name: rydio-backend
     restart: always
@@ -10,15 +11,17 @@ services:
       - redis
     ports:
       - "3003:3003"
+    networks:
+      - rydio_network
 
-    redis:
-     image: redis:7
-     container_name: redis
-     restart: always
-     ports:
-       - "6379:6379"
-     networks:
-       - rydio_network
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - rydio_network
 
   prom-server:
     image: prom/prometheus
@@ -27,8 +30,9 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      # go up one level to find prometheus/
       - ./prometheus-config.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - rydio_network
 
   grafana:
     image: grafana/grafana
@@ -36,6 +40,10 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    networks:
+      - rydio_network
+    depends_on:
+      - prom-server
 
   nginx:
     image: nginx:alpine
@@ -51,3 +59,7 @@ services:
       - rydio_network
     depends_on:
       - rydio-backend
+
+networks:
+  rydio_network:
+    driver: bridge
