@@ -6,8 +6,19 @@ services:
     restart: always
     env_file:
       - .env
+    depends_on:
+      - redis
     ports:
       - "3003:3003"
+
+    redis:
+     image: redis:7
+     container_name: redis
+     restart: always
+     ports:
+       - "6379:6379"
+     networks:
+       - rydio_network
 
   prom-server:
     image: prom/prometheus
