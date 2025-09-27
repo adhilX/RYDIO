@@ -85,6 +85,7 @@ jobs:
           script: |
             set -e
             cd ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}/deploy
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             sudo docker compose -f deploy-compose.generated.yml pull
             sudo docker compose -f deploy-compose.generated.yml up -d --remove-orphans
             sudo mv rydio.conf /etc/nginx/conf.d/rydio.conf
