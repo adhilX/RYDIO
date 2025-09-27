@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   backend:
-    image: ${IMAGE}
+    image: REPLACE_WITH_IMAGE_TAG
     container_name: rydio-backend
     restart: always
     environment:
