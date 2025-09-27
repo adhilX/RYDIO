@@ -4,8 +4,8 @@ services:
     image: REPLACE_WITH_IMAGE_TAG
     container_name: rydio-backend
     restart: always
-    environment:
-      - NODE_ENV=production
+    env_file:
+      - .env
     ports:
       - "3003:3003"
 
