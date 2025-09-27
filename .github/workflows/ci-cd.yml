@@ -50,7 +50,7 @@ jobs:
         run: |
           mkdir -p deploy
           echo "PORT=${{ secrets.PORT }}" >> deploy/.env
-          echo "MONGO_URL=${{ secrets.MONGO_URL }}" >> deploy/.env
+          echo "MONGODB_URL=${{ secrets.MONGODB_URL }}" >> deploy/.env
           echo "ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }}" >> deploy/.env
           echo "REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}" >> deploy/.env
           echo "EMAIL_ID=${{ secrets.EMAIL_ID }}" >> deploy/.env
