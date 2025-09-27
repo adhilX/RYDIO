@@ -85,8 +85,8 @@ jobs:
           script: |
             set -e
             cd ${{ secrets.DOCKER_COMPOSE_REMOTE_PATH }}/deploy
-            docker compose -f deploy-compose.generated.yml pull
-            docker compose -f deploy-compose.generated.yml up -d --remove-orphans
+            sudo docker compose -f deploy-compose.generated.yml pull
+            sudo docker compose -f deploy-compose.generated.yml up -d --remove-orphans
             sudo mv rydio.conf /etc/nginx/conf.d/rydio.conf
             sudo nginx -t
             sudo systemctl reload nginx || sudo service nginx reload
