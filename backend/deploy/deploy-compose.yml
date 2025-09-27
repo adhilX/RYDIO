@@ -50,8 +50,8 @@ services:
     container_name: nginx
     restart: always
     volumes:
-      - ./rydio.conf:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./rydio.conf:/etc/nginx/conf.d/default.conf:ro
+      - certbot_data:/etc/letsencrypt
     ports:
       - "80:80"
       - "443:443"
@@ -59,6 +59,9 @@ services:
       - rydio_network
     depends_on:
       - rydio-backend
+
+volumes:
+  certbot_data:
 
 networks:
   rydio_network:
