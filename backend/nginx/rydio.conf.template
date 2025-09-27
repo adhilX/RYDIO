@@ -3,6 +3,18 @@
 server {
     listen 80;
     server_name REPLACE_WITH_DOMAIN;  # Placeholder for your domain
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name REPLACE_WITH_DOMAIN;  # Placeholder for your domain
+
+    # SSL Configuration
+    ssl_certificate /etc/letsencrypt/live/REPLACE_WITH_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/REPLACE_WITH_DOMAIN/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     # Backend API
     location /api/ {
