@@ -64,9 +64,9 @@ jobs:
           sed "s|REPLACE_WITH_IMAGE_TAG|${{ steps.image-uri.outputs.IMAGE }}|g" backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
           # Replace domain and ports in nginx config
           DOMAIN=${{ secrets.DOMAIN_NAME }}
-          BACKEND_HOST=localhost
+          BACKEND_HOST=http://rydio-backend:3003/api/
           BACKEND_PORT=${{ secrets.PORT }}
-          GRAFANA_HOST=localhost
+          GRAFANA_HOST=127.0.0.1
           GRAFANA_PORT=3000
           sed -e "s|REPLACE_WITH_DOMAIN|${DOMAIN}|g" \
               -e "s|REPLACE_WITH_BACKEND_HOST|${BACKEND_HOST}|g" \
