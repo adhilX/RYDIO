@@ -38,38 +38,40 @@ export default function UserProfile() {
     },
   });
 
+  // Refresh user data function
+  const refreshUser = async () => {
+    if (!user?._id) return;
+
+    try {
+      const foundUser = await getUser(user._id);
+      reset({
+        name: foundUser.name || '',
+        phone: foundUser.phone || ''
+      });
+      setUserData(prev => ({
+        ...prev,
+        name: foundUser.name || '',
+        phone: foundUser.phone || '',
+        email: foundUser.email || '',
+        role: foundUser.role || 'user',
+        _id: foundUser._id || '',
+        profile_image: foundUser.profile_image || '',
+        is_verified_user: foundUser.is_verified_user || false,
+        idproof_id: foundUser.idproof_id || prev.idproof_id
+      }));
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      toast.error('Failed to load user data');
+    }
+  };
+
   useEffect(() => {
-    const fetchUser = async () => {
-      if (!user?._id) return;
-
-      try {
-        const foundUser = await getUser(user._id);
-        reset({
-          name: foundUser.name || '',
-          phone: foundUser.phone || ''
-        });
-        setUserData(prev => ({
-          ...prev,
-          name: foundUser.name || '',
-          phone: foundUser.phone || '',
-          email: foundUser.email || '',
-          role: foundUser.role || 'user',
-          _id: foundUser._id || '',
-          profile_image: foundUser.profile_image || '',
-          is_verified_user: foundUser.is_verified_user || false,
-          idproof_id: foundUser.idproof_id || prev.idproof_id
-        }));
-        setIsEditing(false);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        toast.error('Failed to load user data');
-      }
-    };
-
-    fetchUser();
-  }, [user?._id, user?.is_verified_user, user?.idproof_id, reset, open]);
+    refreshUser();
+  }, [user?._id, user?.is_verified_user, user?.idproof_id, reset]);
 
   if (!user) return null
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -217,7 +219,7 @@ export default function UserProfile() {
           open={showCropper}
           onOpenChange={setShowCropper}
         />
-        <UploadIdProofModal open={open} onClose={() => SetOpen(false)} />
+        <UploadIdProofModal open={open} onClose={() => SetOpen(false)} onSuccess={refreshUser} />
       </div>
 
       {/* Right: Editable Form or Info Blocks */}

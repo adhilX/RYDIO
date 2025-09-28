@@ -7,25 +7,25 @@ import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { ImageCropper } from "@/components/modal/ImageCroper";
 import { uploadIdProof } from "@/services/user/UpdateProfileService";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
-import { addUser } from "@/store/slice/user/UserSlice";
 
 interface UploadIdProofModalProps {
   open: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 export const UploadIdProofModal = ({
   open,
   onClose,
+  onSuccess,
 }: UploadIdProofModalProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [showCropper, setShowCropper] = useState(false);
   const [croppedFile, setCroppedFile] = useState<File | null>(null);
   const user = useSelector((state: RootState) => state.auth.user)
-  const dispatch = useDispatch()
   useEffect(() => {
     if (file) {
       setShowCropper(true);
@@ -38,12 +38,15 @@ export const UploadIdProofModal = ({
     if (!uploadTarget) return;
     setUploading(true);
     try {
-      onClose()
       const url = await uploadToCloudinary(uploadTarget);
-     const updatedUser = await uploadIdProof(url, user._id!)
-      dispatch(addUser(updatedUser.newUser))
+      const updatedUser = await uploadIdProof(url, user._id!)
       setCroppedFile(null)
       toast.success(updatedUser.message)
+      onClose()
+      // Call onSuccess callback to trigger parent component re-render
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (err) {
       toast.error((err as Error).message);
     } finally {
