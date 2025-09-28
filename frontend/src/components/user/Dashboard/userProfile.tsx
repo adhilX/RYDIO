@@ -99,8 +99,8 @@ export default function UserProfile() {
         imageUrl = await uploadToCloudinary(croppedImage);
       }
       const updatedData = { ...userData, email: userDate.email };
-      const { newUser } = await updateProfile(imageUrl, updatedData);
-      setUserData(newUser)
+      await updateProfile(imageUrl, updatedData);
+      await refreshUser();
       toast.success("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {

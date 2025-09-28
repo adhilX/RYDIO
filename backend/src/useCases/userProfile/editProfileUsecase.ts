@@ -10,14 +10,14 @@ export class EditProfileUsecase implements IEditProfileUsecase{
         
     async handleEditProfile(input: EditProfileInputDto): Promise<EditProfileOutputDto | null> {
         try {
-            const { profileData } = input;
-            const { name, email, phone, address, city, state, pincode } = profileData;
+    
+            const { name, email, phone, ImageUrl } = input;
             
             const updatedUser = await this._userRepository.updateProfile(
                 email || "",
                 phone || "",
                 name || "",
-                "" // ImageUrl placeholder
+                ImageUrl || "" 
             );
             
             if (!updatedUser) {
@@ -29,10 +29,7 @@ export class EditProfileUsecase implements IEditProfileUsecase{
                 name: updatedUser.name,
                 email: updatedUser.email,
                 phone: updatedUser.phone,
-                address: address,
-                city: city,
-                state: state,
-                pincode: pincode,
+                profile_image: updatedUser.profile_image,
                 isVerified: updatedUser.is_verified_user || false,
                 isBlocked: updatedUser.is_blocked || false,
                 role: updatedUser.role,

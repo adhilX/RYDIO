@@ -24,27 +24,18 @@ export interface ChangePasswordOutputDto {
 //=================== Edit Profile DTOs ===================
 
 export interface EditProfileInputDto {
-  userId: string;
-  profileData: {
     name?: string;
     email?: string;
     phone?: string;
-    address?: string;
-    city?: string;
-    state?: string;
-    pincode?: string;
+    ImageUrl ?: string;
   };
-}
 
 export interface EditProfileOutputDto {
   _id?: string;
   name: string;
   email: string;
   phone: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  pincode?: string;
+  profile_image?: string;
   isVerified: boolean;
   isBlocked: boolean;
   role: string;
@@ -84,10 +75,7 @@ export interface GetUserProfileOutputDto {
   name: string;
   email: string;
   phone: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  pincode?: string;
+  profile_image?: string;
   isVerified: boolean;
   isBlocked: boolean;
   role: string;

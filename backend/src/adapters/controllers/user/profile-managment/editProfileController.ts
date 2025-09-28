@@ -10,19 +10,8 @@ export class EditProfileController{
 
     async handleEditProfle(req:Request,res:Response):Promise<void>{
         try {
-            const input = {
-                userId: req.body.userId,
-                profileData: {
-                    name: req.body.name,
-                    email: req.body.email,
-                    phone: req.body.phone,
-                    address: req.body.address,
-                    city: req.body.city,
-                    state: req.body.state,
-                    pincode: req.body.pincode
-                }
-            };
-            const updatedUser = await this._EditProfileUseCase.handleEditProfile(input);
+              const {name,email,phone,ImageUrl}=req.body
+            const updatedUser = await this._EditProfileUseCase.handleEditProfile({name,email,phone,ImageUrl});
             res.status(HttpStatus.OK).json({message: 'Profile updated successfully', user: updatedUser});
         } catch (error) {
            console.log('error while editing profile', error)
