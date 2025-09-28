@@ -18,7 +18,18 @@ server {
 
     # Backend API
     location /api/ {
-        proxy_pass http://REPLACE_WITH_BACKEND_HOST:REPLACE_WITH_BACKEND_PORT/;
+        proxy_pass http://REPLACE_WITH_BACKEND_HOST:REPLACE_WITH_BACKEND_PORT/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+
+     # Backend API
+    location /socket.io/ {
+        proxy_pass http://REPLACE_WITH_BACKEND_HOST:REPLACE_WITH_BACKEND_PORT/socket.io/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
