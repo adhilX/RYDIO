@@ -34,21 +34,21 @@ services:
     networks:
       - rydio_network
       
-    grafana:
-      image: grafana/grafana
-      container_name: grafana
-      restart: always
-      ports:
-        - "3000:3000"
-      environment:
-        - GF_SERVER_ROOT_URL=/grafana/
-        - GF_SERVER_SERVE_FROM_SUB_PATH=true
-      networks:
-        - rydio_network
-      volumes:
-        - grafana_data:/var/lib/grafana
-      depends_on:
-        - prom-server
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SERVER_ROOT_URL=/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    networks:
+      - rydio_network
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prom-server
 
   nginx:
     image: nginx:alpine
