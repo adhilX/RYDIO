@@ -60,8 +60,10 @@ jobs:
           echo "NODE_ENV=production" >> deploy/.env
           echo "ORIGIN=${{ secrets.ORIGIN }}" >> deploy/.env
 
-          # Replace backend image
-          sed "s|REPLACE_WITH_IMAGE_TAG|${{ steps.image-uri.outputs.IMAGE }}|g" backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
+          # Replace backend image, grafana domain name for grafana
+          sed -e "s|REPLACE_WITH_IMAGE_TAG|${{ steps.image-uri.outputs.IMAGE }}|g" \
+              -e "s|REPLACE_WITH_DOMAIN|${{ secrets.DOMAIN_NAME }}|g" \
+              backend/deploy/deploy-compose.yml > deploy/deploy-compose.generated.yml
           # Replace domain and ports in nginx config
           DOMAIN=${{ secrets.DOMAIN_NAME }}
           BACKEND_HOST=rydio-backend
