@@ -25,10 +25,13 @@ services:
     container_name: loki
     image: grafana/loki:3.1.1
     ports:
-      - 3100:3100
+      - "3100:3100"
     networks:
-      - rydio_network 
-    
+      - rydio_network
+    volumes:
+      - ./loki-config.yml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+
   rydio_backend:
     container_name: rydio_backend
     image: adhiilll/rydio-backend:latest
