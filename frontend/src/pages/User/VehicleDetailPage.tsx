@@ -16,6 +16,7 @@ import Navbar from "@/components/user/Navbar";
 import "leaflet/dist/leaflet.css";
 import type { Iuser } from "@/Types/User/Iuser";
 import { getBookedDate } from "@/services/user/bookingService";
+import { getUser } from "@/services/user/authService";
 
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
@@ -26,14 +27,17 @@ const VehicleDetailPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-
+  const [user, setUser] = useState<Iuser | null>(null);
   const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
-
+  const userId = useSelector((state: RootState) => state.auth.user!);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const user: Iuser = useSelector((state: RootState) => state.auth.user!);
-   console.log(user,'user')
   useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUser(userId._id);
+      setUser(user);
+    };
+    fetchUser();
     const fetchVehicle = async () => {
       setLoading(true);
       try {
@@ -92,7 +96,7 @@ const calculateTotalPrice = () => {
     return;
   }
 
-  if (user.idproof_id?.status !== 'approved') {
+  if (user?.idproof_id?.status !== 'approved') {
     toast.error("Please submit your ID proof to book a vehicle.");
     navigate("/userProfile");
     return;
@@ -210,7 +214,7 @@ const calculateTotalPrice = () => {
                     showDisabledMonthNavigation
                   />
                 </div>
-                {user.idproof_id?.status !== 'approved' && (
+                {user?.idproof_id?.status !== 'approved' && (
                   <div>
 
                     <div className="col-span-2 text-red-500 text-sm">
@@ -232,7 +236,7 @@ const calculateTotalPrice = () => {
                 <Button
                   onClick={handleBookNow}
                   className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-full"
-                  disabled={!startDate || !endDate||user.idproof_id?.status !== 'approved' }
+                  disabled={!startDate || !endDate||user?.idproof_id?.status !== 'approved' }
                 >
                   Book Now
                 </Button>

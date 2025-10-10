@@ -87,20 +87,18 @@ useEffect(() => {
             <span className="text-white">starts here</span>
           </h1>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto animate-fade-in">
-            Premium vehicles, warm service, and unforgettable journeys await you
           </p>
         </div>
         <div className="h-30"></div>
         {/* Search Form */}
         <VehicleSearchBar/>
         {/* Feature Cards */}
-        <div className="max-w-7xl mx-auto pb-24">
+        <div className="max-w-7xl mx-auto pb-24 relative z-0">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <Card className="p-8 rounded-2xl bg-white/10 backdrop-blur-sm border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-bounce">
                 <Car className="text-white" size={32} />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Premium Fleet</h3>
               <p className="text-gray-300">Luxury vehicles maintained to perfection</p>
             </Card>
 

@@ -52,14 +52,10 @@ const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({
 
   const handleStatusUpdate = async (newStatus: string) => {
     setUpdatingStatus(true);
-    try {
-      await onStatusUpdate(report._id, newStatus);
-      toast.success(`Report status updated to ${newStatus}`);
-    } catch (error) {
-      toast.error('Failed to update status');
-    } finally {
-      setUpdatingStatus(false);
-    }
+    
+       onStatusUpdate(report._id, newStatus);
+    
+    
   };
 
   const openReasonModal = (type: 'reject' | 'removeVendor' | 'warning') => {

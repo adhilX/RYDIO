@@ -187,14 +187,14 @@ function VehicleSearchBar() {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="max-w-7xl mx-auto mt-20 mb-16 relative">
+    <div className="max-w-7xl mx-auto mt-20 mb-16 relative z-50">
       <Card
         className={`max-w-6xl mx-auto p-8 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-md border-white/20 transition-all duration-500 ${showSparkles ? 'ring-2 ring-white/50' : ''
           }`}
       >
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Location */}
-          <div className="relative group">
+          <div className="relative group z-50">
             <label className="block text-sm font-medium text-gray-200 mb-2">
               Pick-up Location
             </label>
@@ -217,14 +217,15 @@ function VehicleSearchBar() {
                 size={20}
               />
               { showSuggestions && suggestions.length > 0 && (
-                <ul className="absolute z-10 mt-2 bg-white text-black rounded-lg shadow-lg w-full max-h-60 overflow-y-auto border border-gray-200">
+                <ul className="absolute z-[100] mt-2 bg-black/95 backdrop-blur-xl text-white rounded-xl shadow-2xl w-full max-h-60 overflow-y-auto border border-white/20 animate-in fade-in slide-in-from-top-2 duration-200 custom-scrollbar">
                   {suggestions.map((suggestion, i) => (
                     <li
                       key={i}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                      className="px-4 py-3 hover:bg-white/10 cursor-pointer text-sm transition-all duration-200 border-b border-white/5 last:border-b-0 flex items-start gap-3 group hover:pl-5"
                     >
-                      {suggestion.display_name}
+                      <MapPin className="flex-shrink-0 mt-0.5 text-gray-400 group-hover:text-white transition-colors duration-200" size={16} />
+                      <span className="text-gray-300 group-hover:text-white transition-colors duration-200 leading-relaxed font-semibold">{suggestion.display_name}</span>
                     </li>
                   ))}
                 </ul>

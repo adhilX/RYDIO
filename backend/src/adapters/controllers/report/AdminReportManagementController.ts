@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 import { IAdminReportManagementUsecase } from "../../../domain/interface/usecaseInterface/report/IAdminReportManagementUsecase";
+import { ReportStatus } from "../../../domain/entities/ReportEntities";
 
 export class AdminReportManagementController {
     constructor(
@@ -21,7 +22,7 @@ export class AdminReportManagementController {
             }
 
             // Validate status
-            const validStatuses = ['pending', 'in_review', 'resolved', 'dismissed'];
+            const validStatuses = Object.values(ReportStatus);
             if (!validStatuses.includes(status)) {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
