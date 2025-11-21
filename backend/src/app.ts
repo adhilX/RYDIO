@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import express, { Application, Request, Response, NextFunction, urlencoded } from 'express';
-import { createServer, Server } from 'http';
+import { Server } from 'http';
 import { UserRoutes } from './framework/routes/user/userRoutes';
 import { ConnectMongoDB } from './framework/database/databaseConnection/dbConnection';
 import cors from 'cors';
