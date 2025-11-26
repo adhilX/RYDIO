@@ -33,7 +33,3 @@ The project follows **SOLID principles**, clean architecture, and reusable compo
 - **Database**: MongoDB  
 - **Authentication**: JWT  
 - **Deployment**: Docker, GitHub Actions (CI/CD)  
-
----
-
-## 📂 Project Structure
