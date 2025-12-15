@@ -10,6 +10,10 @@ export class UserRoutes {
         this.setRoutes();
 }
     private setRoutes(){
+
+    this.UserRoutes.get('/',(req:Request,res:Response)=>{
+        res.send('your server is running successfully')
+    })
     this.UserRoutes.post('/signup', (req: Request, res:Response) => {
        sendendOtpController.sendOtp(req,res)
     })
