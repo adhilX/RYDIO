@@ -5,7 +5,7 @@
   color: black !important;
 }
 
-.leaflet-control-geosearch .results > * {
+.leaflet-control-geosearch .results>* {
   color: black !important;
 }
 
@@ -186,6 +186,7 @@
     outline-color: var(--color-ring);
     /* outline-color: color-mix(in oklab, var(--color-ring) 50%, transparent); */
   }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -277,7 +278,8 @@
 
 /* React Datepicker Dark & Glowing White Mode Overrides */
 .react-datepicker {
-  @apply bg-[#1a1a1a] border border-white/20 text-white font-sans rounded-xl overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.1)];
+  @apply bg-[#1a1a1a] border border-white/20 text-white font-sans rounded-xl overflow-hidden;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .react-datepicker__header {
@@ -285,7 +287,8 @@
 }
 
 .react-datepicker__current-month {
-  @apply text-white font-bold text-lg mb-2 drop-shadow-[0_0_5px_rgba(255,255,255,0.5)];
+  @apply text-white font-bold text-lg mb-2;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
 }
 
 .react-datepicker__day-name {
@@ -293,12 +296,20 @@
 }
 
 .react-datepicker__day {
-  @apply text-gray-300 w-10 h-10 leading-10 m-0 hover:bg-white/20 hover:rounded-full transition-all hover:shadow-[0_0_10px_rgba(255,255,255,0.3)];
+  @apply text-gray-300 w-10 h-10 leading-10 m-0 hover:bg-white/20 hover:rounded-full transition-all;
+}
+
+.react-datepicker__day:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-  @apply bg-white text-black font-bold rounded-full !important shadow-[0_0_15px_rgba(255,255,255,0.6)];
+  background-color: white !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6) !important;
 }
 
 .react-datepicker__day--disabled {
@@ -323,5 +334,5 @@
 
 .react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
   border-color: #ffffff !important;
-  filter: drop-shadow(0 0 5px rgba(255,255,255,0.8));
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
 }
