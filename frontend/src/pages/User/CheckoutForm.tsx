@@ -10,6 +10,7 @@ import type { BookingData } from "@/Types/User/Booking/BookingData";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/ui/spinner";
 
 const cardElementOptions = {
   style: {
@@ -118,11 +119,10 @@ const CheckoutForm = () => {
 
         {paymentStatus && (
           <div
-            className={`text-center text-base font-bold ${
-              paymentStatus === "Payment Successful"
-                ? "text-green-600"
-                : "text-yellow-600"
-            }`}
+            className={`text-center text-base font-bold ${paymentStatus === "Payment Successful"
+              ? "text-green-600"
+              : "text-yellow-600"
+              }`}
           >
             {paymentStatus}
           </div>
@@ -131,31 +131,13 @@ const CheckoutForm = () => {
         <button
           type="submit"
           disabled={loading || !stripe}
-          className={`w-full py-3 px-4 rounded-md text-white text-lg font-medium flex justify-center items-center transition duration-200 ${
-            loading || !stripe
-              ? "bg-indigo-300 cursor-not-allowed"
-              : "bg-indigo-600 hover:bg-indigo-700"
-          }`}
+          className={`w-full py-3 px-4 rounded-md text-white text-lg font-medium flex justify-center items-center transition duration-200 ${loading || !stripe
+            ? "bg-indigo-300 cursor-not-allowed"
+            : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
         >
           {loading ? (
-            <svg
-              className="animate-spin h-5 w-5 mr-2 text-white"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 0116 0A8 8 0 014 12z"
-              ></path>
-            </svg>
+            <Spinner size="sm" variant="light" className="mr-2" />
           ) : (
             "Pay Now"
           )}

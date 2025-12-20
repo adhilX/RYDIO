@@ -51,16 +51,16 @@ services:
       - prom-server
       - loki
 
-  loki:
-    image: grafana/loki:3.1.1
-    container_name: loki
-    restart: always
-    ports:
-      - "3100:3100"
-    networks:
-      - rydio_network
-    volumes:
-      - loki_data:/loki
+  # loki:
+  #   image: grafana/loki:3.1.1
+  #   container_name: loki
+  #   restart: always
+  #   ports:
+  #     - "3100:3100"
+  #   networks:
+  #     - rydio_network
+  #   volumes:
+  #     - loki_data:/loki
 
   nginx:
     image: nginx:alpine

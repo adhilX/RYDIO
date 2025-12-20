@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, X } from 'lucide-react';
+import { Spinner } from "@/components/ui/spinner";
 import { getUsers } from '@/services/admin/authService';
 import { HandleVendorAccess, UnbserBlock, UserBlock } from '@/services/admin/UserManagmentService';
 import toast from 'react-hot-toast';
 import Pagination from '../Pagination';
 import Table from '../Table';
- export interface User {
+export interface User {
   _id: string;
   email: string;
   phone: string;
@@ -16,7 +17,7 @@ import Table from '../Table';
   createdAt: string;
   updatedAt: string;
 }
-const arr = ["user",'Created','Status','Vendor Access']
+const arr = ["user", 'Created', 'Status', 'Vendor Access']
 
 
 export function UserManagement() {
@@ -148,11 +149,10 @@ export function UserManagement() {
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
-                showFilters || hasActiveFilters
-                  ? 'bg-[#e63946]/20 border-[#e63946] text-[#e63946]'
-                  : 'border-black/60 text-gray-400 hover:border-gray-500'
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${showFilters || hasActiveFilters
+                ? 'bg-[#e63946]/20 border-[#e63946] text-[#e63946]'
+                : 'border-black/60 text-gray-400 hover:border-gray-500'
+                }`}
             >
               <Filter size={18} />
               Filters
@@ -221,13 +221,13 @@ export function UserManagement() {
       <motion.div className="bg-transparent backdrop-blur-xl border border-black/60 shadow-2xl rounded-xl overflow-hidden">
         {isLoading ? (
           <div className="flex flex-col justify-center items-center h-64">
-            <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+            <Spinner size="xl" className="border-red-500 border-t-transparent" />
             <span className="mt-4 text-white/80 text-lg font-semibold animate-pulse">Loading users...</span>
           </div>
         ) : users.length === 0 ? (
           <div className="p-6  h-100 flex text-center justify-center text-gray-400">No users found</div>
         ) : (
-         <Table users={users} heading={arr} handleVendorAccess={handleVendorAccess} handleBlock={handleBlock}/>
+          <Table users={users} heading={arr} handleVendorAccess={handleVendorAccess} handleBlock={handleBlock} />
         )}
       </motion.div>
 

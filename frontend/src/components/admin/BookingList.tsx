@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Calendar, User, AlertCircle } from 'lucide-react';
+import { Spinner } from "@/components/ui/spinner";
 import { getBookings } from '@/services/admin/bookingService';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
@@ -135,7 +136,7 @@ export default function BookingList() {
 
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+          <Spinner size="xl" className="border-red-500 border-t-transparent" />
         </div>
       ) : bookings.length === 0 ? (
         <div className="bg-gray-900/50 rounded-lg p-8 text-center">
@@ -228,7 +229,7 @@ export default function BookingList() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Button onClick={()=>openDetailsModal(booking)} variant="outline" size="sm" className="text-xs">
+                        <Button onClick={() => openDetailsModal(booking)} variant="outline" size="sm" className="text-xs">
                           View Details
                         </Button>
                       </td>
@@ -248,14 +249,14 @@ export default function BookingList() {
               }}
             />
           )}
-            <div className="flex justify-center mt-4">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={Math.ceil(totalBookings / limit)} 
-                onPageChange={setCurrentPage}
-              />
-            </div>
-        
+          <div className="flex justify-center mt-4">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.ceil(totalBookings / limit)}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+
 
         </>
       )}

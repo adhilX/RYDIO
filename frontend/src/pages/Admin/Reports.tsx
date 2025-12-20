@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {Flag,Search,Filter,Eye,CheckCircle,XCircle,Clock,AlertTriangle,User,Car,X,Calendar} from 'lucide-react';
+import { Flag, Search, Filter, Eye, CheckCircle, XCircle, Clock, AlertTriangle, User, Car, X, Calendar } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { getAllReports, updateReportStatus, getReportsStats, type AdminReportData, type ReportFilters } from '@/services/admin/reportService';
 import ReportDetailsModal from '@/components/admin/reports/ReportDetailsModal';
 import Pagination from '@/components/Pagination';
+import { Spinner } from "@/components/ui/spinner";
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
@@ -15,11 +16,11 @@ const Reports: React.FC = () => {
   const [selectedReport, setSelectedReport] = useState<AdminReportData | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
-  
+
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+
   // Filters
   const [filters, setFilters] = useState<ReportFilters>({
     status: '',
@@ -57,17 +58,17 @@ const Reports: React.FC = () => {
 
   const handleStatusUpdate = async (reportId: string, newStatus: string) => {
     if (updatingStatus) return;
-    
+
     setUpdatingStatus(reportId);
     try {
       await updateReportStatus(reportId, newStatus);
-        setReports(prev => 
-          prev.map(report => 
-            report._id === reportId 
-              ? { ...report, status: newStatus as any }
-              : report
-          )
-        );
+      setReports(prev =>
+        prev.map(report =>
+          report._id === reportId
+            ? { ...report, status: newStatus as any }
+            : report
+        )
+      );
       toast.success(`Report status updated to ${newStatus}`);
       // Refresh stats after status update
       fetchStats();
@@ -95,9 +96,9 @@ const Reports: React.FC = () => {
   };
 
   const hasActiveFilters = Boolean(
-    filters.status || 
-    filters.search || 
-    filters.dateFrom || 
+    filters.status ||
+    filters.search ||
+    filters.dateFrom ||
     filters.dateTo
   );
 
@@ -240,11 +241,10 @@ const Reports: React.FC = () => {
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
-                showFilters || hasActiveFilters
-                  ? 'bg-[#e63946]/20 border-[#e63946] text-[#e63946]'
-                  : 'border-black/60 text-gray-400 hover:border-gray-500'
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${showFilters || hasActiveFilters
+                ? 'bg-[#e63946]/20 border-[#e63946] text-[#e63946]'
+                : 'border-black/60 text-gray-400 hover:border-gray-500'
+                }`}
             >
               <Filter className="w-4 h-4" />
               Filters
@@ -278,20 +278,20 @@ const Reports: React.FC = () => {
                     onChange={(e) => handleFilterChange('dateTo', e.target.value)}
                   />
                 </div>
-            </div>
-            {hasActiveFilters && (
-              <div className="mt-4 flex justify-end">
-                <button
-                  onClick={clearFilters}
-                  className="flex items-center gap-2 px-3 py-1 text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  <X size={16} className="text-gray-300" />
-                  Clear Filters
-                </button>
               </div>
-            )}
-          </div>
-        )}
+              {hasActiveFilters && (
+                <div className="mt-4 flex justify-end">
+                  <button
+                    onClick={clearFilters}
+                    className="flex items-center gap-2 px-3 py-1 text-sm text-gray-400 hover:text-white transition-colors"
+                  >
+                    <X size={16} className="text-gray-300" />
+                    Clear Filters
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </motion.div>
 
@@ -333,7 +333,7 @@ const Reports: React.FC = () => {
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center">
                     <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#e63946]"></div>
+                      <Spinner size="md" className="border-[#e63946] border-t-transparent" />
                       <span className="ml-2 text-gray-400">Loading reports...</span>
                     </div>
                   </td>
@@ -457,7 +457,7 @@ const Reports: React.FC = () => {
                           <Eye className="w-4 h-4" />
                           View
                         </button>
-                        
+
                         {report.status === 'Pending' && (
                           <select
                             className="text-sm border border-black/60 rounded px-2 py-1 bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#e63946]"

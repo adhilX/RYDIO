@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Calendar, Car, MapPin, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Spinner } from "@/components/ui/spinner";
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useSelector } from 'react-redux';
@@ -117,7 +118,7 @@ const MyBooking = () => {
   if (bookingState.isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <Spinner size="xl" variant="primary" />
       </div>
     );
   }

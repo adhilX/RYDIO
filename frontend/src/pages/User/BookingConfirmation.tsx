@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { ArrowLeft, Car, Fuel, Users, Settings, MapPin, Phone, Mail, CheckCircle, Calendar, CreditCard, Sparkles } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useNavigate, useLocation } from "react-router-dom"
@@ -25,18 +26,18 @@ const BookingConfirmation = () => {
 
   useEffect(() => {
     const fetchdepostdata = async () => {
-     const deposit = await getSecurityDeposit()
-     setSecurityDeposit(deposit*days)
+      const deposit = await getSecurityDeposit()
+      setSecurityDeposit(deposit * days)
     }
     fetchdepostdata()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const user = useSelector((state: RootState) => state.auth.user)
-  if (!user)return 
- 
+  if (!user) return
+
   const bookingData: BookingData = location.state?.bookingData
-  console.log(bookingData,"bookingData")
+  console.log(bookingData, "bookingData")
 
   if (!bookingData) {
     return (
@@ -56,7 +57,7 @@ const BookingConfirmation = () => {
       </div>
     )
   }
-  const { vehicle, startDate, endDate,total_amount, days } = bookingData
+  const { vehicle, startDate, endDate, total_amount, days } = bookingData
 
   const validateForm = () => {
     const newErrors: { address?: string; city?: string } = {}
@@ -76,7 +77,7 @@ const BookingConfirmation = () => {
 
   const newBookingDate = {
     vehicle_id: vehicle._id,
-    total_amount:total_amount+securityDeposit,
+    total_amount: total_amount + securityDeposit,
     start_date: startDate,
     end_date: endDate,
     user_id: user?._id,
@@ -110,7 +111,7 @@ const BookingConfirmation = () => {
     try {
       const stripeLib = await import("@stripe/stripe-js")
       const stripeInstance = await stripeLib.loadStripe(publishable_key)
-      const response = await getCheckoutSession({...bookingData,user_id:user._id!})
+      const response = await getCheckoutSession({ ...bookingData, user_id: user._id! })
       console.log(stripeInstance)
       console.log(response.sessionId)
 
@@ -373,9 +374,8 @@ const BookingConfirmation = () => {
                         setErrors((prev) => ({ ...prev, address: undefined }))
                       }}
                       placeholder="Street address"
-                      className={`w-full px-4 py-2 bg-white/10 border ${
-                        errors.address ? 'border-red-500' : 'border-white/20'
-                      } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#6DA5C0]`}
+                      className={`w-full px-4 py-2 bg-white/10 border ${errors.address ? 'border-red-500' : 'border-white/20'
+                        } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#6DA5C0]`}
                     />
                     {errors.address && (
                       <motion.p
@@ -397,9 +397,8 @@ const BookingConfirmation = () => {
                         setErrors((prev) => ({ ...prev, city: undefined }))
                       }}
                       placeholder="Enter city"
-                      className={`w-full px-4 py-2 bg-white/10 border ${
-                        errors.city ? 'border-red-500' : 'border-white/20'
-                      } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#6DA5C0]`}
+                      className={`w-full px-4 py-2 bg-white/10 border ${errors.city ? 'border-red-500' : 'border-white/20'
+                        } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#6DA5C0]`}
                     />
                     {errors.city && (
                       <motion.p
@@ -454,11 +453,11 @@ const BookingConfirmation = () => {
                   >
                     {isProcessing ? (
                       <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <Spinner size="sm" variant="light" />
                         Processing...
                       </div>
                     ) : (
-                      `Pay ₹${total_amount+securityDeposit}`
+                      `Pay ₹${total_amount + securityDeposit}`
                     )}
                   </Button>
                 </motion.div>

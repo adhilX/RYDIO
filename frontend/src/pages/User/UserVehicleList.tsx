@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useLocation} from "react-router";
+import { useLocation } from "react-router";
 import { toast } from "react-hot-toast";
 import type { FilterState } from "@/Types/User/carType";
 import type { Vehicle } from "@/Types/User/addVehicle/Ivehicle";
@@ -12,6 +12,14 @@ import Navbar from "@/components/user/Navbar";
 import VehicleSearchBar from "@/components/user/VehicleSearchBar";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 
 const CARS_PER_PAGE = 6;
 
@@ -41,22 +49,22 @@ export default function UserVehicleList() {
     const fetchVehicles = async () => {
       try {
         setIsLoading(true);
-   const data = await SearchVehicle(
-      searchParams.latitude,
-      searchParams.longitude,
-      searchParams.pickupDate,
-      searchParams.returnDate || "",
-      currentPage,
-      CARS_PER_PAGE,
-      user._id!,
-      filters
-    );
+        const data = await SearchVehicle(
+          searchParams.latitude,
+          searchParams.longitude,
+          searchParams.pickupDate,
+          searchParams.returnDate || "",
+          currentPage,
+          CARS_PER_PAGE,
+          user._id!,
+          filters
+        );
 
-      setCars(data.vehicles);
-      setTotalPages(Math.ceil(data.total / CARS_PER_PAGE));
-    } catch (error) {
-    console.error("Error fetching vehicles:", error);
-    toast.error("Failed to load vehicles");
+        setCars(data.vehicles);
+        setTotalPages(Math.ceil(data.total / CARS_PER_PAGE));
+      } catch (error) {
+        console.error("Error fetching vehicles:", error);
+        toast.error("Failed to load vehicles");
       } finally {
         setIsLoading(false);
       }
@@ -75,66 +83,103 @@ export default function UserVehicleList() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col">
+    <div className="min-h-screen bg-black text-white relative">
       <Navbar />
-      <div className="flex-1 pt-16">
-        <div className="container mx-auto px-4 sm:px-6 pb-16 h-full">
+
+      {/* Background Gradient/Image Effect similar to Landing if desired, or just clean black */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-black to-black"></div>
+      </div>
+
+      <div className="relative z-10 pt-24 pb-16">
+        <div className="max-w-7xl mx-auto px-6 h-full">
           <div className="mb-8">
             <VehicleSearchBar />
           </div>
-          <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8 px-15">
-            <div className="lg:w-1/4 w-full">
-              <FilterSidebar 
-                filters={filters} 
-                onFiltersChange={handleFilter} 
+
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Filter Sidebar */}
+            <div className="lg:w-80 flex-shrink-0">
+              <FilterSidebar
+                filters={filters}
+                onFiltersChange={handleFilter}
               />
             </div>
-            <div className="lg:w-3/4 w-full">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <h2 className="text-xl font-semibold text-white">Available Vehicles</h2>
-                <div className="flex items-center space-x-2 sm:space-x-4 w-full sm:w-auto">
-                  <label htmlFor="distance-range" className="text-sm font-medium text-gray-300 whitespace-nowrap">Within:</label>
-                  <select
-                    id="distance-range"
-                    value={filters.distance_range}
-                    onChange={(e) => handleFilter({ distance_range: Number(e.target.value) })}
-                    className="w-full sm:w-auto bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+
+            {/* Main Content */}
+            <div className="flex-1">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-sm">
+                <h2 className="text-2xl font-bold text-white">
+                  Available Vehicles
+                  <span className="text-sm font-normal text-gray-400 ml-3">
+                    {cars?.length || 0} results found
+                  </span>
+                </h2>
+
+                <div className="flex items-center space-x-3 w-full sm:w-auto">
+                  <label htmlFor="distance-range" className="text-sm font-medium text-gray-300 whitespace-nowrap">
+                    Distance:
+                  </label>
+                  <Select
+                    value={filters.distance_range.toString()}
+                    onValueChange={(value) => handleFilter({ distance_range: Number(value) })}
                   >
-                    <option value={10}>10 km</option>
-                    <option value={25}>25 km</option>
-                    <option value={50}>50 km</option>
-                    <option value={100}>100 km</option>
-                    <option value={0}>Any distance</option>
-                  </select>
+                    <SelectTrigger className="w-[120px] bg-black/50 border-white/20 text-white focus:ring-white/50 h-10">
+                      <SelectValue placeholder="Distance" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-black/90 border-white/20 text-white backdrop-blur-xl">
+                      <SelectItem value="10" className="focus:bg-white/10 focus:text-white cursor-pointer">10 km</SelectItem>
+                      <SelectItem value="25" className="focus:bg-white/10 focus:text-white cursor-pointer">25 km</SelectItem>
+                      <SelectItem value="50" className="focus:bg-white/10 focus:text-white cursor-pointer">50 km</SelectItem>
+                      <SelectItem value="100" className="focus:bg-white/10 focus:text-white cursor-pointer">100 km</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
+
               {isLoading ? (
                 <div className="flex justify-center items-center h-64">
-                  <div className="text-white">Loading more vehicles...</div>
+                  <Spinner size="lg" variant="light" />
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {cars?.length ? (
                       cars.map((car) => (
-                        <div key={car._id} className="w-full h-full">
+                        <div key={car._id} className="w-full">
                           <VehicleCard car={car} />
                         </div>
                       ))
                     ) : (
-                      <div className="col-span-full flex flex-col items-center justify-center py-16 px-4 text-center">
-                        <div className="w-24 h-24 mb-4 text-gray-400">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.31m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                      <div className="col-span-full flex flex-col items-center justify-center py-20 px-4 text-center bg-white/5 rounded-2xl border border-white/10 border-dashed">
+                        <div className="w-20 h-20 mb-6 text-gray-500 bg-white/5 rounded-full flex items-center justify-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} className="w-10 h-10">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                           </svg>
                         </div>
                         <h3 className="text-xl font-semibold text-white mb-2">No vehicles found</h3>
-                        <p className="text-gray-400 max-w-md mb-6">We couldn't find any vehicles matching your search criteria. Try adjusting your filters or search location.</p>
+                        <p className="text-gray-400 max-w-md mb-8">
+                          We couldn't find any vehicles matching your search criteria. Try expanding your search radius or changing dates.
+                        </p>
+                        <button
+                          onClick={() => handleFilter({
+                            fuel_types: [],
+                            seats: [],
+                            car_types: [],
+                            transmission: [],
+                            price_range: [0, 10000],
+                            distance_range: 100
+                          })}
+                          className="px-6 py-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          Clear Filters
+                        </button>
                       </div>
                     )}
                   </div>
-                  {totalPages >1 && (
-                    <div className="mt-8">
+
+                  {totalPages > 1 && (
+                    <div className="mt-12 flex justify-center">
                       <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}

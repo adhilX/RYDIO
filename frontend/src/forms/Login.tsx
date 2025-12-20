@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { addToken } from "@/store/slice/user/UserTokenSlice";
 import { addUser } from "@/store/slice/user/UserSlice";
 import Google from "../pages/User/auth/Google";
+import { Spinner } from "@/components/ui/spinner";
 import { loginFormSchema, type TLoginForm } from "@/Types/User/validation/LoginFrom";
 
 export default function Login() {
@@ -137,7 +138,7 @@ export default function Login() {
                   >
                     {isLoading ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <Spinner size="sm" variant="light" className="mr-2" />
                         Signing in...
                       </>
                     ) : (

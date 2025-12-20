@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { X, Car, Calendar, MapPin, Fuel, Users, Settings, DollarSign, AlertCircle, RefreshCw } from 'lucide-react';
+import { Spinner } from "@/components/ui/spinner";
 import type { Vehicle } from '@/Types/User/addVehicle/Ivehicle';
 import { reapplyVehicle } from '@/services/user/vehicleService';
 import { toast } from 'react-hot-toast';
-const IMG_URL = import.meta.env.VITE_IMAGE_URL  
+const IMG_URL = import.meta.env.VITE_IMAGE_URL
 interface RejectedVehicleModalProps {
   vehicle: Vehicle;
   isOpen: boolean;
@@ -25,7 +26,7 @@ const RejectedVehicleModal: React.FC<RejectedVehicleModalProps> = ({
     try {
       setIsReapplying(true);
       const response = await reapplyVehicle(vehicle._id!);
-      
+
       if (response.success) {
         toast.success('Vehicle re-submitted for review');
         onReapplySuccess(vehicle._id!);
@@ -72,7 +73,7 @@ const RejectedVehicleModal: React.FC<RejectedVehicleModalProps> = ({
                 {vehicle.image_urls.slice(0, 3).map((imageUrl, index) => (
                   <div key={index} className="aspect-video rounded-lg overflow-hidden">
                     <img
-                      src={IMG_URL+imageUrl}
+                      src={IMG_URL + imageUrl}
                       alt={`${vehicle.name} - Image ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
@@ -193,7 +194,7 @@ const RejectedVehicleModal: React.FC<RejectedVehicleModalProps> = ({
             >
               {isReapplying ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <Spinner size="sm" variant="light" className="mr-2" />
                   <span>Reapplying...</span>
                 </>
               ) : (
