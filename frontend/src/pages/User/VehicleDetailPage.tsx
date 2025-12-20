@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { getVehicleDetails } from "@/services/user/vehicleService";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
@@ -58,10 +58,22 @@ const VehicleDetailPage = () => {
       setLoading(true);
       try {
         const id = pathname.split("/")[2];
-        const booking = await getBookedDate(id);
-        setUnavailableDates(booking?.bookedVehicles || []);
         const response = await getVehicleDetails(id);
         setVehicle(response);
+
+        const booking = await getBookedDate(id);
+        // Normalize all dates to yyyy-MM-dd format for consistent comparison
+        // Assuming booking.bookedVehicles returns an array of date strings or Date objects
+        const formattedDates = (booking?.bookedVehicles || []).map((date: string | Date) => {
+          try {
+            return format(new Date(date), 'yyyy-MM-dd');
+          } catch (e) {
+            console.error("Invalid date format received:", date);
+            return null;
+          }
+        }).filter((date: string | null): date is string => Boolean(date));
+
+        setUnavailableDates(formattedDates);
       } catch (error) {
         console.error("Error fetching vehicle:", error);
         toast.error("Failed to load vehicle details");
@@ -165,9 +177,25 @@ const VehicleDetailPage = () => {
   const totalPrice = calculateTotalPrice();
   const [lat, lng] = getLocationCoordinates();
 
+  const getDayClassName = (date: Date) => {
+    return !isDateAvailable(date) ? "booked-date" : "";
+  };
+
   return (
     <div className="min-h-screen bg-[#121212] text-white pb-12">
       <Navbar />
+
+      <style>{`
+        .booked-date {
+          color: #ef4444 !important;
+          font-weight: bold !important;
+          text-decoration: line-through;
+        }
+        .booked-date:hover {
+          background-color: transparent !important;
+          cursor: not-allowed !important;
+        }
+      `}</style>
 
       {/* Hero Section / Content Container */}
       <div className="container mx-auto px-4 pt-24 pb-12 max-w-7xl">
@@ -323,7 +351,7 @@ const VehicleDetailPage = () => {
                         placeholderText="Select start date"
                         className="w-full p-3 rounded-lg border border-white/10 bg-black/50 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-white focus:border-white/50 transition-all hover:border-white/30"
                         dateFormat="MMM dd, yyyy"
-                        excludeDates={unavailableDates?.map(date => parseISO(date))}
+                        dayClassName={getDayClassName}
                         selectsStart
                         startDate={startDate}
                         endDate={endDate}
@@ -345,7 +373,7 @@ const VehicleDetailPage = () => {
                         placeholderText="Select end date"
                         className="w-full p-3 rounded-lg border border-white/10 bg-black/50 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-white focus:border-white/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:border-white/30"
                         dateFormat="MMM dd, yyyy"
-                        excludeDates={unavailableDates?.map(date => parseISO(date))}
+                        dayClassName={getDayClassName}
                         selectsEnd
                         startDate={startDate}
                         endDate={endDate}

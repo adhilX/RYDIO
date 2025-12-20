@@ -111,13 +111,20 @@ function Navbar() {
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden z-50 text-white p-2"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile Profile Icon & Menu Button */}
+          <div className="flex items-center gap-4 md:hidden">
+            {token && user && (
+              <Link to="/userProfile" className="text-white p-2">
+                <User size={24} />
+              </Link>
+            )}
+            <button
+              className="z-50 text-white p-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation Overlay */}

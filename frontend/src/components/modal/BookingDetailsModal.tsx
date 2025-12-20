@@ -28,7 +28,7 @@ interface BookingDetailsModalProps {
 }
 
 const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOpen, onClose }) => {
-  const user = useSelector((state:RootState)=>state.auth.user)
+  const user = useSelector((state: RootState) => state.auth.user)
   const [showReasonModal, setShowReasonModal] = useState(false)
   const [cancelReason, setCancelReason] = useState('')
   const [showConfirmation, setShowConfirmation] = useState(false)
@@ -49,15 +49,15 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
   // Check if report button should be shown
   const shouldShowReportButton = () => {
     if (!booking) return false
-    
+
     const now = new Date()
     const endDate = new Date(booking.end_date)
     const timeDiff = now.getTime() - endDate.getTime()
     const hoursDiff = timeDiff / (1000 * 60 * 60)
-    
+
     // Show report button if booking is ongoing or completed within 24 hours
-    return booking.status === 'ongoing' || 
-           (booking.status === 'completed' && hoursDiff <= 24)
+    return booking.status === 'ongoing' ||
+      (booking.status === 'completed' && hoursDiff <= 24)
   }
 
   // Check if user has already reported this booking when modal opens
@@ -80,7 +80,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
     checkExistingReport()
   }, [isOpen, booking?.booking_id, user?._id])
 
-  if(!user) return null
+  if (!user) return null
   const handleCancelBooking = () => {
     setShowReasonModal(true)
   }
@@ -93,20 +93,20 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({ booking, isOp
   }
 
 
-  const  startChatWithOwner = () => {
+  const startChatWithOwner = () => {
     navigate(`/chat/${user._id}_${booking!.vehicle.owner_id}`)
   }
-  const handleWithdraw = async()=>{
-try {
-  await withdrawMoney(booking!.booking_id!,user._id!) 
-  onClose()
-  toast.success('withdraw success')
-} catch (error) {
+  const handleWithdraw = async () => {
+    try {
+      await withdrawMoney(booking!.booking_id!, user._id!)
+      onClose()
+      toast.success('withdraw success')
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
       toast.error(errorMessage)
-}
+    }
 
-}
+  }
 
   const handleConfirmCancel = async () => {
     if (!booking?.booking_id) {
@@ -115,7 +115,7 @@ try {
     }
 
     setIsCancelling(true)
-    
+
     try {
       await cancelBooking(booking.booking_id, cancelReason)
       toast.success('Booking cancelled successfully!')
@@ -152,7 +152,7 @@ try {
       return
     }
     setIsSubmittingReport(true)
-    
+
     try {
       await createReport({
         reporterId: user._id,
@@ -162,7 +162,7 @@ try {
       })
       toast.success('Report submitted successfully!')
       setShowReportModal(false)
-      setHasUserReported(true) 
+      setHasUserReported(true)
       onClose()
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to submit report'
@@ -172,284 +172,249 @@ try {
       setIsSubmittingReport(false)
     }
   }
-  
+
   if (!booking) return null
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="w-full max-w-2xl max-h-[90vh] bg-gray-900 text-white p-6 rounded-lg">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-semibold">Booking Details</DialogTitle>
+        <DialogContent className="w-full max-w-2xl max-h-[90vh] bg-black/80 backdrop-blur-xl text-white p-0 rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+          <DialogHeader className="p-6 border-b border-white/10 flex flex-row items-center justify-between">
+            <DialogTitle className="text-xl font-bold tracking-tight">Booking Details</DialogTitle>
+            {/* Close button is handled by DialogPrimitive, but we can style if needed or rely on default */}
           </DialogHeader>
 
-          <div className="mt-4 space-y-6 overflow-y-auto max-h-[70vh] pr-2">
+          <div className="p-6 space-y-8 overflow-y-auto max-h-[calc(90vh-80px)] custom-scrollbar">
 
-            {/* Booking ID */}
-            <section>
-              <p className="text-sm text-gray-400">Booking ID</p>
-              <p className="text-lg font-mono">{booking.booking_id}</p>
+            {/* Booking ID and Status */}
+            <section className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/5">
+              <div>
+                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Booking ID</p>
+                <p className="text-lg font-mono font-bold text-white tracking-widest">{booking.booking_id}</p>
+              </div>
+              <div className={`px-4 py-1.5 rounded-full text-sm font-bold border capitalize ${booking.status === 'completed' ? 'bg-green-500/10 border-green-500/20 text-green-400' :
+                booking.status === 'ongoing' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
+                  booking.status === 'cancelled' ? 'bg-red-500/10 border-red-500/20 text-red-400' :
+                    'bg-yellow-500/10 border-yellow-500/20 text-yellow-400'
+                }`}>
+                {booking.status}
+              </div>
             </section>
 
-        {/* Vehicle Info */}
-        <section className="flex gap-4">
-          <div className="w-32 h-24 overflow-hidden rounded-md border border-gray-700">
-            <img
-            onClick={()=>navigate(`/vehicle-details/${booking.vehicle._id}`)}
-              src={IMG_URL + booking.vehicle.image_urls[0]}
-              alt={booking.vehicle.name}
-              className="w-full h-full cursor-pointer object-cover"
-            />
-          </div>
-          <div className="flex-1">
-            <p className="text-lg font-bold">{booking.vehicle.name}</p>
-            <p className="text-sm text-gray-400 mb-1">{booking.vehicle.brand}</p>
-            <p className="text-xs text-gray-500 mb-2">{booking.vehicle.registration_number}</p>
-            <div className="flex flex-wrap gap-4 text-sm text-gray-300">
-              <div className="flex items-center gap-1">
-                <Car className="w-4 h-4" />
-                <span className="capitalize">{booking.vehicle.fuel_type}</span>
+            {/* Vehicle Info */}
+            <section className="flex flex-col sm:flex-row gap-6">
+              <div className="w-full sm:w-40 h-32 overflow-hidden rounded-2xl border border-white/10 relative group shrink-0">
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                <img
+                  onClick={() => navigate(`/vehicle-details/${booking.vehicle._id}`)}
+                  src={IMG_URL + booking.vehicle.image_urls[0]}
+                  alt={booking.vehicle.name}
+                  className="w-full h-full cursor-pointer object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
               </div>
-              <div className="flex items-center gap-1">
-                <User className="w-4 h-4" />
-                <span>{booking.vehicle.seats} seats</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />
-                <span>{booking.vehicle.automatic ? 'Automatic' : 'Manual'}</span>
-              </div>
-            </div>
-          </div>
-        </section>
+              <div className="flex-1 space-y-3">
+                <div>
+                  <h3 className="text-2xl font-bold text-white leading-tight">{booking.vehicle.name}</h3>
+                  <p className="text-sm text-gray-400 font-medium">{booking.vehicle.brand}</p>
+                </div>
 
-        {/* Booking Period */}
-        <section>
-          <p className="text-sm text-gray-400 mb-1">Booking Duration</p>
-          <p className="text-md font-medium">
-            {new Date(booking.start_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })} - {new Date(booking.end_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </p>
-          <p className="text-sm text-gray-400">{calculateDays(booking.start_date, booking.end_date)} day(s)</p>
-        </section>
-
-        {/* Payment Breakdown */}
-        <section className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-          <div className="flex items-center gap-2 mb-3">
-            <Receipt className="w-5 h-5 text-blue-400" />
-            <h3 className="text-lg font-semibold text-white">Payment Breakdown</h3>
-          </div>
-          
-          <div className="space-y-3">
-            {/* Total Amount */}
-            <div className="flex justify-between items-center py-2 border-b border-gray-700">
-              <span className="text-gray-300 flex items-center gap-2">
-                <DollarSign className="w-4 h-4" />
-                Total Amount
-              </span>
-              <span className="text-lg font-bold text-white">₹{booking.total_amount.toLocaleString('en-IN')}</span>
-            </div>
-            
-            {/* Security Deposit */}
-            <div className="flex justify-between items-center py-2 border-b border-gray-700">
-              <span className="text-gray-300 flex items-center gap-2">
-                <Shield className="w-4 h-4" />
-                Security Deposit
-              </span>
-              <span className="text-green-400 font-semibold">₹{booking.finance?.security_deposit?.toLocaleString('en-IN')}</span>
-            </div>
-            
-            
-            {/* Fine Amount (if any) */}
-            {booking.finance.fine_amount > 0 && (
-              <div className="flex justify-between items-center py-2 border-b border-gray-700">
-                <span className="text-red-400 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4" />
-                  Fine Amount
-                </span>
-                <span className="text-red-400 font-semibold">₹{booking.finance?.fine_amount?.toLocaleString('en-IN')||0}</span>
-              </div>
-            )}
-            
-            {/* Late Return Status */}
-            {booking.finance.is_late_return && (
-              <div className="flex justify-between items-center py-2 border-b border-gray-700">
-                <span className="text-red-400 flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  Late Return
-                </span>
-                <span className="text-red-400 text-sm">Yes</span>
-              </div>
-            )}
-            
-            {/* Refundable Amount */}
-            <div className="flex justify-between items-center py-2 bg-gray-700 rounded px-3">
-              <span className="text-white font-medium">Refundable Amount</span>
-              <span className="text-green-400 font-bold text-lg">
-                ₹{(booking.finance.security_deposit - booking.finance.fine_amount).toLocaleString('en-IN')}
-              </span>
-            </div>
-          </div>
-        </section>
-
-        {/* Payment Status */}
-        <section className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-          <div className="flex items-center gap-2 mb-3">
-            <CreditCard className="w-5 h-5 text-green-400" />
-            <h3 className="text-lg font-semibold text-white">Payment Information</h3>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-300">Payment Status</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                booking.payment_status === 'paid' ? 'bg-green-900 text-green-400' : 'bg-yellow-900 text-yellow-400'
-              }`}>
-                {booking.payment_status === 'paid' ? 'Paid' : 'Pending'}
-              </span>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <span className="text-gray-300">Payment Method</span>
-              <span className="text-white font-medium">
-                {booking.payment_type === 'card' ? 'Card Payment' : 'Wallet Payment'}
-              </span>
-            </div>
-            
-            {booking.payment_intent_id && (
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Transaction ID</span>
-                <span className="text-gray-400 text-sm font-mono">
-                  {booking.payment_intent_id.slice(-8)}
-                </span>
-              </div>
-            )}
-            
-            <div className="flex justify-between items-center">
-              <span className="text-gray-300">Price per Day</span>
-              <span className="text-gray-400">₹{booking.vehicle.price_per_day.toLocaleString('en-IN')}</span>
-            </div>
-          </div>
-        </section>
-
-        {/* Withdrawal Status */}
-        {booking.status === 'completed' && (
-          <section className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <div className="flex items-center gap-2 mb-3">
-              <DollarSign className="w-5 h-5 text-purple-400" />
-              <h3 className="text-lg font-semibold text-white">Withdrawal Status</h3>
-            </div>
-            
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">User Withdrawal</span>
-                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                  booking.finance.user_withdraw ? 'bg-green-900 text-green-400' : 'bg-gray-700 text-gray-400'
-                }`}>
-                  {booking.finance.user_withdraw ? 'Completed' : 'Pending'}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Owner Withdrawal</span>
-                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                  booking.finance.owner_withdraw ? 'bg-green-900 text-green-400' : 'bg-gray-700 text-gray-400'
-                }`}>
-                  {booking.finance.owner_withdraw ? 'Completed' : 'Pending'}
-                </span>
-              </div>
-            </div>
-          </section>
-        )}
-
-            {/* Cancel Booking Button */}
-            {booking.status === 'booked' && (
-              <section>
-                <Button 
-                  onClick={handleCancelBooking}
-                  variant="destructive"
-                  className="w-full bg-red-600 hover:bg-red-700 text-white"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Cancel Booking
-                </Button>
-              </section>
-            )}
-
-      {booking.status === 'completed' && !booking.finance.user_withdraw && (
-    <section>
-      <Button
-        onClick={handleWithdraw}
-        variant="default"
-        className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2"
-      >
-        <DollarSign className="w-4 h-4" />
-        Withdraw ₹{(booking.finance.security_deposit - booking.finance.fine_amount).toLocaleString('en-IN')}
-      </Button>
-    </section>
-      )}
-
-
-      {(booking.status === 'booked' || booking.status === 'ongoing') &&(
-        <section>
-          <Button
-            onClick={startChatWithOwner}
-            variant="outline"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-          >
-         Chat with Owner            
-          </Button>
-        </section>
-          )}
-
-          {/* Report Button */}
-          {shouldShowReportButton() && !hasUserReported && (
-            <section>
-              <Button
-                onClick={handleOpenReportModal}
-                variant="outline"
-                className="w-full bg-orange-600 hover:bg-orange-700 text-white border-orange-600 hover:border-orange-700"
-                disabled={isSubmittingReport || isCheckingReport}
-              >
-                <Flag className="w-4 h-4 mr-2" />
-                {isCheckingReport ? 'Checking...' : isSubmittingReport ? 'Submitting...' : 'Report Issue'}
-              </Button>
-            </section>
-          )}
-
-          {/* Already Reported Message */}
-          {shouldShowReportButton() && hasUserReported && (
-            <section>
-              <div className="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-center">
-                <div className="flex items-center justify-center gap-2 text-gray-400">
-                  <Flag className="w-4 h-4" />
-                  <span className="text-sm">Issue already reported</span>
+                <div className="flex flex-wrap gap-3">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-xs text-gray-300">
+                    <Car className="w-3.5 h-3.5" />
+                    <span className="capitalize">{booking.vehicle.fuel_type}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-xs text-gray-300">
+                    <User className="w-3.5 h-3.5" />
+                    <span>{booking.vehicle.seats} Seats</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-xs text-gray-300">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{booking.vehicle.automatic ? 'Automatic' : 'Manual'}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-xs text-gray-300 font-mono">
+                    {booking.vehicle.registration_number}
+                  </span>
                 </div>
               </div>
             </section>
-          )}
-        {/* QR Code Section */}
-        <section>
-          {booking.status === 'booked' && (
-            <QRGenerator booking_id={booking.booking_id} action="start" />
-          )}
-          {booking.status === 'ongoing' && (
-            <QRGenerator booking_id={booking.booking_id} action="end" />
-          )}
-        </section>
 
-        {/* Location Info */}
-        {booking.location?.address && (
-          <section>
-            <p className="text-sm text-gray-400 mb-1">Pickup Location</p>
-            <div className="flex items-start gap-2">
-              <MapPin className="w-4 h-4 mt-0.5 text-gray-400" />
-              <p className="text-sm text-gray-200">{booking.location.address}</p>
+            {/* Booking Period */}
+            <section className="grid grid-cols-2 gap-4 bg-white/5 p-5 rounded-2xl border border-white/5">
+              <div className="space-y-1">
+                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Start Date</p>
+                <p className="text-sm font-bold text-white">
+                  {new Date(booking.start_date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+                </p>
+              </div>
+              <div className="space-y-1 text-right">
+                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">End Date</p>
+                <p className="text-sm font-bold text-white">
+                  {new Date(booking.end_date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+                </p>
+              </div>
+              <div className="col-span-2 pt-3 mt-1 border-t border-white/10 flex justify-between items-center text-xs">
+                <span className="text-gray-400">Total Duration</span>
+                <span className="text-white font-bold bg-white/10 px-2 py-0.5 rounded">{calculateDays(booking.start_date, booking.end_date)} Days</span>
+              </div>
+            </section>
+
+            {/* Location Info */}
+            {booking.location?.address && (
+              <section className="flex items-start gap-4 p-4 rounded-2xl border border-white/10 bg-gradient-to-r from-white/5 to-transparent">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-white">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">Pickup Location</p>
+                  <p className="text-sm text-gray-200 leading-relaxed font-medium">{booking.location.address}</p>
+                </div>
+              </section>
+            )}
+
+            {/* QR Code Section */}
+            {(booking.status === 'booked' || booking.status === 'ongoing') && (
+              <section className="flex flex-col items-center justify-center p-6 bg-white/5 rounded-2xl border border-white/5 border-dashed">
+                {booking.status === 'booked' && (
+                  <QRGenerator booking_id={booking.booking_id} action="start" />
+                )}
+                {booking.status === 'ongoing' && (
+                  <QRGenerator booking_id={booking.booking_id} action="end" />
+                )}
+              </section>
+            )}
+
+
+            {/* Payment & Finance Breakdown */}
+            <section className="space-y-4">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <Receipt className="w-5 h-5 text-gray-400" />
+                Payment Details
+              </h3>
+
+              <div className="divide-y divide-white/10 border border-white/10 rounded-2xl overflow-hidden">
+                {/* Price Status */}
+                <div className="p-4 bg-white/5 flex justify-between items-center">
+                  <span className="text-sm text-gray-400">Total Amount</span>
+                  <span className="text-lg font-bold text-white tracking-tight">₹{booking.total_amount.toLocaleString('en-IN')}</span>
+                </div>
+                <div className="p-4 bg-white/5 flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-green-400" />
+                    <span className="text-sm text-gray-400">Security Deposit</span>
+                  </div>
+                  <span className="text-green-400 font-bold">₹{booking.finance?.security_deposit?.toLocaleString('en-IN')}</span>
+                </div>
+
+                {/* Fine */}
+                {booking.finance.fine_amount > 0 && (
+                  <div className="p-4 bg-red-500/5 flex justify-between items-center">
+                    <div className="flex items-center gap-2 text-red-400">
+                      <AlertCircle className="w-4 h-4" />
+                      <span className="text-sm">Fine Amount</span>
+                    </div>
+                    <span className="text-red-400 font-bold">- ₹{booking.finance?.fine_amount?.toLocaleString('en-IN') || 0}</span>
+                  </div>
+                )}
+
+                {/* Late Return */}
+                {booking.finance.is_late_return && (
+                  <div className="p-4 bg-red-500/5 flex justify-between items-center">
+                    <div className="flex items-center gap-2 text-red-400">
+                      <Clock className="w-4 h-4" />
+                      <span className="text-sm">Late Return</span>
+                    </div>
+                    <span className="text-xs font-bold bg-red-500/20 text-red-400 px-2 py-0.5 rounded uppercase">Yes</span>
+                  </div>
+                )}
+
+                {/* Refundable */}
+                <div className="p-4 bg-white/10 flex justify-between items-center">
+                  <span className="text-sm font-bold text-white">Refundable Amount</span>
+                  <span className="text-xl font-bold text-green-400">
+                    ₹{(booking.finance.security_deposit - booking.finance.fine_amount).toLocaleString('en-IN')}
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            {/* Payment Meta */}
+            <section className="grid grid-cols-2 gap-4 text-xs">
+              <div className="bg-white/5 p-3 rounded-xl border border-white/5">
+                <p className="text-gray-500 uppercase font-bold mb-1">Status</p>
+                <p className={`font-bold capitalize flex items-center gap-2 ${booking.payment_status === 'paid' ? 'text-green-400' : 'text-yellow-400'}`}>
+                  <span className={`w-2 h-2 rounded-full ${booking.payment_status === 'paid' ? 'bg-green-500' : 'bg-yellow-500'}`}></span>
+                  {booking.payment_status}
+                </p>
+              </div>
+              <div className="bg-white/5 p-3 rounded-xl border border-white/5">
+                <p className="text-gray-500 uppercase font-bold mb-1">Method</p>
+                <p className="font-bold text-white overflow-hidden text-ellipsis whitespace-nowrap">
+                  {booking.payment_type === 'card' ? 'Card Payment' : 'Wallet'}
+                </p>
+              </div>
+            </section>
+
+
+            {/* Action Buttons */}
+            <div className="space-y-3 pt-4">
+              {/* Withdraw */}
+              {booking.status === 'completed' && !booking.finance.user_withdraw && (
+                <Button
+                  onClick={handleWithdraw}
+                  className="w-full bg-green-600 hover:bg-green-500 text-white font-bold h-12 shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all hover:scale-[1.02] active:scale-95"
+                >
+                  <DollarSign className="w-5 h-5 mr-2" />
+                  Withdraw Refund (₹{(booking.finance.security_deposit - booking.finance.fine_amount).toLocaleString('en-IN')})
+                </Button>
+              )}
+
+              {/* Chat Owner */}
+              {(booking.status === 'booked' || booking.status === 'ongoing') && (
+                <Button
+                  onClick={startChatWithOwner}
+                  className="w-full bg-white text-black hover:bg-gray-200 font-bold h-12 transition-all hover:scale-[1.02] active:scale-95"
+                >
+                  Chat with Owner
+                </Button>
+              )}
+
+              {/* Report Button */}
+              {shouldShowReportButton() && !hasUserReported && (
+                <Button
+                  onClick={handleOpenReportModal}
+                  variant="outline"
+                  className="w-full bg-transparent border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300 h-10 transition-colors"
+                  disabled={isSubmittingReport || isCheckingReport}
+                >
+                  <Flag className="w-4 h-4 mr-2" />
+                  {isCheckingReport ? 'Checking...' : isSubmittingReport ? 'Submitting...' : 'Report Issue'}
+                </Button>
+              )}
+
+              {/* Reported Status */}
+              {shouldShowReportButton() && hasUserReported && (
+                <div className="w-full bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-center gap-2 text-gray-400 text-sm">
+                  <Flag className="w-4 h-4" />
+                  <span>Issue already reported</span>
+                </div>
+              )}
+
+              {/* Cancel Button */}
+              {booking.status === 'booked' && (
+                <Button
+                  onClick={handleCancelBooking}
+                  variant="ghost"
+                  className="w-full text-red-500 hover:text-red-400 hover:bg-red-500/10 h-10"
+                >
+                  Cancel Booking
+                </Button>
+              )}
             </div>
-          </section>
-        )}
-      </div>
-      </DialogContent>
+
+          </div>
+        </DialogContent>
       </Dialog>
 
-      {/* Separate Cancel Modal Components */}
+      {/* Modals remain unchanged in logic, just ensuring they are mounted */}
       <CancelReasonModal
         isOpen={showReasonModal}
         onClose={() => setShowReasonModal(false)}
@@ -467,7 +432,6 @@ try {
         isLoading={isCancelling}
       />
 
-      {/* Report Modal */}
       <ReportModal
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
@@ -477,7 +441,6 @@ try {
       />
     </>
   )
-
 }
 
 export default React.memo(BookingDetailsModal)
