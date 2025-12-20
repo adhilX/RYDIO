@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+
 import { ImageCropper } from '@/components/modal/ImageCroper';
 import type { StepTwoFormData } from '@/Types/User/addVehicle/TaddVehicle';
 import { motion, AnimatePresence } from 'framer-motion';

@@ -206,7 +206,7 @@ const RejectedVehicleModal: React.FC<RejectedVehicleModalProps> = ({
           >
             {isReapplying ? (
               <>
-                <Spinner size="sm" variant="dark" className="mr-2" />
+                <Spinner size="sm" variant="default" className="mr-2" />
                 Reapplying...
               </>
             ) : (

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Calendar, Car, MapPin, Search, Clock, DollarSign, User, CreditCard, Eye, QrCode } from 'lucide-react';
+import { Car, MapPin, Search, Eye, QrCode } from 'lucide-react';
 import { Spinner } from "@/components/ui/spinner";
-import { Badge } from '@/components/ui/badge';
+
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
@@ -111,15 +110,7 @@ function IncomingBookings() {
     return statusColors[status as keyof typeof statusColors] || 'bg-gray-500/20 text-gray-400 border-gray-500/30';
   };
 
-  const getPaymentStatusColor = (status: string) => {
-    const statusColors = {
-      'pending': 'bg-yellow-500/20 text-yellow-400',
-      'succeeded': 'bg-green-500/20 text-green-400',
-      'failed': 'bg-red-500/20 text-red-400',
-      'paid': 'bg-blue-500/20 text-blue-400',
-    };
-    return statusColors[status as keyof typeof statusColors] || 'bg-gray-500/20 text-gray-400';
-  };
+
 
   const formatDate = (dateString: string) => {
     try {

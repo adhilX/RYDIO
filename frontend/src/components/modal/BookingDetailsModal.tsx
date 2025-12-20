@@ -4,7 +4,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Car, Clock, MapPin, User, X, CreditCard, DollarSign, Receipt, Shield, AlertCircle, Flag } from 'lucide-react'
+import { Car, Clock, MapPin, User, DollarSign, Receipt, Shield, AlertCircle, Flag } from 'lucide-react'
 import QRGenerator from '../user/QRGenerator'
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
