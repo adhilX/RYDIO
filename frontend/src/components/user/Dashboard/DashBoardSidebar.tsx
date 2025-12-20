@@ -52,14 +52,14 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside className={`
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        fixed md:relative left-6 md:left-0 z-30
-        w-[300px] md:w-[320px] bg-gradient-to-b from-[#232b3a] via-[#181f23] to-[#232b3a] text-white border border-white/10
-        h-[calc(100vh-108px)] md:h-full my-[20px] md:my-0 md:mr-6 flex flex-col items-stretch justify-between
-        rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out pt-14
-        ring-1 ring-[#6DA5C0]/10 overflow-hidden flex-shrink-0
+        fixed md:relative md:left-0 z-30
+        w-[300px] md:w-[320px] bg-black/40 backdrop-blur-xl text-white border border-white/10
+        h-[calc(100vh-120px)] md:h-full flex flex-col items-stretch justify-between
+        rounded-2xl shadow-xl transition-transform duration-300 ease-in-out
+        mt-20 md:mt-0 md:mr-6 shrink-0
       `}>
 
-        <nav className="flex-1 flex flex-col gap-4 px-4 py-6 overflow-y-auto">
+        <nav className="flex-1 flex flex-col gap-3 px-4 py-6 overflow-y-auto">
           {links.map(({ to, label, icon: Icon }) => {
             const active = isActive(to);
             return (
@@ -67,16 +67,15 @@ export function Sidebar() {
                 to={`/${to}`}
                 key={to}
                 onClick={() => setIsMobileOpen(false)}
-                className={`flex items-center gap-4 px-4 py-3 rounded-full font-semibold text-base transition-all duration-200 group relative flex-shrink-0
+                className={`flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium text-base transition-all duration-300 group relative flex-shrink-0
                   ${active
-                    ? 'bg-[#eaf6fa] dark:bg-[#1a232a] text-[#6DA5C0] shadow-lg scale-105 ring-2 ring-[#6DA5C0]'
-                    : 'hover:bg-[#232b3a] hover:text-[#6DA5C0] text-gray-200'}`}
-                style={{ fontFamily: 'DM Sans, Inter, sans-serif' }}
+                    ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-[1.02]'
+                    : 'hover:bg-white/10 text-gray-400 hover:text-white hover:pl-6'}`}
               >
-                <Icon className={`w-6 h-6 flex-shrink-0 transition-all duration-200 ${active ? 'text-[#6DA5C0] scale-110' : 'group-hover:text-[#6DA5C0]'}`} />
+                <Icon className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${active ? 'text-black' : 'group-hover:text-white'}`} />
                 <span className="flex-1 text-left tracking-wide">{label}</span>
                 {active && (
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#6DA5C0] rounded-full shadow-lg animate-pulse" />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
                 )}
               </NavLink>
             );
@@ -85,9 +84,9 @@ export function Sidebar() {
         <div className="mx-4 my-2 border-t border-white/10" />
         <button
           onClick={logout}
-          className="flex items-center gap-4 px-4 py-3 rounded-full text-red-400 hover:bg-[#232b3a] hover:text-red-300 transition-all duration-200 font-semibold mb-6 mx-4 dashboard-sidebar-btn"
+          className="flex items-center gap-4 px-4 py-3.5 rounded-xl text-red-500 hover:bg-white/5 hover:text-red-400 transition-all duration-200 font-medium mb-6 mx-4"
         >
-          <LogOut className="w-6 h-6 flex-shrink-0" />
+          <LogOut className="w-5 h-5 flex-shrink-0" />
           <span className="flex-1 text-left tracking-wide">Logout</span>
         </button>
       </aside>

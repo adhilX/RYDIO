@@ -124,102 +124,129 @@ const ListVehilce = () => {
 
 
     return (
-        <div className="w-full  p-4 md:p-8 font-sans">
-            <div className="flex items-center justify-between mb-8">
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">My Vehicles</h1>
-                <motion.div className="bg-black/80 backdrop-blur-xl border border-black/60 shadow-2xl p-3 rounded-xl">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="flex-1 relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search by email or name..."
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 border border-white/40 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#e63946]"
-                            />
+        <div className="w-full space-y-8 font-sans">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight text-white">My Vehicles</h1>
+                    <p className="text-gray-400 mt-1">Manage your fleet and track status</p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                    <div className="relative flex-1 md:w-80">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Search className="h-4 w-4 text-gray-400" />
                         </div>
+                        <input
+                            type="text"
+                            placeholder="Search vehicles..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/30 transition-all font-medium"
+                        />
+                    </div>
+
+                    <button
+                        disabled={disableAddBtn || isActionsDisabled}
+                        onClick={() => navigate('/userProfile/add-vehicle')}
+                        className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-bold shadow-lg transition-all
+                        ${disableAddBtn || isActionsDisabled
+                                ? 'bg-white/10 text-gray-500 cursor-not-allowed'
+                                : 'bg-white text-black hover:bg-gray-200 hover:scale-105 active:scale-95'
+                            }`}
+                        title={isActionsDisabled ? 'Vendor access required to add vehicles' : ''}
+                    >
+                        <PlusCircle className="w-5 h-5" />
+                        <span className="whitespace-nowrap">Add Vehicle</span>
+                    </button>
+                </div>
+            </div>
+
+            {(disableAddBtn || isActionsDisabled) && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-red-500/10 border border-red-500/20 text-red-200 px-6 py-4 rounded-2xl flex items-start gap-3"
+                >
+                    <div className="p-1 bg-red-500/20 rounded-full shrink-0">
+                        <X className="w-4 h-4 text-red-400" />
+                    </div>
+                    <div>
+                        <h4 className="font-semibold text-red-400">Action Required</h4>
+                        <p className="text-sm text-red-200/70 mt-1">
+                            {isActionsDisabled
+                                ? 'Vendor access is currently restricted. Please contact support.'
+                                : 'Please submit your ID proof and wait for verification to add more vehicles.'}
+                        </p>
                     </div>
                 </motion.div>
-                {(disableAddBtn || isActionsDisabled) && (
-                    <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg shadow-sm text-sm font-medium max-w-md">
-                        {isActionsDisabled
-                            ? '⚠️ Vendor access required to manage vehicles. Please contact admin.'
-                            : 'Submit ID proof to add more vehicles.'}
-                    </div>
-                )}
-                <button
-                    disabled={disableAddBtn || isActionsDisabled}
-                    onClick={() => navigate('/userProfile/add-vehicle')}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold shadow transition
-            ${disableAddBtn || isActionsDisabled
-                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                            : 'bg-[#6DA5C0] text-white hover:bg-[#232b3a]'
-                        }`
-                    }
-                    title={isActionsDisabled ? 'Vendor access required to add vehicles' : ''}
-                >
-                    <PlusCircle className="w-5 h-5" />
-                    Add Vehicle
-                </button>
-            </div>
-            <div className="overflow-x-auto">
+            )}
 
+            <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
                 {isLoading ? (
-                    <div className="flex flex-col justify-center items-center h-64">
-                        <Spinner size="xl" className="border-red-500 border-t-transparent" />
-                        <span className="mt-4 text-white/80 text-lg font-semibold animate-pulse">Loading vehicle...</span>
+                    <div className="flex flex-col justify-center items-center h-96">
+                        <Spinner size="xl" className="border-white border-t-transparent opacity-50" />
+                        <span className="mt-4 text-gray-400 font-medium animate-pulse">Loading fleet...</span>
                     </div>
                 ) : vehicles.length === 0 ? (
-                    <div className="p-6  h-100 flex text-center justify-center text-gray-400">No vehicle found</div>
+                    <div className="flex flex-col items-center justify-center h-96 text-center p-8">
+                        <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                            <Search className="w-8 h-8 text-gray-600" />
+                        </div>
+                        <h3 className="text-xl font-semibold text-white">No vehicles found</h3>
+                        <p className="text-gray-400 mt-2 max-w-sm">
+                            Get started by adding your first vehicle to the platform.
+                        </p>
+                    </div>
                 ) : (
-                    <table className="min-w-full bg-stone-900/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden">
-                        <thead>
-                            <tr className="bg-gradient-to-r from-[#6DA5C0] to-[#232b3a] text-white">
-                                <th className="px-6 py-4 text-left font-semibold">VEHICLE DETAILS</th>
-                                <th className="px-4 py-3 text-center font-semibold">FUEL TYPE</th>
-                                <th className="px-4 py-3 text-center font-semibold">ADMIN STATUS</th>
-                                <th className="px-4 py-3 text-center font-semibold">AVAILABILITY</th>
-                                <th className="px-4 py-3 text-center font-semibold">ACTIONS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {vehicles.map((vehicle, index) => (
-                                <tr key={index} className="border-b border-stone-700 hover:bg-stone-800/50 transition-colors">
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center space-x-4">
-                                            <div className="flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden">
-                                                <img
-                                                    src={IMG_URL + vehicle.image_urls[0]}
-                                                    alt={vehicle.name}
-                                                    className="w-full h-full object-cover"
-                                                />
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full">
+                            <thead>
+                                <tr className="bg-white/5 border-b border-white/10">
+                                    <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Vehicle</th>
+                                    <th className="px-6 py-5 text-center text-xs font-bold text-gray-400 uppercase tracking-wider">Fuel</th>
+                                    <th className="px-6 py-5 text-center text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-5 text-center text-xs font-bold text-gray-400 uppercase tracking-wider">Availability</th>
+                                    <th className="px-8 py-5 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                {vehicles.map((vehicle, index) => (
+                                    <tr key={index} className="group hover:bg-white/5 transition-colors duration-200">
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center space-x-5">
+                                                <div className="flex-shrink-0 w-24 h-16 rounded-xl overflow-hidden bg-white/5 border border-white/10 relative">
+                                                    <img
+                                                        src={IMG_URL + vehicle.image_urls[0]}
+                                                        alt={vehicle.name}
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white group-hover:text-blue-300 transition-colors">{vehicle.name}</h3>
+                                                    <p className="text-sm text-gray-400 font-medium">{vehicle.brand}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h3 className="text-white font-medium">{vehicle.name}</h3>
-                                                <p className="text-sm text-gray-300">{vehicle.brand}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-4 text-center text-gray-300 capitalize">
-                                        {vehicle.fuel_type}
-                                    </td>
-                                    <td className="px-4 py-4 text-center">
-                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${vehicle.admin_approve === 'accepted'
-                                            ? 'bg-green-100 text-green-800'
-                                            : vehicle.admin_approve === 'pending'
-                                                ? 'bg-yellow-100 text-yellow-800'
-                                                : vehicle.admin_approve === 'rejected'
-                                                    ? 'bg-red-100 text-red-800'
-                                                    : vehicle.admin_approve === 'reapplied'
-                                                        ? 'bg-blue-100 text-blue-800'
-                                                        : 'bg-gray-100 text-gray-800'
-                                            }`}>
-                                            {vehicle.admin_approve}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        <div className="flex flex-col items-center space-y-1.5">
+                                        </td>
+                                        <td className="px-6 py-6 text-center">
+                                            <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-sm font-medium text-gray-300 capitalize">
+                                                {vehicle.fuel_type}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-6 text-center">
+                                            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide border ${vehicle.admin_approve === 'accepted' ? 'bg-green-500/10 border-green-500/20 text-green-400' :
+                                                    vehicle.admin_approve === 'pending' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400' :
+                                                        vehicle.admin_approve === 'rejected' ? 'bg-red-500/10 border-red-500/20 text-red-400' :
+                                                            'bg-blue-500/10 border-blue-500/20 text-blue-400'
+                                                }`}>
+                                                <span className={`w-1.5 h-1.5 rounded-full ${vehicle.admin_approve === 'accepted' ? 'bg-green-400' :
+                                                        vehicle.admin_approve === 'pending' ? 'bg-yellow-400' :
+                                                            vehicle.admin_approve === 'rejected' ? 'bg-red-400' :
+                                                                'bg-blue-400'
+                                                    }`}></span>
+                                                {vehicle.admin_approve}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-6 text-center">
                                             <button
                                                 onClick={() => {
                                                     if (!isActionsDisabled) {
@@ -227,62 +254,47 @@ const ListVehilce = () => {
                                                     }
                                                 }}
                                                 disabled={updatingStatus[vehicle._id!] || isActionsDisabled}
-                                                className={`relative inline-flex items-center h-7 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isActionsDisabled
-                                                    ? 'bg-gray-300 cursor-not-allowed'
-                                                    : vehicle.is_available ? 'bg-green-200' : 'bg-gray-400'
+                                                className={`relative inline-flex items-center h-8 w-14 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/50 ${isActionsDisabled ? 'bg-white/10 opacity-50 cursor-not-allowed' :
+                                                        vehicle.is_available ? 'bg-white shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'bg-white/20'
                                                     }`}
-                                                title={isActionsDisabled ? 'Vendor access required to manage vehicle availability' : ''}
                                             >
-                                                <span className={`inline-block w-5 h-5 transform transition-transform bg-white rounded-full shadow-md ${vehicle.is_available ? 'translate-x-8' : 'translate-x-1'}`} />
-                                                {updatingStatus[vehicle._id!] && (
-                                                    <div className="absolute inset-0 flex items-center justify-center">
-                                                        <Spinner size="sm" variant="light" />
-                                                    </div>
-                                                )}
+                                                <span
+                                                    className={`inline-block w-6 h-6 transform transition-transform duration-300 bg-black rounded-full shadow-lg ml-1 ${vehicle.is_available ? 'translate-x-6 bg-black' : 'translate-x-0 bg-black/50'
+                                                        }`}
+                                                />
                                             </button>
-                                            <span className={`text-xs font-medium ${vehicle.is_available ? 'text-white' : 'text-gray-400'}`}>
-                                                {updatingStatus[vehicle._id!] ? 'Updating...' : vehicle.is_available ? 'Listed' : 'Unlisted'}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        <div className="flex justify-center space-x-3">
-                                            <div className="flex items-center space-x-2">
+                                        </td>
+                                        <td className="px-8 py-6 text-right">
+                                            <div className="flex items-center justify-end gap-2">
                                                 {/* View button for rejected vehicles */}
                                                 {vehicle.admin_approve === 'rejected' && (
                                                     <button
-                                                        onClick={() => {
-                                                            if (!isActionsDisabled) {
-                                                                handleViewRejectedVehicle(vehicle);
-                                                            }
-                                                        }}
+                                                        onClick={() => !isActionsDisabled && handleViewRejectedVehicle(vehicle)}
                                                         disabled={isActionsDisabled}
-                                                        className={`p-2 rounded-lg transition-colors shadow-md hover:shadow-lg ${isActionsDisabled
-                                                            ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                                                            : 'bg-blue-600 text-white hover:bg-blue-700'
-                                                            }`}
-                                                        title={isActionsDisabled ? 'Vendor access required to reapply vehicle' : 'View Details & Reapply'}
+                                                        className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all hover:scale-110"
+                                                        title="View Details & Reapply"
                                                     >
                                                         <Eye className="w-4 h-4" />
                                                     </button>
                                                 )}
+
                                                 <div className="relative">
                                                     {showDeleteConfirm === vehicle._id ? (
-                                                        <div className="absolute right-0 z-10 flex items-center bg-white rounded-lg shadow-lg p-1 space-x-1">
-                                                            <span className="px-2 text-sm text-gray-700 whitespace-nowrap">Delete?</span>
+                                                        <motion.div
+                                                            initial={{ opacity: 0, scale: 0.9, x: 10 }}
+                                                            animate={{ opacity: 1, scale: 1, x: 0 }}
+                                                            className="flex items-center bg-black border border-white/20 rounded-xl p-1 shadow-2xl absolute right-0 -top-1 z-10"
+                                                        >
                                                             <button
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
-                                                                    if (vehicle._id) {
-                                                                        handleDelete(vehicle._id);
-                                                                    }
+                                                                    if (vehicle._id) handleDelete(vehicle._id);
                                                                 }}
                                                                 disabled={deletingId === vehicle._id}
-                                                                className="p-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
-                                                                title="Confirm Delete"
+                                                                className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 mr-1"
                                                             >
                                                                 {deletingId === vehicle._id ? (
-                                                                    <Spinner size="sm" variant="light" />
+                                                                    <Spinner size="sm" className="border-white" />
                                                                 ) : (
                                                                     <Check className="w-3.5 h-3.5" />
                                                                 )}
@@ -292,12 +304,11 @@ const ListVehilce = () => {
                                                                     e.stopPropagation();
                                                                     setShowDeleteConfirm(null);
                                                                 }}
-                                                                className="p-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                                                                title="Cancel"
+                                                                className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20"
                                                             >
                                                                 <X className="w-3.5 h-3.5" />
                                                             </button>
-                                                        </div>
+                                                        </motion.div>
                                                     ) : (
                                                         <button
                                                             onClick={(e) => {
@@ -307,25 +318,24 @@ const ListVehilce = () => {
                                                                 }
                                                             }}
                                                             disabled={isActionsDisabled}
-                                                            className={`p-2 rounded-lg transition-colors shadow-md hover:shadow-lg ${isActionsDisabled
-                                                                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                                                                : 'bg-red-600 text-white hover:bg-red-700'
-                                                                }`}
-                                                            title={isActionsDisabled ? 'Vendor access required to delete vehicle' : 'Delete Vehicle'}
+                                                            className={`p-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all hover:scale-110 ${isActionsDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                            title="Delete Vehicle"
                                                         >
                                                             <Trash2 className="w-4 h-4" />
                                                         </button>
                                                     )}
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
+
+            {(disableAddBtn || isActionsDisabled) && <div className="h-8" />}
             {/* Pagination Controls */}
 
             {totalPages > 1 && (

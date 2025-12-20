@@ -6,39 +6,31 @@ import Navbar from "@/components/user/Navbar";
 
 export default function Layout() {
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white relative overflow-hidden">
-      {/* Premium Background Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-      
+    <div className="min-h-screen bg-black text-white relative flex flex-col">
       <Navbar />
-      
-      <div className="relative z-10 flex flex-col md:flex-row h-[calc(100vh-80px)] gap-6 p-6">
+
+      <div className="flex-1 flex flex-col md:flex-row max-w-[1920px] mx-auto w-full pt-20 md:pt-24 p-6 gap-6 relative z-10">
         <Sidebar />
-        
-        {/* Premium Main Content Area */}
-        <motion.main 
+
+        {/* Main Content Area */}
+        <motion.main
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex-1 overflow-hidden h-max"
+          className="flex-1 min-w-0"
         >
           {/* Glass Container for Content */}
-          <div 
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl h-[calc(100vh-40px)] p-6 md:p-8 overflow-y-auto custom-scrollbar"
-            style={{
-              scrollbarWidth: 'thin',
-              scrollbarColor: 'rgba(255, 255, 255, 0.2) transparent',
-            }}
-          >
+          <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl h-[calc(100vh-140px)] p-6 md:p-10 overflow-y-auto custom-scrollbar relative shadow-[0_0_50px_rgba(255,255,255,0.05)]">
             <Outlet />
           </div>
         </motion.main>
       </div>
-      
-      {/* Premium Floating Elements */}
-      <div className="fixed top-1/4 -right-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="fixed bottom-1/4 -left-20 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+
+      {/* Background Ambience */}
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-white/5 rounded-full blur-[150px]" />
+      </div>
     </div>
   );
 }

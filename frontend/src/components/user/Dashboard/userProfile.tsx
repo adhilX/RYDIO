@@ -14,6 +14,7 @@ import { userProfileSchema, type UserProfileFormData } from "@/Types/User/valida
 import { UploadIdProofModal } from "./modal/IdProof";
 import { getUser } from "@/services/user/authService";
 import type { Iuser } from "@/Types/User/Iuser";
+import { IdCard, CheckCircle, XCircle, ShieldAlert, ChevronRight } from "lucide-react";
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 export default function UserProfile() {
   const { user } = useSelector((state: RootState) => state.auth)
@@ -82,6 +83,7 @@ export default function UserProfile() {
       setShowCropper(true);
     };
     reader.readAsDataURL(file);
+    e.target.value = ""; // Reset input so same file can be selected again
   };
 
   const triggerFileInput = () => {
@@ -116,176 +118,231 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12 py-8 md:py-12 font-sans">
-      {/* Left: User Details Card */}
-      <div className="w-full md:w-[340px] bg-white dark:bg-black rounded-xl shadow-lg border border-gray-200 dark:border-white/10 p-6 md:p-8 flex flex-col items-center mb-8 md:mb-0">
-        <div className="relative group cursor-pointer mb-6" onClick={isEditing ? triggerFileInput : undefined}>
-          <Avatar className="w-32 h-32 border-4 border-white dark:border-black shadow-lg group-hover:opacity-90 transition-opacity">
-            <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) : IMG_URL + userDate.profile_image || ""} />
-            <AvatarFallback className="bg-gray-100 text-gray-600 text-6xl font-medium">
-              {userDate.name?.[0]?.toUpperCase() || "?"}
-            </AvatarFallback>
-          </Avatar>
-          {isEditing && (
-            <div className="absolute inset-0 bg-black bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-white font-medium">Change Photo</span>
-            </div>
-          )}
-        </div>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="hidden"
-          ref={fileInputRef}
-          title="Upload profile image"
-        />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-          {userDate.name || "Not set"}
-          {userDate.is_verified_user && (
-            <svg
-              fill="#000000"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="icon flat-line"
-            >
-              <path
-                d="M21.37,12c0,1-.86,1.79-1.14,2.67s-.1,2.08-.65,2.83-1.73.94-2.5,1.49-1.28,1.62-2.18,1.92S13,20.65,12,20.65s-2,.55-2.9.27S7.67,19.55,6.92,19,5,18.28,4.42,17.51s-.35-1.92-.65-2.83S2.63,13,2.63,12s.86-1.8,1.14-2.68.1-2.08.65-2.83S6.15,5.56,6.92,5,8.2,3.39,9.1,3.09s1.93.27,2.9.27,2-.55,2.9-.27S16.33,4.46,17.08,5s1.94.72,2.5,1.49.35,1.92.65,2.83S21.37,11,21.37,12Z"
-                fill="#61d0ff"
-                strokeWidth={0.696}
-              />
-              <polyline
-                points="8 12 11 15 16 10"
-                fill="none"
-                stroke="#000000"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={0.696}
-              />
-              <path
-                d="M21.37,12c0,1-.86,1.79-1.14,2.67s-.1,2.08-.65,2.83-1.73.94-2.5,1.49-1.28,1.62-2.18,1.92S13,20.65,12,20.65s-2,.55-2.9.27S7.67,19.55,6.92,19,5,18.28,4.42,17.51s-.35-1.92-.65-2.83S2.63,13,2.63,12s.86-1.8,1.14-2.68.1-2.08.65-2.83S6.15,5.56,6.92,5,8.2,3.39,9.1,3.09s1.93.27,2.9.27,2-.55,2.9-.27S16.33,4.46,17.08,5s1.94.72,2.5,1.49.35,1.92.65,2.83S21.37,11,21.37,12Z"
-                fill="none"
-                stroke="#000000"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={0.696}
-              />
-            </svg>
-          )}
+    <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 font-sans">
+      {/* Left: User Identity Card */}
+      <div className="w-full lg:w-[380px] shrink-0">
+        <div className="bg-black/40 backdrop-blur-md rounded-3xl border border-white/10 p-8 flex flex-col items-center relative overflow-hidden group">
+          {/* Decorative glow */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-50" />
 
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{userDate.email || "Not set"}</p>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{userDate.phone || "Add your phone number"}</p>
-        {userDate.idproof_id ? (
-          userDate.idproof_id.status === 'rejected' ? (
-            <div className="mb-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 flex flex-col gap-1">
-              <div>
-                <span className="font-semibold">ID Proof Status:</span>
-                <span className="capitalize ml-2">{userDate.idproof_id.status}</span>
-              </div>
-              <div>
-                <span className="font-semibold">Reason:</span>
-                <span className="ml-2">{userDate.idproof_id.reason || "No reason provided"}</span>
-              </div>
+          <div className="relative mb-6">
+            <div className="w-40 h-40 rounded-full p-1 bg-gradient-to-br from-white/20 to-transparent border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+              <Avatar className="w-full h-full rounded-full border-4 border-black/50 shadow-inner">
+                <AvatarImage src={croppedImage ? URL.createObjectURL(croppedImage) : IMG_URL + userDate.profile_image || ""} className="object-cover" />
+                <AvatarFallback className="bg-black text-white/50 text-5xl font-light">
+                  {userDate.name?.[0]?.toUpperCase() || "?"}
+                </AvatarFallback>
+              </Avatar>
             </div>
-          ) :
-            userDate.idproof_id.status !== 'approved' ? (
-              <div className="mb-2 p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 flex items-center">
-                <span className="font-semibold">ID Proof Status:</span>
-                <span className="capitalize">{userDate.idproof_id.status}</span>
-              </div>
-            ) : null
-        ) : (
-          <Button
-            className="w-full bg-[#6DA5C0] hover:bg-[#5b8ca3] text-white font-semibold py-2 rounded-md transition-all duration-200 shadow-sm mb-2"
-            onClick={() => SetOpen(true)}
-          >
-            Submit ID Proof
-          </Button>
-        )}
-        <Button
-          className="w-full bg-black dark:bg-white text-white dark:text-black border border-black dark:border-white hover:bg-[#6DA5C0] hover:text-white dark:hover:bg-[#6DA5C0] dark:hover:text-white font-semibold py-2 rounded-md transition-all duration-200 shadow-sm"
-          type="button"
-          onClick={() => setIsEditing(true)}
-          disabled={isEditing}
-        >
-          Edit Profile
-        </Button>
-        <ImageCropper
-          imageSrc={imageSrc}
-          onCropComplete={setCroppedImage}
-          open={showCropper}
-          onOpenChange={setShowCropper}
-        />
-        <UploadIdProofModal open={open} onClose={() => SetOpen(false)} onSuccess={refreshUser} />
-      </div>
 
-      {/* Right: Editable Form or Info Blocks */}
-      <div className="flex-1 bg-white dark:bg-black rounded-xl shadow-lg border border-gray-200 dark:border-white/10 p-6 md:p-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Profile Details</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Manage your account details</p>
-        </div>
-        <form onSubmit={handleSubmit(handleUpdateUser)} className="space-y-8">
-          {/* Name Field */}
-          <div>
-            <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">Name</Label>
-            {isEditing ? (
-              <div>
-                <input
-                  {...register("name")}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-md text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
-                />
-                {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
+            {isEditing && (
+              <button
+                onClick={triggerFileInput}
+                className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer backdrop-blur-sm"
+              >
+                <div className="bg-white text-black px-4 py-2 rounded-full font-bold text-sm shadow-[0_0_15px_rgba(255,255,255,0.5)] transform scale-90 group-hover:scale-100 transition-transform">
+                  Upload Photo
+                </div>
+              </button>
+            )}
+
+
+          </div>
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            ref={fileInputRef}
+          />
+
+          <h2 className="text-3xl font-bold text-white mb-2 text-center tracking-tight flex items-center justify-center gap-2">
+            {userDate.name || "Anonymous"}
+            {userDate.is_verified_user && (
+              <div title="Verified User" className="mt-1">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.5 12.5C22.5 10.92 21.625 9.55 20.352 8.9C20.506 8.465 20.59 7.995 20.59 7.5C20.59 5.29 18.88 3.502 16.772 3.502C16.302 3.502 15.852 3.586 15.436 3.752C14.818 2.415 13.51 1.5 12 1.5C10.49 1.5 9.184 2.417 8.563 3.75C8.15 3.585 7.697 3.5 7.227 3.5C5.117 3.5 3.409 5.29 3.409 7.5C3.409 7.995 3.492 8.465 3.647 8.9C2.375 9.55 1.5 10.92 1.5 12.5C1.5 14.078 2.375 15.448 3.647 16.098C3.493 16.533 3.409 17.003 3.409 17.5C3.409 19.71 5.119 21.5 7.227 21.5C7.697 21.5 8.147 21.414 8.563 21.25C9.183 22.583 10.489 23.5 12 23.5C13.512 23.5 14.818 22.583 15.437 21.25C15.851 21.415 16.303 21.5 16.772 21.5C18.882 21.5 20.59 19.71 20.59 17.5C20.59 17.005 20.507 16.535 20.353 16.1C21.625 15.45 22.5 14.08 22.5 12.5Z" fill="#1877F2" />
+                  <path d="M10 16.5L6 12.5L7.41 11.09L10 13.67L16.59 7.09L18 8.5L10 16.5Z" fill="white" />
+                </svg>
+              </div>
+            )}
+          </h2>
+          <p className="text-gray-400 mb-6 text-center text-sm tracking-wide uppercase font-medium">
+            {userDate.email}
+          </p>
+
+          <div className="w-full space-y-3">
+
+
+            {userDate.idproof_id ? (
+              <div className={`group relative overflow-hidden rounded-2xl border bg-white/5 p-4 transition-all duration-300 ${userDate.idproof_id.status === 'approved' ? 'border-green-500/30 hover:bg-green-500/5' :
+                userDate.idproof_id.status === 'rejected' ? 'border-red-500/30 hover:bg-red-500/5' :
+                  'border-yellow-500/30 hover:bg-yellow-500/5'
+                }`}>
+                <div className="flex items-center gap-4">
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 shadow-inner ${userDate.idproof_id.status === 'approved' ? 'text-green-400' :
+                    userDate.idproof_id.status === 'rejected' ? 'text-red-400' :
+                      'text-yellow-400'
+                    }`}>
+                    <IdCard className="h-6 w-6" />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium uppercase tracking-wider text-gray-500">Identity Verification</span>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-base font-bold capitalize tracking-tight ${userDate.idproof_id.status === 'approved' ? 'text-white' :
+                        userDate.idproof_id.status === 'rejected' ? 'text-red-200' :
+                          'text-yellow-200'
+                        }`}>
+                        {userDate.idproof_id.status === 'approved' ? 'Verified Account' :
+                          userDate.idproof_id.status === 'rejected' ? 'Verification Failed' :
+                            'Verification Pending'
+                        }
+                      </span>
+                      {userDate.idproof_id.status === 'approved' && <CheckCircle className="h-4 w-4 text-green-400" />}
+                      {userDate.idproof_id.status === 'rejected' && <XCircle className="h-4 w-4 text-red-400" />}
+                      {userDate.idproof_id.status === 'pending' && <ShieldAlert className="h-4 w-4 text-yellow-400 animate-pulse" />}
+                    </div>
+                  </div>
+                </div>
+
+                {userDate.idproof_id.status === 'rejected' && (
+                  <div className="mt-3 flex items-start gap-2 rounded-lg bg-red-500/10 p-3 text-xs text-red-200">
+                    <ShieldAlert className="h-4 w-4 shrink-0" />
+                    <p>{userDate.idproof_id.reason || "Please re-upload clearer documents."}</p>
+                    <button
+                      onClick={() => SetOpen(true)}
+                      className="ml-auto font-bold text-white underline hover:text-red-200"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
-              <p className="text-gray-900 dark:text-white font-medium">{userDate.name || "Not set"}</p>
+              <button
+                onClick={() => SetOpen(true)}
+                className="group relative flex w-full items-center justify-between overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-r from-white/10 to-transparent p-4 text-left transition-all duration-300 hover:border-white/40 hover:from-white/20"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform duration-300 group-hover:scale-110">
+                    <IdCard className="h-6 w-6" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium uppercase tracking-wider text-gray-400 group-hover:text-gray-300">Identity Status</span>
+                    <span className="text-base font-bold text-white group-hover:text-white">Verify Your Account</span>
+                  </div>
+                </div>
+                <div className="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition-opacity group-hover:bg-white group-hover:text-black">
+                  <ChevronRight className="h-5 w-5" />
+                </div>
+              </button>
+            )}
+
+            {!isEditing && (
+              <Button
+                onClick={() => setIsEditing(true)}
+                className="w-full bg-white text-black hover:bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300 h-12 rounded-xl font-bold mt-4"
+              >
+                Edit Profile
+              </Button>
             )}
           </div>
-          {/* Email Field (read-only) */}
-          <div>
-            <Label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">Email</Label>
-            <p className="text-gray-900 dark:text-white font-medium">{userDate.email || "Not set"}</p>
-            <span className="text-xs text-yellow-600 mt-1 block">Email cannot be changed</span>
-          </div>
-          {/* Phone Field */}
-          <div>
-            <Label htmlFor="phone" className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">Phone</Label>
-            {isEditing ? (
-              <div>
-                <input
-                  {...register("phone")}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-white/10 rounded-md text-gray-900 dark:text-white bg-white dark:bg-black focus:ring-[#6DA5C0] focus:border-[#6DA5C0] transition-all duration-200"
-                />
-                {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>}
-              </div>
-            ) : (
-              <p className="text-gray-900 dark:text-white font-medium">{userDate.phone || "Add your phone number"}</p>
-            )}
-          </div>
-          {/* Save/Cancel Buttons */}
-          {isEditing && (
-            <div className="flex gap-4 pt-2">
-              <Button
-                type="button"
-                onClick={() => setIsEditing(false)}
-                className="w-28 bg-gray-300 hover:bg-red-400 text-black py-2 rounded-md transition-all duration-200 shadow-sm"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-28 bg-[#6DA5C0] hover:bg-[#5b8ca3] text-white py-2 rounded-md transition-all duration-200 shadow-sm"
-              >
-                {isSubmitting ? "Please Wait..." : "Save Profile"}
-              </Button>
-            </div>
-          )}
-        </form>
+        </div>
       </div>
+
+      {/* Right: Edit Layout */}
+      <div className="flex-1">
+        <div className="bg-black/40 backdrop-blur-md rounded-3xl border border-white/10 p-8 md:p-10 h-full relative">
+          <div className="mb-10 border-b border-white/10 pb-6">
+            <h2 className="text-3xl font-bold text-white mb-2">Account Details</h2>
+            <p className="text-gray-400 font-light">Update your personal information and contact details.</p>
+          </div>
+
+          <form onSubmit={handleSubmit(handleUpdateUser)} className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <Label className="text-gray-300 text-sm font-medium ml-1">Full Name</Label>
+                {isEditing ? (
+                  <div className="relative">
+                    <input
+                      {...register("name")}
+                      className="w-full h-14 bg-white/5 border border-white/10 rounded-xl px-5 text-white focus:border-white focus:bg-white/10 transition-all outline-none"
+                    />
+                    {errors.name && <p className="text-red-400 text-xs mt-2 ml-1">{errors.name.message}</p>}
+                  </div>
+                ) : (
+                  <div className="h-14 flex items-center px-5 rounded-xl bg-white/5 border border-white/5 text-gray-300 cursor-not-allowed">
+                    {userDate.name || "Not set"}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <Label className="text-gray-300 text-sm font-medium ml-1">Phone Number</Label>
+                {isEditing ? (
+                  <div className="relative">
+                    <input
+                      {...register("phone")}
+                      className="w-full h-14 bg-white/5 border border-white/10 rounded-xl px-5 text-white focus:border-white focus:bg-white/10 transition-all outline-none"
+                    />
+                    {errors.phone && <p className="text-red-400 text-xs mt-2 ml-1">{errors.phone.message}</p>}
+                  </div>
+                ) : (
+                  <div className="h-14 flex items-center px-5 rounded-xl bg-white/5 border border-white/5 text-gray-300 cursor-not-allowed">
+                    {userDate.phone || "Not Set"}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Label className="text-gray-300 text-sm font-medium ml-1">Email Address</Label>
+              <div className="h-14 flex items-center px-5 rounded-xl bg-white/5 border border-white/5 text-gray-400 cursor-not-allowed opacity-70">
+                {userDate.email}
+                <span className="ml-auto text-xs text-white/30 border border-white/10 px-2 py-1 rounded">Read Only</span>
+              </div>
+            </div>
+
+            {isEditing && (
+              <div className="flex justify-end gap-4 pt-8 border-t border-white/10 mt-8">
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(false);
+                    // optionally reset form here
+                    refreshUser();
+                  }}
+                  className="h-12 px-8 rounded-xl bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="h-12 px-8 rounded-xl bg-white text-black hover:bg-gray-200 font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
+                      Saving...
+                    </span>
+                  ) : "Save Changes"}
+                </Button>
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
+
+      <ImageCropper
+        imageSrc={imageSrc}
+        onCropComplete={setCroppedImage}
+        open={showCropper}
+        onOpenChange={setShowCropper}
+      />
+      <UploadIdProofModal open={open} onClose={() => SetOpen(false)} onSuccess={refreshUser} />
     </div>
   );
 }
