@@ -12,6 +12,8 @@ import type { SearchParams, LocationCoords } from "@/Types/User/searchTypes";
 import React from "react";
 import { setSearchDate } from "@/store/slice/user/SearchDateSlice";
 import { Spinner } from "@/components/ui/spinner";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Type for location suggestions
 interface Suggestion {
@@ -185,12 +187,12 @@ function VehicleSearchBar() {
   }, []);
 
   // Set minimum date for date pickers to today
-  const today = new Date().toISOString().split('T')[0];
+  // const today = new Date().toISOString().split('T')[0];
 
   return (
     <div className="max-w-7xl mx-auto mt-20 mb-16 relative z-50">
       <Card
-        className={`max-w-6xl mx-auto p-8 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-md border-white/20 transition-all duration-500 ${showSparkles ? 'ring-2 ring-white/50' : ''
+        className={`max-w-6xl mx-auto p-8 rounded-2xl shadow-2xl bg-black/40 backdrop-blur-md border-white/10 transition-all duration-500 ${showSparkles ? 'ring-2 ring-white/50' : ''
           }`}
       >
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -209,8 +211,8 @@ function VehicleSearchBar() {
                   setError(null);
                 }}
                 disabled={isLoading}
-                className={`pl-12 h-14 rounded-xl border-2 ${error && !selectedLocation ? 'border-red-400' : 'border-white/30 focus:border-white'
-                  } transition-all duration-300 hover:scale-[1.02] text-lg bg-white/10 backdrop-blur-sm text-white placeholder:text-gray-300`}
+                className={`pl-12 h-14 rounded-xl border-2 ${error && !selectedLocation ? 'border-red-400' : 'border-white/10 focus:border-white'
+                  } transition-all duration-300 hover:scale-[1.02] text-lg bg-black/40 backdrop-blur-sm text-white placeholder:text-gray-400`}
               />
               <MapPin
                 className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-all duration-300 ${selectedLocation ? 'text-white animate-bounce' : 'text-gray-300'
@@ -241,48 +243,68 @@ function VehicleSearchBar() {
           </div>
 
           {/* Pickup Date */}
-          <div className="relative">
+          <div className="relative z-40">
             <label className="block text-sm font-medium text-gray-200 mb-2">
               Pick-up Date
             </label>
             <div className="relative">
-              <Input
-                type="date"
-                min={today}
-                value={pickupDate}
-                onChange={(e) => handleDateChange(setPickupDate, e.target.value)}
-                disabled={isLoading}
-                className={`pl-12 h-14 rounded-xl border-2 ${error && !pickupDate ? 'border-red-400' : 'border-white/30 focus:border-white'
-                  } transition-all duration-300 hover:scale-[1.02] text-lg bg-white/10 backdrop-blur-sm text-white`}
+              <DatePicker
+                selected={pickupDate ? new Date(pickupDate) : null}
+                onChange={(date: Date | null) => {
+                  if (date) {
+                    // Adjust to local date string YYYY-MM-DD
+                    const offset = date.getTimezoneOffset();
+                    const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+                    handleDateChange(setPickupDate, localDate.toISOString().split('T')[0]);
+                  } else {
+                    handleDateChange(setPickupDate, '');
+                  }
+                }}
+                minDate={new Date()}
+                placeholderText="Select Date"
+                className={`pl-12 w-full h-14 rounded-xl border-2 ${error && !pickupDate ? 'border-red-400' : 'border-white/10 focus:border-white'
+                  } transition-all duration-300 hover:scale-[1.02] text-lg bg-black/40 backdrop-blur-sm text-white placeholder:text-gray-400 focus:outline-none`}
+                wrapperClassName="w-full"
+                dateFormat="MMM dd, yyyy"
               />
               <Calendar
                 className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-all duration-300 ${pickupDate ? 'text-white animate-pulse' : 'text-gray-300'
-                  }`}
+                  } z-10 pointer-events-none`}
                 size={20}
               />
             </div>
           </div>
 
           {/* Return Date */}
-          <div className="relative">
+          <div className="relative z-40">
             <label className="block text-sm font-medium text-gray-200 mb-2">
               Return Date
             </label>
             <div className="relative">
-              <Input
-                type="date"
-                min={pickupDate || today}
-                value={returnDate}
-                onChange={(e) => handleDateChange(setReturnDate, e.target.value)}
+              <DatePicker
+                selected={returnDate ? new Date(returnDate) : null}
+                onChange={(date: Date | null) => {
+                  if (date) {
+                    const offset = date.getTimezoneOffset();
+                    const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+                    handleDateChange(setReturnDate, localDate.toISOString().split('T')[0]);
+                  } else {
+                    handleDateChange(setReturnDate, '');
+                  }
+                }}
+                minDate={pickupDate ? new Date(pickupDate) : new Date()}
                 disabled={isLoading || !pickupDate}
-                className={`pl-12 h-14 rounded-xl border-2 ${error && returnDate && new Date(returnDate) <= new Date(pickupDate)
+                placeholderText="Select Date"
+                className={`pl-12 w-full h-14 rounded-xl border-2 ${error && returnDate && new Date(returnDate) <= new Date(pickupDate)
                   ? 'border-red-400'
-                  : 'border-white/30 focus:border-white'
-                  } transition-all duration-300 hover:scale-[1.02] text-lg bg-white/10 backdrop-blur-sm text-white`}
+                  : 'border-white/10 focus:border-white'
+                  } transition-all duration-300 hover:scale-[1.02] text-lg bg-black/40 backdrop-blur-sm text-white placeholder:text-gray-400 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed`}
+                wrapperClassName="w-full"
+                dateFormat="MMM dd, yyyy"
               />
               <Calendar
                 className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-all duration-300 ${returnDate ? 'text-white animate-pulse' : 'text-gray-300'
-                  }`}
+                  } z-10 pointer-events-none`}
                 size={20}
               />
             </div>

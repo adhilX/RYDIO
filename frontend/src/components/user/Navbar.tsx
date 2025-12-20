@@ -54,9 +54,9 @@ function Navbar() {
   }, [token, notification]);
 
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled || isMobileMenuOpen
-        ? 'bg-black/80 backdrop-blur-md shadow-lg border-b border-white/10'
-        : 'bg-transparent'
+    <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled || isMobileMenuOpen
+      ? 'bg-black/40 backdrop-blur-xl border-b border-white/10 shadow-sm'
+      : 'bg-gradient-to-b from-black/50 to-transparent backdrop-blur-[2px]'
       }`}>
       <nav className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">

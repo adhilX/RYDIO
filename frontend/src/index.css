@@ -278,25 +278,48 @@
 
 /* React Datepicker Dark & Glowing White Mode Overrides */
 .react-datepicker {
-  @apply bg-[#1a1a1a] border border-white/20 text-white font-sans rounded-xl overflow-hidden;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  background-color: #000000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  border-radius: 0.75rem !important;
+  overflow: hidden !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1) !important;
 }
 
 .react-datepicker__header {
-  @apply bg-[#121212] border-b border-white/10 pt-4;
+  background-color: #000000 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-top: 1rem !important;
+}
+
+.react-datepicker__month-container {
+  background-color: #000000 !important;
 }
 
 .react-datepicker__current-month {
-  @apply text-white font-bold text-lg mb-2;
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.125rem !important;
+  margin-bottom: 0.5rem !important;
+  text-shadow: none !important;
 }
 
 .react-datepicker__day-name {
-  @apply text-gray-400 font-medium w-10;
+  color: #a1a1aa !important;
+  /* text-gray-400 */
+  font-weight: 500 !important;
+  width: 2.5rem !important;
 }
 
 .react-datepicker__day {
-  @apply text-gray-300 w-10 h-10 leading-10 m-0 hover:bg-white/20 hover:rounded-full transition-all;
+  color: #e4e4e7 !important;
+  /* text-gray-200 */
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  line-height: 2.5rem !important;
+  margin: 0 !important;
+  transition: all 0.2s ease !important;
 }
 
 .react-datepicker__day:hover {
