@@ -4,6 +4,7 @@ import { getUserNotifications, markNotificationAsRead, markAllNotificationsAsRea
 import type { Notification } from '@/Types/NotificationType';
 import type { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
+import { Spinner } from "@/components/ui/spinner";
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 interface NotificationModalProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
-  if(!user)return null
+  if (!user) return null
   const fetchNotifications = async () => {
     try {
       setLoading(true);
@@ -40,9 +41,9 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
   const handleMarkAsRead = async (notificationId: string) => {
     try {
       await markNotificationAsRead(notificationId);
-      setNotifications(prev => 
-        prev.map(notification => 
-          notification._id === notificationId 
+      setNotifications(prev =>
+        prev.map(notification =>
+          notification._id === notificationId
             ? { ...notification, read: true }
             : notification
         )
@@ -56,7 +57,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
   const handleMarkAllAsRead = async () => {
     try {
       await markAllNotificationsAsRead(user._id);
-      setNotifications(prev => 
+      setNotifications(prev =>
         prev.map(notification => ({ ...notification, read: true }))
       );
       onNotificationUpdate?.();
@@ -68,7 +69,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
   const handleDeleteNotification = async (notificationId: string) => {
     try {
       await deleteNotification(notificationId);
-      setNotifications(prev => 
+      setNotifications(prev =>
         prev.filter(notification => notification._id !== notificationId)
       );
       onNotificationUpdate?.();
@@ -102,7 +103,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
     const date = new Date(dateString);
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) return 'Just now';
     if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} hours ago`;
@@ -139,7 +140,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
         <div className="max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
           {loading ? (
             <div className="p-8 text-center text-gray-400">
-              <div className="w-8 h-8 mx-auto mb-4 animate-spin rounded-full border-2 border-gray-600 border-t-blue-500"></div>
+              <Spinner size="md" className="mx-auto mb-4 border-gray-600 border-t-blue-500" />
               <p className="text-sm">Loading notifications...</p>
             </div>
           ) : error ? (
@@ -148,7 +149,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
                 <AlertTriangle className="w-8 h-8 text-red-500" />
               </div>
               <p className="text-sm">{error}</p>
-              <button 
+              <button
                 onClick={fetchNotifications}
                 className="mt-2 text-xs text-blue-400 hover:text-blue-300 underline"
               >
@@ -167,16 +168,15 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
               {notifications.map((notification) => (
                 <div
                   key={notification._id}
-                  className={`p-4 hover:bg-gray-800 transition-all duration-200 group relative ${
-                    !notification.read ? 'bg-blue-900/30 border-l-4 border-l-blue-500' : ''
-                  }`}
+                  className={`p-4 hover:bg-gray-800 transition-all duration-200 group relative ${!notification.read ? 'bg-blue-900/30 border-l-4 border-l-blue-500' : ''
+                    }`}
                 >
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0 mt-0.5">
                       {notification.from?.profileImage ? (
-                        <img 
-                          src={IMG_URL + notification.from.profileImage} 
-                          alt={notification.from.name || 'User'} 
+                        <img
+                          src={IMG_URL + notification.from.profileImage}
+                          alt={notification.from.name || 'User'}
                           className="w-10 h-10 rounded-full object-cover border border-gray-600 shadow-sm"
                         />
                       ) : (
@@ -185,15 +185,14 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
                         </div>
                       )}
                     </div>
-                    <div 
+                    <div
                       className="flex-1 min-w-0 cursor-pointer"
                       onClick={() => !notification.read && handleMarkAsRead(notification._id!)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <p className={`text-sm font-semibold leading-5 ${
-                            !notification.read ? 'text-white' : 'text-gray-300'
-                          }`}>
+                          <p className={`text-sm font-semibold leading-5 ${!notification.read ? 'text-white' : 'text-gray-300'
+                            }`}>
                             {notification.from?.name || 'Unknown User'}
                           </p>
                           <p className="text-sm text-gray-400 mt-1 leading-relaxed">
@@ -231,13 +230,13 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
         {notifications.length > 0 && !loading && (
           <div className="p-4 border-t border-gray-700 bg-gray-800 rounded-b-xl">
             <div className="flex justify-between items-center">
-              <button 
+              <button
                 onClick={handleMarkAllAsRead}
                 className="text-sm text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-200 hover:underline"
               >
                 Mark all as read
               </button>
-              <button 
+              <button
                 onClick={handleDeleteAllNotifications}
                 className="text-sm text-red-400 hover:text-red-300 font-semibold transition-colors duration-200 hover:underline"
               >

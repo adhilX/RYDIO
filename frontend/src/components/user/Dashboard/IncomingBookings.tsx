@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Calendar, Car, MapPin, Search, Clock, DollarSign, User, CreditCard, Eye, QrCode } from 'lucide-react';
+import { Spinner } from "@/components/ui/spinner";
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,19 +25,19 @@ interface ApiResponse {
 
 function IncomingBookings() {
   const user = useSelector((state: RootState) => state.auth.user);
-  
+
   const [bookings, setBookings] = useState<IncomingBooking[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all'| 'booked' | 'ongoing' | 'completed' | 'cancelled'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'booked' | 'ongoing' | 'completed' | 'cancelled'>('all');
   const [limit] = useState(6);
-  
+
   const [bookingState, setBookingState] = useState({
     currentPage: 1,
     isLoading: false,
     debouncedSearch: ''
   });
-  
+
   const [selectedBooking, setSelectedBooking] = useState<IncomingBooking | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [showQrScanner, setShowQrScanner] = useState(false);
@@ -59,9 +60,9 @@ function IncomingBookings() {
   useEffect(() => {
     const fetchBookings = async () => {
       if (!user?._id) return;
-      
+
       setBookingState(prev => ({ ...prev, isLoading: true }));
-      
+
       try {
         const response: ApiResponse = await getIncomingBooking(
           user._id,
@@ -70,7 +71,7 @@ function IncomingBookings() {
           currentPage,
           limit
         );
-        
+
         setBookings(response.bookings || []);
         setTotalPages(Math.ceil((response.total || 0) / limit));
       } catch (error) {
@@ -153,7 +154,7 @@ function IncomingBookings() {
   if (bookingState.isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <Spinner size="xl" variant="primary" />
       </div>
     );
   }
@@ -180,14 +181,14 @@ function IncomingBookings() {
             {showQrScanner ? 'Close Scanner' : 'Scan QR Code'}
           </Button>
           <div className="relative w-full md:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Search bookings..."
-            className="pl-10 w-full"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search bookings..."
+              className="pl-10 w-full"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
       </div>
@@ -256,7 +257,7 @@ function IncomingBookings() {
                       </Badge>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-col flex-1 space-y-3">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
@@ -316,7 +317,7 @@ function IncomingBookings() {
                         </div>
                         <span className="font-bold text-lg">₹{booking.total_amount.toLocaleString()}</span>
                       </div>
-                      
+
                       {booking.finance && (
                         <div className="grid grid-cols-2 gap-2 text-xs mb-3">
                           <div>
@@ -329,7 +330,7 @@ function IncomingBookings() {
                           </div>
                         </div>
                       )}
-                      
+
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-1">
                           <CreditCard className="h-3 w-3" />
@@ -342,8 +343,8 @@ function IncomingBookings() {
                         </p>
                       </div>
                     </div>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       className="bg-gray-800 border-gray-700 hover:bg-gray-700 text-white"
                       onClick={() => handleViewDetails(booking)}
@@ -384,7 +385,7 @@ function IncomingBookings() {
       <IncomingBookingDetailsModal
         booking={selectedBooking}
         isOpen={isDetailsModalOpen}
-        onClose={()=>handleCloseDetailsModal()}
+        onClose={() => handleCloseDetailsModal()}
       />
     </div>
   );

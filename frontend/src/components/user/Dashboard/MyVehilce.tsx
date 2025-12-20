@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { PlusCircle, Search, Trash2, Check, X, Eye } from 'lucide-react';
+import { Spinner } from "@/components/ui/spinner";
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { getMyVehicle, updateVehicleStatus, deleteVehicle } from '@/services/user/vehicleService';
@@ -28,12 +29,12 @@ const ListVehilce = () => {
     const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [vendorAccess, setVendorAccess] = useState<boolean>(true);
-    
+
     // Check if user has vendor access - disable all actions if false
     const isActionsDisabled = !vendorAccess;
     const navigate = useNavigate();
 
-  const handleDelete = useCallback(async (vehicleId: string) => {
+    const handleDelete = useCallback(async (vehicleId: string) => {
         if (isActionsDisabled) return;
         try {
             setDeletingId(vehicleId);
@@ -63,32 +64,32 @@ const ListVehilce = () => {
             if ((!user?.idproof_id || !user.is_verified_user) && vehicles.length >= 1) {
                 setDisableAddBtn(true);
             };
-        setIsLoading(true);
-        try {
-            const userdata = await getUser(user._id)
-            if(userdata?.vendor_access === false){
-                setVendorAccess(false)
-            } else {
-                setVendorAccess(true)
+            setIsLoading(true);
+            try {
+                const userdata = await getUser(user._id)
+                if (userdata?.vendor_access === false) {
+                    setVendorAccess(false)
+                } else {
+                    setVendorAccess(true)
+                }
+                const response = await getMyVehicle(user._id, debouncedSearch, currentPage, limit);
+                if (response?.vehicles) {
+                    setVehicles(response.vehicles);
+                    setTotalPages(Math.ceil((response.total || 0) / limit));
+                }
+            } catch (error) {
+                console.error('Error fetching vehicles:', error);
+            } finally {
+                setIsLoading(false);
             }
-            const response = await getMyVehicle(user._id, debouncedSearch, currentPage, limit);
-            if (response?.vehicles) {
-                setVehicles(response.vehicles);
-                setTotalPages(Math.ceil((response.total || 0) / limit));
-            }
-        } catch (error) {
-            console.error('Error fetching vehicles:', error);
-        } finally {
-            setIsLoading(false);
         }
-    }
-    
-    fetchData();
-    }, [debouncedSearch, currentPage, limit, user?._id, user?.idproof_id,user?.is_verified_user, vehicles.length]);
-    
-    const handleStatusToggle =useCallback( async (vehicleId: string, currentStatus: boolean) => {
+
+        fetchData();
+    }, [debouncedSearch, currentPage, limit, user?._id, user?.idproof_id, user?.is_verified_user, vehicles.length]);
+
+    const handleStatusToggle = useCallback(async (vehicleId: string, currentStatus: boolean) => {
         if (!vehicleId) return;
-        
+
         setUpdatingStatus({ [vehicleId]: true });
         try {
             await updateVehicleStatus(vehicleId, !currentStatus);
@@ -99,7 +100,7 @@ const ListVehilce = () => {
         } finally {
             setUpdatingStatus({ [vehicleId]: false });
         }
-    },[])
+    }, [])
 
     const handleViewRejectedVehicle = useCallback((vehicle: Vehicle) => {
         setSelectedVehicle(vehicle);
@@ -113,15 +114,15 @@ const ListVehilce = () => {
 
     const handleReapplySuccess = useCallback((vehicleId: string) => {
         // Remove the vehicle from the rejected list and update its status
-        setVehicles(prev => prev.map(v => 
-            v._id === vehicleId 
+        setVehicles(prev => prev.map(v =>
+            v._id === vehicleId
                 ? { ...v, admin_approve: 'reapplied' as const, reject_reason: undefined }
                 : v
         ));
         toast.success('Vehicle re-submitted for review');
     }, []);
 
-  
+
     return (
         <div className="w-full  p-4 md:p-8 font-sans">
             <div className="flex items-center justify-between mb-8">
@@ -142,8 +143,8 @@ const ListVehilce = () => {
                 </motion.div>
                 {(disableAddBtn || isActionsDisabled) && (
                     <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg shadow-sm text-sm font-medium max-w-md">
-                        {isActionsDisabled 
-                            ? '⚠️ Vendor access required to manage vehicles. Please contact admin.' 
+                        {isActionsDisabled
+                            ? '⚠️ Vendor access required to manage vehicles. Please contact admin.'
                             : 'Submit ID proof to add more vehicles.'}
                     </div>
                 )}
@@ -166,7 +167,7 @@ const ListVehilce = () => {
 
                 {isLoading ? (
                     <div className="flex flex-col justify-center items-center h-64">
-                        <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                        <Spinner size="xl" className="border-red-500 border-t-transparent" />
                         <span className="mt-4 text-white/80 text-lg font-semibold animate-pulse">Loading vehicle...</span>
                     </div>
                 ) : vehicles.length === 0 ? (
@@ -184,146 +185,142 @@ const ListVehilce = () => {
                         </thead>
                         <tbody>
                             {vehicles.map((vehicle, index) => (
-                         <tr key={index} className="border-b border-stone-700 hover:bg-stone-800/50 transition-colors">
-                         <td className="px-6 py-4">
-                             <div className="flex items-center space-x-4">
-                                 <div className="flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden">
-                                     <img
-                                         src={IMG_URL + vehicle.image_urls[0]}
-                                         alt={vehicle.name}
-                                         className="w-full h-full object-cover"
-                                     />
-                                 </div>
-                                 <div>
-                                     <h3 className="text-white font-medium">{vehicle.name}</h3>
-                                     <p className="text-sm text-gray-300">{vehicle.brand}</p>
-                                 </div>
-                             </div>
-                         </td>
-                         <td className="px-4 py-4 text-center text-gray-300 capitalize">
-                             {vehicle.fuel_type}
-                         </td>
-                         <td className="px-4 py-4 text-center">
-                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                                 vehicle.admin_approve === 'accepted'
-                                     ? 'bg-green-100 text-green-800'
-                                     : vehicle.admin_approve === 'pending'
-                                         ? 'bg-yellow-100 text-yellow-800'
-                                         : vehicle.admin_approve === 'rejected'
-                                             ? 'bg-red-100 text-red-800'
-                                             : vehicle.admin_approve === 'reapplied'
-                                                 ? 'bg-blue-100 text-blue-800'
-                                                 : 'bg-gray-100 text-gray-800'
-                                 }`}>
-                                 {vehicle.admin_approve}
-                             </span>
-                         </td>
-                         <td className="px-4 py-4">
-                             <div className="flex flex-col items-center space-y-1.5">
-                                 <button
-                                     onClick={() => {
-                                         if (!isActionsDisabled) {
-                                             handleStatusToggle(vehicle._id!, !!vehicle.is_available);
-                                         }
-                                     }}
-                                     disabled={updatingStatus[vehicle._id!] || isActionsDisabled}
-                                     className={`relative inline-flex items-center h-7 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                                         isActionsDisabled 
-                                             ? 'bg-gray-300 cursor-not-allowed' 
-                                             : vehicle.is_available ? 'bg-green-200' : 'bg-gray-400'
-                                     }`}
-                                     title={isActionsDisabled ? 'Vendor access required to manage vehicle availability' : ''}
-                                 >
-                                     <span className={`inline-block w-5 h-5 transform transition-transform bg-white rounded-full shadow-md ${vehicle.is_available ? 'translate-x-8' : 'translate-x-1'}`} />
-                                     {updatingStatus[vehicle._id!] && (
-                                         <div className="absolute inset-0 flex items-center justify-center">
-                                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                         </div>
-                                     )}
-                                 </button>
-                                 <span className={`text-xs font-medium ${vehicle.is_available ? 'text-white' : 'text-gray-400'}`}>
-                                     {updatingStatus[vehicle._id!] ? 'Updating...' : vehicle.is_available ? 'Listed' : 'Unlisted'}
-                                 </span>
-                             </div>
-                         </td>
-                         <td className="px-4 py-4">
-                             <div className="flex justify-center space-x-3">
-                                 <div className="flex items-center space-x-2">
-                                     {/* View button for rejected vehicles */}
-                                     {vehicle.admin_approve === 'rejected' && (
-                                         <button
-                                             onClick={() => {
-                                                 if (!isActionsDisabled) {
-                                                     handleViewRejectedVehicle(vehicle);
-                                                 }
-                                             }}
-                                             disabled={isActionsDisabled}
-                                             className={`p-2 rounded-lg transition-colors shadow-md hover:shadow-lg ${
-                                                 isActionsDisabled 
-                                                     ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
-                                                     : 'bg-blue-600 text-white hover:bg-blue-700'
-                                             }`}
-                                             title={isActionsDisabled ? 'Vendor access required to reapply vehicle' : 'View Details & Reapply'}
-                                         >
-                                             <Eye className="w-4 h-4" />
-                                         </button>
-                                     )}
-                                     <div className="relative">
-                                         {showDeleteConfirm === vehicle._id ? (
-                                             <div className="absolute right-0 z-10 flex items-center bg-white rounded-lg shadow-lg p-1 space-x-1">
-                                                 <span className="px-2 text-sm text-gray-700 whitespace-nowrap">Delete?</span>
-                                                 <button
-                                                     onClick={(e) => {
-                                                         e.stopPropagation();
-                                                         if (vehicle._id) {
-                                                             handleDelete(vehicle._id);
-                                                         }
-                                                     }}
-                                                     disabled={deletingId === vehicle._id}
-                                                     className="p-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
-                                                     title="Confirm Delete"
-                                                 >
-                                                     {deletingId === vehicle._id ? (
-                                                         <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                                     ) : (
-                                                         <Check className="w-3.5 h-3.5" />
-                                                     )}
-                                                 </button>
-                                                 <button
-                                                     onClick={(e) => {
-                                                         e.stopPropagation();
-                                                         setShowDeleteConfirm(null);
-                                                     }}
-                                                     className="p-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                                                     title="Cancel"
-                                                 >
-                                                     <X className="w-3.5 h-3.5" />
-                                                 </button>
-                                             </div>
-                                         ) : (
-                                             <button
-                                                 onClick={(e) => {
-                                                     e.stopPropagation();
-                                                     if (vehicle._id && !isActionsDisabled) {
-                                                         setShowDeleteConfirm(vehicle._id);
-                                                     }
-                                                 }}
-                                                 disabled={isActionsDisabled}
-                                                 className={`p-2 rounded-lg transition-colors shadow-md hover:shadow-lg ${
-                                                     isActionsDisabled 
-                                                         ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
-                                                         : 'bg-red-600 text-white hover:bg-red-700'
-                                                 }`}
-                                                 title={isActionsDisabled ? 'Vendor access required to delete vehicle' : 'Delete Vehicle'}
-                                             >
-                                                 <Trash2 className="w-4 h-4" />
-                                             </button>
-                                         )}
-                                     </div>
-                                 </div>
-                             </div>
-                         </td>
-                     </tr>
+                                <tr key={index} className="border-b border-stone-700 hover:bg-stone-800/50 transition-colors">
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden">
+                                                <img
+                                                    src={IMG_URL + vehicle.image_urls[0]}
+                                                    alt={vehicle.name}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-white font-medium">{vehicle.name}</h3>
+                                                <p className="text-sm text-gray-300">{vehicle.brand}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-4 text-center text-gray-300 capitalize">
+                                        {vehicle.fuel_type}
+                                    </td>
+                                    <td className="px-4 py-4 text-center">
+                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${vehicle.admin_approve === 'accepted'
+                                            ? 'bg-green-100 text-green-800'
+                                            : vehicle.admin_approve === 'pending'
+                                                ? 'bg-yellow-100 text-yellow-800'
+                                                : vehicle.admin_approve === 'rejected'
+                                                    ? 'bg-red-100 text-red-800'
+                                                    : vehicle.admin_approve === 'reapplied'
+                                                        ? 'bg-blue-100 text-blue-800'
+                                                        : 'bg-gray-100 text-gray-800'
+                                            }`}>
+                                            {vehicle.admin_approve}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-4">
+                                        <div className="flex flex-col items-center space-y-1.5">
+                                            <button
+                                                onClick={() => {
+                                                    if (!isActionsDisabled) {
+                                                        handleStatusToggle(vehicle._id!, !!vehicle.is_available);
+                                                    }
+                                                }}
+                                                disabled={updatingStatus[vehicle._id!] || isActionsDisabled}
+                                                className={`relative inline-flex items-center h-7 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isActionsDisabled
+                                                    ? 'bg-gray-300 cursor-not-allowed'
+                                                    : vehicle.is_available ? 'bg-green-200' : 'bg-gray-400'
+                                                    }`}
+                                                title={isActionsDisabled ? 'Vendor access required to manage vehicle availability' : ''}
+                                            >
+                                                <span className={`inline-block w-5 h-5 transform transition-transform bg-white rounded-full shadow-md ${vehicle.is_available ? 'translate-x-8' : 'translate-x-1'}`} />
+                                                {updatingStatus[vehicle._id!] && (
+                                                    <div className="absolute inset-0 flex items-center justify-center">
+                                                        <Spinner size="sm" variant="light" />
+                                                    </div>
+                                                )}
+                                            </button>
+                                            <span className={`text-xs font-medium ${vehicle.is_available ? 'text-white' : 'text-gray-400'}`}>
+                                                {updatingStatus[vehicle._id!] ? 'Updating...' : vehicle.is_available ? 'Listed' : 'Unlisted'}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-4">
+                                        <div className="flex justify-center space-x-3">
+                                            <div className="flex items-center space-x-2">
+                                                {/* View button for rejected vehicles */}
+                                                {vehicle.admin_approve === 'rejected' && (
+                                                    <button
+                                                        onClick={() => {
+                                                            if (!isActionsDisabled) {
+                                                                handleViewRejectedVehicle(vehicle);
+                                                            }
+                                                        }}
+                                                        disabled={isActionsDisabled}
+                                                        className={`p-2 rounded-lg transition-colors shadow-md hover:shadow-lg ${isActionsDisabled
+                                                            ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                                                            }`}
+                                                        title={isActionsDisabled ? 'Vendor access required to reapply vehicle' : 'View Details & Reapply'}
+                                                    >
+                                                        <Eye className="w-4 h-4" />
+                                                    </button>
+                                                )}
+                                                <div className="relative">
+                                                    {showDeleteConfirm === vehicle._id ? (
+                                                        <div className="absolute right-0 z-10 flex items-center bg-white rounded-lg shadow-lg p-1 space-x-1">
+                                                            <span className="px-2 text-sm text-gray-700 whitespace-nowrap">Delete?</span>
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    if (vehicle._id) {
+                                                                        handleDelete(vehicle._id);
+                                                                    }
+                                                                }}
+                                                                disabled={deletingId === vehicle._id}
+                                                                className="p-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
+                                                                title="Confirm Delete"
+                                                            >
+                                                                {deletingId === vehicle._id ? (
+                                                                    <Spinner size="sm" variant="light" />
+                                                                ) : (
+                                                                    <Check className="w-3.5 h-3.5" />
+                                                                )}
+                                                            </button>
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setShowDeleteConfirm(null);
+                                                                }}
+                                                                className="p-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                                                                title="Cancel"
+                                                            >
+                                                                <X className="w-3.5 h-3.5" />
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                if (vehicle._id && !isActionsDisabled) {
+                                                                    setShowDeleteConfirm(vehicle._id);
+                                                                }
+                                                            }}
+                                                            disabled={isActionsDisabled}
+                                                            className={`p-2 rounded-lg transition-colors shadow-md hover:shadow-lg ${isActionsDisabled
+                                                                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                                                : 'bg-red-600 text-white hover:bg-red-700'
+                                                                }`}
+                                                            title={isActionsDisabled ? 'Vendor access required to delete vehicle' : 'Delete Vehicle'}
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             ))}
                         </tbody>
                     </table>

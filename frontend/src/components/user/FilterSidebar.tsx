@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-// import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Filter, X, RotateCcw, Search } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
@@ -16,17 +15,6 @@ interface FilterSidebarProps {
   onFiltersChange: (filters: FilterState & { search?: string; sortBy?: SortOption }) => void;
 }
 
-// Define sort options outside component to prevent recreation
-// const SORT_OPTIONS = [
-//   { value: 'price_low_high' as SortOption, label: 'Price: Low to High' },
-  // { value: 'price_high_low' as SortOption, label: 'Price: High to Low' },
-  // { value: 'distance' as SortOption, label: 'Distance: Nearest First' },
-  // { value: 'rating' as SortOption, label: 'Rating: Highest First' },
-  // { value: 'newest' as SortOption, label: 'Newest First' },
-  // { value: 'oldest' as SortOption, label: 'Oldest First' },
-// ];
-
-// Define filter option arrays outside component
 const FUEL_TYPE_OPTIONS = [
   { value: "petrol", label: "Petrol" },
   { value: "diesel", label: "Diesel" },
@@ -48,6 +36,38 @@ const TRANSMISSION_OPTIONS = [
   { value: "false", label: "Manual" },
 ];
 
+// Extracted CheckboxGroup component
+interface CheckboxGroupProps {
+  label: string;
+  items: { value: string | number; label: string }[];
+  filterKey: keyof FilterState;
+  selectedValues: (string | number)[];
+  onToggle: (key: keyof FilterState, value: string | number, checked: boolean) => void;
+}
+
+const CheckboxGroup = React.memo(({ label, items, filterKey, selectedValues, onToggle }: CheckboxGroupProps) => (
+  <div className="space-y-3">
+    <Label className="text-sm font-medium text-gray-300">{label}</Label>
+    <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+      <div className={filterKey === "seats" ? "grid grid-cols-2 gap-2" : "space-y-2"}>
+        {items.map((item) => (
+          <div key={item.value} className="flex items-center space-x-3">
+            <Checkbox
+              id={`${filterKey}-${item.value}`}
+              checked={selectedValues.includes(item.value)}
+              onCheckedChange={(checked) => onToggle(filterKey, item.value, checked as boolean)}
+              className="border-white/30 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
+            />
+            <Label htmlFor={`${filterKey}-${item.value}`} className="text-sm text-gray-300 cursor-pointer font-normal">
+              {item.label}
+            </Label>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+));
+
 const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState(filters.search || "");
@@ -62,6 +82,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     onFiltersChangeRef.current = onFiltersChange;
   });
 
+  // Sync internal search value with props
   useEffect(() => {
     if (filters.search !== searchValueRef.current) {
       setSearchValue(filters.search || "");
@@ -69,23 +90,23 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     }
   }, [filters.search]);
 
-  // Debounce search input - using refs to prevent infinite re-renders
+  // Debounce search input
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
       return;
     }
-    
+
     const handler = setTimeout(() => {
       if (searchValue !== filtersRef.current.search) {
         onFiltersChangeRef.current({ ...filtersRef.current, search: searchValue });
       }
     }, 500);
-    
+
     return () => clearTimeout(handler);
   }, [searchValue]);
 
-  // Memoize update functions to prevent recreation
+  // Update filters helper
   const updateFilters = useCallback((key: keyof (FilterState & { search?: string; sortBy?: SortOption }), value: string | number | (string | number)[] | SortOption) => {
     onFiltersChange({ ...filters, [key]: value });
   }, [filters, onFiltersChange]);
@@ -96,7 +117,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     updateFilters(key, newArray);
   }, [filters, updateFilters]);
 
-  // Memoize clear filters function
   const clearFilters = useCallback(() => {
     setSearchValue("");
     onFiltersChange({
@@ -112,7 +132,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     });
   }, [onFiltersChange]);
 
-  // Memoize active filter count calculation
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (filters.search?.trim()) count++;
@@ -125,40 +144,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
     return count;
   }, [filters]);
 
-  // Memoize CheckboxGroup component to prevent recreation
-  const CheckboxGroup = useCallback(({
-    label,
-    items,
-    filterKey,
-  }: {
-    label: string;
-    items: { value: string | number; label: string }[];
-    filterKey: keyof FilterState;
-  }) => (
-    <div className="space-y-3">
-      <Label className="text-sm font-medium text-gray-300">{label}</Label>
-      <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-        <div className={filterKey === "seats" ? "grid grid-cols-2 gap-2" : "space-y-2"}>
-          {items.map((item) => (
-            <div key={item.value} className="flex items-center space-x-3">
-              <Checkbox
-                id={`${filterKey}-${item.value}`}
-                checked={(filters[filterKey] as (string | number)[]).includes(item.value)}
-                onCheckedChange={(checked) => toggleArrayFilter(filterKey, item.value, checked as boolean)}
-                className="border-white/30 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
-              />
-              <Label htmlFor={`${filterKey}-${item.value}`} className="text-sm text-gray-300 cursor-pointer font-normal">
-                {item.label}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  ), [filters, toggleArrayFilter]);
-
-  // Memoize FilterContent component to prevent recreation
-  const FilterContent = useCallback(() => (
+  // Define FilterContent as a simple React Node (variable), not a component component
+  const filterContent = (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -204,65 +191,44 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
         </div>
       </div>
 
-      {/* Sort Options */}
-      {/* <div className="space-y-3">
-        <Label className="text-sm font-medium text-gray-300">Sort By</Label>
-        <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-          <Select
-            value={filters.sortBy || ''}
-            onValueChange={(value) => updateFilters('sortBy', value as SortOption)}
-          >
-            <SelectTrigger className="bg-transparent border-white/20 text-white focus:border-blue-500">
-              <div className="flex items-center gap-2">
-                <ArrowUpDown className="w-4 h-4 text-gray-400" />
-                <SelectValue placeholder="Select sorting option" />
-              </div>
-            </SelectTrigger> */}
-            {/* <SelectContent className="bg-gray-900 border-white/20">
-              {SORT_OPTIONS.map((option) => (
-                <SelectItem 
-                  key={option.value} 
-                  value={option.value}
-                  className="text-white hover:bg-white/10 focus:bg-white/10"
-                >
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent> */}
-          {/* </Select>
-        </div>
-      </div> */}
-
       {/* Filter Groups */}
       <CheckboxGroup
         label="Fuel Type"
         filterKey="fuel_types"
         items={FUEL_TYPE_OPTIONS}
+        selectedValues={filters.fuel_types as (string | number)[]}
+        onToggle={toggleArrayFilter}
       />
       <CheckboxGroup
         label="Number of Seats"
         filterKey="seats"
         items={SEAT_OPTIONS}
+        selectedValues={filters.seats as (string | number)[]}
+        onToggle={toggleArrayFilter}
       />
       <CheckboxGroup
         label="Vehicle Type"
         filterKey="car_types"
         items={CAR_TYPE_OPTIONS}
+        selectedValues={filters.car_types as (string | number)[]}
+        onToggle={toggleArrayFilter}
       />
       <CheckboxGroup
         label="Transmission"
         filterKey="transmission"
         items={TRANSMISSION_OPTIONS}
+        selectedValues={filters.transmission as (string | number)[]}
+        onToggle={toggleArrayFilter}
       />
     </div>
-  ), [activeFiltersCount, clearFilters, searchValue, filters, onFiltersChange, CheckboxGroup]);
+  );
 
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block w-80 h-fit sticky top-6">
+      <div className="hidden lg:block w-80 h-fit sticky top-24">
         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
-          <FilterContent />
+          {filterContent}
         </div>
       </div>
 
@@ -293,13 +259,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFiltersChange 
               </SheetClose>
             </SheetHeader>
             <div className="mt-6">
-              <FilterContent />
+              {filterContent}
             </div>
             <div className="sticky bottom-0 bg-black/95 pt-4 mt-6 border-t border-white/20">
               <SheetClose asChild>
                 <Button
                   className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                  onClick={()=> setIsOpen(false)}
+                  onClick={() => setIsOpen(false)}
                 >
                   Apply Filters
                 </Button>

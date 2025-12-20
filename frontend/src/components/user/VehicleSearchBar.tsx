@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import type { SearchParams, LocationCoords } from "@/Types/User/searchTypes";
 import React from "react";
 import { setSearchDate } from "@/store/slice/user/SearchDateSlice";
+import { Spinner } from "@/components/ui/spinner";
 
 // Type for location suggestions
 interface Suggestion {
@@ -100,7 +101,7 @@ function VehicleSearchBar() {
       toast.error(error || 'Invalid search parameters');
       return;
     }
-    
+
     if (!user) {
       toast.error('Please login to perform search');
       return;
@@ -116,7 +117,7 @@ function VehicleSearchBar() {
         returnDate
       };
 
-      navigate('/vehicle-list', { state: searchParams ,replace:true});
+      navigate('/vehicle-list', { state: searchParams, replace: true });
     } catch (error) {
       console.error('Search error:', error);
       toast.error('Failed to perform search. Please try again.');
@@ -216,7 +217,7 @@ function VehicleSearchBar() {
                   }`}
                 size={20}
               />
-              { showSuggestions && suggestions.length > 0 && (
+              {showSuggestions && suggestions.length > 0 && (
                 <ul className="absolute z-[100] mt-2 bg-black/95 backdrop-blur-xl text-white rounded-xl shadow-2xl w-full max-h-60 overflow-y-auto border border-white/20 animate-in fade-in slide-in-from-top-2 duration-200 custom-scrollbar">
                   {suggestions.map((suggestion, i) => (
                     <li
@@ -275,8 +276,8 @@ function VehicleSearchBar() {
                 onChange={(e) => handleDateChange(setReturnDate, e.target.value)}
                 disabled={isLoading || !pickupDate}
                 className={`pl-12 h-14 rounded-xl border-2 ${error && returnDate && new Date(returnDate) <= new Date(pickupDate)
-                    ? 'border-red-400'
-                    : 'border-white/30 focus:border-white'
+                  ? 'border-red-400'
+                  : 'border-white/30 focus:border-white'
                   } transition-all duration-300 hover:scale-[1.02] text-lg bg-white/10 backdrop-blur-sm text-white`}
               />
               <Calendar
@@ -293,13 +294,13 @@ function VehicleSearchBar() {
               onClick={handleVehicleSearch}
               disabled={isLoading}
               className={`w-full h-14 rounded-xl text-lg font-semibold transition-all duration-300 transform shadow-lg ${isLoading
-                  ? 'bg-white/50 cursor-not-allowed'
-                  : 'bg-white hover:bg-gray-200 hover:scale-105 active:rotate-3 hover:shadow-xl text-black'
+                ? 'bg-white/50 cursor-not-allowed'
+                : 'bg-white hover:bg-gray-200 hover:scale-105 active:rotate-3 hover:shadow-xl text-black'
                 }`}
             >
               {isLoading ? (
                 <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                  <Spinner size="sm" variant="default" className="mr-2 border-black border-t-transparent" />
                   Searching...
                 </div>
               ) : (
