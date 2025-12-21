@@ -11,7 +11,6 @@ interface ParticlesProps {
 export default function Particles({
     className = "",
     quantity = 30,
-    staticity = 50,
     ease = 50,
     refresh = false,
 }: ParticlesProps) {
@@ -138,7 +137,7 @@ export default function Particles({
 
     const animate = () => {
         clearContext();
-        circles.current.forEach((circle: any, i: number) => {
+        circles.current.forEach((circle: any) => {
             // Handle the alpha fade in
             const edge = [
                 circle.x + circle.translateX - circle.size, // distance from left edge
@@ -173,17 +172,7 @@ export default function Particles({
 
             // Mouse interaction
             const { w, h } = canvasSize.current;
-            const x = mouse.current.x - w / 2; // relative to center
-            const y = mouse.current.y - h / 2;
-
-            // Simple parallax based on mouse
-            // (Simplified for performance found in the request context)
-            // const rect = canvasContainerRef.current?.getBoundingClientRect();
-            // const mouseX = (mouse.current.x - (rect?.left || 0));
-            // const mouseY = (mouse.current.y - (rect?.top || 0));
-
-            // circle.translateX = (mouseX - w/2) / (staticity * circle.magnetism);
-            // circle.translateY = (mouseY - h/2) / (staticity * circle.magnetism);
+            // Removed unused vars
 
             // For now, simpler consistent movement
             circle.translateX += ((mouse.current.x / w) * 20 - circle.translateX) / ease;
