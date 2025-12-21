@@ -8,16 +8,16 @@ import socket from '@/hooks/ConnectSocketIo';
 interface MessageInputProps {
   message: string;
   setMessage: (message: string) => void;
-  onSendMessage: (e:React.FormEvent) => void;
+  onSendMessage: (e: React.FormEvent) => void;
   inputRef: RefObject<HTMLInputElement | null>;
   disabled?: boolean;
   roomId: string;
 }
 
-const MessageInput = ({ 
-  message, 
-  setMessage, 
-  onSendMessage, 
+const MessageInput = ({
+  message,
+  setMessage,
+  onSendMessage,
   inputRef,
   disabled = false,
   roomId
@@ -27,7 +27,7 @@ const MessageInput = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
-    
+
     // Emit typing event if not already typing
     if (!isTypingRef.current) {
       socket.emit('typing', { roomId });
@@ -58,14 +58,14 @@ const MessageInput = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.3 }}
-      className="bg-[#1e1e1e] border-t border-[#2f2f2f] px-4 py-3 flex-shrink-0"
+      className="bg-black/20 backdrop-blur-md border-t border-white/10 px-4 py-4 flex-shrink-0 relative z-20"
     >
-      <form onSubmit={onSendMessage} className="flex items-center space-x-3">
+      <form onSubmit={onSendMessage} className="flex items-center space-x-3 max-w-5xl mx-auto">
         {/* Attachment Button */}
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-full p-2"
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-white/50 hover:text-white hover:bg-white/10 rounded-full p-2.5 transition-all duration-300"
           disabled={disabled}
           type="button"
         >
@@ -73,7 +73,7 @@ const MessageInput = ({
         </Button>
 
         {/* Message Input */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative group">
           <input
             ref={inputRef}
             type="text"
@@ -81,30 +81,29 @@ const MessageInput = ({
             onChange={handleInputChange}
             placeholder="Type a message..."
             disabled={disabled}
-            className="w-full bg-[#2f2f2f] text-white placeholder-[#8E8E93] rounded-full px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#007AFF] focus:bg-[#3a3a3a] transition-all duration-200"
+            className="w-full bg-white/5 text-white placeholder:text-white/30 rounded-full px-5 py-3.5 pr-12 border border-white/5 focus:outline-none focus:border-white/20 focus:bg-white/10 focus:ring-1 focus:ring-white/10 transition-all duration-300 backdrop-blur-xl"
           />
-          
+
           {/* Emoji Button */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white hover:bg-[#4a4a4a] rounded-full p-1.5"
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white hover:bg-white/10 rounded-full p-2"
             disabled={disabled}
             type="button"
           >
-            <Smile className="w-4 h-4" />
+            <Smile className="w-5 h-5" />
           </Button>
         </div>
-        
+
         {/* Send Button */}
-        <Button 
+        <Button
           type="submit"
           disabled={!message.trim() || disabled}
-          className={`rounded-full p-3 transition-all duration-200 ${
-            message.trim() && !disabled
-              ? 'bg-[#007AFF] hover:bg-[#0056CC] text-white' 
-              : 'bg-[#2f2f2f] text-gray-500 cursor-not-allowed'
-          }`}
+          className={`rounded-full p-3.5 transition-all duration-300 shadow-lg ${message.trim() && !disabled
+              ? 'bg-white hover:bg-white/90 text-black transform hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]'
+              : 'bg-white/10 text-white/30 cursor-not-allowed'
+            }`}
         >
           <Send className="w-5 h-5" />
         </Button>
