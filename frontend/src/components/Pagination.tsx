@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface PaginationProps {
   currentPage: number;
@@ -13,43 +14,49 @@ function Pagination({ onPageChange, currentPage, totalPages }: PaginationProps) 
     }
   };
 
+  if (totalPages <= 1) return null;
+
   return (
     <motion.div
-      className="flex items-center justify-center bg-black/80 backdrop-blur-xl p-4 rounded-xl border border-black/60 shadow-2xl"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      className="inline-flex items-center justify-center bg-black/40 backdrop-blur-md p-1.5 rounded-full border border-white/10 shadow-lg"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-3 py-1 bg-gray-700 text-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent transition-all duration-200"
+          aria-label="Previous Page"
         >
-          Previous
+          <ChevronLeft className="w-5 h-5" />
         </button>
-        <div className="flex items-center gap-1">
+
+        <div className="flex items-center gap-1 px-2">
           {Array.from({ length: totalPages }, (_, i) => i + 1)
             .slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2))
             .map((page) => (
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded-lg transition-all duration-200 font-semibold ${
-                  currentPage === page
-                    ? 'bg-[#e63946] text-white shadow'
-                    : 'bg-black/60 text-gray-300 hover:bg-black/80'
-                }`}
+                className={`w-9 h-9 flex items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 ${currentPage === page
+                    ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-110'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  }`}
               >
                 {page}
               </button>
             ))}
         </div>
+
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 bg-gray-700 text-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent transition-all duration-200"
+          aria-label="Next Page"
         >
-          Next
+          <ChevronRight className="w-5 h-5" />
         </button>
       </div>
     </motion.div>

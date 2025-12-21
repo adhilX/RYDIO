@@ -40,6 +40,7 @@
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.2.0",
     "lucide-react": "^0.515.0",
+    "ogl": "^1.0.11",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-bits": "^1.0.5",
