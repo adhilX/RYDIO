@@ -62,7 +62,7 @@ function Navbar() {
         <div className="flex items-center justify-between">
           <div onClick={() => navigate('/')} className="flex items-center cursor-pointer space-x-2 z-50">
             <Car className="text-white animate-bounce" size={32} />
-            <span className="text-2xl font-bold text-white">RYDIO</span>
+            <img src="/logo.png" alt="RYDIO" className="h-8 w-auto object-contain" />
           </div>
 
           {/* Desktop Navigation */}

@@ -13,6 +13,8 @@ import { addUser } from "@/store/slice/user/UserSlice";
 import Google from "../pages/User/auth/Google";
 import { Spinner } from "@/components/ui/spinner";
 import { loginFormSchema, type TLoginForm } from "@/Types/User/validation/LoginFrom";
+import BlurText from "@/components/common/BlurText";
+import Particles from "@/components/common/Particles";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,22 +23,29 @@ export default function Login() {
   const dispatch = useDispatch();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-600 via-black to-gray-800 flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center opacity-10"></div>
-      <div className="absolute inset-0 bg-black/60"></div>
-      <div className="absolute bottom-20 top-5 w-120 h-200 bg-red-900/20 blur-3xl animate-pulse delay-2000"></div>
+    <div className="min-h-screen bg-[#000000] flex items-center justify-center p-4 relative overflow-hidden selection:bg-white/20">
+      <div className="absolute inset-0 bg-neutral-950/80 z-0" /> {/* Slight overlay */}
+      <Particles className="absolute inset-0 z-0 animate-fade-in" quantity={100} ease={80} refresh />
 
-      <Card className="w-full max-w-md bg-dark-400 backdrop-blur-xl border-gray-700/50 shadow-2xl relative z-10">
+      <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black pointer-events-none z-0" />
+
+      <Card className="w-full max-w-md bg-black/40 backdrop-blur-xl border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.1)] relative z-10 animate-in fade-in zoom-in-95 duration-500 rounded-3xl overflow-hidden group">
+        {/* Decorative glow */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-50" />
+
         <CardHeader className="space-y-6 pb-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-white tracking-wider">
-              RY<span className="text-red-700">DIO</span>
-            </h1>
-            <div className="w-16 h-1 bg-gradient-to-r from-red-700 to-red-500 mx-auto mt-2 rounded-full"></div>
+            <div className="flex justify-center">
+              <img src="/logo.png" alt="RYDIO Logo" className="h-12 w-auto object-contain" />
+            </div>
           </div>
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl font-semibold text-white">Welcome Back</h2>
-            <p className="text-gray-400">Sign in to your account</p>
+          <div className="text-center space-y-2 flex flex-col items-center">
+            <BlurText
+              text="Welcome Back"
+              className="text-2xl font-bold text-white tracking-tight justify-center" // Center the text
+              delayStep={0.05}
+            />
+            <p className="text-gray-400 font-medium">Sign in to continue your journey</p>
           </div>
         </CardHeader>
 
@@ -47,7 +56,6 @@ export default function Login() {
             onSubmit={async (values, { resetForm }) => {
               setIsLoading(true);
               try {
-                console.log("Submitting:", values);
                 const response = await loginUser(values);
                 dispatch(addToken(response.accessToken));
                 dispatch(addUser(response.user));
@@ -66,7 +74,7 @@ export default function Login() {
               return (
                 <Form className="space-y-5" noValidate>
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-300 font-medium">
+                    <Label htmlFor="email" className="text-gray-300 font-medium pl-1">
                       Email Address
                     </Label>
                     <Field
@@ -75,20 +83,20 @@ export default function Login() {
                       type="email"
                       placeholder="Enter your email"
                       as="input"
-                      className={`w-full px-3 py-2 bg-gray-800/50 text-white placeholder:text-gray-500 h-12 transition-all duration-200 
+                      className={`w-full px-4 py-3 bg-white/5 border text-white placeholder:text-gray-500 rounded-xl transition-all duration-300 
                         ${touched.email && errors.email
-                          ? "border border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
-                          : "border border-gray-600 focus:border-red-700 focus:ring-2 focus:ring-red-700/20"
+                          ? "border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500/20"
+                          : "border-white/10 focus:border-white/30 focus:bg-white/10 focus:ring-1 focus:ring-white/20"
                         }`}
                       disabled={isLoading}
                     />
                     {touched.email && errors.email && (
-                      <p className="text-red-500 text-sm">{errors.email}</p>
+                      <p className="text-red-400 text-xs pl-1">{errors.email}</p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="text-gray-300 font-medium">
+                    <Label htmlFor="password" className="text-gray-300 font-medium pl-1">
                       Password
                     </Label>
                     <div className="relative">
@@ -98,21 +106,21 @@ export default function Login() {
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         as="input"
-                        className={`w-full px-3 py-2 bg-gray-800/50 text-white placeholder:text-gray-500 h-12 transition-all duration-200 
+                        className={`w-full px-4 py-3 bg-white/5 border text-white placeholder:text-gray-500 rounded-xl transition-all duration-300
                           ${touched.password && errors.password
-                            ? "border border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
-                            : "border border-gray-600 focus:border-red-700 focus:ring-2 focus:ring-red-700/20"
+                            ? "border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500/20"
+                            : "border-white/10 focus:border-white/30 focus:bg-white/10 focus:ring-1 focus:ring-white/20"
                           }`}
                         disabled={isLoading}
                       />
                       {touched.password && errors.password && (
-                        <p className="text-red-500 text-sm">{errors.password}</p>
+                        <p className="text-red-400 text-xs pl-1 absolute -bottom-5 left-0">{errors.password}</p>
                       )}
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-gray-400 hover:text-white hover:bg-gray-700/50"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg"
                         onClick={() => setShowPassword(!showPassword)}
                         disabled={isLoading}
                       >
@@ -122,10 +130,10 @@ export default function Login() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-end pt-2">
                     <Link
                       to="/forgetpassword"
-                      className="text-sm text-red-400 hover:text-red-300 transition-colors duration-200"
+                      className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
                     >
                       Forgot Password?
                     </Link>
@@ -133,12 +141,12 @@ export default function Login() {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-red-800 to-red-700 hover:from-red-700 hover:to-red-600 text-white font-semibold h-12 shadow-lg hover:shadow-red-900/25 transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full bg-white text-black hover:bg-gray-200 font-bold h-12 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] transition-all duration-300 transform hover:-translate-y-0.5"
                     disabled={isLoading}
                   >
                     {isLoading ? (
                       <>
-                        <Spinner size="sm" variant="light" className="mr-2" />
+                        <Spinner size="sm" className="mr-2 border-black border-t-transparent" />
                         Signing in...
                       </>
                     ) : (
@@ -152,10 +160,10 @@ export default function Login() {
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-600" />
+              <span className="w-full border-t border-white/10" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-900 px-2 text-gray-400">Or continue with</span>
+              <span className="bg-transparent px-2 text-gray-500 backdrop-blur-sm">Or continue with</span>
             </div>
           </div>
 
@@ -165,7 +173,7 @@ export default function Login() {
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="text-red-400 hover:text-red-300 font-medium transition-colors duration-200"
+              className="text-white hover:underline font-semibold transition-all duration-200"
             >
               Sign up
             </Link>

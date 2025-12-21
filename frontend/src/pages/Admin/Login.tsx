@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Car, Eye, EyeOff, Shield } from "lucide-react";
+import { Eye, EyeOff, Shield } from "lucide-react";
 import toast from "react-hot-toast";
 import { loginadmin } from "@/services/admin/authService";
 import { useDispatch } from "react-redux";
@@ -51,11 +51,8 @@ export default function AdminLogin() {
         {/* Logo */}
         <motion.div className="text-center mb-8" initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.2 }}>
           <div className="flex justify-center mb-4">
-            <div className="bg-blue-600 p-3 rounded-full">
-              <Car className="w-8 h-8 text-white" />
-            </div>
+            <img src="/logo.png" alt="RYDIO" className="h-20 w-auto object-contain" />
           </div>
-          <h1 className="text-3xl font-bold text-white">RYDIO</h1>
         </motion.div>
 
         <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm">
