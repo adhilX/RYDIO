@@ -11,15 +11,27 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
      }
 
      //   Creates base aggregation pipeline with user and vehicle lookups
- 
+
      private createBaseAggregationPipeline(): PipelineStage[] {
           return [
+
                {
                     $lookup: {
                          from: "users",
                          localField: "user_id",
                          foreignField: "_id",
-                         as: "user"
+                         as: "user",
+                         pipeline: [
+                              {
+                                   $project: {
+                                        _id: 1,
+                                        name: 1,
+                                        email: 1,
+                                        phone: 1,
+                                        profile_image: 1
+                                   }
+                              }
+                         ]
                     }
                },
                { $unwind: "$user" },
@@ -157,11 +169,11 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
           const matchConditions: {
                [key: string]: { $regex: string, $options: string } | Types.ObjectId;
           }[] = [
-               { "user.name": { $regex: search, $options: "i" } },
-               { "vehicle.name": { $regex: search, $options: "i" } },
-               { "vehicle.brand": { $regex: search, $options: "i" } },
-               { "booking_id": { $regex: search, $options: "i" } }
-          ];
+                    { "user.name": { $regex: search, $options: "i" } },
+                    { "vehicle.name": { $regex: search, $options: "i" } },
+                    { "vehicle.brand": { $regex: search, $options: "i" } },
+                    { "booking_id": { $regex: search, $options: "i" } }
+               ];
 
           if (isValidObjectId(search)) {
                matchConditions.push({ _id: new Types.ObjectId(search) });
@@ -190,16 +202,16 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
 
      async getBookedBookingsByVehicleId(vehicle_id: string): Promise<IBooking[]|null> {
           return await bookingModel.find({
-            vehicle_id,
-            status: BookingStatus.booked,
-            payment_status: "paid",
+               vehicle_id,
+               status: BookingStatus.booked,
+               payment_status: "paid",
           });
-        }
+     }
 
-        
+
      async changeBookingStatus(booking_id: string, status: BookingStatus): Promise<IBooking | null> {
-        return await bookingModel.findOneAndUpdate({ booking_id }, { status }, { new: true })
-    }
+          return await bookingModel.findOneAndUpdate({ booking_id }, { status }, { new: true })
+     }
 
      async getOwnerBookings(userId: string, limit: number, page: number, search: string, status: string): Promise<{ bookings: IBooking[], total: number } | null> {
           const match: any = {
@@ -214,26 +226,40 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
                match.status = status;
           }
 
-          return await this.executeVehicleAggregationWithCount(match, limit, page);
+
+          // Create the location lookup pipeline stage to replicate what executeVehicleAggregationWithCount did
+          const locationLookupPipeline: PipelineStage[] = [
+               {
+                    $lookup: {
+                         from: "locations",
+                         localField: "vehicle.location_id",
+                         foreignField: "_id",
+                         as: "location"
+                    }
+               },
+               { $unwind: "$location" }
+          ];
+
+          return await this.executeAggregationWithCount(match, limit, page, locationLookupPipeline);
      }
-     async cancelBooking(booking_id:string,reason:string, financeUpdate?: ICancleFinalce): Promise<boolean> {
-          const updateData: any = { 
-               status: "cancelled", 
-               cancellation_reason: reason 
+     async cancelBooking(booking_id: string, reason: string, financeUpdate?: ICancleFinalce): Promise<boolean> {
+          const updateData: any = {
+               status: "cancelled",
+               cancellation_reason: reason
           };
-          
+
           if (financeUpdate) {
                updateData.finance = financeUpdate;
           }
-          
+
           await bookingModel.findOneAndUpdate({booking_id}, updateData);
           return true;
      }
 
      async endRide(booking: IBooking): Promise<IBooking | null> {
           return await bookingModel.findOneAndUpdate(
-               { booking_id: booking.booking_id }, 
-               { 
+               { booking_id: booking.booking_id },
+               {
                     ride_end_time: booking.ride_end_time,
                     status: BookingStatus.Completed,
                     finance: booking.finance
@@ -254,7 +280,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
           return await bookingModel.findOne({booking_id})
      }
 
-     
+
      async checkBookingExistsBetweenUserAndOwner(userId: string, ownerId: string): Promise<IBooking | null> {
           try {
                const booking = await bookingModel.findOne({
@@ -281,10 +307,10 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
      async getLastMonthRevenue(): Promise<number> {
           const lastMonth = new Date();
           lastMonth.setMonth(lastMonth.getMonth() - 1);
-          
+
           const result = await bookingModel.aggregate([
-               { 
-                    $match: { 
+               {
+                    $match: {
                          status: BookingStatus.Completed,
                          createdAt: { $gte: lastMonth }
                     }
@@ -330,7 +356,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
      async getLastMonthBookingsCount(): Promise<number> {
           const lastMonth = new Date();
           lastMonth.setMonth(lastMonth.getMonth() - 1);
-          
+
           return await bookingModel.countDocuments({
                createdAt: { $gte: lastMonth }
           });
@@ -431,7 +457,7 @@ export class BookingRepository extends BaseRepository<IBooking> implements IBook
                { $sort: { count: -1 } },
                { $limit: 1 }
           ]);
-          
+
           return {
                name: result[0]?._id || "No data",
                bookings: result[0]?.count || 0

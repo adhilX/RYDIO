@@ -10,9 +10,9 @@ import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { getIncomingBooking } from '@/services/user/incommingBookingSevice';
 import Pagination from '@/components/Pagination';
-import IncomingBookingDetailsModal from '@/components/modal/IncomingBookingDetailsModal';
 import type { IncomingBooking } from '@/Types/User/Booking/IncomingBooking';
 import QrScanner from '../QrReader';
+import IncomingBookingDetailsModal from '@/components/modal/IncomingBookingDetailsModal';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 

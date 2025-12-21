@@ -21,8 +21,8 @@ export interface BaseInputDto {
   user_id: string;
   page: number;
   limit: number;
-  search:string
-  status:BookingStatus
+  search: string
+  status: BookingStatus
 }
 
 
@@ -55,7 +55,7 @@ export type MyBookingInputDto = BaseInputDto;
 
 export interface MyBookingItemDto extends Omit<CreateBookingOutputDto, 'vehicle_id'> {
   vehicle: IVehicle;
-  location?:Location
+  location?: Location
   name?: string;
   phone?: number;
   createdAt?: Date;
@@ -67,11 +67,12 @@ export interface MyBookingOutputDto {
 }
 
 // Incoming Booking DTOs
-export interface IncomingBookingInputDto extends Omit<BaseInputDto ,'user_id'> {
+export interface IncomingBookingInputDto extends Omit<BaseInputDto, 'user_id'> {
   owner_id: string;
 }
 
-export interface IncomingBookingItemDto extends Omit<CreateBookingOutputDto, 'vehicle_id'> {
+export interface IncomingBookingItemDto extends Omit<CreateBookingOutputDto, 'vehicle_id' | 'user_id'> {
+  user: any;
   vehicle: IVehicle;
   createdAt?: Date;
   updatedAt?: Date;
@@ -177,4 +178,4 @@ export interface RideEndOutputDto {
   message: string;
 }
 
-export  interface ICancleFinalce {security_deposit:number, owner_earnings:number}
+export interface ICancleFinalce { security_deposit: number, owner_earnings: number }

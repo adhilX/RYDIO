@@ -1,4 +1,5 @@
 import type { Vehicle } from "../addVehicle/Ivehicle";
+import type { Iuser } from "../Iuser";
 import type { Ilocation } from "../location";
 
 export interface Finance {
@@ -14,7 +15,7 @@ export interface Finance {
 export interface IncomingBooking {
   _id: string;
   booking_id: string;
-  user_id: string;
+  user: Iuser;
   vehicle_id: string;
   address: string;
   city: string;

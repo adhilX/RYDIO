@@ -3,17 +3,17 @@ import { IncomingBookingInputDto, IncomingBookingItemDto, IncomingBookingOutputD
 import { IIncomingBookingUsecase } from "../../domain/interface/usecaseInterface/bookings/IIncomingBookingUsecase"
 
 export class IncomingBookingUsecase implements IIncomingBookingUsecase{
-    
+
     constructor(private _bookingRepository: IBookingRepository){}
 
     async execute({ owner_id, page,limit,search,status }: IncomingBookingInputDto): Promise<IncomingBookingOutputDto | null> {
         const result = await this._bookingRepository.getOwnerBookings(owner_id, limit,page, search, status);
         if (!result) return null;
-        
+
         return {
             bookings: (result.bookings).map((booking:any) => ({
                 booking_id: booking.booking_id,
-                user_id: booking.user_id.toString(),    
+                user: booking.user,
                 vehicle: booking.vehicle,
                 location: booking.location,
                 address: booking.address,
