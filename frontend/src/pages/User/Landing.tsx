@@ -11,6 +11,7 @@ import { findLocation } from '@/services/user/locationService';
 import VehicleSearchBar from '@/components/user/VehicleSearchBar';
 import { setLocation } from '@/store/slice/user/locationSlice';
 import { resetSearchDate } from '@/store/slice/user/SearchDateSlice';
+import Particles from '@/components/common/Particles';
 
 const LandingPage = () => {
   // Hero carousel images
@@ -60,6 +61,7 @@ useEffect(() => {
             {heroImages.map((image, index) => (
               <CarouselItem key={index} className="h-full">
                 <div className="relative w-full h-full">
+                  <Particles className='z-0 animate-fade-in' ease={80} quantity={100}/>
                   <img 
                     src={image} 
                     alt={`Hero image ${index + 1}`}
