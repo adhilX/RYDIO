@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import Particles from "@/components/common/Particles";
 
 const CARS_PER_PAGE = 6;
 
@@ -87,9 +88,10 @@ export default function UserVehicleList() {
       <Navbar />
 
       {/* Background Gradient/Image Effect similar to Landing if desired, or just clean black */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+      <Particles  className="absolute inset-0 z-0 animate-fade-in" quantity={100} ease={80} refresh/>
+      {/* <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-black to-black"></div>
-      </div>
+      </div> */}
 
       <div className="relative z-10 pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-6 h-full">
