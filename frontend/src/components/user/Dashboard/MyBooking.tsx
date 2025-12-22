@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Calendar, Car, MapPin, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Spinner } from "@/components/ui/spinner";
 import { Input } from '@/components/ui/input';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
@@ -11,6 +10,7 @@ import BookingDetailsModal from '../../modal/BookingDetailsModal';
 import { getMyBooking } from '@/services/user/bookingService';
 import type { BookingStatus, IbookedData } from '@/Types/User/Booking/bookedData';
 import Pagination from '@/components/Pagination';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
@@ -113,13 +113,6 @@ const MyBooking = () => {
     }
   };
 
-  if (bookingState.isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <Spinner size="xl" variant="primary" />
-      </div>
-    );
-  }
 
   if (!user) {
     return <div className="p-4 text-center">Please log in to view your bookings.</div>;
@@ -168,7 +161,9 @@ const MyBooking = () => {
       </div>
 
       {/* Bookings Grid */}
-      {bookings.length > 0 ? (
+      {bookingState.isLoading ? (
+        <LoadingSpinner />
+      ) : bookings.length > 0 ? (
         <div className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {bookings.map((booking) => (

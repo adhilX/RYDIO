@@ -22,7 +22,7 @@ export default function Layout() {
           className="flex-1 min-w-0"
         >
           {/* Glass Container for Content */}
-          <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl h-[calc(100vh-140px)] p-6 md:p-10 overflow-y-auto custom-scrollbar relative shadow-[0_0_50px_rgba(255,255,255,0.05)]">
+          <div className="bg-white/2 border border-white/10 rounded-3xl h-[calc(100vh-140px)] p-6 md:p-10 overflow-y-auto custom-scrollbar relative shadow-[0_0_50px_rgba(255,255,255,0.05)]">
             <Outlet />
           </div>
         </motion.main>

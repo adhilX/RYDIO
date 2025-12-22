@@ -10,6 +10,7 @@ import { getCheckoutSession, getSecurityDeposit } from "@/services/user/bookingS
 import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import type { BookingData } from "@/Types/User/Booking/BookingData"
+import Particles from "@/components/common/Particles"
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
 const BookingConfirmation = () => {
@@ -39,6 +40,7 @@ const BookingConfirmation = () => {
   if (!user || !bookingData) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
+        
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -123,8 +125,8 @@ const BookingConfirmation = () => {
   }
 
   return (
-    <div className="min-h-screen font-sans text-white pb-20 bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,255,255,0.15),rgba(255,255,255,0))]">
-
+    <div className="min-h-screen font-sans text-white pb-20 bg-black">
+      <Particles className="absolute inset-0 z-0 animate-fade-in" quantity={100} ease={80} refresh/>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <motion.div

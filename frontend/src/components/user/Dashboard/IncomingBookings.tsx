@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Car, MapPin, Search, Eye, QrCode } from 'lucide-react';
-import { Spinner } from "@/components/ui/spinner";
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSelector } from 'react-redux';
@@ -13,6 +11,7 @@ import Pagination from '@/components/Pagination';
 import type { IncomingBooking } from '@/Types/User/Booking/IncomingBooking';
 import QrScanner from '../QrReader';
 import IncomingBookingDetailsModal from '@/components/modal/IncomingBookingDetailsModal';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
@@ -142,14 +141,6 @@ function IncomingBookings() {
     }
   };
 
-  if (bookingState.isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <Spinner size="xl" variant="primary" />
-      </div>
-    );
-  }
-
   if (!user) {
     return <div className="p-4 text-center">Please log in to view your incoming bookings.</div>;
   }
@@ -227,7 +218,9 @@ function IncomingBookings() {
         ))}
       </div>
 
-      {bookings.length > 0 ? (
+      {bookingState.isLoading ? (
+        <LoadingSpinner />
+      ) : bookings.length > 0 ? (
         <div className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {bookings.map((booking) => (

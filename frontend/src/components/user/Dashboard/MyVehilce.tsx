@@ -11,6 +11,7 @@ import Pagination from '@/components/Pagination';
 import { toast } from 'react-hot-toast';
 import RejectedVehicleModal from '@/components/user/modals/RejectedVehicleModal';
 import { getUser } from '@/services/user/authService';
+import LoadingSpinner from '@/components/LoadingSpinner';
 const IMG_URL = import.meta.env.VITE_IMAGE_URL
 
 const ListVehilce = () => {
@@ -183,10 +184,7 @@ const ListVehilce = () => {
 
             <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
                 {isLoading ? (
-                    <div className="flex flex-col justify-center items-center h-96">
-                        <Spinner size="xl" className="border-white border-t-transparent opacity-50" />
-                        <span className="mt-4 text-gray-400 font-medium animate-pulse">Loading fleet...</span>
-                    </div>
+                    <LoadingSpinner/>
                 ) : vehicles.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-96 text-center p-8">
                         <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">

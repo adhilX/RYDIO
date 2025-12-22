@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Car, Fuel, Users, Settings, MapPin, Phone, Mail, Calendar, Info, ShieldCheck } from "lucide-react";
+import { Car, Fuel, Users, Settings, MapPin, Phone, Mail, Calendar, Info } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer, Popup } from "react-leaflet";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,6 +22,7 @@ import L from 'leaflet';
 
 // Fix for default marker icon - Using Red Marker
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import Particles from "@/components/common/Particles";
 
 let DefaultIcon = L.icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -156,7 +157,8 @@ const VehicleDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#121212]">
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <Particles className="absolute inset-0 z-0 animate-fade-in" quantity={100} ease={80} refresh />
         <Spinner size="xl" variant="light" />
       </div>
     );
@@ -182,7 +184,8 @@ const VehicleDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white pb-12">
+    <div className="min-h-screen bg-black text-white pb-12">
+      <Particles className="absolute inset-0 z-0 animate-fade-in" quantity={100} ease={80} refresh />
       <Navbar />
 
       <style>{`
@@ -194,6 +197,13 @@ const VehicleDetailPage = () => {
         .booked-date:hover {
           background-color: transparent !important;
           cursor: not-allowed !important;
+        }
+        .react-datepicker__today-button {
+          background-color: #000 !important;
+          color: #fff !important;
+          border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+          padding: 10px 0 !important;
+          font-weight: 600 !important;
         }
       `}</style>
 
@@ -443,8 +453,11 @@ const VehicleDetailPage = () => {
                         className="w-14 h-14 rounded-full object-cover border-2 border-white/10"
                       />
                       {vehicle.owner_id.is_verified_user && (
-                        <div className="absolute -bottom-1 -right-1 bg-black rounded-full p-0.5">
-                          <ShieldCheck className="w-5 h-5 text-white fill-white/20" />
+                        <div className="absolute -bottom-1 -right-1 bg-black rounded-full p-0.5 border border-white/10" title="Verified Owner">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4">
+                            <path d="M22.5 12.5C22.5 10.92 21.625 9.55 20.352 8.9C20.506 8.465 20.59 7.995 20.59 7.5C20.59 5.29 18.88 3.502 16.772 3.502C16.302 3.502 15.852 3.586 15.436 3.752C14.818 2.415 13.51 1.5 12 1.5C10.49 1.5 9.184 2.417 8.563 3.75C8.15 3.585 7.697 3.5 7.227 3.5C5.117 3.5 3.409 5.29 3.409 7.5C3.409 7.995 3.492 8.465 3.647 8.9C2.375 9.55 1.5 10.92 1.5 12.5C1.5 14.078 2.375 15.448 3.647 16.098C3.493 16.533 3.409 17.003 3.409 17.5C3.409 19.71 5.119 21.5 7.227 21.5C7.697 21.5 8.147 21.414 8.563 21.25C9.183 22.583 10.489 23.5 12 23.5C13.512 23.5 14.818 22.583 15.437 21.25C15.851 21.415 16.303 21.5 16.772 21.5C18.882 21.5 20.59 19.71 20.59 17.5C20.59 17.005 20.507 16.535 20.353 16.1C21.625 15.45 22.5 14.08 22.5 12.5Z" fill="#1877F2" />
+                            <path d="M10 16.5L6 12.5L7.41 11.09L10 13.67L16.59 7.09L18 8.5L10 16.5Z" fill="white" />
+                          </svg>
                         </div>
                       )}
                     </div>

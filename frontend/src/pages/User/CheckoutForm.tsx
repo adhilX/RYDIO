@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { Spinner } from "@/components/ui/spinner";
 import { Lock, CreditCard, ShieldCheck, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Particles from "@/components/common/Particles";
 
 const cardElementOptions = {
   style: {
@@ -101,8 +102,9 @@ const CheckoutForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,255,255,0.15),rgba(255,255,255,0))] font-sans text-white flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-black font-sans text-white flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
+        <Particles className="absolute inset-0 z-0 animate-fade-in" quantity={100} ease={80} refresh/>
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
