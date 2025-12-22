@@ -8,9 +8,9 @@ import Particles from "@/components/common/Particles";
 export default function Layout() {
   return (
     <div className="min-h-screen bg-black text-white relative flex flex-col">
-      <Particles className="absolute inset-0 z-0 animate-fade-in" quantity={100} ease={80} refresh/>
+      <Particles className="absolute inset-0 z-0 animate-fade-in" quantity={100} ease={80} refresh />
       <Navbar />
-       
+
       <div className="flex-1 flex flex-col md:flex-row max-w-[1920px] mx-auto w-full pt-20 md:pt-24 p-6 gap-6 relative z-10">
         <Sidebar />
 

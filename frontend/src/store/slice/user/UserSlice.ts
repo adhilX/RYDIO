@@ -1,8 +1,8 @@
 import type { Iuser } from "@/Types/User/Iuser";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: { user:Iuser | null } = {
-    user: null
+const initialState: { user: Iuser | null } = {
+    user: null,
 }
 
 export const userSlice = createSlice({

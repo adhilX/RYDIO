@@ -11,9 +11,16 @@ import NotificationModal from './NotificationModal';
 import { getUnreadCount } from '../../services/notificationService';
 
 
+import { setHasShownIdAlert } from '@/store/slice/user/AlertSlice';
+import { IdProofAlertModal } from '../modal/IdProofAlertModal';
+
+
 function Navbar() {
   const token = useSelector((state: RootState) => state.userToken.userToken);
   const user = useSelector((state: RootState) => state.auth.user)
+  // Safely access state.alert since it is a new slice
+  const alertState = useSelector((state: RootState) => state.alert);
+  const hasShownIdAlert = alertState?.hasShownIdAlert || false;
   const navigate = useNavigate()
   const { location, error } = useCurrentLocation();
   const dispatch = useDispatch()
@@ -22,6 +29,18 @@ function Navbar() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showIdAlert, setShowIdAlert] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in, has no ID proof updates, and alert hasn't been shown
+    if (user && !user.idproof_id && !hasShownIdAlert) {
+      const timer = setTimeout(() => {
+        setShowIdAlert(true);
+        dispatch(setHasShownIdAlert(true));
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, hasShownIdAlert, dispatch]);
 
   const fetchUnreadCount = async (userId: string) => {
     console.log(userId)
@@ -178,6 +197,8 @@ function Navbar() {
         onClose={() => setIsNotificationModalOpen(false)}
         onNotificationUpdate={() => fetchUnreadCount(user?._id)}
       />}
+
+      <IdProofAlertModal open={showIdAlert} onClose={() => setShowIdAlert(false)} />
     </header>
   );
 }

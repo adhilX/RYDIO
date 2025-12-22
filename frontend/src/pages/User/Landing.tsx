@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { MapPin, Car, Sparkles} from 'lucide-react';
+import { MapPin, Car, Sparkles } from 'lucide-react';
 
 import { Card } from '@/components/ui/card';
-import {Carousel,CarouselContent,CarouselItem,} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Navbar from '@/components/user/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,8 @@ import { resetSearchDate } from '@/store/slice/user/SearchDateSlice';
 import Particles from '@/components/common/Particles';
 
 const LandingPage = () => {
+  const dispatch = useDispatch();
+
   // Hero carousel images
   const heroImages = [
     "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
@@ -21,28 +23,27 @@ const LandingPage = () => {
     "https://images.unsplash.com/photo-1471479917193-f00955256257?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
   ];
-const dispatch = useDispatch()
   // Auto-play plugin for the carousel
   const plugin = useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false })
   );
 
-const {latitude,longitude} = useSelector((state:RootState)=>state.location)
-const fetchLocation = async (latitude: number, longitude: number) => {
-  const data = await findLocation(latitude, longitude);
-  return data.display_name;
-}
+  const { latitude, longitude } = useSelector((state: RootState) => state.location)
+  const fetchLocation = async (latitude: number, longitude: number) => {
+    const data = await findLocation(latitude, longitude);
+    return data.display_name;
+  }
 
-useEffect(() => {
-  dispatch(resetSearchDate())
+  useEffect(() => {
+    dispatch(resetSearchDate())
     if (latitude && longitude) {
       (async () => {
         const address = await fetchLocation(latitude, longitude);
         setLocation(address);
       })();
     }
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, [latitude, longitude]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latitude, longitude]);
 
 
 
@@ -50,7 +51,7 @@ useEffect(() => {
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       {/* Full-screen auto-changing carousel background */}
       <div className="fixed inset-0 z-0 h-screen w-full">
-        <Carousel 
+        <Carousel
           className="w-full h-full"
           plugins={[plugin.current]}
           onMouseEnter={plugin.current.stop}
@@ -61,9 +62,9 @@ useEffect(() => {
             {heroImages.map((image, index) => (
               <CarouselItem key={index} className="h-full">
                 <div className="relative w-full h-full">
-                  <Particles className='z-0 animate-fade-in' ease={80} quantity={100}/>
-                  <img 
-                    src={image} 
+                  <Particles className='z-0 animate-fade-in' ease={80} quantity={100} />
+                  <img
+                    src={image}
                     alt={`Hero image ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -78,7 +79,7 @@ useEffect(() => {
       {/* Easter Egg Car */}
 
       {/* Header */}
-      <Navbar/>
+      <Navbar />
 
       {/* Hero Content */}
       <main className="relative px-6 pt-32 pb-16 z-10">
@@ -93,7 +94,7 @@ useEffect(() => {
         </div>
         <div className="h-30"></div>
         {/* Search Form */}
-        <VehicleSearchBar/>
+        <VehicleSearchBar />
         {/* Feature Cards */}
         <div className="max-w-7xl mx-auto pb-24 relative z-0">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
