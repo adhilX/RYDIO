@@ -2,6 +2,7 @@ import { INotificationRepository } from "../../../domain/interface/repositoryInt
 import { INotification } from "../../../domain/entities/notificationEntities";
 import { notificationModel } from "../../../framework/database/models/notificationModel";
 import { BaseRepository } from "../base/BaseRepo";
+import { Types } from "mongoose";
 
 export class NotificationRepository extends BaseRepository<INotification> implements INotificationRepository {
     constructor() {
@@ -9,11 +10,61 @@ export class NotificationRepository extends BaseRepository<INotification> implem
     }
 
     async findByUserId(userId: string): Promise<INotification[]> {
-        return await notificationModel.find({ to: userId }).sort({ createdAt: -1 }).populate('from')
+        return await notificationModel.aggregate([
+            {
+                $match: {
+                    to: new Types.ObjectId(userId)
+                }
+            },
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            },
+            {
+                $addFields: {
+                    fromObjId: {
+                        $toObjectId: "$from"
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "fromObjId",
+                    foreignField: "_id",
+                    as: "from"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$from",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    from: {
+                        _id: 1,
+                        name: 1,
+                        email: 1,
+                        profile_image: 1
+                    },
+                    message: 1,
+                    read: 1,
+                    to: 1,
+                    senderModel: 1,
+                    receiverModel: 1,
+                    type: 1,
+                    createdAt: 1,
+                    updatedAt: 1
+                }
+            }
+        ])
     }
 
     async markAsRead(id: string): Promise<INotification | null> {
-        return await notificationModel.findByIdAndUpdate(id,{ read: true },{ new: true }).populate('from')
+        return await notificationModel.findByIdAndUpdate(id, { read: true }, { new: true }).populate('from')
     }
 
     async markAllAsRead(userId: string): Promise<{ modifiedCount: number }> {
