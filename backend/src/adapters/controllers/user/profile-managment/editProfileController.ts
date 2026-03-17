@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IEditProfileUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IEditProfileUsecase";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 
 export class EditProfileController{
     private _EditProfileUseCase : IEditProfileUsecase

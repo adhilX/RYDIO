@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { HttpStatus } from "../../domain/entities/httpStatus"
+import { HttpStatus } from "../../domain/constants/httpStatus"
 
 export const checkRoleBaseMiddleware = (allowedRoles: string) => {
     return (req: Request, res: Response, next: NextFunction) => {

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 import { ISearchUserUsecase } from "../../../domain/interface/usecaseInterface/admin/ISearchUserUsecase";
 
 export class SearchUserController {

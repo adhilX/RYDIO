@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IGetBookedVehicleUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IGetBookedVehicleUsecase";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 
 export class GetBookedVehicleController {
     private _getBookedVehicleUsecase: IGetBookedVehicleUsecase;

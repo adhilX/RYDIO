@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ICancelBookingUseCase } from "../../../../domain/interface/usecaseInterface/bookings/ICancelBookingUseCase";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 export class CancelBookingController {
     constructor(private _cancelBookingUseCase: ICancelBookingUseCase){}
 

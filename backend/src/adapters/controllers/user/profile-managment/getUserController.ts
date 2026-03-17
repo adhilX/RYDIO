@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 import { IGetUserUsecase } from "../../../../domain/interface/usecaseInterface/userProfile/IgetUserUsecase";
 
 export class GetUserController {

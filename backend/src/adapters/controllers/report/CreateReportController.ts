@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ICreateReportUsecase } from "../../../domain/interface/usecaseInterface/report/ICreateReportUsecase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class CreateReportController {
     private _createReportUseCase: ICreateReportUsecase;

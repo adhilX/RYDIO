@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 import { IAdminNotificationUsecase } from "../../../domain/interface/usecaseInterface/notification/IAdminNotificationUsecase";
 
 export class AdminNotificationController {

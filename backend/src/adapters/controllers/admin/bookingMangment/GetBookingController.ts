@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { IGetBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IGetBookingUsecase"
-import { HttpStatus } from "../../../../domain/entities/httpStatus"
+import { HttpStatus } from "../../../../domain/constants/httpStatus"
 
 export class GetBookingController {
     constructor(private _getBookingUsecase: IGetBookingUsecase) {

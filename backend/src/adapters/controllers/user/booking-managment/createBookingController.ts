@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../../../domain/entities/httpStatus"
+import { HttpStatus } from "../../../../domain/constants/httpStatus"
 import { ICreateBookingUsecase } from "../../../../domain/interface/usecaseInterface/bookings/ICreateBookingUsecase";
 
 export class CreateBookingController {

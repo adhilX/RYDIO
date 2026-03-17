@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IAddVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IAddVehicleUsecase";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 
 export class AddVehicleController {
     private _addVehicleUsecase : IAddVehicleUsecase

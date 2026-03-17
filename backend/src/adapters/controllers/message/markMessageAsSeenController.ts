@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IMessageRepository } from "../../../domain/interface/repositoryInterface/IMessageRepository";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class MarkMessageAsSeenController {
     private _messageRepository: IMessageRepository;

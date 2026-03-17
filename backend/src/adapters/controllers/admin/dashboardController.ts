@@ -4,7 +4,7 @@ import { IFinancialOverviewUseCase } from "../../../domain/interface/usecaseInte
 import { IUserMangementUsecase } from "../../../domain/interface/usecaseInterface/admin/IUserMangmentUsecase";
 import { IVehileManagmentUsecase } from "../../../domain/interface/usecaseInterface/admin/IVehicleMangementUsecase";
 import { IBookingAnalyticsUseCase } from "../../../domain/interface/usecaseInterface/dashboard/IBookingAnalyticsUseCase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class DashboardController {
     constructor(

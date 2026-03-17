@@ -1,4 +1,4 @@
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 import { Request, Response } from "express";
 import { IGetSecurityDepositUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IGetSecurityDepositUsecase";
 

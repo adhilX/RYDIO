@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../../../domain/entities/httpStatus"
+import { HttpStatus } from "../../../../domain/constants/httpStatus"
 import { IResendOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/IResendOtpUsecase";
 
 export class ResendOtpController{

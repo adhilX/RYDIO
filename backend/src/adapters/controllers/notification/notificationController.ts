@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IGetNotificationUsecase } from "../../../domain/interface/usecaseInterface/notification/IGetNotificationUsecase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class NotificationController {
     constructor(private _getNotificationUsecase: IGetNotificationUsecase) {}

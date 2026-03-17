@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ICreatePaymentIntentUsecase } from "../../../../domain/interface/usecaseInterface/payments/ICreatePaymentIntentUsecase";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 
 export class CreatePaymentIntentController {
     constructor(private _createPaymentIntentUsecase: ICreatePaymentIntentUsecase) {

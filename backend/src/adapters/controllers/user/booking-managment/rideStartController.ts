@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { IRideStartUsecase } from "../../../../domain/interface/usecaseInterface/bookings/IRideStartUsecase"
-import { HttpStatus } from "../../../../domain/entities/httpStatus"
+import { HttpStatus } from "../../../../domain/constants/httpStatus"
 
 export class RideStartController {
     constructor(private _rideStartUsecase: IRideStartUsecase) { }

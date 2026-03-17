@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { IJwtService } from "../../domain/interface/serviceInterface/IJwtService";
-import { HttpStatus } from "../../domain/entities/httpStatus";
+import { HttpStatus } from "../../domain/constants/httpStatus";
 
 export const TokenTimeExpiryValidationMiddleware = (jwtService: IJwtService) => {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IDeleteVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IDeleteVehicleUsecase";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 
 export class DeleteVehicleController {
     constructor(private _deleteVehicleUseCase:IDeleteVehicleUsecase) {

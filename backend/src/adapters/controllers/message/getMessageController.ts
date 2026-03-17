@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IGetMessagesUsecase } from "../../../domain/interface/usecaseInterface/message/IGetMessagesUsecase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class GetMessageController {
     private _getMessagesUsecase: IGetMessagesUsecase;

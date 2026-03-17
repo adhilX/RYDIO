@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 import { setCookie } from "../../../../framework/services/tokenCookieSet";
 import { IGoogleLoginUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/IGoogleLoginUsecase";
 import { ILoginUserUsecase } from "../../../../domain/interface/usecaseInterface/auth/login/ILoginUserUsecase";

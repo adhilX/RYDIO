@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IUserReportQueryUsecase } from "../../../domain/interface/usecaseInterface/report/IUserReportQueryUsecase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class GetReportsController {
     private _userReportQueryUseCase: IUserReportQueryUsecase;

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IBlockUserUseCase } from "../../../domain/interface/usecaseInterface/admin/IBlockUserUseCase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class BlockUserController {
     private _userBlockUseCase: IBlockUserUseCase

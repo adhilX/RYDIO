@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 import { ISendOtpUsecase } from "../../../../domain/interface/usecaseInterface/auth/register/ISendOtpUsecase";
 export class SendOtpController{
     private _userSendOtpUsecase:ISendOtpUsecase

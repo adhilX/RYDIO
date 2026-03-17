@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 import { IAdminReportManagementUsecase } from "../../../domain/interface/usecaseInterface/report/IAdminReportManagementUsecase";
 import { ReportStatus } from "../../../domain/entities/ReportEntities";
 

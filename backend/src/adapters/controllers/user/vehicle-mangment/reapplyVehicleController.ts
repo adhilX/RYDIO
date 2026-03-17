@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 import { IReapplyVehicleUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IReapplyVehiclUsecase";
 
 export class ReapplyVehicleController {

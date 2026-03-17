@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IUserRepository } from "../../../domain/interface/repositoryInterface/IUserRepository";
 import { IRedisService } from "../../../domain/interface/serviceInterface/IRedisService";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export const UserBlockCheckingMiddleware = (redisService: IRedisService,userRepository: IUserRepository) => {
   return async (req: Request, res: Response, next: NextFunction) => {

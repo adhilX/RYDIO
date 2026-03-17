@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IEnableChatUsecase } from "../../../domain/interface/usecaseInterface/chat/IEnableChatUsecase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class EnableChatController {
     private _enableChatUseCase: IEnableChatUsecase;

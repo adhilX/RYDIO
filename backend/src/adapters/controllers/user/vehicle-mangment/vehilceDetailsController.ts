@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IVehicleDetailsUsecase } from "../../../../domain/interface/usecaseInterface/vehicles/IVehicleDetailsUsecase";
-import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../../domain/constants/httpStatus";
 
 export class VehilceDetailsController {
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IFindOrCreateChatUsecase } from "../../../domain/interface/usecaseInterface/chat/IFindOrCreateChatUsecase";
-import { HttpStatus } from "../../../domain/entities/httpStatus";
+import { HttpStatus } from "../../../domain/constants/httpStatus";
 
 export class FindOrCreateChatController {
     private _createChatUseCase: IFindOrCreateChatUsecase;
