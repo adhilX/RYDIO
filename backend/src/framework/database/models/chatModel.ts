@@ -6,4 +6,4 @@ export interface IChatModel extends Omit<IChat,'_id'>,Document{
     _id: ObjectId;
 }
 
-export const chatModel = model<IChat>('chat',chatSchema)
+export const chatModel = model<IChat>('chat',chatSchema) 
